@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "799879175588",
+    "project_id": "supfamof-c8c84",
+    "storage_bucket": "supfamof-c8c84.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:799879175588:android:af7df495c1c883b1caf531",
+        "android_client_info": {
+          "package_name": "com.duybpz389.supportFPTadmissionoffice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "799879175588-0pbmvhrmvra67leu6cs9um5gs3faqreg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.duybpz389.supportFPTadmissionoffice",
+            "certificate_hash": "10bf38d1aaea44433c443bb7684b7d37bd22804d"
+          }
+        },
+        {
+          "client_id": "799879175588-bkqcet9pptlthapf0kuodscjcbo1knmv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.duybpz389.supportFPTadmissionoffice",
+            "certificate_hash": "06abe2b1011e9884c2fd01972fabc4dfc7f7405e"
+          }
+        },
+        {
+          "client_id": "799879175588-c3eve1j8aprq6ijv45roetch9huje68f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBj2UvYkpIVIxIVc3H0ejxf9zHIN9FeYzs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "799879175588-c3eve1j8aprq6ijv45roetch9huje68f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
