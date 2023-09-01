@@ -16,9 +16,11 @@
     ],
     "plugins": [
       "@react-native-google-signin/google-signin"
-    ],    
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.duybpz389.supportFPTadmissionoffice",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {

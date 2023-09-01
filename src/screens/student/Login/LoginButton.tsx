@@ -10,7 +10,7 @@ const LoginButton: React.FC<LoginButtonProps> = ({ onPress }) => {
   return (
     <View style={{ flex: 1.1}}>
       <Pressable style={styles.buttonContainerRow} onPress={onPress}>
-        <Image style={styles.iconGoogle} source={require("../../assets/Images/ic_google.png")} />
+        <Image style={styles.iconGoogle} source={require("../../../assets/Images/ic_google.png")} />
         <Text style={styles.text}>Sign in with Google</Text>
       </Pressable>
     </View>

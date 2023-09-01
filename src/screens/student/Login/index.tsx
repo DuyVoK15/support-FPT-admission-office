@@ -12,7 +12,7 @@ import { loginGoogle } from '../../../features/student/authSlice';
 
 
 
-const Login: React.FC = () => {
+const Login= () => {
 
   const dispatch = useAppDispatch();
   
@@ -70,7 +70,7 @@ const Login: React.FC = () => {
   // }, []);
 
   return (
-    <ImageBackground style={{ height: "100%", width: "100%" }} source={require("../../assets/Images/bg_login.png")} >
+    <ImageBackground style={{ height: "100%", width: "100%" }} source={require("../../../assets/Images/bg_login.png")} >
       <SafeAreaView style={{ flex: 1, alignItems: "center", justifyContent: "space-around" }}>
         <AppIcon />
         <CampusSelection />
@@ -91,9 +91,6 @@ const Login: React.FC = () => {
           }
         })} />
         <Text>{user?.displayName}</Text>
-        <Button title='Logout' onPress={() => auth()
-          .signOut()
-          .then(() => console.log('User signed out! '))} />
         <AppVersion />
       </SafeAreaView>
     </ImageBackground>
