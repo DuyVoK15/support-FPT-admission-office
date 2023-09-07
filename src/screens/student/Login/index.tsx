@@ -1,5 +1,5 @@
 import { Button, Image, ImageBackground, Pressable, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import LoginButton from './LoginButton';
 import AppIcon from './AppIcon';
 import CampusSelection from './CampusSelection';
@@ -8,19 +8,22 @@ import "expo-dev-client";
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useAppDispatch } from '../../../app/store';
-import { loginGoogle } from '../../../features/student/authSlice';
+import { getUserInfo, loginGoogle } from '../../../features/student/authSlice';
+import { AuthContext, AuthContextType } from '../../../context/AuthContext';
 
 
 
-const Login= () => {
-
+const Login = () => {
+  const { isLoggined, checkIsLoggined } = useContext(
+    AuthContext
+  ) as AuthContextType;
   const dispatch = useAppDispatch();
   
   useEffect(() => {
     GoogleSignin.configure({
       webClientId: '799879175588-c3eve1j8aprq6ijv45roetch9huje68f.apps.googleusercontent.com',
-      
-      
+      iosClientId: '799879175588-bn0dkiuaid4tv9rr5ms7n05hv5hq4biq.apps.googleusercontent.com',
+      offlineAccess: true,
     });
   }, [])
 
@@ -45,7 +48,7 @@ const Login= () => {
     setUser(user);
     if (initializing) setInitializing(false);
   }
-
+  
   useEffect(() => {
     console.log(JSON.stringify(user)) 
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
@@ -75,15 +78,17 @@ const Login= () => {
         <AppIcon />
         <CampusSelection />
         <LoginButton onPress={() => onGoogleButtonPress().then(() => {
-          console.log("User signed in!")
+          console.log("User signed in!");
+          checkIsLoggined();
           const currentUser = auth().currentUser;
           if (currentUser) {
             currentUser
               .getIdToken()
               .then(token => {
-                console.log(token)
                 dispatch(loginGoogle(token));
+                dispatch(getUserInfo()); 
                 setIdToken(token);
+                console.log("<LoginScreen> JWT: ", token)
               })
               .catch(error => {
                 console.error('Error getting ID token:', error);

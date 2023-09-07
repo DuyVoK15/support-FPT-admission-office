@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from './Home';
@@ -23,7 +23,7 @@ const BottomTabs: React.FC = () => {
           marginTop: 5,
         },
         tabBarStyle: {
-          height: 70,
+          height: Platform.OS ==='ios' ? 100 : 70,
         },
         tabBarLabelStyle: {
           marginBottom: 12,

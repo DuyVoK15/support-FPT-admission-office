@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
-import UserInfo from "../../models/student/userInfo.model";
+import UserInfo from "../../models/student/userInfoLogin.model";
 import { authService } from "../../services/student/auth.service";
 import { AxiosError } from "axios";
 import { RootState } from "../../app/store";
@@ -15,7 +15,7 @@ interface AuthState {
 
   // Thêm các trường khác liên quan đến người dùng nếu cần thiết
 }
-const initialState: AuthState = {
+const initialState: AuthState = { 
   isAuthenticated: false,
   role: -1,
   user: null,
@@ -25,13 +25,13 @@ const initialState: AuthState = {
 
 export const loginGoogle = createAsyncThunk(
   'auth/login-google',
-  async (accessToken: string, { rejectWithValue }) => {
+  async (JWT: string, { rejectWithValue }) => {
     try {
-      console.log("<AuthSlice> Access Token: ", accessToken)
-      const result = await authService.loginGoogle({ idToken: accessToken, fcmToken: "" })
+      console.log("<AuthSlice> JWT: ", JWT)
+      const result = await authService.loginGoogle({ idToken: JWT, fcmToken: "" })
       await AsyncStorage.setItem(AppConstants.ACCESS_TOKEN, result.data.data.access_token)
       console.log("<AuthSlice> Access Token: ", result.data.data.access_token)
-      console.log("<AuthSlice> User Info: ", JSON.stringify(result.data.data))
+      console.log("<AuthSlice> User Token: ", JSON.stringify(result.data.data))
       return result.data;
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -41,13 +41,15 @@ export const loginGoogle = createAsyncThunk(
   },
 );
 export const getUserInfo = createAsyncThunk(
-  'auth/login-google',
+  'auth/getUserInfo',
   async (_, { rejectWithValue }) => {
     try {
+      console.log("Có vô getUserInfo")
       const response = await authService.getUserInfo();
-      console.log("<AuthSlice> UserInfo: ", response.data.data)
+      console.log("<AuthSlice> User Info: "+ JSON.stringify(response.data))
       return response.data;
     } catch (error: any) {
+      // console.error(error);
       return rejectWithValue(error.message);
 
     }
@@ -101,7 +103,7 @@ export const authSlice = createSlice({
         state.user = action.payload.data
       })
   },
-}); 
+});
 
 export const selectUser = (state: RootState) => state.auth.user;
 export default authSlice.reducer;

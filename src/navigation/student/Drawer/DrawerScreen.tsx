@@ -1,13 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import Login from '../../../screens/student/Login';
 
-const LoginScreen = () => {
+const DrawerScreen = () => {
   return (
-    <Login />
+    <View>
+      <Text>DrawerScreen</Text>
+    </View>
   )
 }
 
-export default LoginScreen;
+export default DrawerScreen;
 
 const styles = StyleSheet.create({})

@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useAppDispatch } from '../../../../app/store';
 import { logout } from '../../../../features/student/authSlice';
 import Header from '../../../../components/shared/Header/Back';
@@ -18,9 +18,11 @@ import { ScreenWidth } from '../../../../constants/Demesions';
 import { COLORS } from '../../../../constants/Colors';
 import ProfileTextInput from './ProfileTextInput';
 import { Feather, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { AuthContext, AuthContextType } from '../../../../context/AuthContext';
 
 const UserProfile = () => {
   const dispatch = useAppDispatch();
+  const { logout } = useContext(AuthContext) as AuthContextType;
   return (
     <View style={styles.container}>
       <View style={{ width: ScreenWidth * 0.9, marginTop: 50 }}>
@@ -34,7 +36,7 @@ const UserProfile = () => {
           }}
         />
         <View style={{ marginTop: 30 }}>
-          <Button title="Logout" onPress={() => dispatch(logout())} />
+          <Button title="Logout" onPress={() => logout()} />
         </View>
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -131,5 +133,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+    backgroundColor: "white"
   },
 });

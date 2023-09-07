@@ -6,7 +6,7 @@ import AppConstants from '../../enums/student/app';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react';
 const axiosClient = axios.create({
-    baseURL: "http://18.141.188.211:7049",
+    baseURL: "http://54.179.223.200",
     headers: {
         'content-type': 'application/json',
     },
