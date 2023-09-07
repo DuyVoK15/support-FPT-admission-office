@@ -18,7 +18,7 @@ const Login = () => {
     AuthContext
   ) as AuthContextType;
   const dispatch = useAppDispatch();
-  
+
   useEffect(() => {
     GoogleSignin.configure({
       webClientId: '799879175588-c3eve1j8aprq6ijv45roetch9huje68f.apps.googleusercontent.com',
@@ -48,9 +48,9 @@ const Login = () => {
     setUser(user);
     if (initializing) setInitializing(false);
   }
-  
+
   useEffect(() => {
-    console.log(JSON.stringify(user)) 
+    console.log(JSON.stringify(user))
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
 
@@ -84,9 +84,10 @@ const Login = () => {
           if (currentUser) {
             currentUser
               .getIdToken()
-              .then(token => {
-                dispatch(loginGoogle(token));
-                dispatch(getUserInfo()); 
+              .then( async token => {
+                await dispatch(loginGoogle(token)).then( async () => {
+                  await dispatch(getUserInfo());
+                })
                 setIdToken(token);
                 console.log("<LoginScreen> JWT: ", token)
               })

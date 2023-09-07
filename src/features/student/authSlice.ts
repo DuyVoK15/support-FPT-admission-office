@@ -5,6 +5,7 @@ import { AxiosError } from "axios";
 import { RootState } from "../../app/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AppConstants from "../../enums/student/app";
+import auth from '@react-native-firebase/auth';
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -15,7 +16,7 @@ interface AuthState {
 
   // Thêm các trường khác liên quan đến người dùng nếu cần thiết
 }
-const initialState: AuthState = { 
+const initialState: AuthState = {
   isAuthenticated: false,
   role: -1,
   user: null,
@@ -46,21 +47,24 @@ export const getUserInfo = createAsyncThunk(
     try {
       console.log("Có vô getUserInfo")
       const response = await authService.getUserInfo();
-      console.log("<AuthSlice> User Info: "+ JSON.stringify(response.data))
+      console.log("<AuthSlice> User Info: " + JSON.stringify(response.data.data))
       return response.data;
     } catch (error: any) {
       // console.error(error);
       return rejectWithValue(error.message);
 
-    }
+    } 
   },
 )
 export const logout = createAsyncThunk(
   'auth/logout',
   async (_, { rejectWithValue }) => {
     try {
-      await authService.logout();
-      return null;
+      await AsyncStorage.removeItem(AppConstants.ACCESS_TOKEN);
+      auth()
+        .signOut()
+        .then(() => console.log('User signed out!'));
+      return true;
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
@@ -72,18 +76,6 @@ export const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // .addCase(login.pending, (state) => {
-      //   state.loading = true;
-      //   state.error = "";
-      // })
-      // .addCase(login.fulfilled, (state, action) => {
-      //   state.isAuthenticated = true;
-      //   state.loading = false;
-      // })
-      // .addCase(login.rejected, (state, action) => {
-      //   state.error = String(action.payload);
-      //   state.loading = false;
-      // })
       .addCase(logout.pending, (state) => {
         state.loading = true;
         state.error = '';

@@ -22,7 +22,10 @@ import { AuthContext, AuthContextType } from '../../../../context/AuthContext';
 
 const UserProfile = () => {
   const dispatch = useAppDispatch();
-  const { logout } = useContext(AuthContext) as AuthContextType;
+  // const { logout } = useContext(AuthContext) as AuthContextType;
+  const handleLogout = async () => {
+    await dispatch(logout())
+  }
   return (
     <View style={styles.container}>
       <View style={{ width: ScreenWidth * 0.9, marginTop: 50 }}>
@@ -36,7 +39,7 @@ const UserProfile = () => {
           }}
         />
         <View style={{ marginTop: 30 }}>
-          <Button title="Logout" onPress={() => logout()} />
+          <Button title="Logout" onPress={() => handleLogout()} />
         </View>
         <ScrollView
           showsVerticalScrollIndicator={false}

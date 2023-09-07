@@ -17,18 +17,10 @@ export const authService = {
     const url = '/api/account/login';
 
     return axiosClient.post(url, { ...payload });
-  }, 
+  },
   getUserInfo: (): Promise<AxiosResponse<GetUserInfo>> => {
     const url =
       '/api/account/getAccountByToken/authorization';
     return axiosClient.get(url);
-  },
-  logout: async () => {
-    // Xử lý đăng xuất ở đây (nếu cần)
-    // Gọi action logout để cập nhật trạng thái đăng nhập
-    await AsyncStorage.removeItem(AppConstants.ACCESS_TOKEN);
-    auth()
-      .signOut()
-      .then(() => console.log('User signed out!'));
-  },
+  }
 };
