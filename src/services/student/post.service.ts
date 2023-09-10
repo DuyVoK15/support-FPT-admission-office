@@ -9,7 +9,7 @@ import Post from '../../dtos/student/post.dto';
 export const postService = {
   getAllPost: (): Promise<AxiosResponse<Post>> => {
     const url =
-      '/api/admission/admission-post/getAll';
+      '/api/post/getAll';
     console.log('Ahihi');
     return axiosClient.get(url);
   },

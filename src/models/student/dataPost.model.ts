@@ -1,3 +1,5 @@
+import { AccountInfo } from "./account.model";
+
 type DataPost = [
   {
     id: number;
@@ -59,21 +61,7 @@ type DataPost = [
         totalPost: number;
         totalSalary: number;
       };
-      accountInformations: [
-        {
-          id: number;
-          accountId: number;
-          identityNumber: string;
-          idStudent: string;
-          fbUrl: string;
-          address: string;
-          personalIdDate: string;
-          placeOfIssue: string;
-          identityFrontImg: string;
-          identityBackImg: string;
-          taxNumber: string;
-        }
-      ];
+      accountInformation: AccountInfo;
     };
     postTitle: {
       id: number;
@@ -101,6 +89,7 @@ type DataPost = [
         salary: number;
       }
     ];
-  }
-];
+  }]
+;
+
 export default DataPost;

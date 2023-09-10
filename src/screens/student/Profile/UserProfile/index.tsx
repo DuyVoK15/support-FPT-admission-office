@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   Image,
   ScrollView,
@@ -8,24 +9,164 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAppDispatch } from '../../../../app/store';
 import { logout } from '../../../../features/student/authSlice';
-import Header from '../../../../components/shared/Header/Back';
-import Backward from '../../../../components/shared/Direction/Backward';
 import AvatarImage from './AvatarImage';
 import { ScreenWidth } from '../../../../constants/Demesions';
 import { COLORS } from '../../../../constants/Colors';
 import ProfileTextInput from './ProfileTextInput';
-import { Feather, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { AuthContext, AuthContextType } from '../../../../context/AuthContext';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import {
+  UserInfo,
+  UserInfoUpdate,
+} from '../../../../models/student/userInfo.model';
+import { formatToDate, formatToISO_8601 } from '../../../../utils/formats';
+import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
+import { firebase } from '../../../../config/firebase';
+import { updateProfile } from '../../../../features/student/accountSlice';
+import { AccountInfoUpdate } from '../../../../models/student/account.model';
 
-const UserProfile = () => {
+interface UserProfileProps {
+  userInfo: UserInfo | null;
+}
+const UserProfile: React.FC<UserProfileProps> = ({ userInfo }) => {
   const dispatch = useAppDispatch();
-  // const { logout } = useContext(AuthContext) as AuthContextType;
+  const imgUndefined =
+    'https://cdn2.storify.me/data/uploads/2022/11/marcdayne_202211192100.jpg';
+  const [name, setName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [phone, setPhone] = useState<string>('');
+  const [dateOfBirth, setDateOfBirth] = useState<string>('');
+  const [imgUrl, setImgUrl] = useState<string>(imgUndefined);
+  const [identityNumber, setIdentityNumber] = useState<string>('');
+  const [idStudent, setIdStudent] = useState<string>('');
+  const [fbUrl, setFbUrl] = useState<string>('');
+  const [address, setAddress] = useState<string>('');
+  const [personalIdDate, setPersonalIdDate] = useState<string>('');
+  const [placeOfIssue, setPlaceOfIssue] = useState<string>('');
+  const [identityFrontImg, setIdentityFrontImg] = useState<string>('');
+  const [identityBackImg, setIdentityBackImg] = useState<string>('');
+  const [taxNumber, setTaxNumber] = useState<string>('');
+  const [image, setImage] = useState<string>(imgUndefined);
+  const [uploading, setUploading] = useState<boolean>(false);
+
+  const UserInfoUpdate = {
+    name,
+    phone,
+    dateOfBirth: formatToISO_8601({dateProp: dateOfBirth}),
+    imgUrl,
+    updateAccountInformation: {
+      identityNumber,
+      idStudent,
+      fbUrl,
+      address,
+      personalIdDate: formatToISO_8601({dateProp: personalIdDate}),
+      placeOfIssue,
+      identityFrontImg,
+      identityBackImg,
+      taxNumber,
+    } as AccountInfoUpdate,
+  } as UserInfoUpdate;
+
+  const handleUpdateProfile = async () => {
+    // const rs = await dispatch(updateProfile(UserInfoUpdate));
+    // if (rs) {
+    //   console.log('Updated profile success!');
+    // } else {
+    //   console.log('Failed to update profile!');
+    // }
+    console.log("Data: ", JSON.stringify(UserInfoUpdate, null, 2))
+  };
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
+  const uploadMedia = async () => {
+    setUploading(true);
+    try {
+      const { uri } = await FileSystem.getInfoAsync(image);
+      const blob = await new Promise<Blob>((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = () => {
+          resolve(xhr.response);
+        };
+        xhr.onerror = (e) => {
+          reject(new TypeError('Network request failed!'));
+        };
+        xhr.responseType = 'blob';
+        xhr.open('GET', uri, true);
+        xhr.send(null);
+      });
+
+      const filename = image.substring(image.lastIndexOf('/') + 1);
+      const storageRef = firebase.storage().ref();
+      const ref = storageRef.child(filename);
+      await ref.put(blob);
+
+      storageRef
+        .child(filename)
+        .getDownloadURL()
+        .then((url) => {
+          // url chứa đường dẫn tới hình ảnh
+          console.log('URL của hình ảnh:', url);
+        })
+        .catch((error) => {
+          // Xử lý lỗi nếu có
+          console.error('Lỗi khi lấy URL hình ảnh:', error);
+        });
+
+      setUploading(false);
+      Alert.alert('Photo uploaded!');
+      setImage('');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (userInfo) {
+      setName(userInfo?.name);
+      setEmail(userInfo?.email);
+      setPhone(userInfo?.phone);
+      setDateOfBirth(formatToDate({ dateProp: userInfo?.dateOfBirth }));
+      setImgUrl(userInfo?.imgUrl);
+      if (userInfo?.accountInformation) {
+        setAddress(userInfo?.accountInformation?.address);
+        setIdentityNumber(userInfo?.accountInformation?.identityNumber);
+        setPersonalIdDate(
+          formatToDate({
+            dateProp: userInfo?.accountInformation?.personalIdDate,
+          })
+        );
+        setPlaceOfIssue(userInfo?.accountInformation?.placeOfIssue);
+        setIdStudent(userInfo?.accountInformation?.idStudent);
+        setFbUrl(userInfo?.accountInformation?.fbUrl);
+        setTaxNumber(userInfo?.accountInformation?.taxNumber);
+      }
+
+      console.log(userInfo?.accountInformation?.personalIdDate);
+    } else {
+      console.log('No data!');
+    }
+  }, []);
+
+  console.log(JSON.stringify(userInfo));
   const handleLogout = async () => {
-    await dispatch(logout())
-  }
+    await dispatch(logout());
+  };
   return (
     <View style={styles.container}>
       <View style={{ width: ScreenWidth * 0.9, marginTop: 50 }}>
@@ -35,9 +176,12 @@ const UserProfile = () => {
       <View style={{ alignItems: 'center', flex: 1 }}>
         <AvatarImage
           source={{
-            uri: 'https://scontent.fdad1-4.fna.fbcdn.net/v/t1.15752-9/368508962_209687898482858_4689236446600182480_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=ae9488&_nc_ohc=0NKDPALugQEAX863g5P&_nc_oc=AQkqMBaap8yj-k9OEtNhbzrA0hqTikU37vMckHv8X8hzmjVV7XRYeeEuALmpqWHg-YQ&_nc_ht=scontent.fdad1-4.fna&oh=03_AdSsYuhpCmzKxNODTN24Oicr0PNPdL8Q0eTHrG5N-F8qeQ&oe=65104F4B',
+            uri: imgUrl,
           }}
+          onPressCamera={pickImage}
         />
+        <Button title="Update" onPress={uploadMedia} />
+
         <View style={{ marginTop: 30 }}>
           <Button title="Logout" onPress={() => handleLogout()} />
         </View>
@@ -45,17 +189,61 @@ const UserProfile = () => {
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={16}
         >
-          <ProfileTextInput name="Name" />
-          <ProfileTextInput name="Phone Number" />
-          <ProfileTextInput name="Avatar Image URL" />
-          <ProfileTextInput name="Citizen Identification Number" />
-          <ProfileTextInput name="Citizen Identification Issue Address" />
-          <ProfileTextInput name="Citizen Identification Issue Date" />
-          <ProfileTextInput name="Citizen Identification Issue Place" />
-          <ProfileTextInput name="Student ID" />
-          <ProfileTextInput name="Facebook Profile URL" />
-          <ProfileTextInput name="Tax Number" />
-          <ProfileTextInput name="Date Of Birth" />
+          <ProfileTextInput
+            name="Name"
+            value={name}
+            onChangeText={(value) => setName(value)}
+          />
+          <ProfileTextInput
+            name="Phone Number"
+            value={phone}
+            onChangeText={(value) => setPhone(value)}
+          />
+          <ProfileTextInput
+            name="Date Of Birth"
+            value={dateOfBirth}
+            onChangeText={(value) => setDateOfBirth(value)}
+          />
+          <ProfileTextInput
+            name="Avatar Image URL"
+            value={imgUrl}
+            onChangeText={(value) => setImgUrl(value)}
+          />
+          <ProfileTextInput
+            name="Citizen Identification Number"
+            value={identityNumber}
+            onChangeText={(value) => setIdentityNumber(value)}
+          />
+          <ProfileTextInput
+            name="Citizen Identification Issue Address"
+            value={address}
+            onChangeText={(value) => setAddress(value)}
+          />
+          <ProfileTextInput
+            name="Citizen Identification Issue Date"
+            value={personalIdDate}
+            onChangeText={(value) => setPersonalIdDate(value)}
+          />
+          <ProfileTextInput
+            name="Citizen Identification Issue Place"
+            value={placeOfIssue}
+            onChangeText={(value) => setPlaceOfIssue(value)}
+          />
+          <ProfileTextInput
+            name="Student ID"
+            value={idStudent}
+            onChangeText={(value) => setIdStudent(value)}
+          />
+          <ProfileTextInput
+            name="Facebook Profile URL"
+            value={fbUrl}
+            onChangeText={(value) => setFbUrl(value)}
+          />
+          <ProfileTextInput
+            name="Tax Number"
+            value={taxNumber}
+            onChangeText={(value) => setTaxNumber(value)}
+          />
 
           <View style={{ alignItems: 'center', marginVertical: 20 }}>
             <Text style={{ fontSize: 16 }}>
@@ -107,8 +295,16 @@ const UserProfile = () => {
                 borderRadius: 15,
                 alignItems: 'center',
                 justifyContent: 'center',
+                shadowColor: '#000',
+                shadowOffset: {
+                  width: 0,
+                  height: 2,
+                },
+                shadowOpacity: 0.25,
+                shadowRadius: 3.84,
                 elevation: 5,
               }}
+              onPress={() => handleUpdateProfile()}
             >
               <View style={{ flex: 1, alignItems: 'center' }}>
                 <Text style={{ fontSize: 16, color: 'white' }}>
@@ -136,6 +332,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: "white"
+    backgroundColor: 'white',
   },
 });

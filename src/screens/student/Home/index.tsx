@@ -1,130 +1,320 @@
-import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
-import React, { useContext, useEffect } from 'react';
+import {
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
 import { ScreenHeight, ScreenWidth } from '../../../constants/Demesions';
 import EventCard from '../../../components/student/Home/EventCard';
 import { AuthContext, AuthContextType } from '../../../context/AuthContext';
-import { Ionicons, Octicons } from '@expo/vector-icons';
+import {
+  AntDesign,
+  FontAwesome,
+  Ionicons,
+  MaterialIcons,
+  Octicons,
+} from '@expo/vector-icons';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
+import { useAppDispatch } from '../../../app/store';
+import { getAllPost } from '../../../features/student/postSlice';
+import { useAppSelector } from '../../../app/hooks';
+import {
+  formatToDay,
+  formatToMonthString,
+  timeAgo,
+} from '../../../utils/formats';
+import { COLORS } from '../../../constants/Colors';
 
 const Explore = () => {
-  const { isLoggined, checkIsLoggined } = useContext(
-    AuthContext
-  ) as AuthContextType;
+  const [text, setText] = useState<string>('');
+
+  const dispatch = useAppDispatch();
+  const fetchPost = async () => {
+    await dispatch(getAllPost());
+  };
   useEffect(() => {
-    checkIsLoggined();
+    fetchPost();
   }, []);
+
+  const postList = useAppSelector((state) => state.post.post);
+  // console.log(JSON.stringify(postList, null, 2));
   return (
     <View style={styles.container}>
       <View style={styles.viewHeader}>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: Platform.OS === 'ios' ? 50 : 40,
-            marginHorizontal: 20,
-            alignItems: 'center',
-          }}
-        >
-          <View style={{ flex: 1 }}>
-            <Octicons name="three-bars" size={30} color="white" />
-          </View>
-          <View style={{ flex: 8, alignItems: 'center' }}>
-            <View>
-              <Text
-                style={{
-                  fontFamily: FONTS_FAMILY.Ubuntu_300Light,
-                  fontSize: 16,
-                }}
-              >
-                Current Location
-              </Text>
+        <View style={{ marginHorizontal: 20 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: Platform.OS === 'ios' ? 60 : 40,
+              alignItems: 'center',
+            }}
+          >
+            <View style={{ flex: 1 }}>
+              <Octicons name="three-bars" size={30} color="white" />
             </View>
-            <View>
-              <Text
-                style={{
-                  fontFamily: FONTS_FAMILY.Ubuntu_300Light,
-                  fontSize: 18,
-                  marginTop: 2,
-                }}
-              >
-                FPT University HCM
-              </Text>
+            <View style={{ flex: 8, alignItems: 'center' }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text
+                  style={{
+                    fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+                    fontSize: 16,
+                    color: 'rgba(255,255,255, 0.8)',
+                  }}
+                >
+                  Current Location
+                </Text>
+                <View style={{ marginLeft: 3 }}>
+                  <AntDesign
+                    name="caretdown"
+                    size={14}
+                    color="rgba(255,255,255, 0.8)"
+                  />
+                </View>
+              </View>
+              <View>
+                <Text
+                  style={{
+                    fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+                    fontSize: 18,
+                    color: 'white',
+                    marginTop: 2,
+                  }}
+                >
+                  FPT University HCM
+                </Text>
+              </View>
+            </View>
+            <View
+              style={{
+                width: 40,
+                height: 40,
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderRadius: 100,
+              }}
+            >
+              <Ionicons name="notifications" size={30} color="white" />
             </View>
           </View>
           <View
             style={{
-              width: 40,
-              height: 40,
-              backgroundColor: 'rgba(255, 255, 255, 0.2)',
-              justifyContent: 'center',
+              flexDirection: 'row',
               alignItems: 'center',
-              borderRadius: 100,
+              marginTop: 30,
             }}
           >
-            <Ionicons name="notifications" size={30} color="white" />
-          </View>
-        </View>
-        <View style={{ flexDirection: 'row' }}>
-          <View style={{ flex: 1 }}>
-            <Text>Ha</Text>
-          </View>
-          <View>
-            <Text>Ha</Text>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingVertical: 5,
+                marginRight: 20,
+              }}
+            >
+              <View style={{ marginRight: 10 }}>
+                <FontAwesome name="search" size={32} color="white" />
+              </View>
+              <View style={{ flex: 1 }}>
+                <TextInput
+                  value={text}
+                  onChangeText={(value) => setText(value)}
+                  style={{
+                    fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+                    fontSize: 20,
+                    color: COLORS.light_black,
+                  }}
+                  placeholder="Search...."
+                />
+              </View>
+              <TouchableOpacity
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: 100,
+                  backgroundColor: COLORS.light_black,
+                  padding: 1,
+                }}
+                onPress={() => setText('')}
+              >
+                {text && <MaterialIcons name="clear" size={20} color="white" />}
+              </TouchableOpacity>
+            </View>
+
+            <View
+              style={{
+                backgroundColor: COLORS.green_filter_button,
+                borderRadius: 22,
+              }}
+            >
+              <TouchableOpacity
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingVertical: 8,
+                  paddingHorizontal: 10,
+                }}
+              >
+                <View
+                  style={{
+                    paddingVertical: 3,
+                    paddingHorizontal: 4,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: 'white',
+                    borderRadius: 100, 
+                    marginRight: 10,
+                  }}
+                >
+                  <Ionicons
+                    name="filter"
+                    size={22}
+                    color={COLORS.green_filter_button}
+                  />
+                </View>
+                <View>
+                  <Text
+                    style={{
+                      fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+                      fontSize: 16,
+                      color: 'white',
+                    }}
+                  >
+                    Filters
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>
-      {/* <Text>{isLoggined ? 'true' : 'false'}</Text> */}
+
       <ScrollView>
-        <View style={{ flex: 1, paddingTop: 20 }}>
-          <View style={{flexDirection: "row"}}>
-            <Text
-              style={{
-                flex: 1,
-                fontFamily: 'Ubuntu_500Medium',
-                fontSize: 24,
-                paddingHorizontal: 20,
-              }}
+        <View style={{ flex: 1, paddingTop: 20, marginHorizontal: 20 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flex: 1 }}>
+              <Text
+                style={{
+                  flex: 1,
+                  fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
+                  fontSize: 24,
+                }}
+              >
+                Post Today
+              </Text>
+            </View>
+
+            <TouchableOpacity
+              style={{ flexDirection: 'row', alignItems: 'center' }}
             >
-              Post Today
-            </Text>
+              <View>
+                <Text
+                  style={{
+                    fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
+                    fontSize: 16,
+                    color: COLORS.light_black,
+                  }}
+                >
+                  See All
+                </Text>
+              </View>
+              <View>
+                <AntDesign
+                  name="caretright"
+                  size={14}
+                  color={COLORS.light_black}
+                />
+              </View>
+            </TouchableOpacity>
           </View>
 
-          <View style={{ height: 200, marginTop: 20 }}>
+          <View style={{ height: ScreenHeight * 0.25, marginTop: 20 }}>
             <ScrollView horizontal scrollEventThrottle={16}>
-              <EventCard
-                currentDay="10"
-                currentMonth="JUNE"
-                timeAgo="10 min ago"
-                titleEvent="Open day"
-                currentPeopleAmount={3}
-                totalPeopleAmount={10}
-                location="FPT UNIVERSITY"
-              />
+              {postList.data.map((post, index) => (
+                <EventCard
+                  key={index}
+                  currentDay={formatToDay({
+                    dateProp: post?.dateFrom,
+                  })}
+                  currentMonth={formatToMonthString({
+                    dateProp: post?.dateFrom,
+                  })}
+                  timeAgo={timeAgo({
+                    dateProp: post?.createAt,
+                  })}
+                  titleEvent={post?.postTitle?.postTitleDescription}
+                  currentPeopleAmount={0}
+                  totalPeopleAmount={post?.postPositions?.[0]?.amount}
+                  location={post?.location}
+                />
+              ))}
             </ScrollView>
           </View>
         </View>
 
-        <View style={{ flex: 1, paddingTop: 20 }}>
-          <Text
-            style={{
-              fontFamily: 'Ubuntu_500Medium',
-              fontSize: 24,
-              paddingHorizontal: 20,
-            }}
-          >
-            Post is missing slot
-          </Text>
+        <View style={{ flex: 1, paddingTop: 20, marginHorizontal: 20 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flex: 1 }}>
+              <Text
+                style={{
+                  flex: 1,
+                  fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
+                  fontSize: 24,
+                }}
+              >
+                Post is missing slot
+              </Text>
+            </View>
 
-          <View style={{ height: 200, marginTop: 20 }}>
+            <TouchableOpacity
+              style={{ flexDirection: 'row', alignItems: 'center' }}
+            >
+              <View>
+                <Text
+                  style={{
+                    fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
+                    fontSize: 16,
+                    color: COLORS.light_black,
+                  }}
+                >
+                  See All
+                </Text>
+              </View>
+              <View>
+                <AntDesign
+                  name="caretright"
+                  size={14}
+                  color={COLORS.light_black}
+                />
+              </View>
+            </TouchableOpacity>
+          </View>
+
+          <View style={{ height: ScreenHeight * 0.25, marginTop: 20 }}>
             <ScrollView horizontal scrollEventThrottle={16}>
-              <EventCard
-                currentDay="10"
-                currentMonth="JUNE"
-                timeAgo="10 min ago"
-                titleEvent="OPEN DAY"
-                currentPeopleAmount={3}
-                totalPeopleAmount={10}
-                location="FPT UNIVERSITY"
-              />
+              {postList?.data.map((post, index) => (
+                <EventCard
+                  key={index}
+                  currentDay={formatToDay({
+                    dateProp: post?.dateFrom,
+                  })}
+                  currentMonth={formatToMonthString({
+                    dateProp: post?.dateFrom,
+                  })}
+                  timeAgo={timeAgo({
+                    dateProp: post?.createAt,
+                  })}
+                  titleEvent={post?.postTitle?.postTitleDescription}
+                  currentPeopleAmount={0}
+                  totalPeopleAmount={post?.postPositions?.[0]?.amount}
+                  location={post?.location}
+                />
+              ))}
             </ScrollView>
           </View>
         </View>
@@ -142,7 +332,7 @@ const styles = StyleSheet.create({
   viewHeader: {
     height: ScreenHeight / 4.5,
     width: ScreenWidth,
-    backgroundColor: 'orange',
+    backgroundColor: COLORS.orange_button,
     borderBottomLeftRadius: 33,
     borderBottomRightRadius: 33,
   },

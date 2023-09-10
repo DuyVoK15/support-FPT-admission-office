@@ -13,14 +13,13 @@ import GetUserInfo from '../../dtos/student/getUserInfo.dto';
 
 export const authService = {
   loginGoogle: (payload: LoginGoogleDto): Promise<AxiosResponse<LoginUser>> => {
-    console.log('HIHI ', payload);
     const url = '/api/account/login';
 
     return axiosClient.post(url, { ...payload });
   },
   getUserInfo: (): Promise<AxiosResponse<GetUserInfo>> => {
-    const url =
-      '/api/account/getAccountByToken/authorization';
+    const url = '/api/account/getAccountByToken/authorization';
+    
     return axiosClient.get(url);
-  }
+  },
 };

@@ -1,4 +1,4 @@
-import UserInfo from "../../models/student/userInfoLogin.model";
+import UserInfo from "../../models/student/userInfo.model";
 
 
 export default interface GetUserInfo {

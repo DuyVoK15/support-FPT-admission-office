@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../../../../components/shared/Header/Back';
 import Backward from '../../../../components/shared/Direction/Backward';
 import ProfileTextInput from '../UserProfile/ProfileTextInput';
@@ -13,8 +13,50 @@ import ProfileSignupTextInput from './ProfileSignupTextInput';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { COLORS } from '../../../../constants/Colors';
 import { ScreenWidth } from '../../../../constants/Demesions';
+import { useAppDispatch } from '../../../../app/store';
+import { signupAccountInformation } from '../../../../features/student/accountSlice';
+import { AccountInfoSignup } from '../../../../models/student/account.model';
+import { isAccountInformationValid } from '../../../../utils/validates';
 
 const UserProfileSignup = () => {
+  const dispatch = useAppDispatch();
+
+  const [identityNumber, setIdentityNumber] = useState<string>('');
+  const [address, setAddress] = useState<string>('');
+  const [personalIdDate, setPersonalIdDate] = useState<string>('');
+  const [placeOfIssue, setPlaceOfIssue] = useState<string>('');
+  const [idStudent, setIdStudent] = useState<string>('');
+  const [fbUrl, setFbUrl] = useState<string>('');
+  const [taxNumber, setTaxNumber] = useState<string>('');
+  const [identityFrontImg, setIdentityFrontImg] = useState<string>('');
+  const [identityBackImg, setIdentityBackImg] = useState<string>('');
+
+  const AccountInfoSignup = {
+    identityNumber,
+    idStudent,
+    fbUrl,
+    address,
+    personalIdDate,
+    placeOfIssue,
+    identityFrontImg,
+    identityBackImg,
+    taxNumber,
+  } as AccountInfoSignup;
+
+  useEffect(() => {
+    console.log(AccountInfoSignup) 
+    if(isAccountInformationValid(AccountInfoSignup)){
+      console.log("con cu")
+    } else {
+      console.log("con chim")
+    }
+  }, []);
+  
+
+  const handleSubmitInfo = async () => {
+    await dispatch(signupAccountInformation(AccountInfoSignup));
+  };
+
   return (
     <View style={styles.container}>
       <Header>
@@ -25,7 +67,7 @@ const UserProfileSignup = () => {
         <Text style={styles.titleHeader}>Sign-up Profile Information</Text>
       </Header>
       <View style={{ flex: 1, alignItems: 'center', marginTop: 30 }}>
-        <View style={{marginBottom: 30}}>
+        <View style={{ marginBottom: 30 }}>
           <Text style={{ fontSize: 24 }}>Profile Information</Text>
         </View>
         <ScrollView
@@ -35,30 +77,44 @@ const UserProfileSignup = () => {
           <ProfileSignupTextInput
             style={{ marginVertical: 10, backgroundColor: 'white' }}
             name="Citizen Identification Number *"
+            value={identityNumber}
+            onChangeText={(value) => setIdentityNumber(value)}
           />
           <ProfileSignupTextInput
             style={{ marginVertical: 10, backgroundColor: 'white' }}
             name="Citizen Identification Issue Address *"
+            value={address}
+            onChangeText={(value) => setAddress(value)}
           />
           <ProfileSignupTextInput
             style={{ marginVertical: 10, backgroundColor: 'white' }}
             name="Citizen Identification Issue Date *"
+            value={personalIdDate}
+            onChangeText={(value) => setPersonalIdDate(value)}
           />
           <ProfileSignupTextInput
             style={{ marginVertical: 10, backgroundColor: 'white' }}
             name="Citizen Identification Issue Place *"
+            value={placeOfIssue}
+            onChangeText={(value) => setPlaceOfIssue(value)}
           />
           <ProfileSignupTextInput
             style={{ marginVertical: 10, backgroundColor: 'white' }}
             name="Student ID *"
+            value={idStudent}
+            onChangeText={(value) => setIdStudent(value)}
           />
           <ProfileSignupTextInput
             style={{ marginVertical: 10, backgroundColor: 'white' }}
             name="Facebook Profile URL *"
+            value={fbUrl}
+            onChangeText={(value) => setFbUrl(value)}
           />
           <ProfileSignupTextInput
             style={{ marginVertical: 10, backgroundColor: 'white' }}
             name="Tax Number"
+            value={taxNumber}
+            onChangeText={(value) => setTaxNumber(value)}
           />
 
           <View style={{ alignItems: 'center', marginVertical: 20 }}>
@@ -113,6 +169,7 @@ const UserProfileSignup = () => {
                 justifyContent: 'center',
                 elevation: 5,
               }}
+              onPress={() => handleSubmitInfo()}
             >
               <View style={{ flex: 1, alignItems: 'center' }}>
                 <Text style={{ fontSize: 16, color: 'white' }}> SUBMIT</Text>

@@ -84,7 +84,7 @@ const Login = () => {
           if (currentUser) {
             currentUser
               .getIdToken()
-              .then( async token => {
+              .then( async (token) => {
                 await dispatch(loginGoogle(token)).then( async () => {
                   await dispatch(getUserInfo());
                 })

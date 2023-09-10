@@ -1,17 +1,20 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { Component } from 'react';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-type AvatarImageProps = Image['props'] & {}
+type AvatarImageProps = Image['props'] & {
+  onPressCamera?: () => void
+};
 export default class AvatarImage extends Component<AvatarImageProps> {
   render() {
-    const {style, ...otherProps} = this.props;
+    const { style, onPressCamera, ...otherProps } = this.props;
 
     return (
       <View
         style={{
           borderRadius: 100,
           borderColor: '#242760',
-          borderWidth: 3,
+          borderWidth: 2,
         }}
       >
         <Image
@@ -23,8 +26,23 @@ export default class AvatarImage extends Component<AvatarImageProps> {
             borderWidth: 3,
             resizeMode: 'stretch',
           }}
-          {...otherProps}         
+          {...otherProps}
         />
+        <TouchableOpacity
+        onPress={onPressCamera}
+          style={{
+            position: 'absolute',
+            bottom: 4,
+            left: 52,
+            // backgroundColor: 'rgba(255,255,255,0.8)',
+          }}
+        >
+          <MaterialCommunityIcons
+            name="camera-plus-outline"
+            size={36}
+            color="rgba(255,255,255,0.5)"
+          />
+        </TouchableOpacity>
       </View>
     );
   }

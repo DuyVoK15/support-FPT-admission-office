@@ -1,4 +1,6 @@
-type UserInfo = {
+import { AccountInfo } from "./account.model";
+
+type UserInfoLogin = {
     access_token: string
     account: {
         id: number,
@@ -18,22 +20,9 @@ type UserInfo = {
             totalPost: number,
             totalSalary: number
         },
-        accountInformations: AccountInfo[]
+        accountInformation: AccountInfo;
     }
     
 };
-type AccountInfo = {
-    id: 0,
-    accountId: 0,
-    personalId: string,
-    idStudent: string,
-    fbUrl: string,
-    address: string,
-    personalIdDate: string,
-    placeOfIssue: string,
-    personalIdFrontImg: string,
-    personalIdBackImg: string,
-    taxNumber: string
-}
 
-export default UserInfo;
+export default UserInfoLogin;
