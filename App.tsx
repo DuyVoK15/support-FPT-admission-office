@@ -5,7 +5,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
 import { store } from './src/app/store';
 import { useCallback, useEffect } from 'react';
-import { AuthProvider } from './src/context/AuthContext';
 import { useFonts, Ubuntu_300Light, Ubuntu_300Light_Italic, Ubuntu_400Regular, Ubuntu_400Regular_Italic, Ubuntu_500Medium, Ubuntu_500Medium_Italic, Ubuntu_700Bold, Ubuntu_700Bold_Italic } from '@expo-google-fonts/ubuntu';
 
 export default function App() {
@@ -23,14 +22,12 @@ export default function App() {
     return null;
   }
   return (
-    <AuthProvider>
       <Provider store={store}>
         <NavigationContainer>         
             <AppNavigator />
           <StatusBar backgroundColor="transparent" translucent={true} />
         </NavigationContainer>
       </Provider>
-    </AuthProvider>
   );
 }
 

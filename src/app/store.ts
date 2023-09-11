@@ -2,9 +2,9 @@
 
 import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
-import authReducer from '../features/student/authSlice';
-import postReducer from '../features/student/postSlice';
-import accountReducer from'../features/student/accountSlice';
+import authReducer from '../features/collaborator/authSlice';
+import postReducer from '../features/collaborator/postSlice';
+import accountReducer from'../features/collaborator/accountSlice';
 
 export const store = configureStore({
   reducer: {

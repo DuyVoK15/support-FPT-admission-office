@@ -1,4 +1,4 @@
-import { AccountInfoSignup } from "../models/student/account.model";
+import { AccountInfoSignup } from "../models/collaborator/account.model";
 
 export function isAccountInformationValid(accountInfo: AccountInfoSignup): boolean {
   for (const key in accountInfo) {

@@ -2,14 +2,14 @@ import { StyleSheet } from 'react-native';
 import React, { FC, useEffect, useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ROUTES } from '../constants/Routes';
-import BottomTabs from './student/MainTab/BottomTabs';
+import BottomTabs from './collaborator/MainTab/BottomTabs';
 import { useAppSelector } from '../app/hooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppConstants from '../enums/student/app';
-import LoginScreen from './student/AuthStack/Login';
+import LoginScreen from './collaborator/AuthStack/Login';
 import { useAppDispatch } from '../app/store';
-import { getUserInfo } from '../features/student/authSlice';
-import UserProfileSignup from '../screens/student/Profile/UserProfileSignup';
+import { getUserInfo } from '../features/collaborator/authSlice';
+import UserProfileSignup from '../screens/collaborator/Profile/UserProfileSignup';
 
 const AuthStackScreen: React.FC = () => {
   return <LoginScreen />;
@@ -73,13 +73,17 @@ const AppNavigator: FC = () => {
   };
 
   useEffect(() => {
-    fetchUserInfo();
+    console.log("Vô AppNavigator gọi getUsserInfo")
+    if(isLogin){
+      fetchUserInfo();
+    }
+    
     console.log(JSON.stringify(userInfo, null, 2));
   }, [loading]); 
 
-  return isLogin ? (
+  return (isLogin && userInfo?.roleId===2) ? (
     userInfo?.accountInformation === null ? (
-      <UserProfileSignup />
+      <UserProfileSignup /> 
     ) : (
       <HomeStudentStackScreen />
     )
