@@ -1,6 +1,8 @@
+import StatusInfo from "../../models/collaborator/statusInfo.model";
 import { UserInfo } from "../../models/collaborator/userInfo.model";
 
 
-export default interface GetUserInfo {
+export default interface GetUserInfoDto {
+    status: StatusInfo;
     data: UserInfo;
 }

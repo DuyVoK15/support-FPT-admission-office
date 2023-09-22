@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 type AvatarImageProps = Image['props'] & {
-  onPressCamera?: () => void
+  onPressCamera?: () => void;
 };
 export default class AvatarImage extends Component<AvatarImageProps> {
   render() {
@@ -12,9 +12,12 @@ export default class AvatarImage extends Component<AvatarImageProps> {
     return (
       <View
         style={{
+          height: 147,
+          width: 147,
           borderRadius: 100,
           borderColor: '#242760',
           borderWidth: 2,
+          alignItems: 'center',
         }}
       >
         <Image
@@ -29,7 +32,7 @@ export default class AvatarImage extends Component<AvatarImageProps> {
           {...otherProps}
         />
         <TouchableOpacity
-        onPress={onPressCamera}
+          onPress={onPressCamera}
           style={{
             position: 'absolute',
             bottom: 4,

@@ -7,9 +7,9 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import { ScreenHeight, ScreenWidth } from '../../../constants/Demesions';
-import EventCard from '../../../components/collaborator/Home/EventCard';
-import Explore from '../../../screens/collaborator/Home';
+import { ScreenHeight, ScreenWidth } from '../../../../constants/Demesions';
+import EventCard from '../../../../components/collaborator/Home/EventCard';
+import Explore from '../../../../screens/collaborator/Home';
 
 const Home: React.FC = () => {
   return (

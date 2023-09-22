@@ -2,6 +2,7 @@ import {
   Alert,
   Button,
   Image,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -11,11 +12,14 @@ import {
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch } from '../../../../app/store';
-import { logout } from '../../../../features/collaborator/authSlice';
-import AvatarImage from './AvatarImage';
+import {
+  getUserInfo,
+  logout,
+} from '../../../../features/collaborator/authSlice';
+import AvatarImage from '../../../../components/collaborator/Profile/UserProfile/AvatarImage';
 import { ScreenWidth } from '../../../../constants/Demesions';
 import { COLORS } from '../../../../constants/Colors';
-import ProfileTextInput from './ProfileTextInput';
+import ProfileTextInput from '../../../../components/collaborator/Profile/UserProfile/ProfileTextInput';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   UserInfo,
@@ -25,16 +29,24 @@ import { formatToDate, formatToISO_8601 } from '../../../../utils/formats';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import { firebase } from '../../../../config/firebase';
-import { updateProfile } from '../../../../features/collaborator/accountSlice';
+import {
+  updateAvatar,
+  updateProfile,
+} from '../../../../features/collaborator/accountSlice';
 import { AccountInfoUpdate } from '../../../../models/collaborator/account.model';
+import TextInputDatePicker from '../../../../components/collaborator/Profile/UserProfile/DatePickerModal';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import DatePickerField from '../../../../components/collaborator/Profile/UserProfile/DatePickerModal';
+import { useAppSelector } from '../../../../app/hooks';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { FONTS_FAMILY } from '../../../../constants/Fonts';
+import SubmitButton from '../../../../components/shared/Button/SubmitButton';
 
-interface UserProfileProps {
-  userInfo: UserInfo | null; 
-}
-const UserProfile: React.FC<UserProfileProps> = ({ userInfo }) => {
-  const dispatch = useAppDispatch();
+const UserProfile: React.FC = () => {
   const imgUndefined =
     'https://cdn2.storify.me/data/uploads/2022/11/marcdayne_202211192100.jpg';
+
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
@@ -49,20 +61,20 @@ const UserProfile: React.FC<UserProfileProps> = ({ userInfo }) => {
   const [identityFrontImg, setIdentityFrontImg] = useState<string>('');
   const [identityBackImg, setIdentityBackImg] = useState<string>('');
   const [taxNumber, setTaxNumber] = useState<string>('');
-  const [image, setImage] = useState<string>(imgUndefined);
+  const [imagePicker, setImagePicker] = useState<string>(imgUndefined);
   const [uploading, setUploading] = useState<boolean>(false);
 
   const UserInfoUpdate = {
     name,
     phone,
-    dateOfBirth: formatToISO_8601({dateProp: dateOfBirth}),
+    dateOfBirth: formatToISO_8601({ dateProp: dateOfBirth }),
     imgUrl,
-    updateAccountInformation: {
+    accountInformation: {
       identityNumber,
       idStudent,
       fbUrl,
       address,
-      personalIdDate: formatToISO_8601({dateProp: personalIdDate}),
+      personalIdDate: formatToISO_8601({ dateProp: personalIdDate }),
       placeOfIssue,
       identityFrontImg,
       identityBackImg,
@@ -71,33 +83,34 @@ const UserProfile: React.FC<UserProfileProps> = ({ userInfo }) => {
   } as UserInfoUpdate;
 
   const handleUpdateProfile = async () => {
-    // const rs = await dispatch(updateProfile(UserInfoUpdate));
-    // if (rs) {
-    //   console.log('Updated profile success!');
-    // } else {
-    //   console.log('Failed to update profile!');
-    // }
-    console.log("Data: ", JSON.stringify(UserInfoUpdate, null, 2))
+    const rs = await dispatch(updateProfile(UserInfoUpdate));
+    if (rs) {
+      console.log('Updated profile success!');
+    } else {
+      console.log('Failed to update profile!');
+    }
+    console.log('Data: ', JSON.stringify(UserInfoUpdate, null, 2));
   };
 
+  // Pick and Upload image
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      setImagePicker(result.assets[0].uri);
     }
   };
 
   const uploadMedia = async () => {
     setUploading(true);
     try {
-      const { uri } = await FileSystem.getInfoAsync(image);
+      const { uri } = await FileSystem.getInfoAsync(imagePicker);
       const blob = await new Promise<Blob>((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.onload = () => {
@@ -111,7 +124,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ userInfo }) => {
         xhr.send(null);
       });
 
-      const filename = image.substring(image.lastIndexOf('/') + 1);
+      const filename = imagePicker.substring(imagePicker.lastIndexOf('/') + 1);
       const storageRef = firebase.storage().ref();
       const ref = storageRef.child(filename);
       await ref.put(blob);
@@ -119,9 +132,11 @@ const UserProfile: React.FC<UserProfileProps> = ({ userInfo }) => {
       storageRef
         .child(filename)
         .getDownloadURL()
-        .then((url) => {
+        .then(async (url) => {
           // url chứa đường dẫn tới hình ảnh
           console.log('URL của hình ảnh:', url);
+          setImgUrl(url);
+          await dispatch(updateAvatar(url));
         })
         .catch((error) => {
           // Xử lý lỗi nếu có
@@ -130,13 +145,25 @@ const UserProfile: React.FC<UserProfileProps> = ({ userInfo }) => {
 
       setUploading(false);
       Alert.alert('Photo uploaded!');
-      setImage('');
+      setImagePicker(imgUndefined);
     } catch (error) {
+      setUploading(false);
       console.log(error);
     }
   };
 
+  // Load UserInfo state;
+  const dispatch = useAppDispatch();
+  const userInfo = useAppSelector((state) => state.auth.userInfo);
+  const fetchUserInfo = async () => {
+    await dispatch(getUserInfo()).catch((error) => {
+      console.log(error);
+    });
+    unwrapResult;
+  };
   useEffect(() => {
+    fetchUserInfo();
+
     if (userInfo) {
       setName(userInfo?.name);
       setEmail(userInfo?.email);
@@ -163,164 +190,187 @@ const UserProfile: React.FC<UserProfileProps> = ({ userInfo }) => {
     }
   }, []);
 
-  console.log(JSON.stringify(userInfo));
+  // Handle logout
   const handleLogout = async () => {
     await dispatch(logout());
   };
+
+  // Date time picker modal
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date: any) => {
+    console.log('A date has been picked: ', formatToDate({ dateProp: date }));
+    setPersonalIdDate(formatToDate({ dateProp: date }));
+    hideDatePicker();
+  };
+
   return (
     <View style={styles.container}>
-      <View style={{ width: ScreenWidth * 0.9, marginTop: 50 }}>
-        <Text style={{ fontSize: 24 }}>User Profile</Text>
-      </View>
-
-      <View style={{ alignItems: 'center', flex: 1 }}>
-        <AvatarImage
-          source={{
-            uri: imgUrl,
-          }}
-          onPressCamera={pickImage}
-        />
-        <Button title="Update" onPress={uploadMedia} />
-
-        <View style={{ marginTop: 30 }}>
-          <Button title="Logout" onPress={() => handleLogout()} />
+      <View style={{ flex: 1, marginHorizontal: 20 }}>
+        <View style={{ marginTop: 50 }}>
+          <Text style={{ fontSize: 24 }}>User Profile</Text>
         </View>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          scrollEventThrottle={16}
-        >
-          <ProfileTextInput
-            name="Name"
-            value={name}
-            onChangeText={(value) => setName(value)}
-          />
-          <ProfileTextInput
-            name="Phone Number"
-            value={phone}
-            onChangeText={(value) => setPhone(value)}
-          />
-          <ProfileTextInput
-            name="Date Of Birth"
-            value={dateOfBirth}
-            onChangeText={(value) => setDateOfBirth(value)}
-          />
-          <ProfileTextInput
-            name="Avatar Image URL"
-            value={imgUrl}
-            onChangeText={(value) => setImgUrl(value)}
-          />
-          <ProfileTextInput
-            name="Citizen Identification Number"
-            value={identityNumber}
-            onChangeText={(value) => setIdentityNumber(value)}
-          />
-          <ProfileTextInput
-            name="Citizen Identification Issue Address"
-            value={address}
-            onChangeText={(value) => setAddress(value)}
-          />
-          <ProfileTextInput
-            name="Citizen Identification Issue Date"
-            value={personalIdDate}
-            onChangeText={(value) => setPersonalIdDate(value)}
-          />
-          <ProfileTextInput
-            name="Citizen Identification Issue Place"
-            value={placeOfIssue}
-            onChangeText={(value) => setPlaceOfIssue(value)}
-          />
-          <ProfileTextInput
-            name="Student ID"
-            value={idStudent}
-            onChangeText={(value) => setIdStudent(value)}
-          />
-          <ProfileTextInput
-            name="Facebook Profile URL"
-            value={fbUrl}
-            onChangeText={(value) => setFbUrl(value)}
-          />
-          <ProfileTextInput
-            name="Tax Number"
-            value={taxNumber}
-            onChangeText={(value) => setTaxNumber(value)}
-          />
 
-          <View style={{ alignItems: 'center', marginVertical: 20 }}>
-            <Text style={{ fontSize: 16 }}>
-              Citizen Identification Card Picture
-            </Text>
+        
+          <View style={{ alignItems: 'center' }}>
+            {imagePicker === imgUndefined ? (
+              <AvatarImage
+                source={{
+                  uri: imgUrl,
+                }}
+                onPressCamera={pickImage}
+              />
+            ) : (
+              <AvatarImage
+                source={{
+                  uri: imagePicker,
+                }}
+                onPressCamera={pickImage}
+              />
+            )}
+
+            {imagePicker !== imgUndefined && (
+              <Button title="Update" onPress={uploadMedia} />
+            )}
+
+            <View style={{ marginTop: 30 }}>
+              <Button title="Logout" onPress={() => handleLogout()} />
+            </View>
           </View>
 
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginBottom: 30,
-            }}
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            scrollEventThrottle={16}
+            // style={{width: ScreenWidth*0.9}}
+            // contentContainerStyle={{width: ScreenWidth*0.9}}
           >
-            <TouchableOpacity
-              style={{ alignItems: 'center' }}
-              onPress={() => console.log('a')}
-            >
-              <Ionicons name="image" size={160} />
-              <Text style={{ color: COLORS.light_black }}>Front Image</Text>
-            </TouchableOpacity>
+            <ProfileTextInput
+              name="Name"
+              value={name}
+              onChangeText={(value) => setName(value)}
+            />
+            <ProfileTextInput
+              name="Phone Number"
+              value={phone}
+              onChangeText={(value) => setPhone(value)}
+            />
+            <DatePickerField
+              onPress={() => showDatePicker()}
+              name="Date Of Birth"
+              value={dateOfBirth}
+            />
+            <ProfileTextInput
+              name="Citizen Identification Number"
+              value={identityNumber}
+              onChangeText={(value) => setIdentityNumber(value)}
+            />
+            <ProfileTextInput
+              name="Citizen Identification Issue Address"
+              value={address}
+              onChangeText={(value) => setAddress(value)}
+            />
+            <DatePickerField
+              onPress={() => showDatePicker()}
+              name="Citizen Identification Issue Date"
+              value={personalIdDate}
+            />
+            <DateTimePickerModal
+              isVisible={isDatePickerVisible}
+              mode="date"
+              onConfirm={handleConfirm}
+              onCancel={hideDatePicker}
+            />
+            <ProfileTextInput
+              name="Citizen Identification Issue Place"
+              value={placeOfIssue}
+              onChangeText={(value) => setPlaceOfIssue(value)}
+            />
+            <ProfileTextInput
+              name="Student ID"
+              value={idStudent}
+              onChangeText={(value) => setIdStudent(value)}
+            />
+            <ProfileTextInput
+              name="Facebook Profile URL"
+              value={fbUrl}
+              onChangeText={(value) => setFbUrl(value)}
+            />
+            <ProfileTextInput
+              name="Tax Number"
+              value={taxNumber}
+              onChangeText={(value) => setTaxNumber(value)}
+            />
+
+            <View style={{ alignItems: 'center', marginVertical: 20 }}>
+              <Text
+                style={{
+                  fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+                  fontSize: 16,
+                }}
+              >
+                Citizen Identification Card Picture
+              </Text>
+            </View>
+
             <View
               style={{
-                height: 130,
-                borderWidth: 1,
-                borderColor: COLORS.grey_icon,
-                marginHorizontal: 20,
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginBottom: 30,
               }}
-            ></View>
-            <TouchableOpacity style={{ alignItems: 'center' }}>
-              <Ionicons name="image" size={160} />
-              <Text style={{ color: COLORS.light_black }}>Back Image</Text>
-            </TouchableOpacity>
-          </View>
-
+            >
+              <TouchableOpacity
+                style={{ alignItems: 'center' }}
+                onPress={() => console.log('a')}
+              >
+                <Ionicons name="image" size={160} />
+                <Text
+                  style={{
+                    fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+                    color: COLORS.light_black,
+                  }}
+                >
+                  Front Image
+                </Text>
+              </TouchableOpacity>
+              <View
+                style={{
+                  height: 130,
+                  borderWidth: 1,
+                  borderColor: COLORS.grey_icon,
+                  marginHorizontal: 20,
+                }}
+              ></View>
+              <TouchableOpacity style={{ alignItems: 'center' }}>
+                <Ionicons name="image" size={160} />
+                <Text
+                  style={{
+                    fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+                    color: COLORS.light_black,
+                  }}
+                >
+                  Back Image
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
           <View
             style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: 50,
+              marginVertical: 10
             }}
           >
-            <TouchableOpacity
-              style={{
-                width: ScreenWidth * 0.8,
-                paddingVertical: 15,
-                backgroundColor: COLORS.orange_button,
-                borderRadius: 15,
-                alignItems: 'center',
-                justifyContent: 'center',
-                shadowColor: '#000',
-                shadowOffset: {
-                  width: 0,
-                  height: 2,
-                },
-                shadowOpacity: 0.25,
-                shadowRadius: 3.84,
-                elevation: 5,
-              }}
-              onPress={() => handleUpdateProfile()}
-            >
-              <View style={{ flex: 1, alignItems: 'center' }}>
-                <Text style={{ fontSize: 16, color: 'white' }}>
-                  {' '}
-                  SAVE CHANGE
-                </Text>
-              </View>
-              <MaterialCommunityIcons
-                style={{ position: 'absolute', right: 10 }}
-                name="arrow-right-circle"
-                size={30}
-                color="black"
-              />
-            </TouchableOpacity>
+            <SubmitButton titleButton="SAVE CHANGE" onPress={() => handleUpdateProfile()}  />
           </View>
-        </ScrollView>
+       
       </View>
     </View>
   );
@@ -331,7 +381,6 @@ export default UserProfile;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     backgroundColor: 'white',
   },
 });

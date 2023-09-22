@@ -1,13 +1,10 @@
-// AuthService.ts
+// PostService.ts
 import { AxiosResponse } from 'axios';
-
-// import LoginDto from '../dtos/login.dto';
-// import LoginUserToken from '../dtos/login.userToken.model';
-import axiosClient from './axiosClient';
-import Post from '../../dtos/collaborator/post.dto';
+import axiosClient from '../axiosClient';
+import PostDto from '../../dtos/collaborator/post.dto';
 
 export const postService = {
-  getAllPost: (): Promise<AxiosResponse<Post>> => {
+  getAllPost: (): Promise<AxiosResponse<PostDto>> => {
     const url =
       '/api/post/getAll';
     console.log('Ahihi');

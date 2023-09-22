@@ -28,7 +28,7 @@ import {
 } from '../../../utils/formats';
 import { COLORS } from '../../../constants/Colors';
 
-const Explore = () => {
+const Home = () => {
   const [text, setText] = useState<string>('');
 
   const dispatch = useAppDispatch();
@@ -56,9 +56,9 @@ const Explore = () => {
               alignItems: 'center',
             }}
           >
-            <View style={{ flex: 1 }}>
+            <TouchableOpacity style={{ flex: 1 }}>
               <Octicons name="three-bars" size={30} color="white" />
-            </View>
+            </TouchableOpacity>
             <View style={{ flex: 8, alignItems: 'center' }}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Text
@@ -104,6 +104,7 @@ const Explore = () => {
               <Ionicons name="notifications" size={30} color="white" />
             </View>
           </View>
+
           <View
             style={{
               flexDirection: 'row',
@@ -326,7 +327,7 @@ const Explore = () => {
   );
 };
 
-export default Explore;
+export default Home;
 
 const styles = StyleSheet.create({
   container: {

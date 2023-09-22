@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import Post from '../../dtos/collaborator/post.dto';
+import PostDto from '../../dtos/collaborator/post.dto';
 import { postService } from '../../services/collaborator/post.service';
 import DataPost from '../../models/collaborator/dataPost.model';
 
 interface PostState {
-  post: Post;
+  post: PostDto;
   loading: boolean;
   error: string;
   // Thêm các trường khác liên quan đến người dùng nếu cần thiết

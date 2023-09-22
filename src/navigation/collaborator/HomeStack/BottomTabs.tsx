@@ -1,11 +1,11 @@
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Home from './Home';
-import Events from './Events';
-import MyBooking from './MyBooking';
+import Home from './MainTabs/HomeTab';
+import Events from './MainTabs/EventTab';
+import MyBooking from './MainTabs/BookingTab';
 import { ROUTES } from '../../../constants/Routes';
-import Profile from './Profile';
+import Profile from './MainTabs/ProfileTab';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { COLORS } from '../../../constants/Colors';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';

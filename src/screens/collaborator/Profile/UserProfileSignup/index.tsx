@@ -8,8 +8,8 @@ import {
 import React, { useEffect, useState } from 'react';
 import Header from '../../../../components/shared/Header/Back';
 import Backward from '../../../../components/shared/Direction/Backward';
-import ProfileTextInput from '../UserProfile/ProfileTextInput';
-import ProfileSignupTextInput from './ProfileSignupTextInput';
+import ProfileTextInput from '../../../../components/collaborator/Profile/UserProfile/ProfileTextInput';
+import ProfileSignupTextInput from '../../../../components/collaborator/Profile/UserProfileSignup/ProfileSignupTextInput';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { COLORS } from '../../../../constants/Colors';
 import { ScreenWidth } from '../../../../constants/Demesions';
@@ -17,6 +17,7 @@ import { useAppDispatch } from '../../../../app/store';
 import { signupAccountInformation } from '../../../../features/collaborator/accountSlice';
 import { AccountInfoSignup } from '../../../../models/collaborator/account.model';
 import { isAccountInformationValid } from '../../../../utils/validates';
+import { formatToISO_8601 } from '../../../../utils/formats';
 
 const UserProfileSignup = () => {
   const dispatch = useAppDispatch();
@@ -36,7 +37,7 @@ const UserProfileSignup = () => {
     idStudent,
     fbUrl,
     address,
-    personalIdDate,
+    personalIdDate: formatToISO_8601({dateProp: personalIdDate}),
     placeOfIssue,
     identityFrontImg,
     identityBackImg,
@@ -151,7 +152,7 @@ const UserProfileSignup = () => {
               <Text style={{ color: COLORS.light_black }}>Back Image</Text>
             </TouchableOpacity>
           </View>
-
+              
           <View
             style={{
               alignItems: 'center',

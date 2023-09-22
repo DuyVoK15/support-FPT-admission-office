@@ -2,9 +2,8 @@ import axios from 'axios';
 import createAuthRefreshInterceptor, {
     AxiosAuthRefreshRequestConfig,
 } from 'axios-auth-refresh';
-import AppConstants from '../../enums/student/app';
+import AppConstants from '../enums/student/app';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect } from 'react';
 const axiosClient = axios.create({
     baseURL: "http://54.179.223.200",
     headers: {
@@ -14,7 +13,6 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(async (config: any) => {
     const customHeaders: Record<string, unknown> = {};
-
     const accessToken = await AsyncStorage.getItem(AppConstants.ACCESS_TOKEN);
     console.log("<AxiosClient> ACCESSTOKEN: ", accessToken) 
     if (accessToken) { 
@@ -60,7 +58,7 @@ const refreshAuthLogic = async (failedRequest: {
     }
 };
 
-createAuthRefreshInterceptor(axiosClient, refreshAuthLogic);
+// createAuthRefreshInterceptor(axiosClient, refreshAuthLogic);
 
 // HOW TO CALL EXTERNAL API
 

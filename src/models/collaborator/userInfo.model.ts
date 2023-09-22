@@ -26,7 +26,7 @@ type UserInfoUpdate = {
     phone: string;
     dateOfBirth: string;
     imgUrl: string;
-    updateAccountInformation: AccountInfoUpdate;
+    accountInformation: AccountInfoUpdate;
 };
 
 export { UserInfo, UserInfoUpdate };

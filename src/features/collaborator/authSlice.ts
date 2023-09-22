@@ -23,7 +23,7 @@ const initialState: AuthState = {
   role: -1,
   userInfoLogin: null,
   userInfo: null,
-  loading: false,
+  loading: false, 
   error: '',
 };
 
@@ -36,9 +36,14 @@ export const loginGoogle = createAsyncThunk(
         idToken: JWT,
         fcmToken: '',
       });
+      console.log("<AuthSlice> ResData: ", JSON.stringify(result.data.data))
       await AsyncStorage.setItem(
         AppConstants.ACCESS_TOKEN,
         result.data.data.access_token
+      );
+      await AsyncStorage.setItem(
+        AppConstants.ID_TOKEN,
+        JWT
       );
       return result.data;
     } catch (error) {
@@ -85,18 +90,22 @@ export const getUserInfo = createAsyncThunk(
       return rejectWithValue(error.message);
     }
   }
-);
+); 
 export const logout = createAsyncThunk(
   'auth/logout',
   async (_, { rejectWithValue }) => {
     try {
       console.log('Có vô logout');
-      await AsyncStorage.removeItem(AppConstants.ACCESS_TOKEN);
-      await GoogleSignin.revokeAccess();
-      await GoogleSignin.signOut();
       await auth()
         .signOut()
-        .then(() => console.log('User signed out!'));
+        .then(() => console.log('Current user signed out!'));
+      await AsyncStorage.removeItem(AppConstants.ACCESS_TOKEN);
+      await AsyncStorage.removeItem(AppConstants.ID_TOKEN);
+      // await GoogleSignin.revokeAccess();
+      await GoogleSignin.signOut().then(() => {
+        console.log("Google sign out!")
+      }); 
+      
       return true;
     } catch (error: any) {
       return rejectWithValue(error.message);
@@ -110,6 +119,7 @@ export const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(logout.pending, (state) => {
+        console.log("pending out")
         state.loading = true;
         state.error = '';
       })
@@ -117,8 +127,8 @@ export const authSlice = createSlice({
         state.isAuthenticated = false;
         state.role = -1;
         state.loading = false;
-        state.userInfoLogin = null;
-      })
+        state.userInfoLogin = null; 
+      }) 
       .addCase(logout.rejected, (state, action) => {
         state.error = String(action.payload);
         state.loading = false;

@@ -1,8 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { UserInfo, UserInfoUpdate } from '../../models/collaborator/userInfo.model';
+import {
+  UserInfo,
+  UserInfoUpdate,
+} from '../../models/collaborator/userInfo.model';
 import { AccountInfoSignup } from '../../models/collaborator/account.model';
 import { AxiosError } from 'axios';
 import { accountService } from '../../services/collaborator/account.service';
+import UpdateAvatarDto from '../../dtos/collaborator/payload/updateAvatar.dto';
 
 interface AccountState {
   userInfo: UserInfo | null;
@@ -49,17 +53,32 @@ export const updateProfile = createAsyncThunk(
         phone: account.phone,
         dateOfBirth: account.dateOfBirth,
         imgUrl: account.imgUrl,
-        updateAccountInformation: {
-          identityNumber: account.updateAccountInformation.identityNumber,
-          idStudent: account.updateAccountInformation.idStudent,
-          fbUrl: account.updateAccountInformation.fbUrl,
-          address: account.updateAccountInformation.address,
-          personalIdDate: account.updateAccountInformation.personalIdDate,
-          placeOfIssue: account.updateAccountInformation.placeOfIssue,
-          identityFrontImg: account.updateAccountInformation.identityFrontImg,
-          identityBackImg: account.updateAccountInformation.identityBackImg,
-          taxNumber: account.updateAccountInformation.taxNumber,
+        accountInformation: {
+          identityNumber: account.accountInformation.identityNumber,
+          idStudent: account.accountInformation.idStudent,
+          fbUrl: account.accountInformation.fbUrl,
+          address: account.accountInformation.address,
+          personalIdDate: account.accountInformation.personalIdDate,
+          placeOfIssue: account.accountInformation.placeOfIssue,
+          identityFrontImg: account.accountInformation.identityFrontImg,
+          identityBackImg: account.accountInformation.identityBackImg,
+          taxNumber: account.accountInformation.taxNumber,
         },
+      });
+      return result.data.data;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      console.log(error);
+      return rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+export const updateAvatar = createAsyncThunk(
+  'account/updateAvatar',
+  async (imgUrl: string, { rejectWithValue }) => {
+    try {
+      const result = await accountService.updateAvatar({
+        imgUrl,
       });
       return result.data.data;
     } catch (error) {
@@ -97,6 +116,18 @@ export const accountSlice = createSlice({
         state.loading = false;
       })
       .addCase(updateProfile.rejected, (state, action) => {
+        state.error = String(action.payload);
+        state.loading = false;
+      })
+      .addCase(updateAvatar.pending, (state) => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(updateAvatar.fulfilled, (state, action) => {
+        state.userInfo = action.payload;
+        state.loading = false;
+      })
+      .addCase(updateAvatar.rejected, (state, action) => {
         state.error = String(action.payload);
         state.loading = false;
       });

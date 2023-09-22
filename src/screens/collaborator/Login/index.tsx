@@ -63,7 +63,9 @@ const Login = () => {
             currentUser
               .getIdToken()
               .then( async (token) => {
+                console.log("<Login> Có token")
                 await dispatch(loginGoogle(token)).then( async () => {
+                  console.log("<Login> Đnhap okie")
                   await dispatch(getUserInfo());
                 })
                 setIdToken(token);
