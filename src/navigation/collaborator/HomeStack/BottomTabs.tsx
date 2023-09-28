@@ -1,20 +1,21 @@
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Home from './MainTabs/HomeTab';
-import Events from './MainTabs/EventTab';
-import MyBooking from './MainTabs/BookingTab';
 import { ROUTES } from '../../../constants/Routes';
-import Profile from './MainTabs/ProfileTab';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../../constants/Colors';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import AccountTab from './MainTabs/AccountTab';
+import BookingTab from './MainTabs/BookingTab';
+import EventTab from './MainTabs/EventTab';
+import HomeTab from './MainTabs/HomeTab';
+import { HomeCollaboratorStackNavigatorParamList } from '../../../../type';
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<HomeCollaboratorStackNavigatorParamList>();
 const BottomTabs: React.FC = () => {
   return (
     <Tab.Navigator
-      initialRouteName={ROUTES.HOME}
+      initialRouteName={"HOME"}
       // tabBarPosition='bottom'
       screenOptions={{
         tabBarActiveTintColor: COLORS.orange_icon,
@@ -32,8 +33,8 @@ const BottomTabs: React.FC = () => {
       }}
     >
       <Tab.Screen
-        name={ROUTES.HOME}
-        component={Home}
+        name={"HOME"}
+        component={HomeTab}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
@@ -42,8 +43,8 @@ const BottomTabs: React.FC = () => {
         }}
       />
       <Tab.Screen
-        name={ROUTES.EVENTS}
-        component={Events}
+        name={"EVENTS"}
+        component={EventTab}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
@@ -52,8 +53,8 @@ const BottomTabs: React.FC = () => {
         }}
       />
       <Tab.Screen
-        name={ROUTES.MY_BOOKING}
-        component={MyBooking}
+        name={"BOOKING"}
+        component={BookingTab}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
@@ -62,8 +63,8 @@ const BottomTabs: React.FC = () => {
         }}
       />
       <Tab.Screen
-        name={ROUTES.PROFILE}
-        component={Profile}
+        name={"ACCOUNT"}
+        component={AccountTab}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (

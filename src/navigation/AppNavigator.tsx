@@ -18,18 +18,43 @@ import { id } from 'date-fns/locale';
 import { getRefreshIdToken } from '../config/rnfirebase';
 import Loading from '../components/shared/Loading/Loading';
 import { error } from 'console';
+import EventDetail from '../screens/collaborator/EventDetail';
+import { HomeCollaboratorStackNavigatorParamList } from '../../type';
+import UserProfile from '../screens/collaborator/Profile/UserProfile';
+import CertificateHistory from '../screens/collaborator/Certificate';
 
 const AuthStackScreen: React.FC = () => {
   return <LoginScreen />;
 };
 
-const HomeCollaboratorStack = createNativeStackNavigator();
-const HomeCollaboratorStackScreen: React.FC = () => {
+const HomeCollaboratorStack = createNativeStackNavigator<HomeCollaboratorStackNavigatorParamList>();
+const HomeCollaboratorStackScreen = () => {
   return (
     <HomeCollaboratorStack.Navigator>
       <HomeCollaboratorStack.Screen
-        name={ROUTES.HOME_TAB}
+        name={"HOME_TAB"}
         component={BottomTabs}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <HomeCollaboratorStack.Screen
+        name={"PROFILE"}
+        component={UserProfile}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <HomeCollaboratorStack.Screen
+        name={"EVENT_DETAIL"}
+        component={EventDetail}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <HomeCollaboratorStack.Screen
+        name={"CERTIFICATE_HISTORY"}
+        component={CertificateHistory}
         options={{
           headerShown: false,
         }}
@@ -60,21 +85,6 @@ const AppNavigator: FC = () => {
   const loading = useAppSelector((state) => state.account.loading);
   const isLoading = useAppSelector((state) => state.auth.loading);
   const [isLogin, setIsLogin] = useState<boolean>(true);
-
-  // Check login
-  // const checkLoginStatus = async () => {
-  //   const result = (await AsyncStorage.getItem(AppConstants.ACCESS_TOKEN))
-  //     ? true
-  //     : false;
-  //   if (result) {
-  //     setIsLogin(true);
-  //   } else setIsLogin(false);
-  // };
-
-  // useEffect(() => {
-  //   console.log('isAuthenticated: ', isAuthenticated)
-  //   checkLoginStatus();
-  // }, [isAuthenticated]);
 
   const loadAuthState = async () => {
     console.log('Vô loadstate');
