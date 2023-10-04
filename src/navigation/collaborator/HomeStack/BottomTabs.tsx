@@ -36,7 +36,7 @@ const BottomTabs: React.FC = () => {
       }}
     >
       <Tab.Screen
-        name={'HOME'}
+        name={'HOME_STACK_NAVIGATOR'}
         component={HomeStackNavigator}
         options={{
           headerShown: false,
@@ -47,7 +47,7 @@ const BottomTabs: React.FC = () => {
         }}
       />
       <Tab.Screen
-        name={'EVENTS'}
+        name={'EVENT_STACK_NAVIGATOR'}
         component={EventTab}
         options={{
           headerShown: false,
@@ -58,7 +58,7 @@ const BottomTabs: React.FC = () => {
         }}
       />
       <Tab.Screen
-        name={'MAP'}
+        name={'MAP_STACK_NAVIGATOR'}
         component={MapTab}
         options={{
           headerShown: false,
@@ -69,7 +69,7 @@ const BottomTabs: React.FC = () => {
         }}
       />
       <Tab.Screen
-        name={'BOOKING'}
+        name={'BOOKING_STACK_NAVIGATOR'}
         component={BookingTab}
         options={{
           headerShown: false,

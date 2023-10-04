@@ -10,25 +10,12 @@ import LoginScreen from './collaborator/AuthStack/Login';
 import { useAppDispatch } from '../app/store';
 import {
   getUserInfo,
-  loadAuthState,
   loginGoogle,
 } from '../features/collaborator/authSlice';
 import UserProfileSignup from '../screens/collaborator/Profile/UserProfileSignup';
-import { id } from 'date-fns/locale';
 import { getRefreshIdToken } from '../config/rnfirebase';
 import Loading from '../components/shared/Loading/Loading';
-import { error } from 'console';
-import EventDetail from '../screens/collaborator/EventDetail';
 import { HomeCollaboratorStackNavigatorParamList } from '../../type';
-import UserProfile from '../screens/collaborator/Profile/UserProfile';
-import CertificateHistory from '../screens/collaborator/Certificate';
-import Wallet from '../screens/collaborator/Wallet';
-import Notification from '../screens/collaborator/Notification';
-import Verification from '../screens/collaborator/Verification';
-import PositionRegistration from '../screens/collaborator/PositionRegistration';
-import UserProfileDisable from '../screens/collaborator/Profile/UserProfileDisable';
-import Security from '../screens/collaborator/Security';
-
 const AuthStackScreen: React.FC = () => {
   return <LoginScreen />;
 };
