@@ -1,15 +1,16 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
+import { SHADOWS } from '../../../constants/Shadows';
 
 interface LoginButtonProps {
   onPress: () => void;
 }
 
-const LoginButton: React.FC<LoginButtonProps> = ({ onPress }) => {
+const LoginButton = (props: LoginButtonProps) => {
   return (
     <View style={{ flex: 1.1 }}>
-      <Pressable style={styles.buttonContainerRow} onPress={onPress}>
+      <Pressable style={styles.buttonContainerRow} onPress={props.onPress}>
         <Image
           style={styles.iconGoogle}
           source={require('../../../assets/Images/ic_google.png')}
@@ -30,14 +31,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 42,
     backgroundColor: '#F09101',
     borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    ...SHADOWS.SHADOW_09
   },
   iconGoogle: {
     height: 26,
