@@ -9,17 +9,17 @@ type UserInfoLogin = {
         name: string,
         email: string,
         phone: string,
-        dateOfBirth: string,
+        dateOfBirth: Date,
         imgUrl: string,
         postPermission: boolean,
         isPremium: boolean,
         isActive: boolean,
         createAt: string,
         updateAt: string,
-        accountMonthlyReport: {
-            totalPost: number,
-            totalSalary: number
-        },
+        // accountMonthlyReport: {
+        //     totalPost: number,
+        //     totalSalary: number
+        // },
         accountInformation: AccountInfo;
     }
     

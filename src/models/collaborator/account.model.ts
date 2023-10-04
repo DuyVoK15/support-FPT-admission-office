@@ -5,7 +5,7 @@ type AccountInfo = {
     idStudent: string;
     fbUrl: string;
     address: string;
-    personalIdDate: string;
+    identityIssueDate: string;
     placeOfIssue: string;
     identityFrontImg: string;
     identityBackImg: string;
@@ -16,7 +16,7 @@ type AccountInfoSignup = {
     idStudent: string;
     fbUrl: string;
     address: string;
-    personalIdDate: string;
+    identityIssueDate: string;
     placeOfIssue: string;
     identityFrontImg: string;
     identityBackImg: string;
@@ -27,7 +27,7 @@ type AccountInfoUpdate = {
     idStudent: string;
     fbUrl: string;
     address: string;
-    personalIdDate: string;
+    identityIssueDate: string;
     placeOfIssue: string;
     identityFrontImg: string;
     identityBackImg: string;

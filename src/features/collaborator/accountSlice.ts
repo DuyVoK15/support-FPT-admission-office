@@ -22,19 +22,9 @@ const initialState: AccountState = {
 
 export const signupAccountInformation = createAsyncThunk(
   'account/createAccountInfo',
-  async (accountInfo: AccountInfoSignup, { rejectWithValue }) => {
+  async (params: AccountInfoSignup, { rejectWithValue }) => {
     try {
-      const result = await accountService.signupAccountInfo({
-        identityNumber: accountInfo.identityNumber,
-        idStudent: accountInfo.idStudent,
-        fbUrl: accountInfo.fbUrl,
-        address: accountInfo.address,
-        personalIdDate: accountInfo.personalIdDate,
-        placeOfIssue: accountInfo.placeOfIssue,
-        identityFrontImg: accountInfo.identityFrontImg,
-        identityBackImg: accountInfo.identityFrontImg,
-        taxNumber: accountInfo.taxNumber,
-      });
+      const result = await accountService.signupAccountInfo(params);
       return result.data.data;
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -46,25 +36,9 @@ export const signupAccountInformation = createAsyncThunk(
 
 export const updateProfile = createAsyncThunk(
   'account/update',
-  async (account: UserInfoUpdate, { rejectWithValue }) => {
+  async (params: UserInfoUpdate, { rejectWithValue }) => {
     try {
-      const result = await accountService.updateProfile({
-        name: account.name,
-        phone: account.phone,
-        dateOfBirth: account.dateOfBirth,
-        imgUrl: account.imgUrl,
-        accountInformation: {
-          identityNumber: account.accountInformation.identityNumber,
-          idStudent: account.accountInformation.idStudent,
-          fbUrl: account.accountInformation.fbUrl,
-          address: account.accountInformation.address,
-          personalIdDate: account.accountInformation.personalIdDate,
-          placeOfIssue: account.accountInformation.placeOfIssue,
-          identityFrontImg: account.accountInformation.identityFrontImg,
-          identityBackImg: account.accountInformation.identityBackImg,
-          taxNumber: account.accountInformation.taxNumber,
-        },
-      });
+      const result = await accountService.updateProfile(params);
       return result.data.data;
     } catch (error) {
       const axiosError = error as AxiosError;

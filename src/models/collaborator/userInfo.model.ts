@@ -14,10 +14,10 @@ type UserInfo = {
     isActive: boolean;
     createAt: string;
     updateAt: string;
-    accountMonthlyReport: {
-        totalPost: number;
-        totalSalary: number;
-    };
+    // accountMonthlyReport: {
+    //     totalPost: number;
+    //     totalSalary: number;
+    // };
     accountInformation: AccountInfo;
 };
 

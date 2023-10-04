@@ -4,7 +4,7 @@ import { authService } from '../../services/collaborator/auth.service';
 import { AxiosError } from 'axios';
 import { RootState } from '../../app/store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import AppConstants from '../../enums/student/app';
+import AppConstants from '../../enums/collaborator/app';
 import auth from '@react-native-firebase/auth';
 import { UserInfo } from '../../models/collaborator/userInfo.model';
 import UserInfoLogin from '../../models/collaborator/userInfoLogin.model';
@@ -108,7 +108,7 @@ export const logout = createAsyncThunk(
       
       return true;
     } catch (error: any) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.message); 
     }
   }
 );
