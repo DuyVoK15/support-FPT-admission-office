@@ -11,6 +11,7 @@ import { COLORS } from '../../../constants/Colors';
 import SubmitButton from '../../../components/shared/Button/SubmitButton';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Data } from '../../../models/collaborator/dataPost.model';
+import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
 
 type RootStackParamList = {
   EventDetail: { item: Data }; // Khai báo kiểu đối tượng event
@@ -30,7 +31,7 @@ export type Props = {
 };
 
 const EventDetail = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const route = useRoute();
   const { item } = route.params as { item: Data };
 
@@ -57,7 +58,7 @@ const EventDetail = () => {
           position: 'absolute',
           top: 222,
           width: '100%',
-          height: 500,
+          height: 600,
           backgroundColor: 'white',
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
@@ -71,18 +72,18 @@ const EventDetail = () => {
           elevation: 5,
         }}
       >
-        <ScrollView>
-          <View style={{ marginTop: 30, marginHorizontal: 20 }}>
+        <ScrollView style={{marginTop: 30}}>
+          <View style={{ marginHorizontal: 20 }}>
             {/* ---------------------------------- */}
             <View>
-              <View>
+              <View style={{marginBottom: 10}}>
                 <Text
                   style={{
                     fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
                     fontSize: 20,
                   }}
                 >
-                  Tư vấn lớp
+                  {item?.postCategory.postCategoryDescription}
                 </Text>
               </View>
 
@@ -143,7 +144,7 @@ const EventDetail = () => {
                       marginVertical: 2,
                     }}
                   >
-                    THPT Phước Long
+                    {item.postPositions[0].schoolName}
                   </Text>
                   <Text
                     style={{
@@ -151,9 +152,10 @@ const EventDetail = () => {
                       fontSize: 12,
                       color: COLORS.light_black,
                       marginVertical: 2,
+                      maxWidth: 300
                     }}
                   >
-                    230/3 Man Thiện, Tăng Nhơn Phú A, ...
+                    {item.postPositions[0].location}
                   </Text>
                 </View>
               </View>
@@ -197,7 +199,7 @@ const EventDetail = () => {
                       marginVertical: 2,
                     }}
                   >
-                    DatDT2@fe.edu.vn
+                    {item?.account?.email}
                   </Text>
                   <Text
                     style={{
@@ -243,16 +245,7 @@ const EventDetail = () => {
               </View>
               <View>
                 <Text>
-                  [OD Sáng Thứ 7 ngày 13/05] Vị trí 1: Nhận đoàn và dẫn đoàn
-                  tham quan: Số lượng 17 bạn • Trang phục: Áo cam, bỏ áo vào
-                  quần, đeo thẻ sinh viên • 7h00 có mặt, nhận đoàn và hướng dẫn
-                  tham quan Vị trí 3: Trực HT : Số lượng 2 bạn · Trang phục: Áo
-                  cam, bỏ áo vào quần, đeo thẻ sinh viên · 7h00 có mặt, kiểm tra
-                  vật phẩm trong Hội trường và hướng dẫn Thí sinh · Chạy mic,
-                  tặng quà, ... trong lúc diễn ra sự kiện. Vị trí 6: Logistic :
-                  Số lượng 3 bạn • Trang phục: Áo cam, bỏ áo vào quần, đeo thẻ
-                  sinh viên • 6h30 có mặt, kiểm tra vật phẩm • Phát vật phẩm cho
-                  các gian liên quan.
+                  {item?.postDescription}
                 </Text>
               </View>
             </View>
@@ -283,8 +276,11 @@ const EventDetail = () => {
       </View>
 
       {/* Button */}
-      <View style={{ top: 550, marginHorizontal: 20 }}>
-        <SubmitButton titleButton="REGISTER" />
+      <View style={{ top: 600, marginHorizontal: 20 }}>
+        <SubmitButton
+          onPress={() => navigation.navigate('POSITION_REGISTRATION')}
+          titleButton="REGISTER"
+        />
       </View>
     </View>
   );

@@ -48,13 +48,13 @@ const Account = () => {
 
   return (
     <View style={styles.container}>
-   
-        <View style={styles.containerHeader}>
-          <View style={styles.containerTextHeader}>
-            <Text style={styles.textHeader}>My Account</Text>
-          </View>
+      <View style={styles.containerHeader}>
+        <View style={styles.containerTextHeader}>
+          <Text style={styles.textHeader}>My Account</Text>
+        </View>
 
-          <View style={styles.containerRow}>
+        <View style={styles.containerInfoBox}>
+          <View style={styles.containerInfoContent}>
             <View style={styles.avatarStyle}>
               <Image
                 source={{
@@ -73,7 +73,7 @@ const Account = () => {
             </View>
           </View>
         </View>
-     
+      </View>
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -81,29 +81,7 @@ const Account = () => {
         //     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         //   }
       >
-        {/* <Spinner visible={isLoading} /> */}
-
         <View style={styles.containerItem}>
-          {/* <View style={styles.containerTextTitles}>
-          <Text style={styles.textTitle}>
-            Số dư tài khoản:{" "}
-            <Text style={styles.textBalance}>{123213123} VNĐ</Text>
-          </Text>
-          <TouchableOpacity
-            style={styles.buttonRecharge}
-            onPress={() => console.log("object")}
-          >
-            <Text style={styles.textRecharge}>Nạp tiền</Text>
-          </TouchableOpacity>
-        </View> */}
-
-          {/* <View style={styles.containerPoBo}>
-          <Text style={styles.textPoBo1}>Trở thành thợ chụp ảnh của POBO</Text>
-          <Text style={styles.textPoBo2}>
-            Thiết lập và bắt đầu kiếm tiền thật đơn giản.
-          </Text>
-        </View> */}
-
           <View style={styles.containerTextTitles}>
             <Text style={styles.textTitle}>Personal</Text>
           </View>
@@ -130,7 +108,10 @@ const Account = () => {
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => navigation.navigate("CERTIFICATE_HISTORY")} style={styles.containerRow}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('CERTIFICATE_HISTORY')}
+              style={styles.containerRow}
+            >
               <View style={styles.column1}>
                 <MaterialCommunityIcons
                   name="certificate"
@@ -148,7 +129,10 @@ const Account = () => {
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.containerRow}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('WALLET')}
+              style={styles.containerRow}
+            >
               <View style={styles.column1}>
                 <Entypo name="wallet" size={24} color={COLORS.orange_icon} />
               </View>
@@ -164,7 +148,7 @@ const Account = () => {
 
             <TouchableOpacity
               style={styles.containerRow}
-              onPress={() => console.log('object')}
+              onPress={() => navigation.navigate('VERIFICATION')}
             >
               <View style={styles.column1}>
                 <MaterialIcons
@@ -189,7 +173,7 @@ const Account = () => {
           </View>
 
           <View style={styles.containerColumn}>
-            <TouchableOpacity style={styles.containerRow}>
+            {/* <TouchableOpacity style={styles.containerRow}>
               <View style={styles.column1}>
                 <MaterialIcons
                   name="security"
@@ -203,11 +187,14 @@ const Account = () => {
               <View style={styles.column3}>
                 <Entypo name="chevron-small-right" size={24} color="black" />
               </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
-            <TouchableOpacity style={styles.containerRow}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('SECURITY')}
+              style={styles.containerRow}
+            >
               <View style={styles.column1}>
-              <Entypo name="lock" size={24} color={COLORS.orange_icon} />
+                <Entypo name="lock" size={24} color={COLORS.orange_icon} />
               </View>
               <View style={styles.column2}>
                 <Text style={styles.text}>Security</Text>
@@ -217,7 +204,10 @@ const Account = () => {
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.containerRow}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('NOTIFICATION')}
+              style={styles.containerRow}
+            >
               <View style={styles.column1}>
                 <Ionicons
                   name="notifications"
@@ -239,7 +229,7 @@ const Account = () => {
           </View>
 
           <View style={styles.containerColumn}>
-            <TouchableOpacity style={styles.containerRow}>
+            <TouchableOpacity onPress={() => navigation.navigate("PROFILE_SIGNUP")} style={styles.containerRow}>
               <View style={styles.column1}>
                 <MaterialIcons
                   name="connect-without-contact"
@@ -319,7 +309,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: '#F9F9F9',
+    backgroundColor: 'white',
   },
   containerHeader: {
     marginHorizontal: 20,
@@ -357,14 +347,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     paddingTop: 30,
     borderRadius: 10,
-    shadowColor: '#888888',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.16,
-    shadowRadius: 1.51,
-    elevation: 2,
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
   },
   containerRow: {
     flexDirection: 'row',
@@ -375,6 +366,25 @@ const styles = StyleSheet.create({
 
     // borderRadius: 10,
     marginBottom: 30,
+  },
+  containerInfoBox: {
+    borderRadius: 10,
+    backgroundColor: COLORS.orange_icon,
+    shadowColor: COLORS.orange_icon,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 4.65,
+    elevation: 6,
+    marginBottom: 30,
+  },
+  containerInfoContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    margin: 15,
   },
   column: {
     flex: 1,

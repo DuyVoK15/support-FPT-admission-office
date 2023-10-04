@@ -1,5 +1,6 @@
 import {
   Platform,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -7,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { ScreenHeight, ScreenWidth } from '../../../constants/Demesions';
 import EventCard from '../../../components/collaborator/Home/EventCard';
 import {
@@ -27,20 +28,42 @@ import {
   timeAgo,
 } from '../../../utils/formats';
 import { COLORS } from '../../../constants/Colors';
+import { useNavigation } from '@react-navigation/native';
+import { ROUTES } from '../../../constants/Routes';
+import { Data } from '../../../models/collaborator/dataPost.model';
+import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
+import FilterModal from '../../../components/collaborator/Home/FilterModal';
+import { SHADOWS } from '../../../constants/Shadows';
 
 const Home = () => {
+  const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const [text, setText] = useState<string>('');
 
   const dispatch = useAppDispatch();
   const fetchPost = async () => {
-    await dispatch(getAllPost());
+    await dispatch(getAllPost()).then((res) => {
+      console.log("Alo: ", JSON.stringify(res, null, 2))
+    });;;
   };
   useEffect(() => {
-    fetchPost();
+    fetchPost()
   }, []);
 
   const postList = useAppSelector((state) => state.post.post);
-  // console.log(JSON.stringify(postList, null, 2));
+
+  const handleNavigate = (item: Data) => {
+    navigation.navigate('EVENT_DETAIL', { item });
+  };
+
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchPost();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.viewHeader}>
@@ -91,7 +114,8 @@ const Home = () => {
                 </Text>
               </View>
             </View>
-            <View
+            <TouchableOpacity
+              onPress={() => navigation.navigate('NOTIFICATION')}
               style={{
                 width: 40,
                 height: 40,
@@ -102,7 +126,7 @@ const Home = () => {
               }}
             >
               <Ionicons name="notifications" size={30} color="white" />
-            </View>
+            </TouchableOpacity>
           </View>
 
           <View
@@ -150,55 +174,17 @@ const Home = () => {
               </TouchableOpacity>
             </View>
 
-            <View
-              style={{
-                backgroundColor: COLORS.green_filter_button,
-                borderRadius: 22,
-              }}
-            >
-              <TouchableOpacity
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  paddingVertical: 8,
-                  paddingHorizontal: 10,
-                }}
-              >
-                <View
-                  style={{
-                    paddingVertical: 3,
-                    paddingHorizontal: 4,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: 'white',
-                    borderRadius: 100,
-                    marginRight: 10,
-                  }}
-                >
-                  <Ionicons
-                    name="filter"
-                    size={22}
-                    color={COLORS.green_filter_button}
-                  />
-                </View>
-                <View>
-                  <Text
-                    style={{
-                      fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
-                      fontSize: 16,
-                      color: 'white',
-                    }}
-                  >
-                    Filters
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
+            <FilterModal />
           </View>
         </View>
       </View>
 
-      <ScrollView>
+      {/* Scroll vertical */}
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <View style={{ flex: 1, paddingTop: 20, marginHorizontal: 20 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <View style={{ flex: 1 }}>
@@ -209,7 +195,7 @@ const Home = () => {
                   fontSize: 24,
                 }}
               >
-                Post Today
+                Upcoming Events
               </Text>
             </View>
 
@@ -237,10 +223,11 @@ const Home = () => {
             </TouchableOpacity>
           </View>
 
-          <View style={{ height: ScreenHeight * 0.25, marginTop: 20 }}>
+          <View style={{ height: ScreenWidth * 0.75, marginTop: 20 }}>
             <ScrollView horizontal scrollEventThrottle={16}>
               {postList.data.map((post, index) => (
                 <EventCard
+                  onPress={() => handleNavigate(post)}
                   key={index}
                   currentDay={formatToDay({
                     dateProp: post?.dateFrom,
@@ -251,16 +238,16 @@ const Home = () => {
                   timeAgo={timeAgo({
                     dateProp: post?.createAt,
                   })}
-                  titleEvent={post?.postTitle?.postTitleDescription}
-                  currentPeopleAmount={0}
-                  totalPeopleAmount={post?.postPositions?.[0]?.amount}
-                  location={post?.location}
+                  titleEvent={post?.postCategory.postCategoryDescription}
+                  schoolName={post?.postPositions?.[0].location}
+                  location={post?.postPositions[0].location}
                 />
               ))}
             </ScrollView>
           </View>
         </View>
 
+        {/* Scroll vertical */}
         <View style={{ flex: 1, paddingTop: 20, marginHorizontal: 20 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <View style={{ flex: 1 }}>
@@ -303,6 +290,7 @@ const Home = () => {
             <ScrollView horizontal scrollEventThrottle={16}>
               {postList?.data.map((post, index) => (
                 <EventCard
+                  onPress={() => navigation.navigate(ROUTES.EVENT_DETAIL)}
                   key={index}
                   currentDay={formatToDay({
                     dateProp: post?.dateFrom,
@@ -313,10 +301,10 @@ const Home = () => {
                   timeAgo={timeAgo({
                     dateProp: post?.createAt,
                   })}
-                  titleEvent={post?.postTitle?.postTitleDescription}
+                  titleEvent={post?.postCategory.postCategoryType}
                   currentPeopleAmount={0}
                   totalPeopleAmount={post?.postPositions?.[0]?.amount}
-                  location={post?.location}
+                  location={post?.postPositions[0].location}
                 />
               ))}
             </ScrollView>
@@ -339,6 +327,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.orange_button,
     borderBottomLeftRadius: 33,
     borderBottomRightRadius: 33,
+    ...SHADOWS.SHADOW_03
   },
   cardItem: {
     width: 200,

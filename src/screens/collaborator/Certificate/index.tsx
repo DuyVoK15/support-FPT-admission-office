@@ -11,8 +11,8 @@ const CertificateHistory = () => {
     const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   return (
     <View style={{ flex: 1 }}>
-      <Header style={{height: ScreenHeight / 9}}>
-        <Backward onPress={() => navigation.goBack()} style={{marginBottom: 10}} titleBackward='Cerificate History' />
+      <Header>
+        <Backward onPress={() => navigation.goBack()} titleBackward='Cerificate History' />
       </Header>
       <CertificateTopTabs />
     </View>
