@@ -1,40 +1,44 @@
-import React, { Component } from 'react'
-import { Text, TouchableOpacity, View } from 'react-native'
-import { COLORS } from '../../../constants/Colors'
-import { FONTS_FAMILY } from '../../../constants/Fonts'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
+import React, { Component } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { COLORS } from '../../../constants/Colors';
+import { FONTS_FAMILY } from '../../../constants/Fonts';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 type SubmitButtonProps = TouchableOpacity['props'] & {
-    titleButton?: string,
-}
+  titleButton?: string;
+  color?: string;
+};
 
 export default class SubmitButton extends Component<SubmitButtonProps> {
   render() {
-    const {titleButton, style, ...otherProps} = this.props;
+    const { titleButton, style, ...otherProps } = this.props;
     return (
-        <TouchableOpacity
-        style={{
-          height: 55,
-          paddingHorizontal: 100,
-          backgroundColor: COLORS.orange_button,
-          borderRadius: 15,
-          alignItems: 'center',
-          justifyContent: 'center',
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 2,
+      <TouchableOpacity
+        style={[
+          {
+            height: 55,
+            paddingHorizontal: 100,
+            backgroundColor: COLORS.orange_button,
+            borderRadius: 15,
+            alignItems: 'center',
+            justifyContent: 'center',
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
           },
-          shadowOpacity: 0.25,
-          shadowRadius: 3.84,
-          elevation: 5,
-        }}
+          style,
+        ]}
         {...otherProps}
       >
         <Text
           style={{
-            fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
-            fontSize: 18,
+            fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
+            fontSize: 20,
             color: 'white',
           }}
         >
@@ -48,6 +52,6 @@ export default class SubmitButton extends Component<SubmitButtonProps> {
           color="black"
         />
       </TouchableOpacity>
-    )
+    );
   }
 }

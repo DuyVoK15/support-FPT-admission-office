@@ -1,14 +1,17 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native'
 import React, { ReactNode } from 'react'
 import { ScreenHeight, ScreenWidth } from '../../../../constants/Demesions';
+import { COLORS } from '../../../../constants/Colors';
+import { SHADOWS } from '../../../../constants/Shadows';
 
 type HeaderProps = {
-    children: ReactNode; // Allow children to be passed
+    children?: ReactNode; // Allow children to be passed
+    style?: StyleProp<ViewStyle>;
 };
 
-const Header = ({ children }: HeaderProps) => {
+const Header = ({ children, style }: HeaderProps) => {
     return (
-        <View style={styles.viewHeader}>
+        <View style={[styles.viewHeader, style]} >
             {children}
         </View>
     )
@@ -19,11 +22,11 @@ export default Header;
 const styles = StyleSheet.create({
     viewHeader: {
         flexDirection: "row",
-        alignItems: "center",
-        height: ScreenHeight / 6,
+        alignItems: "flex-end",
+        height: ScreenHeight / 8.5,
         width: ScreenWidth,
-        backgroundColor: "orange",
-        borderBottomLeftRadius: 33,
-        borderBottomRightRadius: 33,
+        backgroundColor: COLORS.orange_button,
+        ...SHADOWS.SHADOW_02
+        
     }
 })
