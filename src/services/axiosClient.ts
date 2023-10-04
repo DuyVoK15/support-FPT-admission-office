@@ -2,7 +2,7 @@ import axios from 'axios';
 import createAuthRefreshInterceptor, {
     AxiosAuthRefreshRequestConfig,
 } from 'axios-auth-refresh';
-import AppConstants from '../enums/student/app';
+import AppConstants from '../enums/collaborator/app';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const axiosClient = axios.create({
     baseURL: "http://54.179.223.200",
