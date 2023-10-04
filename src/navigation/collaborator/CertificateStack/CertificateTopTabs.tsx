@@ -2,7 +2,6 @@ import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import AllTab from './CertificateTab/AllTab';
-import PendingTab from './CertificateTab/PendingTab';
 import CompletedTab from './CertificateTab/CompletedTab';
 import RejectedTab from './CertificateTab/RejectedTab';
 import { COLORS } from '../../../constants/Colors';
@@ -24,9 +23,9 @@ const CertificateTopTabs = () => {
         // },
         tabBarIndicatorStyle: {
           backgroundColor: COLORS.orange_icon,
-          height: 3,
-          width: 100,
-          left: (ScreenWidth * 0.25 - 100) / 2,
+          height: 4,
+          width: 120,
+          left: (ScreenWidth / 3 - 120) / 2,
           borderRadius: 20,
         },
         tabBarIndicatorContainerStyle: {},
@@ -45,16 +44,6 @@ const CertificateTopTabs = () => {
             // marginTop: 50,
           },
           tabBarLabel: 'All',
-        }}
-      />
-      <Tab.Screen
-        name={'CERTIFICATE_PENDING'}
-        component={PendingTab}
-        options={{
-          tabBarStyle: {
-            // marginTop: 50,
-          },
-          tabBarLabel: 'Pending',
         }}
       />
       <Tab.Screen

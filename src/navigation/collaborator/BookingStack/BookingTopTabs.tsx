@@ -4,9 +4,9 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { COLORS } from '../../../constants/Colors';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
 import { ScreenWidth } from '../../../constants/Demesions';
-import Completed from './BookingTab/Completed';
-import Confirm from './BookingTab/Confirm';
-import Pending from './BookingTab/Pending';
+import PendingTab from './BookingTab/PendingTab';
+import ConfirmTab from './BookingTab/ConfirmTab';
+import CompletedTab from './BookingTab/CompletedTab';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -23,7 +23,7 @@ const BookingTopTabs = () => {
         // },
         tabBarIndicatorStyle: {
           backgroundColor: COLORS.orange_icon,
-          height: 5,
+          height: 4,
           width: 120,
           left: (ScreenWidth / 3 - 120) / 2,
           borderRadius: 20,
@@ -31,24 +31,15 @@ const BookingTopTabs = () => {
         tabBarIndicatorContainerStyle: {},
         tabBarLabelStyle: {
           fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
-          fontSize: 16,
+          fontSize: 15,
+          textTransform: 'none'
           // color: COLORS.orange_icon
         },
       }}
     >
       <Tab.Screen
         name={'BOOKING_PENDING'}
-        component={Pending}
-        options={{
-          tabBarStyle: {
-            // marginTop: 50,
-          },
-          tabBarLabel: 'All',
-        }}
-      />
-      <Tab.Screen
-        name={'BOOKING_CONFIRM'}
-        component={Confirm}
+        component={PendingTab}
         options={{
           tabBarStyle: {
             // marginTop: 50,
@@ -57,8 +48,18 @@ const BookingTopTabs = () => {
         }}
       />
       <Tab.Screen
+        name={'BOOKING_CONFIRM'}
+        component={ConfirmTab}
+        options={{
+          tabBarStyle: {
+            // marginTop: 50,
+          },
+          tabBarLabel: 'Confirm',
+        }}
+      />
+      <Tab.Screen
         name={'BOOKING_COMPLETED'}
-        component={Completed}
+        component={CompletedTab}
         options={{
           tabBarStyle: {
             // marginTop: 50,

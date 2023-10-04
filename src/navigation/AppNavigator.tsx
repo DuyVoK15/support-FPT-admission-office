@@ -5,7 +5,7 @@ import { ROUTES } from '../constants/Routes';
 import BottomTabs from './collaborator/HomeStack/BottomTabs';
 import { useAppSelector } from '../app/hooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import AppConstants from '../enums/student/app';
+import AppConstants from '../enums/collaborator/app';
 import LoginScreen from './collaborator/AuthStack/Login';
 import { useAppDispatch } from '../app/store';
 import {
@@ -22,43 +22,30 @@ import EventDetail from '../screens/collaborator/EventDetail';
 import { HomeCollaboratorStackNavigatorParamList } from '../../type';
 import UserProfile from '../screens/collaborator/Profile/UserProfile';
 import CertificateHistory from '../screens/collaborator/Certificate';
+import Wallet from '../screens/collaborator/Wallet';
+import Notification from '../screens/collaborator/Notification';
+import Verification from '../screens/collaborator/Verification';
+import PositionRegistration from '../screens/collaborator/PositionRegistration';
+import UserProfileDisable from '../screens/collaborator/Profile/UserProfileDisable';
+import Security from '../screens/collaborator/Security';
 
 const AuthStackScreen: React.FC = () => {
   return <LoginScreen />;
 };
 
-const HomeCollaboratorStack = createNativeStackNavigator<HomeCollaboratorStackNavigatorParamList>();
+const HomeCollaboratorStack =
+  createNativeStackNavigator<HomeCollaboratorStackNavigatorParamList>();
 const HomeCollaboratorStackScreen = () => {
   return (
     <HomeCollaboratorStack.Navigator>
       <HomeCollaboratorStack.Screen
-        name={"HOME_TAB"}
+        name={'HOME_TAB'}
         component={BottomTabs}
         options={{
           headerShown: false,
         }}
       />
-      <HomeCollaboratorStack.Screen
-        name={"PROFILE"}
-        component={UserProfile}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <HomeCollaboratorStack.Screen
-        name={"EVENT_DETAIL"}
-        component={EventDetail}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <HomeCollaboratorStack.Screen
-        name={"CERTIFICATE_HISTORY"}
-        component={CertificateHistory}
-        options={{
-          headerShown: false,
-        }}
-      />
+     
     </HomeCollaboratorStack.Navigator>
   );
 };
@@ -128,7 +115,10 @@ const AppNavigator: FC = () => {
   useEffect(() => {
     console.log('Vô AppNavigator gọi getUsserInfo: ');
     // setIsLogin(false);
-    // fetchUserInfo();
+    if(isAuthenticated===true){
+      fetchUserInfo();
+
+    }
 
     // console.log(JSON.stringify(userInfo, null, 2));
   }, [loading, isAuthenticated]);
@@ -137,7 +127,7 @@ const AppNavigator: FC = () => {
     return <Loading />;
   }
 
-  return (isAuthenticated === true) ? (
+  return isAuthenticated === true ? (
     userInfo?.accountInformation === null ? (
       <UserProfileSignup />
     ) : (
