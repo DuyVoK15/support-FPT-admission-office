@@ -4,7 +4,7 @@ import { postService } from '../../services/collaborator/post.service';
 import DataPost from '../../models/collaborator/dataPost.model';
 
 interface PostState {
-  post: PostDto;
+  post: PostDto | null;
   loading: boolean;
   error: string;
   // Thêm các trường khác liên quan đến người dùng nếu cần thiết
@@ -40,10 +40,10 @@ export const getAllPost = createAsyncThunk(
 );
 export const searchPostByPostCode = createAsyncThunk(
   'post/searchPost',
-  async (postCode: string, { rejectWithValue }) => {
+  async (searchPost: string, { rejectWithValue }) => {
     try {
       console.log('Có vô post');
-      const response = await postService.searchPostByPostCode(postCode);
+      const response = await postService.searchPostByPostCode(searchPost);
       // console.log("<PostSlice> Post: ", JSON.stringify(response.data.data))
       return response.data
     } catch (error: any) {
