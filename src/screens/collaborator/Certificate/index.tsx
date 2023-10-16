@@ -8,11 +8,14 @@ import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
 import { ScreenHeight } from '../../../constants/Demesions';
 
 const CertificateHistory = () => {
-    const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
+  const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   return (
     <View style={{ flex: 1 }}>
       <Header>
-        <Backward onPress={() => navigation.goBack()} titleBackward='Cerificate History' />
+        <Backward
+          onPress={() => navigation.goBack()}
+          titleBackward="Cerificate History"
+        />
       </Header>
       <CertificateTopTabs />
     </View>
