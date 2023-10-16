@@ -13,84 +13,89 @@ import { HomeCollaboratorStackNavigatorParamList } from '../../../../type';
 import MapTab from './MainTabs/MapTab';
 import AccountStackNavigator from './MainStack/AccountStackNavigator';
 import HomeStackNavigator from './MainStack/HomeStackNavigator';
+import { View } from 'react-native';
+import { ScreenHeight, ScreenWidth } from '../../../constants/Demesions';
 
 const Tab = createBottomTabNavigator<HomeCollaboratorStackNavigatorParamList>();
 const BottomTabs: React.FC = () => {
   return (
-    <Tab.Navigator
-      initialRouteName={'HOME'}
-      // tabBarPosition='bottom'
-      screenOptions={{
-        tabBarActiveTintColor: COLORS.orange_icon,
-        tabBarInactiveTintColor: COLORS.grey_icon,
-        tabBarIconStyle: {
-          marginTop: 5,
-        },
-        tabBarStyle: {
-          height: Platform.OS === 'ios' ? 80 : 70,
-        },
-        tabBarLabelStyle: {
-          marginBottom: 0,
-          fontSize: 11,
-        },
-      }}
-    >
-      <Tab.Screen
-        name={'HOME_STACK_NAVIGATOR'}
-        component={HomeStackNavigator}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" color={color} size={size} />
-          ),
-          tabBarLabel: 'Home',
+    // <View style={{height: Platform.OS === 'android' ? ScreenHeight + 40 : ScreenHeight, width: ScreenWidth}}>
+      <Tab.Navigator
+        initialRouteName={'HOME'}
+        // tabBarPosition='bottom'
+        screenOptions={{
+          tabBarHideOnKeyboard: true,
+          tabBarActiveTintColor: COLORS.orange_icon,
+          tabBarInactiveTintColor: COLORS.grey_icon,
+          tabBarIconStyle: {
+            marginTop: 5,
+          },
+          tabBarStyle: {
+            height: Platform.OS === 'ios' ? 30 + 50 : 60,
+          },
+          tabBarLabelStyle: {
+            marginBottom: Platform.OS === 'ios' ? 0 : 5,
+            fontSize: 11,
+          },
         }}
-      />
-      <Tab.Screen
-        name={'EVENT_STACK_NAVIGATOR'}
-        component={EventTab}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="calendar" color={color} size={size} />
-          ),
-          tabBarLabel: 'Event',
-        }}
-      />
-      <Tab.Screen
-        name={'MAP_STACK_NAVIGATOR'}
-        component={MapTab}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="map" color={color} size={size} />
-          ),
-          tabBarLabel: 'Map',
-        }}
-      />
-      <Tab.Screen
-        name={'BOOKING_STACK_NAVIGATOR'}
-        component={BookingTab}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="calendar-check-o" color={color} size={size} />
-          ),
-          tabBarLabel: 'Booking',
-        }}
-      />
-      <Tab.Screen
-        name={'ACCOUNT_STACK_NAVIGATOR'}
-        component={AccountStackNavigator}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" color={color} size={size} />
-          ),
-          tabBarLabel: 'Account',
-        }}
-      />
-    </Tab.Navigator>
+      >
+        <Tab.Screen
+          name={'HOME_STACK_NAVIGATOR'}
+          component={HomeStackNavigator}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="home" color={color} size={size} />
+            ),
+            tabBarLabel: 'Home',
+          }}
+        />
+        <Tab.Screen
+          name={'EVENT_STACK_NAVIGATOR'}
+          component={EventTab}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="calendar" color={color} size={size} />
+            ),
+            tabBarLabel: 'Event',
+          }}
+        />
+        <Tab.Screen
+          name={'MAP_STACK_NAVIGATOR'}
+          component={MapTab}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="map" color={color} size={size} />
+            ),
+            tabBarLabel: 'Map',
+          }}
+        />
+        <Tab.Screen
+          name={'BOOKING_STACK_NAVIGATOR'}
+          component={BookingTab}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesome name="calendar-check-o" color={color} size={size} />
+            ),
+            tabBarLabel: 'Booking',
+          }}
+        />
+        <Tab.Screen
+          name={'ACCOUNT_STACK_NAVIGATOR'}
+          component={AccountStackNavigator}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="person" color={color} size={size} />
+            ),
+            tabBarLabel: 'Account',
+          }}
+        />
+      </Tab.Navigator>
+    // </View>
   );
 };
 

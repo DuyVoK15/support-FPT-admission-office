@@ -1,20 +1,19 @@
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Home from './MainTabs/Home';
-import Events from './MainTabs/Events';
-import MyBooking from './MainTabs/MyBooking';
-import { ROUTES } from '../../../constants/Routes';
-import Profile from './MainTabs/Profile';
+import HomeTab from './MainTabs/HomeTab';
+import EventTab from './MainTabs/EventTab';
+import AccountTab from './MainTabs/AccountTab';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { COLORS } from '../../../constants/Colors';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { HomeAdmissionStackNavigatorParamList } from '../../../../type';
 
-const Tab = createBottomTabNavigator();
-const BottomTabs: React.FC = () => {
+const Tab = createBottomTabNavigator<HomeAdmissionStackNavigatorParamList>();
+const AdmissionBottomTabs: React.FC = () => {
   return (
     <Tab.Navigator
-      initialRouteName={ROUTES.HOME}
+      initialRouteName={"HOME"}
       // tabBarPosition='bottom'
       screenOptions={{
         tabBarActiveTintColor: COLORS.orange_icon,
@@ -32,8 +31,8 @@ const BottomTabs: React.FC = () => {
       }}
     >
       <Tab.Screen
-        name={ROUTES.HOME}
-        component={Home}
+        name={"HOME"}
+        component={HomeTab}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
@@ -42,8 +41,8 @@ const BottomTabs: React.FC = () => {
         }}
       />
       <Tab.Screen
-        name={ROUTES.EVENTS}
-        component={Events}
+        name={"EVENT"}
+        component={EventTab}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
@@ -51,7 +50,7 @@ const BottomTabs: React.FC = () => {
           ),
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name={ROUTES.MY_BOOKING}
         component={MyBooking}
         options={{
@@ -60,10 +59,10 @@ const BottomTabs: React.FC = () => {
             <Ionicons name="bookmark" color={color} size={size} />
           ),
         }}
-      />
+      /> */}
       <Tab.Screen
-        name={ROUTES.PROFILE}
-        component={Profile}
+        name={"ACCOUNT"}
+        component={AccountTab}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
@@ -75,6 +74,6 @@ const BottomTabs: React.FC = () => {
   );
 };
 
-export default BottomTabs;
+export default AdmissionBottomTabs;
 
 const styles = StyleSheet.create({});
