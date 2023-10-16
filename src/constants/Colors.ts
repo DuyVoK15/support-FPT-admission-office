@@ -1,7 +1,7 @@
 export const COLORS = {
     orange_icon: "#F37021",
     orange_button: "#F09101",
-    super_light_orange: "#f5e1d5",
+    super_light_orange: "#f7d1ba",
     super_dark_orange: "#ed6109",
     grey_icon: "#D0D1D6",
     light_black :"#747688",

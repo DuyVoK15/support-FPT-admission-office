@@ -37,7 +37,6 @@ export default function App() {
       <Provider store={store}>
         <NavigationContainer>
           <AppNavigator />
-
           <StatusBar backgroundColor="transparent" translucent={true} />
         </NavigationContainer>
       </Provider>

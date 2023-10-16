@@ -27,12 +27,12 @@ const initialState: AuthState = {
   error: '',
 };
 
-export const loginGoogle = createAsyncThunk(
+export const collab_loginGoogle = createAsyncThunk(
   'auth/login-google',
   async (JWT: string, { rejectWithValue }) => {
     try {
       console.log('<AuthSlice> JWT: ', JWT);
-      const result = await authService.loginGoogle({
+      const result = await authService.collab_loginGoogle({
         idToken: JWT,
         fcmToken: '',
       });
@@ -55,7 +55,7 @@ export const loginGoogle = createAsyncThunk(
   }
 );
 
-export const loadAuthState = createAsyncThunk(
+export const collab_loadAuthState = createAsyncThunk(
   'auth/loadAuthState',
   async (_, { rejectWithValue }) => {
     try {
@@ -73,12 +73,12 @@ export const loadAuthState = createAsyncThunk(
   }
 );
 
-export const getUserInfo = createAsyncThunk(
+export const collab_getUserInfo = createAsyncThunk(
   'auth/getUserInfo',
   async (_, { rejectWithValue }) => {
     try {
       console.log('Có vô getUserInfo');
-      const response = await authService.getUserInfo();
+      const response = await authService.collab_getUserInfo();
       // console.log(
       //     '<AuthSlice> User Info: ' +
       //         JSON.stringify(response.data.data, null, 2)
@@ -91,7 +91,7 @@ export const getUserInfo = createAsyncThunk(
     }
   }
 ); 
-export const logout = createAsyncThunk(
+export const collab_logout = createAsyncThunk(
   'auth/logout',
   async (_, { rejectWithValue }) => {
     try {
@@ -101,6 +101,7 @@ export const logout = createAsyncThunk(
         .then(() => console.log('Current user signed out!'));
       await AsyncStorage.removeItem(AppConstants.ACCESS_TOKEN);
       await AsyncStorage.removeItem(AppConstants.ID_TOKEN);
+      await AsyncStorage.removeItem("userInfo");
       // await GoogleSignin.revokeAccess();
       await GoogleSignin.signOut().then(() => {
         console.log("Google sign out!")
@@ -118,59 +119,59 @@ export const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(logout.pending, (state) => {
+      .addCase(collab_logout.pending, (state) => {
         console.log("pending out")
         state.loading = true;
         state.error = '';
       })
-      .addCase(logout.fulfilled, (state) => {
+      .addCase(collab_logout.fulfilled, (state) => {
         state.isAuthenticated = false;
         state.role = -1;
         state.loading = false;
         state.userInfoLogin = null; 
       }) 
-      .addCase(logout.rejected, (state, action) => {
+      .addCase(collab_logout.rejected, (state, action) => {
         state.error = String(action.payload);
         state.loading = false;
       })
-      .addCase(loginGoogle.pending, (state) => {
+      .addCase(collab_loginGoogle.pending, (state) => {
         state.loading = true;
         state.error = '';
       })
-      .addCase(loginGoogle.fulfilled, (state, action) => {
+      .addCase(collab_loginGoogle.fulfilled, (state, action) => {
         state.isAuthenticated = true;
         state.role = action.payload.data.account.roleId;
         state.loading = false;
       })
-      .addCase(loginGoogle.rejected, (state, action) => {
+      .addCase(collab_loginGoogle.rejected, (state, action) => {
         state.error = String(action.payload);
         state.loading = false;
       })
-      .addCase(getUserInfo.pending, (state) => {
+      .addCase(collab_getUserInfo.pending, (state) => {
         state.loading = true;
         state.error = '';
       })
-      .addCase(getUserInfo.fulfilled, (state, action) => {
+      .addCase(collab_getUserInfo.fulfilled, (state, action) => {
         state.loading = false;
         state.userInfo = action.payload;
       })
-      .addCase(getUserInfo.rejected, (state, action) => {
+      .addCase(collab_getUserInfo.rejected, (state, action) => {
         state.error = String(action.payload);
         state.loading = false;
       })
-      .addCase(loadAuthState.pending, (state) => {
+      .addCase(collab_loadAuthState.pending, (state) => {
         state.loading = true;
         state.error = '';
       })
-      .addCase(loadAuthState.fulfilled, (state, action) => {
+      .addCase(collab_loadAuthState.fulfilled, (state, action) => {
         state.isAuthenticated = true;
         state.loading = false;     
       })
-      .addCase(loadAuthState.rejected, (state, action) => {
+      .addCase(collab_loadAuthState.rejected, (state, action) => {
         state.error = String(action.payload);
         state.loading = false;
       })
-      .addMatcher(isAnyOf(loginGoogle.fulfilled), (state, action) => {
+      .addMatcher(isAnyOf(collab_loginGoogle.fulfilled), (state, action) => {
         state.isAuthenticated = true;
         state.role = action.payload.data.account.roleId;
         state.loading = false;

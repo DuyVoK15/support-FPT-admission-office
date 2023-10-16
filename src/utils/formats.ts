@@ -5,6 +5,15 @@ type DateProps = {
   dateProp: string | null;
 };
 
+ export function formatDateToDDMMYYYY(date: Date) {
+  const day = date.getDate().toString().padStart(2, '0'); // Lấy ngày và thêm '0' phía trước nếu cần
+  const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Lấy tháng và thêm '0' phía trước nếu cần (lưu ý rằng tháng trong JavaScript bắt đầu từ 0)
+  const year = date.getFullYear();
+
+  return `${day}/${month}/${year}`;
+}
+
+
 export const formatToDate = (props: DateProps) => {
   const { dateProp } = props;
 

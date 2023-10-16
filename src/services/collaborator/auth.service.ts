@@ -5,12 +5,12 @@ import GetUserInfoDto from '../../dtos/collaborator/getUserInfo.dto';
 import LoginUserDto from '../../dtos/collaborator/login.user.dto';
 
 export const authService = {
-  loginGoogle: (payload: LoginGoogleDto): Promise<AxiosResponse<LoginUserDto>> => {
+  collab_loginGoogle: (payload: LoginGoogleDto): Promise<AxiosResponse<LoginUserDto>> => {
     const url = '/api/account/login';
 
     return axiosClient.post(url, { ...payload });
   },
-  getUserInfo: (): Promise<AxiosResponse<GetUserInfoDto>> => {
+  collab_getUserInfo: (): Promise<AxiosResponse<GetUserInfoDto>> => {
     const url = '/api/account/getAccountByToken/authorization';
     
     return axiosClient.get(url);

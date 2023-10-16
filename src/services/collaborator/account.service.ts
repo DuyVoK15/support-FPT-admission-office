@@ -22,6 +22,6 @@ export const accountService = {
     console.log('HIHI ', payload);
     const url = '/api/account/updateAvatar';
     
-    return axiosClient.put(url, { ...payload });
+    return axiosClient.patch(url, { ...payload });
   },
 }

@@ -8,7 +8,11 @@ const axiosClient = axios.create({
     baseURL: "http://54.179.223.200",
     headers: {
         'content-type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
     },
+    // validateStatus: (status) => {
+    //     return status < 500;
+    // }
 });
 
 axiosClient.interceptors.request.use(async (config: any) => {
@@ -17,7 +21,7 @@ axiosClient.interceptors.request.use(async (config: any) => {
     console.log("<AxiosClient> ACCESSTOKEN: ", accessToken) 
     if (accessToken) { 
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        customHeaders.Authorization = `Bearer ${String(accessToken)}`;
+        customHeaders.Authorization = `Bearer ${accessToken}`;
     } else {
         console.log("<AxiosClient> ACCESS TOKEN FAILED!")
     }

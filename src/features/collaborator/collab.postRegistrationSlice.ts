@@ -1,4 +1,4 @@
-import { postRegistrationService } from './../../services/collaborator/postRegistration.service';
+import { postRegistrationService } from '../../services/collaborator/postRegistration.service';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import ViewPostRegistrationDto from '../../dtos/collaborator/response/viewPostRegistration.dto';
