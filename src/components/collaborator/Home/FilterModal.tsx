@@ -81,6 +81,7 @@ const FilterModal = () => {
         onModalShow={() => console.log('Modal is shown!')}
         onModalHide={() => console.log('Modal is hidden!')}
         swipeDirection={['down']} // Cho phép kéo từ trên xuống
+        hideModalContentWhileAnimating={true}
         swipeThreshold={200}
         onSwipeComplete={() => toggleModalVisible()}
         onSwipeCancel={() => console.log('Swipe Canceled')}
@@ -96,8 +97,8 @@ const FilterModal = () => {
             height: ScreenHeight * 0.85,
             width: '100%',
             backgroundColor: 'white',
-            borderTopRightRadius: 20,
-            borderTopLeftRadius: 20,
+            borderTopRightRadius: 35,
+            borderTopLeftRadius: 35,
           }}
         >
           <View style={{ marginHorizontal: 15 }}>

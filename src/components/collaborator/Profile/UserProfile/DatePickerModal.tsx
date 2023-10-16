@@ -16,13 +16,14 @@ import DateTimePickerModal, {
 type DatePickerFieldProps = View['props'] &
   TouchableOpacity['props'] &
   ReactNativeModalDateTimePickerProps & {
-    name?: string;
+    label?: string;
     value?: string;
+    onPress?: () => void;
   };
 
 const DatePickerField = (props: DatePickerFieldProps) => {
   const {
-    name,
+    label,
     value,
     id,
     onConfirm,
@@ -34,7 +35,7 @@ const DatePickerField = (props: DatePickerFieldProps) => {
 
   return (
     <View style={[{ elevation: 2 }, style]} {...otherProps}>
-      <Text style={{ fontSize: 16 }}>{name}</Text>
+      <Text style={{ fontSize: 16 }}>{label}</Text>
       <TouchableOpacity
         style={[
           {
@@ -49,7 +50,7 @@ const DatePickerField = (props: DatePickerFieldProps) => {
           },
           style,
         ]}
-        {...otherProps}
+        onPress={props.onPress}
       >
         <Text style={{ flex: 1 }}>{value ? value : '--/--/----'}</Text>
         <Ionicons
@@ -65,6 +66,7 @@ const DatePickerField = (props: DatePickerFieldProps) => {
         mode="date"
         onConfirm={onConfirm}
         onCancel={onCancel}
+        {...otherProps}
       />
     </View>
   );

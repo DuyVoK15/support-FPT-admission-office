@@ -4,6 +4,7 @@ import { ScreenHeight, ScreenWidth } from '../../../constants/Demesions';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../../constants/Colors';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
+import DashedLine from 'react-native-dashed-line';
 
 type EventCardProps = TouchableOpacity['props'] & {
   currentDay?: string;
@@ -43,7 +44,7 @@ export default class EventCard extends Component<EventCardProps> {
           <View
             style={{
               alignItems: 'center',
-              backgroundColor: 'red',
+              backgroundColor: COLORS.light_black,
               borderRadius: 10,
               marginBottom: 10,
             }}
@@ -126,14 +127,14 @@ export default class EventCard extends Component<EventCardProps> {
               </Text>
             </View>
           </View>
-          <View
-            style={{
-              height: 1,
-              backgroundColor: COLORS.grey_underline,
-              marginHorizontal: 10,
-              marginVertical: 10,
-            }}
-          ></View>
+          <DashedLine
+                style={{ marginVertical: 10 }}
+                dashGap={0}
+                dashThickness={1}
+                dashLength={8}
+                dashColor={COLORS.super_light_grey}
+              />
+
           <View style={{ flex: 1 }}>
             <Text
               style={{

@@ -6,11 +6,12 @@ import { FONTS_FAMILY } from '../../../../constants/Fonts';
 import { SHADOWS } from '../../../../constants/Shadows';
 
 type ProfileTextInputProps = TextInput['props'] & {
-  name?: string;
+  label?: string;
+  placeholder?:string;
 };
 
 const ProfileTextInput = (props: ProfileTextInputProps) => {
-  const { style, name, ...otherProps } = props;
+  const { style, ...otherProps } = props;
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
   // Hàm để xử lý sự kiện khi TextInput được focus
@@ -35,10 +36,10 @@ const ProfileTextInput = (props: ProfileTextInputProps) => {
       <Text
         style={{ fontFamily: FONTS_FAMILY.Ubuntu_400Regular, fontSize: 16 }}
       >
-        {name}
+        {props.label}
       </Text>
       <TextInput
-        placeholder={`Enter ${name}`}
+        placeholder={`Enter ${props.placeholder}`}
         placeholderTextColor={COLORS.grey_icon}
         onFocus={handleFocus}
         onBlur={handleBlur}

@@ -6,13 +6,14 @@ import { FONTS_FAMILY } from '../../../../constants/Fonts';
 import { SHADOWS } from '../../../../constants/Shadows';
 
 type ProfileSignupTextInputProps = TextInput['props'] & {
+  label?: string;
   placeholder?: string;
 };
 
 const ProfileSignupTextInput: React.FC<ProfileSignupTextInputProps> = (
   props
 ) => {
-  const { style, placeholder, ...otherProps } = props;
+  const { style, label, placeholder, ...otherProps } = props;
 
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
@@ -42,7 +43,12 @@ const ProfileSignupTextInput: React.FC<ProfileSignupTextInputProps> = (
       ...SHADOWS.SHADOW_03
       };
   return (
-    <View>
+    <View style={style}>
+      <Text
+        style={{ fontFamily: FONTS_FAMILY.Ubuntu_400Regular, fontSize: 16 }}
+      >
+        {label}
+      </Text>
       <TextInput
         placeholder={`Enter ${placeholder}`}
         placeholderTextColor={COLORS.grey_icon}
@@ -55,9 +61,10 @@ const ProfileSignupTextInput: React.FC<ProfileSignupTextInputProps> = (
             height: 50,
             // borderWidth: 1,
             // borderColor: borderColor,
+            backgroundColor: "white",
             borderRadius: 10,
             paddingLeft: 15,
-            marginTop: 5,
+            marginVertical: 10,
             ...boxShadow,
           },
           ,
