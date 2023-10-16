@@ -21,18 +21,20 @@ import { useNavigation } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
 import { useAppDispatch } from '../../../app/store';
 import { useAppSelector } from '../../../app/hooks';
-import { getUserInfo, logout } from '../../../features/collaborator/authSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import SubmitButton from '../../../components/shared/Button/SubmitButton';
 import Header from '../../../components/shared/Header/Header';
+import { LinearGradient } from 'expo-linear-gradient';
+import { SHADOWS } from '../../../constants/Shadows';
+import { collab_getUserInfo, collab_logout } from '../../../features/collaborator/collab.authSlice';
 
 const Account = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
 
   const dispatch = useAppDispatch();
-  const userInfo = useAppSelector((state) => state.auth.userInfo);
+  const userInfo = useAppSelector((state) => state.collab_auth.userInfo);
   const fetchUserInfo = async () => {
-    await dispatch(getUserInfo()).catch((error) => {
+    await dispatch(collab_getUserInfo()).catch((error) => {
       console.log(error);
     });
     unwrapResult;
@@ -43,7 +45,7 @@ const Account = () => {
   }, []);
 
   const handleLogout = async () => {
-    await dispatch(logout());
+    await dispatch(collab_logout());
   };
 
   return (
@@ -53,7 +55,12 @@ const Account = () => {
           <Text style={styles.textHeader}>My Account</Text>
         </View>
 
-        <View style={styles.containerInfoBox}>
+        <LinearGradient colors={['#FF8C00', '#FFA07A']} // Mã màu cam và màu cam kết hợp
+      start={{ x: 0.5, y: 0 }} // Bắt đầu từ giữa màn hình ở dưới cùng
+      end={{ x: 0.5, y: 1 }}   // Kết thúc ở giữa màn hình ở trên cùng
+      locations={[0, 1]}
+      
+      style={styles.containerInfoBox}>
           <View style={styles.containerInfoContent}>
             <View style={styles.avatarStyle}>
               <Image
@@ -72,7 +79,7 @@ const Account = () => {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+        </LinearGradient>
       </View>
 
       <ScrollView
@@ -309,7 +316,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: 'white',
+    backgroundColor: '#FFFFFF',
   },
   containerHeader: {
     marginHorizontal: 20,
@@ -347,15 +354,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     paddingTop: 30,
     borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.27,
-    shadowRadius: 4.65,
-
-    elevation: 6,
+   ...SHADOWS.SHADOW_03
   },
   containerRow: {
     flexDirection: 'row',
@@ -370,15 +369,8 @@ const styles = StyleSheet.create({
   containerInfoBox: {
     borderRadius: 10,
     backgroundColor: COLORS.orange_icon,
-    shadowColor: COLORS.orange_icon,
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.6,
-    shadowRadius: 4.65,
-    elevation: 6,
-    marginBottom: 30,
+    
+    marginBottom: 10,
   },
   containerInfoContent: {
     flexDirection: 'row',
@@ -413,26 +405,9 @@ const styles = StyleSheet.create({
   },
   textTitle: {
     fontSize: 20,
-    fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+    fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
   },
-  // textBalance: {
-  //   fontSize: 20,
-  //   fontWeight: "bold",
-  // },
-  // buttonRecharge: {
-  //   marginTop: 10,
-  //   backgroundColor: "#FFF",
-  //   borderWidth: 2,
-  //   borderColor: COLORS.orange_icon,
-  //   alignItems: "center",
-  //   width: 100,
-  //   paddingVertical: 10,
-  //   borderRadius: 10,
-  // },
-  // textRecharge: {
-  //   fontSize: 16,
-  //   color: COLORS.orange_icon,
-  // },
+
   containerTextTitles: {
     marginVertical: 10,
   },

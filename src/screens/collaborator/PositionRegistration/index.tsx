@@ -25,8 +25,8 @@ import { useAppDispatch } from '../../../app/store';
 import {
   createPostRegistration,
   getAllPostRegistration,
-} from '../../../features/collaborator/postRegistrationSlice';
-import { getAllPost } from '../../../features/collaborator/postSlice';
+} from '../../../features/collaborator/collab.postRegistrationSlice';
+import { getAllPost } from '../../../features/collaborator/collab.postSlice';
 import { Data } from '../../../models/collaborator/dataPost.model';
 import CreatePostRegistrationDto from '../../../dtos/collaborator/payload/createPostRegistration.dto';
 

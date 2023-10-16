@@ -12,29 +12,15 @@ import SubmitButton from '../../../components/shared/Button/SubmitButton';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Data } from '../../../models/collaborator/dataPost.model';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
-
-type RootStackParamList = {
-  EventDetail: { item: Data }; // Khai báo kiểu đối tượng event
-  // Các màn hình khác ở đây
-};
-
-type DestinationScreenRouteProp = RouteProp<RootStackParamList, 'EventDetail'>;
-
-type DestinationScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'EventDetail'
->;
-
-export type Props = {
-  route: DestinationScreenRouteProp;
-  navigation: DestinationScreenNavigationProp;
-};
+import { SHADOWS } from '../../../constants/Shadows';
 
 const EventDetail = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const route = useRoute();
-  const { item } = route.params as { item: Data };
-
+  const { item } = route?.params as { item: Data };
+  const handleNavigate = (item: Data) => {
+    navigation.navigate('POSITION_REGISTRATION', { item });
+  };
   useEffect(() => {
     console.log(JSON.stringify(item, null, 2));
   }, []);
@@ -62,21 +48,14 @@ const EventDetail = () => {
           backgroundColor: 'white',
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: -10,
-          },
-          shadowOpacity: 0.3,
-          shadowRadius: 4,
-          elevation: 5,
+          ...SHADOWS.SHADOW_03
         }}
       >
-        <ScrollView style={{marginTop: 30}}>
+        <ScrollView style={{ marginTop: 30 }}>
           <View style={{ marginHorizontal: 20 }}>
             {/* ---------------------------------- */}
             <View>
-              <View style={{marginBottom: 10}}>
+              <View style={{ marginBottom: 10 }}>
                 <Text
                   style={{
                     fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
@@ -152,7 +131,7 @@ const EventDetail = () => {
                       fontSize: 12,
                       color: COLORS.light_black,
                       marginVertical: 2,
-                      maxWidth: 300
+                      maxWidth: 300,
                     }}
                   >
                     {item.postPositions[0].location}
@@ -240,13 +219,11 @@ const EventDetail = () => {
                     color: 'red',
                   }}
                 >
-                  Attendees(30)
+                  {item?.registerAmount ? `Attendees(${item?.registerAmount})` : "Ateendees(0)"}
                 </Text>
               </View>
               <View>
-                <Text>
-                  {item?.postDescription}
-                </Text>
+                <Text>{item?.postDescription}</Text>
               </View>
             </View>
             {/* ---------------------------------- */}
@@ -271,16 +248,16 @@ const EventDetail = () => {
                 <Text>X</Text>
               </View>
             </View>
+            {/* Button */}
+          <View style={{ marginVertical: 20, marginHorizontal: 20 }}>
+            <SubmitButton
+              onPress={() => handleNavigate(item)}
+              titleButton="REGISTER"
+            />
           </View>
+          </View>
+          
         </ScrollView>
-      </View>
-
-      {/* Button */}
-      <View style={{ top: 600, marginHorizontal: 20 }}>
-        <SubmitButton
-          onPress={() => navigation.navigate('POSITION_REGISTRATION')}
-          titleButton="REGISTER"
-        />
       </View>
     </View>
   );

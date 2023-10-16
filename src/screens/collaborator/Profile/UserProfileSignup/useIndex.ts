@@ -3,7 +3,7 @@ import React from 'react'
 import { useAppDispatch } from '../../../../app/store';
 import { AccountInfoSignup } from '../../../../models/collaborator/account.model';
 import { formatToISO_8601 } from '../../../../utils/formats';
-import { signupAccountInformation } from '../../../../features/collaborator/accountSlice';
+import { signupAccountInformation } from '../../../../features/collaborator/collab.accountSlice';
 import { useForm } from 'react-hook-form';
 
 const useUserProfileSignup = () => {
@@ -11,6 +11,7 @@ const useUserProfileSignup = () => {
     const {
         control,
         handleSubmit,
+        setValue,
         formState: { errors },
       } = useForm({
         defaultValues: {
@@ -76,9 +77,9 @@ const useUserProfileSignup = () => {
           taxNumber: data.taxNumber,
         } as AccountInfoSignup;
         await dispatch(signupAccountInformation(AccountInfoSignup));
-    
+    console.log(JSON.stringify(AccountInfoSignup, null, 2))
       };
-const handlers = {onSubmit, handleSubmit}
+const handlers = {onSubmit, handleSubmit, setValue}
 const props = {control}
   return {
     handlers,

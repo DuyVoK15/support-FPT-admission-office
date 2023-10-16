@@ -15,186 +15,223 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { COLORS } from '../../../../constants/Colors';
 import { ScreenWidth } from '../../../../constants/Demesions';
 import { useAppDispatch } from '../../../../app/store';
-import { signupAccountInformation } from '../../../../features/collaborator/accountSlice';
+import { signupAccountInformation } from '../../../../features/collaborator/collab.accountSlice';
 import { AccountInfoSignup } from '../../../../models/collaborator/account.model';
 import { isAccountInformationValid } from '../../../../utils/validates';
-import { formatToISO_8601 } from '../../../../utils/formats';
+import {
+  formatDateToDDMMYYYY,
+  formatToDate,
+  formatToISO_8601,
+} from '../../../../utils/formats';
 import { FONTS_FAMILY } from '../../../../constants/Fonts';
 import SubmitButton from '../../../../components/shared/Button/SubmitButton';
 import DashedLine from 'react-native-dashed-line';
 import { Controller, useForm } from 'react-hook-form';
 import useUserProfileSignup from './useIndex';
+import DatePickerField from '../../../../components/collaborator/Profile/UserProfileSignup/DatePickerModal';
 
 const UserProfileSignup = () => {
-  const {handlers, props} = useUserProfileSignup();
+  const { handlers, props } = useUserProfileSignup();
+  // IdentityIssueDate
+  const [
+    isIdentityIssueDatePickerVisible,
+    setIsIdentityIssueDatePickerVisible,
+  ] = useState<boolean>(false);
 
+  const showIdentityIssueDatePicker = () => {
+    setIsIdentityIssueDatePickerVisible(true);
+  };
+
+  const hideIdentityIssueDatePicker = () => {
+    setIsIdentityIssueDatePickerVisible(false);
+  };
+
+  const handleConfirmIdentityIssueDatePicker = (date: Date) => {
+    handlers.setValue('identityIssueDate', formatDateToDDMMYYYY(date));
+    // setIdentityIssueDate(formatToDate({ dateProp: date }));
+    hideIdentityIssueDatePicker();
+  };
   return (
     <View style={styles.container}>
       <Header style={{ justifyContent: 'center' }}>
         <Text style={styles.titleHeader}>Sign-up Account Information</Text>
       </Header>
-      <View style={{ marginTop: 20, marginHorizontal: 20 }}>
-        {/* <ScrollView
+      <View style={{ marginTop: 20, marginBottom: 110 }}>
+        <ScrollView
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={16}
-        > */}
-        <View>
-          <Controller
-            control={props.control}
-            rules={{
-              required: true,
-            }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <ProfileSignupTextInput
-                style={{ marginVertical: 10, backgroundColor: 'white' }}
-                placeholder="Citizen Identification Number *"
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-            name="identityNumber"
-          />
-           <Controller
-            control={props.control}
-            rules={{
-              required: true,
-            }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <ProfileSignupTextInput
-                style={{ marginVertical: 10, backgroundColor: 'white' }}
-                placeholder="Citizen Identification Issue Address *"
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-            name="address"
-          />
-          <Controller
-            control={props.control}
-            rules={{
-              required: true,
-            }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <ProfileSignupTextInput
-                style={{ marginVertical: 10, backgroundColor: 'white' }}
-                placeholder="Citizen Identification Issue Date *"
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-            name="identityIssueDate"
-          />
-        
-          <Controller
-            control={props.control}
-            rules={{
-              required: true,
-            }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <ProfileSignupTextInput
-                style={{ marginVertical: 10, backgroundColor: 'white' }}
-                placeholder="Citizen Identification Issue Place *"
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-            name="placeOfIssue"
-          />
-    
-          <Controller
-            control={props.control}
-            rules={{
-              required: true,
-            }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <ProfileSignupTextInput
-                style={{ marginVertical: 10, backgroundColor: 'white' }}
-                placeholder="Student ID *"
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-            name="idStudent"
-          />
-      
-          <Controller
-            control={props.control}
-            rules={{
-              required: true,
-            }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <ProfileSignupTextInput
-                style={{ marginVertical: 10, backgroundColor: 'white' }}
-                placeholder="Facebook Profile URL *"
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-            name="fbUrl"
-          />
-    
-          <Controller
-            control={props.control}
-            rules={{
-              required: true,
-            }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <ProfileSignupTextInput
-                style={{ marginVertical: 10, backgroundColor: 'white' }}
-                placeholder="Tax Number"
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-            name="taxNumber"
-          />
-          
-          <View style={styles.containerCitizenICP}>
-            <Text style={styles.citizenICP}>
-              Citizen Identification Card Picture
-            </Text>
-          </View>
-
-          <View style={styles.containerCardImage}>
-            <TouchableOpacity
-              style={{ alignItems: 'center' }}
-              onPress={() => console.log('a')}
-            >
-              <View>
-                <Image
-                  style={{ height: 100, width: 150, resizeMode: 'cover' }}
-                  source={require('../../../../assets/Images/ic_id_card.png')}
+        >
+          <View style={{ marginHorizontal: 20 }}>
+            <Controller
+              control={props.control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <ProfileSignupTextInput
+                 
+                  label="Citizen Identification Number"
+                  placeholder="Citizen Identification Number *"
+                  onChangeText={onChange}
+                  value={value}
                 />
-              </View>
-              <View style={styles.containerTextImage}>
-                <Text style={styles.textImage}>Front Image</Text>
-              </View>
-            </TouchableOpacity>
-            <DashedLine
-              axis="vertical"
-              dashGap={0}
-              dashThickness={1}
-              dashLength={8}
-              dashColor={COLORS.light_grey}
+              )}
+              name="identityNumber"
             />
-            <TouchableOpacity style={{ alignItems: 'center' }}>
-              <View>
-                <Image
-                  style={{ height: 100, width: 150, resizeMode: 'cover' }}
-                  source={require('../../../../assets/Images/ic_id_card.png')}
-                />
-              </View>
-              <View style={styles.containerTextImage}>
-                <Text style={styles.textImage}>Back Image</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
-        {/* </ScrollView> */}
+            <Controller
+              control={props.control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <ProfileSignupTextInput
 
-        <View style={styles.containerButton}>
-          <SubmitButton onPress={handlers.handleSubmit(handlers.onSubmit)} titleButton="SUBMIT" />
-        </View>
+                label="Citizen Identification Issue Address"
+                  placeholder="Citizen Identification Issue Address *"
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+              name="address"
+            />
+            <Controller
+              control={props.control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { value } }) => (
+                <DatePickerField
+      
+                  label="Identity Issue Date"
+                  id={'3'}
+                  isVisible={isIdentityIssueDatePickerVisible}
+                  onPress={showIdentityIssueDatePicker}
+                  onConfirm={handleConfirmIdentityIssueDatePicker}
+                  onCancel={hideIdentityIssueDatePicker}
+                  value={value}
+                  // onChange={onChange}
+                />
+              )}
+              name="identityIssueDate"
+            />
+
+            <Controller
+              control={props.control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <ProfileSignupTextInput
+                
+                  label="Citizen Identification Issue Place"
+                  placeholder="Citizen Identification Issue Place *"
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+              name="placeOfIssue"
+            />
+
+            <Controller
+              control={props.control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <ProfileSignupTextInput
+        
+                  label="Student ID"
+                  placeholder="Student ID *"
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+              name="idStudent"
+            />
+
+            <Controller
+              control={props.control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <ProfileSignupTextInput
+
+                  label="Facebook Profile URL"
+                  placeholder="Facebook Profile URL *"
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+              name="fbUrl"
+            />
+
+            <Controller
+              control={props.control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <ProfileSignupTextInput
+                 
+                  label="Tax Number"
+                  placeholder="Tax Number"
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+              name="taxNumber"
+            />
+
+            <View style={styles.containerCitizenICP}>
+              <Text style={styles.citizenICP}>
+                Citizen Identification Card Picture
+              </Text>
+            </View>
+
+            <View style={styles.containerCardImage}>
+              <TouchableOpacity
+                style={{ alignItems: 'center' }}
+                onPress={() => console.log('a')}
+              >
+                <View>
+                  <Image
+                    style={{ height: 100, width: 150, resizeMode: 'cover' }}
+                    source={require('../../../../assets/Images/ic_id_card.png')}
+                  />
+                </View>
+                <View style={styles.containerTextImage}>
+                  <Text style={styles.textImage}>Front Image</Text>
+                </View>
+              </TouchableOpacity>
+              <DashedLine
+                axis="vertical"
+                dashGap={0}
+                dashThickness={1}
+                dashLength={8}
+                dashColor={COLORS.light_grey}
+              />
+              <TouchableOpacity style={{ alignItems: 'center' }}>
+                <View>
+                  <Image
+                    style={{ height: 100, width: 150, resizeMode: 'cover' }}
+                    source={require('../../../../assets/Images/ic_id_card.png')}
+                  />
+                </View>
+                <View style={styles.containerTextImage}>
+                  <Text style={styles.textImage}>Back Image</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.containerButton}>
+              <SubmitButton
+                onPress={handlers.handleSubmit(handlers.onSubmit)}
+                titleButton="SUBMIT"
+              />
+            </View>
+          </View>
+        </ScrollView>
       </View>
     </View>
   );
@@ -238,6 +275,6 @@ const styles = StyleSheet.create({
     color: COLORS.light_black,
   },
   containerButton: {
-    marginVertical: 40,
+    marginVertical: 20,
   },
 });

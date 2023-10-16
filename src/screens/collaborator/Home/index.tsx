@@ -20,7 +20,7 @@ import {
 } from '@expo/vector-icons';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
 import { useAppDispatch } from '../../../app/store';
-import { getAllPost } from '../../../features/collaborator/postSlice';
+import { getAllPost } from '../../../features/collaborator/collab.postSlice';
 import { useAppSelector } from '../../../app/hooks';
 import {
   formatToDay,
@@ -49,7 +49,7 @@ const Home = () => {
     fetchPost()
   }, []);
 
-  const postList = useAppSelector((state) => state.post.post);
+  const postList = useAppSelector((state) => state.collab_post.post);
 
   const handleNavigate = (item: Data) => {
     navigation.navigate('EVENT_DETAIL', { item });
@@ -225,7 +225,7 @@ const Home = () => {
 
           <View style={{ height: ScreenWidth * 0.75, marginTop: 20 }}>
             <ScrollView horizontal scrollEventThrottle={16}>
-              {postList.data.map((post, index) => (
+              {postList ? postList?.data?.map((post, index) => (
                 <EventCard
                   onPress={() => handleNavigate(post)}
                   key={index}
@@ -242,7 +242,7 @@ const Home = () => {
                   schoolName={post?.postPositions?.[0].location}
                   location={post?.postPositions[0].location}
                 />
-              ))}
+              )) : <View />}
             </ScrollView>
           </View>
         </View>
@@ -286,7 +286,7 @@ const Home = () => {
             </TouchableOpacity>
           </View>
 
-          <View style={{ height: ScreenHeight * 0.25, marginTop: 20 }}>
+          <View style={{ height: ScreenWidth * 0.75, marginTop: 20 }}>
             <ScrollView horizontal scrollEventThrottle={16}>
               {postList?.data.map((post, index) => (
                 <EventCard
