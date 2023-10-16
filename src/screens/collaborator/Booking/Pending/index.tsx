@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Header from '../../../../components/shared/Header/Back';
 import Backward from '../../../../components/shared/Direction/Backward/Backward';
 import { FONTS_FAMILY } from '../../../../constants/Fonts';
@@ -16,248 +16,286 @@ import { ScreenWidth } from '../../../../constants/Demesions';
 import DashedLine from 'react-native-dashed-line';
 import { Entypo, FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { SHADOWS } from '../../../../constants/Shadows';
+import { useAppDispatch } from '../../../../app/store';
+import { useAppSelector } from '../../../../app/hooks';
+import { getAllPostRegistration } from '../../../../features/collaborator/collab.postRegistrationSlice';
+import useIndex from '../useIndex';
 
 const Booking_Pending = () => {
-  const [isShowDetail, setIsShowDetail] = useState<boolean>(false);
-  const handleShowDetail = () => {
-    setIsShowDetail(true);
-  };
-  const handleSHideDetail = () => {
-    setIsShowDetail(false);
-  };
-  const [refreshing, setRefreshing] = useState<boolean>(false);
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
+ 
+  const { handlers, state, props } = useIndex();
 
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 1000);
-  }, []);
   return (
     <View style={styles.container}>
       <View>
         <ScrollView
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            <RefreshControl
+              refreshing={state.refreshing}
+              onRefresh={handlers.onRefresh}
+            />
           }
         >
-          <View style={styles.containerItem}>
-            <View style={styles.containerRow}>
-              <View style={styles.firstRow}>
-                <View style={styles.containerImage}>
-                  <Image
-                    style={styles.image}
-                    source={{
-                      uri: 'https://cdnimg.vietnamplus.vn/t870/uploaded/xpcwvovt/2020_11_13/ttxvn_viet_duc_5.jpg',
-                    }}
-                  />
-                </View>
-                <View style={{ flex: 1, marginLeft: 15 }}>
-                  <Text style={styles.textFirst}>General</Text>
-                  <Text style={styles.textFirst_2}>
-                    FPT University Campus Tour
-                  </Text>
-                </View>
-              </View>
-
-              <DashedLine
-                style={{ marginVertical: 10 }}
-                dashGap={0}
-                dashThickness={1}
-                dashLength={8}
-                dashColor={COLORS.super_light_grey}
-              />
-
-              <View style={styles.secondRow}>
-                <View
-                  style={{
-                    flex: 3,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Text style={styles.textSecond}>Position</Text>
-                  <Text style={styles.textSecond_2}>Trực hội trường</Text>
-                </View>
-                <View
-                  style={{
-                    flex: 4,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Text style={styles.textSecond}>Date</Text>
-                  <Text style={styles.textSecond_2}>Tue, JUL 24</Text>
-                </View>
-                <View
-                  style={{
-                    flex: 3,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Text style={styles.textSecond}>Time</Text>
-                  <Text style={styles.textSecond_2}>6:00 AM</Text>
-                </View>
-              </View>
-              <DashedLine
-                style={{ marginVertical: 10 }}
-                dashGap={0}
-                dashThickness={1}
-                dashLength={8}
-                dashColor={COLORS.super_light_grey}
-              />
-              {isShowDetail === false ? (
-                <View style={styles.containerViewDetail}>
-                  <TouchableOpacity onPress={handleShowDetail}>
-                    <Entypo
-                      name="chevron-down"
-                      size={30}
-                      color={COLORS.light_grey}
-                    />
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <View />
-              )}
-
-              <View style={styles.containerStatus}>
-                <View style={styles.statusRow}>
-                  <View>
-                    <Text style={styles.thirdText}>Pending</Text>
-                  </View>
-                  <View style={styles.statusDot} />
-                </View>
-              </View>
-
-              {isShowDetail ? (
-                <View>
-                 
-                    <View style={styles.column}>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          marginVertical: 5,
-                        }}
-                      >
-                        <View
-                          style={{
-                            borderRadius: 10,
-                            backgroundColor: COLORS.super_light_orange,
-                            width: 50,
-                            height: 50,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <FontAwesome5 name="school" size={24} color={COLORS.super_dark_orange}/>
-                        </View>
-                        <View style={{ marginLeft: 20 }}>
-                          <Text
-                            style={{
-                              fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
-                              fontSize: 18,
-                              marginVertical: 2,
-                              maxWidth: 270
+          <View style={{ marginTop: 20 }}>
+            {props?.postRegistrationList ? (
+              props?.postRegistrationList?.data
+                .filter((postRegistration) => postRegistration?.status === 1)
+                .map((postRegistration, index) => (
+                  <View
+                    key={postRegistration?.registrationCode}
+                    style={styles.containerItem}
+                  >
+                    <View style={styles.containerRow}>
+                      <View style={styles.firstRow}>
+                        <View style={styles.containerImage}>
+                          <Image
+                            style={styles.image}
+                            source={{
+                              uri: 'https://cdnimg.vietnamplus.vn/t870/uploaded/xpcwvovt/2020_11_13/ttxvn_viet_duc_5.jpg',
                             }}
-                          >
-                            FPT University
-                          </Text>                         
+                          />
                         </View>
-                      </View>
-                      {/* ------------------------ */}
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          marginVertical: 5,
-                        }}
-                      >
-                        <View
-                          style={{
-                            borderRadius: 10,
-                            backgroundColor: COLORS.super_light_orange,
-                            width: 50,
-                            height: 50,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <Entypo name="location" size={30} color={COLORS.super_dark_orange} />
-                        </View>
-                        <View style={{ marginLeft: 20 }}>
-                          <Text
-                            style={{
-                              fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
-                              fontSize: 14,
-                              marginVertical: 2,
-                              maxWidth: 270
-                            }}
-                          >
-                            Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành Phố
-                            Thủ Đức, Thành phố Hồ Chí Minh 700000, Việt Nam
+                        <View style={{ flex: 1, marginLeft: 15 }}>
+                          <Text style={styles.textFirst}>General</Text>
+                          <Text style={styles.textFirst_2}>
+                            {
+                              postRegistration?.postRegistrationDetail?.post
+                                .postCategory?.postCategoryDescription
+                            }
                           </Text>
-                        
                         </View>
                       </View>
-                      {/* ------------------------ */}
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          marginVertical: 5,
-                        }}
-                      >
-                        <View
-                          style={{
-                            borderRadius: 10,
-                            backgroundColor: COLORS.super_light_orange,
-                            width: 50,
-                            height: 50,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <FontAwesome name="money" size={30} color={COLORS.super_dark_orange} />
-                        </View>
-                        <View style={{ marginLeft: 20 }}>
-                          <Text
-                            style={{
-                              fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
-                              fontSize: 18,
-                              marginVertical: 2,
-                            }}
-                          >
-                            300.000 VNĐ
-                          </Text>
-                        
-                        </View>
-                      </View>
-                    </View>
-                    <DashedLine
-                style={{ marginVertical: 10 }}
-                dashGap={0}
-                dashThickness={1}
-                dashLength={8}
-                dashColor={COLORS.super_light_grey}
-              />
-                  <View style={styles.containerViewDetail}>
-                    <TouchableOpacity onPress={handleSHideDetail}>
-                      <Entypo
-                        name="chevron-up"
-                        size={30}
-                        color={COLORS.light_grey}
+
+                      <DashedLine
+                        style={{ marginVertical: 10 }}
+                        dashGap={0}
+                        dashThickness={1}
+                        dashLength={8}
+                        dashColor={COLORS.super_light_grey}
                       />
-                    </TouchableOpacity>
+
+                      <View style={styles.secondRow}>
+                        <View
+                          style={{
+                            flex: 4,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                        >
+                          <Text style={styles.textSecond}>Position</Text>
+                          <Text style={styles.textSecond_2}>
+                            {
+                              postRegistration?.postRegistrationDetail
+                                ?.postPosition?.positionName
+                            }
+                          </Text>
+                        </View>
+                        <View
+                          style={{
+                            flex: 3,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                        >
+                          <Text style={styles.textSecond}>Date</Text>
+                          <Text style={styles.textSecond_2}>Tue, JUL 24</Text>
+                        </View>
+                        <View
+                          style={{
+                            flex: 4,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                        >
+                          <Text style={styles.textSecond}>Time</Text>
+                          <Text style={styles.textSecond_2}>6:00 AM</Text>
+                        </View>
+                      </View>
+                      <DashedLine
+                        style={{ marginVertical: 10 }}
+                        dashGap={0}
+                        dashThickness={1}
+                        dashLength={8}
+                        dashColor={COLORS.super_light_grey}
+                      />
+                      {state.isShowDetail[index] === false ? (
+                        <View style={styles.containerViewDetail}>
+                          <TouchableOpacity onPress={() => handlers.toggleDetail(index)}>
+                            <Entypo
+                              name="chevron-down"
+                              size={30}
+                              color={COLORS.light_grey}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      ) : (
+                        <View />
+                      )}
+
+                      <View style={styles.containerStatus}>
+                        <View style={styles.statusRow}>
+                          <View>
+                            <Text style={styles.thirdText}>
+                              {postRegistration?.status === 1
+                                ? 'Pending'
+                                : 'Status'}
+                            </Text>
+                          </View>
+                          <View style={styles.statusDot} />
+                        </View>
+                      </View>
+
+                      {state.isShowDetail[index] ? (
+                        <View>
+                          <View style={styles.column}>
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                marginVertical: 5,
+                              }}
+                            >
+                              <View
+                                style={{
+                                  borderRadius: 10,
+                                  backgroundColor: COLORS.super_light_orange,
+                                  width: 50,
+                                  height: 50,
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                }}
+                              >
+                                <FontAwesome5
+                                  name="school"
+                                  size={24}
+                                  color={COLORS.super_dark_orange}
+                                />
+                              </View>
+                              <View style={{ marginLeft: 20 }}>
+                                <Text
+                                  style={{
+                                    fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
+                                    fontSize: 18,
+                                    marginVertical: 2,
+                                    maxWidth: 270,
+                                  }}
+                                >
+                                  FPT University
+                                </Text>
+                              </View>
+                            </View>
+                            {/* ------------------------ */}
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                marginVertical: 5,
+                              }}
+                            >
+                              <View
+                                style={{
+                                  borderRadius: 10,
+                                  backgroundColor: COLORS.super_light_orange,
+                                  width: 50,
+                                  height: 50,
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                }}
+                              >
+                                <Entypo
+                                  name="location"
+                                  size={30}
+                                  color={COLORS.super_dark_orange}
+                                />
+                              </View>
+                              <View style={{ marginLeft: 20 }}>
+                                <Text
+                                  style={{
+                                    fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+                                    fontSize: 14,
+                                    marginVertical: 2,
+                                    maxWidth: 270,
+                                  }}
+                                >
+                                  {
+                                    postRegistration?.postRegistrationDetail
+                                      ?.postPosition?.location
+                                  }
+                                </Text>
+                              </View>
+                            </View>
+                            {/* ------------------------ */}
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                marginVertical: 5,
+                              }}
+                            >
+                              <View
+                                style={{
+                                  borderRadius: 10,
+                                  backgroundColor: COLORS.super_light_orange,
+                                  width: 50,
+                                  height: 50,
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                }}
+                              >
+                                <FontAwesome
+                                  name="money"
+                                  size={30}
+                                  color={COLORS.super_dark_orange}
+                                />
+                              </View>
+                              <View style={{ marginLeft: 20 }}>
+                                <Text
+                                  style={{
+                                    fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
+                                    fontSize: 18,
+                                    marginVertical: 2,
+                                  }}
+                                >
+                                  {postRegistration?.postRegistrationDetail
+                                    ?.postPosition?.salary
+                                    ? String(
+                                        postRegistration?.postRegistrationDetail
+                                          ?.postPosition?.salary
+                                      ) + ' VNĐ'
+                                    : ''}
+                                </Text>
+                              </View>
+                            </View>
+                          </View>
+                          <DashedLine
+                            style={{ marginVertical: 10 }}
+                            dashGap={0}
+                            dashThickness={1}
+                            dashLength={8}
+                            dashColor={COLORS.super_light_grey}
+                          />
+                          <View style={styles.containerViewDetail}>
+                            <TouchableOpacity
+                              onPress={() => handlers.toggleDetail(index)}
+                            >
+                              <Entypo
+                                name="chevron-up"
+                                size={30}
+                                color={COLORS.light_grey}
+                              />
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      ) : (
+                        <View />
+                      )}
+                    </View>
                   </View>
-                </View>
-              ) : (
-                <View />
-              )}
-            </View>
+                ))
+            ) : (
+              <View />
+            )}
           </View>
-          
         </ScrollView>
       </View>
     </View>
@@ -272,7 +310,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   containerItem: {
-    marginVertical: 20,
+    marginBottom: 20,
     marginHorizontal: 20,
     backgroundColor: 'white',
     borderRadius: 15,
@@ -314,14 +352,13 @@ const styles = StyleSheet.create({
   secondRow: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     // marginTop: 10,
     // marginBottom: 20,
   },
   column: {
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-
   },
   textColumn: {
     fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
@@ -341,6 +378,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: 'black',
     marginVertical: 5,
+    textAlign: 'center',
   },
   containerStatus: {
     position: 'absolute',
