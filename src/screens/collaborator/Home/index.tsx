@@ -34,6 +34,7 @@ import { Data } from '../../../models/collaborator/dataPost.model';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
 import FilterModal from '../../../components/collaborator/Home/FilterModal';
 import { SHADOWS } from '../../../constants/Shadows';
+import UpdateBookingPopup from '../../../components/collaborator/Home/UpdateBookingPopup';
 
 const Home = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -41,7 +42,11 @@ const Home = () => {
 
   const dispatch = useAppDispatch();
   const fetchPost = async () => {
-    await dispatch(getAllPost()).then((res) => {
+    const params = {
+      Page: 1,
+      PageSize: 20,
+    }
+    await dispatch(getAllPost(params)).then((res) => {
       console.log("Alo: ", JSON.stringify(res, null, 2))
     });;;
   };
@@ -154,10 +159,10 @@ const Home = () => {
                   onChangeText={(value) => setText(value)}
                   style={{
                     fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
-                    fontSize: 20,
+                    fontSize: 18,
                     color: COLORS.light_black,
                   }}
-                  placeholder="Search...."
+                  placeholder="Search by code, school...."
                 />
               </View>
               <TouchableOpacity
@@ -284,7 +289,7 @@ const Home = () => {
                 />
               </View>
             </TouchableOpacity>
-          </View>
+          </View> 
 
           <View style={{ height: ScreenWidth * 0.75, marginTop: 20 }}>
             <ScrollView horizontal scrollEventThrottle={16}>
@@ -311,6 +316,7 @@ const Home = () => {
           </View>
         </View>
       </ScrollView>
+      {/* <UpdateBookingPopup /> */}
     </View>
   );
 };

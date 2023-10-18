@@ -1,11 +1,12 @@
 import {
+  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Header from '../../../components/shared/Header/Back';
 import Backward from '../../../components/shared/Direction/Backward/Backward';
 import { ScreenHeight, ScreenWidth } from '../../../constants/Demesions';
@@ -14,33 +15,61 @@ import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
 import SubmitButton from '../../../components/shared/Button/SubmitButton';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
 import { COLORS } from '../../../constants/Colors';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Button } from 'react-native';
+import {
+  CodeField,
+  Cursor,
+  useBlurOnFulfill,
+  useClearByFocusCell,
+} from 'react-native-confirmation-code-field';
+import { collab_enableAccount, collab_verifyAccount } from '../../../features/collaborator/collab.accountSlice';
+import UpdateEnableAccountResponse from '../../../dtos/collaborator/response/updateEnableAccount.dto';
+import { useAppDispatch } from '../../../app/store';
+import { useAppSelector } from '../../../app/hooks';
+// import Constants from 'expo-constants';
+import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
+import { SHADOWS } from '../../../constants/Shadows';
 
 const Verification = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
-  const [otp, setOtp] = useState<string>('');
 
-  const handleOtpChange = (text: string, index: number) => {
-    let newOtp = otp;
-    newOtp = newOtp.substr(0, index) + text + newOtp.substr(index + 1);
-    setOtp(newOtp);
-    console.log(otp);
-  };
+  const [value, setValue] = useState('');
+  const ref = useBlurOnFulfill({ value, cellCount: 6 });
+  const [props, getCellOnLayoutHandler] = useClearByFocusCell({
+    value,
+    setValue,
+  });
 
-  const handleVerifyOtp = async () => {
+  const dispatch = useAppDispatch();
+  const enableResponse = useAppSelector(
+    (state) => state.collab_account.enableResponse
+  );
+  const handleEnableAccount = async () => {
     try {
-      console.log(otp);
-      // navigation.push("NewPassword");
+      await dispatch(collab_enableAccount()).then((res) => {
+        console.log(JSON.stringify(res, null, 2));
+      });
+    } catch (error) {
+      
+    }
+  }
+  const handleVerifyOtp = async (code: number) => {
+    try {
+      console.log(code);
+      await dispatch(collab_verifyAccount({code: 111111})).then((res) => {
+        console.log(JSON.stringify(res, null, 2));
+      });
     } catch (error) {
       console.error(error);
     }
   };
+
+  const [isPlaying, setIsPlaying] = useState<boolean>(true);
   return (
     <View style={styles.container}>
-      <Header>
-        <Backward
-          onPress={() => navigation.goBack()}
-          titleBackward="Verification"
-        />
+      <Header style={{justifyContent: "center",}}>
+        <Text style={{fontFamily: FONTS_FAMILY.Ubuntu_500Medium, fontSize: 26, marginBottom: 10, color: "#FFF"}}>Verification</Text>
       </Header>
       <View style={styles.containerBox}>
         <View style={styles.containerTextTitle}>
@@ -50,68 +79,67 @@ const Verification = () => {
           </Text>
         </View>
 
-        <View style={styles.otpContainer}>
-          <TextInput
-            style={styles.otpInput}
-            maxLength={1}
-            keyboardType="numeric"
-            value={otp[0]}
-            onChangeText={(text) => handleOtpChange(text, 0)}
-          />
-          <TextInput
-            style={styles.otpInput}
-            maxLength={1}
-            keyboardType="numeric"
-            value={otp[1]}
-            onChangeText={(text) => handleOtpChange(text, 1)}
-          />
-          <TextInput
-            style={styles.otpInput}
-            maxLength={1}
-            keyboardType="numeric"
-            value={otp[2]}
-            onChangeText={(text) => handleOtpChange(text, 2)}
-          />
-          <TextInput
-            style={styles.otpInput}
-            maxLength={1}
-            keyboardType="numeric"
-            value={otp[3]}
-            onChangeText={(text) => handleOtpChange(text, 3)}
-          />
-          <TextInput
-            style={styles.otpInput}
-            maxLength={1}
-            keyboardType="numeric"
-            value={otp[4]}
-            onChangeText={(text) => handleOtpChange(text, 4)}
-          />
-          <TextInput
-            style={styles.otpInput}
-            maxLength={1}
-            keyboardType="numeric"
-            value={otp[5]}
-            onChangeText={(text) => handleOtpChange(text, 5)}
-          />
-        </View>
+        <CodeField
+          ref={ref}
+          {...props}
+          // Use `caretHidden={false}` when users can't paste a text value, because context menu doesn't appear
+          value={value}
+          onChangeText={setValue}
+          cellCount={6}
+          rootStyle={styles.codeFieldRoot}
+          keyboardType="number-pad"
+          textContentType="oneTimeCode"
+          renderCell={({ index, symbol, isFocused }) => (
+            <View
+              key={index}
+              onLayout={getCellOnLayoutHandler(index)}
+              style={[styles.cell, isFocused && styles.focusCell]}
+            >
+              <Text style={styles.textCell}>{symbol || (isFocused ? <Cursor /> : null)}</Text>
+            </View>
+          )}
+        />
 
         <View style={styles.containerCountDownTime}>
-          <View style={{flex: 1}}>
-            <Text style={styles.countDownTime}>Time Remaining: 01:20</Text>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.countDownTime}>
+              {enableResponse
+                ? 'Time Remaining: ' + enableResponse?.data?.expirationDate
+                : ''}
+            </Text>
           </View>
-          <View style={{flex: 0}}>
+          <TouchableOpacity style={{ flex: 0 }}>
             <Text style={styles.resendOtp}>Resend OTP</Text>
-          </View>
+          </TouchableOpacity>
         </View>
-
         <View style={styles.containerButton}>
-          <SubmitButton titleButton="Verify OTP" />
+          <SubmitButton onPress={handleEnableAccount} titleButton="Send OTP" />
         </View>
+        <View style={styles.containerButton}>
+          <SubmitButton onPress={()=>handleVerifyOtp(parseInt(value))} titleButton="Verify OTP" />
+        </View>
+        {/* <View style={styles.containerCountDown}>
+          <CountdownCircleTimer
+            isPlaying={isPlaying}
+            duration={10}
+            colors={['#004777', '#F7B801', '#A30000', '#A30000']}
+            colorsTime={[10, 6, 3, 0]}
+            onComplete={() => ({ shouldRepeat: true, delay: 2 })}
+            updateInterval={1}
+          >
+            {({ remainingTime, color }) => (
+              <Text style={{ color, fontSize: 40 }}>{remainingTime}</Text>
+            )}
+          </CountdownCircleTimer>
+          <Button
+            title="Toggle Playing"
+            onPress={() => setIsPlaying((prev) => !prev)}
+          />
+        </View> */}
       </View>
     </View>
   );
 };
-
 export default Verification;
 
 const styles = StyleSheet.create({
@@ -131,43 +159,48 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
   },
-  otpContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 30,
-  },
-  otpInput: {
-    width: ScreenWidth * 0.1,
-    height: ScreenWidth * 0.1,
-    backgroundColor: 'white',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.27,
-    shadowRadius: 2.65,
-
-    elevation: 6,
-    borderRadius: 5,
-    fontSize: 28,
-    marginRight: 10,
-    textAlign: 'center',
-  },
   containerCountDownTime: {
     flexDirection: 'row',
     marginVertical: 20,
-    justifyContent: "space-evenly"
+    justifyContent: 'space-evenly',
   },
   countDownTime: {
     fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
-    marginLeft: 20
+    marginLeft: 20,
   },
   resendOtp: {
     fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
-    marginRight: 20
+    marginRight: 20,
   },
   containerButton: {
     marginHorizontal: 30,
+  },
+  codeFieldRoot: { marginTop: 20 },
+  cell: {
+    width: 40,
+    height: 40,
+    // borderWidth: 2,
+    // borderColor: '#00000030',
+    borderRadius: 5,
+    backgroundColor: "#FFF",
+    ...SHADOWS.SHADOW_03,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  textCell: {
+    fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+    fontSize: 24,
+  },
+  focusCell: {
+    ...SHADOWS.SHADOW_06,
+    top: -3,
+  },
+  containerCountDown: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 1,
+    backgroundColor: '#ecf0f1',
+    padding: 8,
   },
 });

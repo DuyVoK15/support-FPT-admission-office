@@ -24,6 +24,8 @@ import {
 import AdmissionBottomTabs from './admission/HomeStack/BottomTabs';
 import GetUserInfoDto from '../dtos/collaborator/getUserInfo.dto';
 import { UserInfo } from '../models/collaborator/userInfo.model';
+import Verification from '../screens/collaborator/Verification';
+import RoleId from '../enums/shared/RoleIdEnum';
 
 const AuthStackScreen: React.FC = () => {
   return <LoginScreen />;
@@ -141,18 +143,12 @@ const AppNavigator: FC = () => {
       const parseUserInfo: UserInfo = JSON.parse(userInfo);
       console.log(parseUserInfo);
 
-      if (
-        collab_isAuthenticated === false &&
-        parseUserInfo?.roleId === 2
-      ) {
+      if (collab_isAuthenticated === false && parseUserInfo?.roleId === RoleId.COLLAB_ROLE) {
         setIsLogin(true);
         collab_loadAuthState();
       }
-      
-      if (
-        admission_isAuthenticated === false &&
-        parseUserInfo?.roleId === 1
-      ) {
+
+      if (admission_isAuthenticated === false && parseUserInfo?.roleId === RoleId.ADMISSION_ROLE) {
         setIsLogin(true);
         admission_loadAuthState();
       }
@@ -168,22 +164,31 @@ const AppNavigator: FC = () => {
   }, []);
 
   useEffect(() => {
-    if (collab_isAuthenticated === true) {
+    if (collab_isAuthenticated && collab_userInfo?.roleId === RoleId.COLLAB_ROLE) {
       fetchCollab_userInfo();
     }
   }, [collab_loadingAccount, collab_isAuthenticated]);
 
-  return collab_isAuthenticated === true && collab_userInfo?.roleId === 2 ? (
-    collab_userInfo?.accountInformation !== null ? (
-      <HomeCollaboratorStackScreen />
+
+
+  return collab_isAuthenticated && collab_userInfo?.roleId === RoleId.COLLAB_ROLE ? (
+    collab_userInfo?.isActive ? (
+      collab_userInfo?.accountInformation! ? (
+        <HomeCollaboratorStackScreen />
+      ) : (
+        <UserProfileSignup />
+      )
     ) : (
-      <UserProfileSignup />
+      <Verification />
     )
-  ) : admission_isAuthenticated === true && admission_userInfo?.roleId === 1 ? (
+  ) : admission_isAuthenticated && admission_userInfo?.roleId === RoleId.ADMISSION_ROLE ? (
     <HomeAdmissionStackScreen />
   ) : (
     <AuthStackScreen />
   );
+  {
+    
+  }
 };
 
 export default AppNavigator;

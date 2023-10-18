@@ -13,13 +13,36 @@ import { FONTS_FAMILY } from '../../../constants/Fonts';
 import { COLORS } from '../../../constants/Colors';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { ScreenHeight, ScreenWidth } from '../../../constants/Demesions';
+import PriorityBar from '../../shared/ProgressBar/PriorityBar';
+import CategorySelection from './CategorySelection';
+import DateWorkingPicker from './DateWorkingPicker';
+import { formatDateToDDMMYYYY } from '../../../utils/formats';
 
 const FilterModal = () => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const toggleModalVisible = () => {
     setIsModalVisible(!isModalVisible);
   };
+  // aaaa
+  const [isDateWorkPickerVisible, setIsDateWorkPickerVisible] =
+    useState<boolean>(false);
 
+  const showDateWotrkPicker = () => {
+    setIsDateWorkPickerVisible(true);
+  };
+
+  const hideDateWotrkPicker = () => {
+    setIsDateWorkPickerVisible(false);
+  };
+
+  const handleConfirmDateWorkPicker = (date: Date) => {
+    console.log('A date has been picked: ', formatDateToDDMMYYYY(date));
+    // handlers.setValue(
+    //   'accountInformation.identityIssueDate',
+    //   formatDateToDDMMYYYY(date)
+    // );
+    hideDateWotrkPicker();
+  };
   return (
     <View>
       <View
@@ -133,74 +156,48 @@ const FilterModal = () => {
             </View>
 
             <View style={{ marginTop: 20 }}>
+              <View style={{ marginTop: 15 }}>
+                <Text
+                  style={{
+                    fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
+                    fontSize: 17,
+                  }}
+                >
+                  Category
+                </Text>
+              </View>
               <ScrollView
                 showsHorizontalScrollIndicator={false}
                 scrollEventThrottle={16}
                 horizontal
+                style={{ marginTop: 15 }}
               >
                 <View
                   style={{ flex: 1, flexDirection: 'row' }}
                   onStartShouldSetResponder={() => true}
                 >
-                  <View
-                    style={{
-                      marginRight: 20,
-                      paddingVertical: 10,
-                      paddingHorizontal: 10,
-                      borderRadius: 20,
-                      backgroundColor: 'red',
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
-                        fontSize: 16,
-                        color: 'white',
-                      }}
-                    >
-                      Tư vấn lớp
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      marginRight: 20,
-                      paddingVertical: 10,
-                      paddingHorizontal: 10,
-                      borderRadius: 20,
-                      backgroundColor: 'green',
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
-                        fontSize: 16,
-                        color: 'white',
-                      }}
-                    >
-                      Openday
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      marginRight: 20,
-                      paddingVertical: 10,
-                      paddingHorizontal: 10,
-                      borderRadius: 20,
-                      backgroundColor: 'blue',
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
-                        fontSize: 16,
-                        color: 'white',
-                      }}
-                    >
-                      Chương trình riêng
-                    </Text>
-                  </View>
+                  <CategorySelection />
                 </View>
               </ScrollView>
+            </View>
+
+            <View style={{ marginTop: 15 }}>
+              <Text
+                style={{
+                  fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
+                  fontSize: 17,
+                }}
+              >
+                Date Working From
+              </Text>
+            </View>
+            <View>
+              <DateWorkingPicker
+                isVisible={isDateWorkPickerVisible}
+                onPress={showDateWotrkPicker}
+                onCancel={hideDateWotrkPicker}
+                onConfirm={handleConfirmDateWorkPicker}
+              />
             </View>
           </View>
         </View>

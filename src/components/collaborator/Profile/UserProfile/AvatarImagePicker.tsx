@@ -5,11 +5,12 @@ import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import { useAppDispatch } from '../../../../app/store';
 import { firebase } from '../../../../config/firebase';
-import { updateAvatar } from '../../../../features/collaborator/collab.accountSlice';
 import GetUserInfoDto from '../../../../dtos/collaborator/getUserInfo.dto';
 import { Button } from '@rneui/base';
 import SuccessPopup from '../../../shared/PopupNotification/SuccessPopup';
 import ErrorPopup from '../../../shared/PopupNotification/ErrorPopup';
+import { collab_updateAvatar } from '../../../../features/collaborator/collab.accountSlice';
+import { collab_getUserInfo } from '../../../../features/collaborator/collab.authSlice';
 
 type AvatarImageProps = {
   style?: any;
@@ -82,10 +83,11 @@ const AvatarImagePicker = (props: AvatarImageProps) => {
           // url chứa đường dẫn tới hình ảnh
           console.log('URL của hình ảnh:', url);
           setImgUrl(url);
-          await dispatch(updateAvatar(url)).then((res) => {
+          await dispatch(collab_updateAvatar({ imgUrl: url })).then(async (res) => {
             const result = res.payload as GetUserInfoDto;
             if (result?.status?.success) {
               setIsSuccessPopupVisible(true);
+              await dispatch(collab_getUserInfo());
             } else {
               setIsErrorPopupVisible(true);
             }
@@ -100,6 +102,7 @@ const AvatarImagePicker = (props: AvatarImageProps) => {
         })
         .catch((error) => {
           // Xử lý lỗi nếu có
+          setUploading(false);
           console.error('Lỗi khi lấy URL hình ảnh:', error);
         });
     } catch (error) {
