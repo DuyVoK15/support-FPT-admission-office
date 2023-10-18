@@ -1,4 +1,5 @@
 import {
+  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -29,6 +30,8 @@ import {
 import { getAllPost } from '../../../features/collaborator/collab.postSlice';
 import { Data } from '../../../models/collaborator/dataPost.model';
 import CreatePostRegistrationDto from '../../../dtos/collaborator/payload/createPostRegistration.dto';
+import CreatePostRegistrationResponse from '../../../dtos/collaborator/response/createPostRegistration.dto';
+import ErrorStatus from '../../../dtos/collaborator/response/errorStatus.dto';
 
 const PositionRegistration = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -77,7 +80,14 @@ const PositionRegistration = () => {
       positionId,
     } as CreatePostRegistrationDto;
     await dispatch(createPostRegistration(params)).then((res) => {
+      const resRejectedData = res.payload as ErrorStatus;
       console.log(JSON.stringify(res, null, 2));
+      if(resRejectedData?.errorCode===4013){
+        Alert.alert("Notifications", "This post is done!")
+      } else if (resRejectedData?.errorCode===4004) {
+        Alert.alert("Notifications", "Can not register the same post!")
+
+      }
       console.log('Vị trí số: ', index);
     });
   };
