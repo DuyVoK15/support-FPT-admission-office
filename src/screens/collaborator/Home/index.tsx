@@ -20,7 +20,10 @@ import {
 } from '@expo/vector-icons';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
 import { useAppDispatch } from '../../../app/store';
-import { getAllPost } from '../../../features/collaborator/collab.postSlice';
+import {
+  getAllPost,
+  searchPostByPostCode,
+} from '../../../features/collaborator/collab.postSlice';
 import { useAppSelector } from '../../../app/hooks';
 import {
   formatToDay,
@@ -38,24 +41,28 @@ import UpdateBookingPopup from '../../../components/collaborator/Home/UpdateBook
 
 const Home = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
-  const [text, setText] = useState<string>('');
+  const [textSearch, setTextSearch] = useState<string>('');
 
   const dispatch = useAppDispatch();
   const fetchPost = async () => {
     const params = {
       Page: 1,
-      PageSize: 20,
-    }
+      PageSize: 30,
+    };
     await dispatch(getAllPost(params)).then((res) => {
-      console.log("Alo: ", JSON.stringify(res, null, 2))
-    });;;
+      console.log('Alo: ', JSON.stringify(res, null, 2));
+    });
   };
   useEffect(() => {
-    fetchPost()
+    fetchPost();
   }, []);
 
   const postList = useAppSelector((state) => state.collab_post.post);
-
+  const handleSearchPost = async (postCode: string) => {
+    await dispatch(searchPostByPostCode(postCode)).then((res) => {
+      console.log(JSON.stringify(res, null, 2));
+    });
+  };
   const handleNavigate = (item: Data) => {
     navigation.navigate('EVENT_DETAIL', { item });
   };
@@ -150,13 +157,16 @@ const Home = () => {
                 marginRight: 20,
               }}
             >
-              <View style={{ marginRight: 10 }}>
+              <TouchableOpacity
+                onPress={() => handleSearchPost(textSearch)}
+                style={{ marginRight: 10 }}
+              >
                 <FontAwesome name="search" size={32} color="white" />
-              </View>
+              </TouchableOpacity>
               <View style={{ flex: 1 }}>
                 <TextInput
-                  value={text}
-                  onChangeText={(value) => setText(value)}
+                  value={textSearch}
+                  onChangeText={(value) => setTextSearch(value)}
                   style={{
                     fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
                     fontSize: 18,
@@ -173,9 +183,11 @@ const Home = () => {
                   backgroundColor: COLORS.light_black,
                   padding: 1,
                 }}
-                onPress={() => setText('')}
+                onPress={() => setTextSearch('')}
               >
-                {text && <MaterialIcons name="clear" size={20} color="white" />}
+                {textSearch && (
+                  <MaterialIcons name="clear" size={20} color="white" />
+                )}
               </TouchableOpacity>
             </View>
 
@@ -230,24 +242,28 @@ const Home = () => {
 
           <View style={{ height: ScreenWidth * 0.75, marginTop: 20 }}>
             <ScrollView horizontal scrollEventThrottle={16}>
-              {postList ? postList?.data?.map((post, index) => (
-                <EventCard
-                  onPress={() => handleNavigate(post)}
-                  key={index}
-                  currentDay={formatToDay({
-                    dateProp: post?.dateFrom,
-                  })}
-                  currentMonth={formatToMonthString({
-                    dateProp: post?.dateFrom,
-                  })}
-                  timeAgo={timeAgo({
-                    dateProp: post?.createAt,
-                  })}
-                  titleEvent={post?.postCategory.postCategoryDescription}
-                  schoolName={post?.postPositions?.[0].location}
-                  location={post?.postPositions[0].location}
-                />
-              )) : <View />}
+              {postList ? (
+                postList?.data?.map((post, index) => (
+                  <EventCard
+                    onPress={() => handleNavigate(post)}
+                    key={index}
+                    currentDay={formatToDay({
+                      dateProp: post?.dateFrom,
+                    })}
+                    currentMonth={formatToMonthString({
+                      dateProp: post?.dateFrom,
+                    })}
+                    timeAgo={timeAgo({
+                      dateProp: post?.createAt,
+                    })}
+                    titleEvent={post?.postCategory.postCategoryDescription}
+                    schoolName={post?.postPositions?.[0].location}
+                    location={post?.postPositions[0].location}
+                  />
+                ))
+              ) : (
+                <View />
+              )}
             </ScrollView>
           </View>
         </View>
@@ -289,7 +305,7 @@ const Home = () => {
                 />
               </View>
             </TouchableOpacity>
-          </View> 
+          </View>
 
           <View style={{ height: ScreenWidth * 0.75, marginTop: 20 }}>
             <ScrollView horizontal scrollEventThrottle={16}>
@@ -333,7 +349,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.orange_button,
     borderBottomLeftRadius: 33,
     borderBottomRightRadius: 33,
-    ...SHADOWS.SHADOW_03
+    ...SHADOWS.SHADOW_03,
   },
   cardItem: {
     width: 200,

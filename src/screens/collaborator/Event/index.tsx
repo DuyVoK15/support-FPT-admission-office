@@ -1,9 +1,9 @@
 import { Button, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { useAppDispatch } from '../../../app/store';
-import { updateAvatar } from '../../../features/collaborator/collab.accountSlice';
 import { searchPostByPostCode } from '../../../features/collaborator/collab.postSlice';
 import UpdateAvatarDto from '../../../dtos/collaborator/payload/updateAvatar.dto';
+import { collab_updateAvatar } from '../../../features/collaborator/collab.accountSlice';
 
 const Event = () => {
   const dispatch = useAppDispatch();
@@ -12,7 +12,7 @@ const Event = () => {
   }
   const testUpdateAvatar = async () => {
     await dispatch(
-      updateAvatar(
+      collab_updateAvatar(
         data
       )
     ).then((res) => {

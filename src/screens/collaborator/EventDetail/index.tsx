@@ -13,6 +13,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Data } from '../../../models/collaborator/dataPost.model';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
 import { SHADOWS } from '../../../constants/Shadows';
+import { ScreenHeight } from '../../../constants/Demesions';
 
 const EventDetail = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -41,29 +42,35 @@ const EventDetail = () => {
 
       <View
         style={{
+          flex: 1,
           position: 'absolute',
           top: 222,
           width: '100%',
-          height: 600,
+          height: ScreenHeight - 222 - 80,
           backgroundColor: 'white',
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
-          ...SHADOWS.SHADOW_03
+          ...SHADOWS.SHADOW_03,
         }}
       >
         <ScrollView style={{ marginTop: 30 }}>
           <View style={{ marginHorizontal: 20 }}>
             {/* ---------------------------------- */}
             <View>
-              <View style={{ marginBottom: 10 }}>
-                <Text
-                  style={{
-                    fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
-                    fontSize: 20,
-                  }}
-                >
-                  {item?.postCategory.postCategoryDescription}
-                </Text>
+              <View style={{ flexDirection: "row", marginBottom: 10, alignItems: "center" }}>
+                <View style={{flex: 1}}>
+                  <Text
+                    style={{
+                      fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
+                      fontSize: 20,
+                    }}
+                  >
+                    {item ? item?.postCategory.postCategoryDescription : "NO EVENT"}
+                  </Text>
+                </View>
+                <View style={{flex: 0}}>
+                  <Text style={{fontFamily: FONTS_FAMILY.Ubuntu_400Regular_Italic}}>{item ? "Postcode: " + "#"+ item?.postCode : ""}</Text>
+                </View>
               </View>
 
               <View
@@ -219,7 +226,9 @@ const EventDetail = () => {
                     color: 'red',
                   }}
                 >
-                  {item?.registerAmount ? `Attendees(${item?.registerAmount})` : "Ateendees(0)"}
+                  {item?.registerAmount
+                    ? `Attendees(${item?.registerAmount})`
+                    : 'Ateendees(0)'}
                 </Text>
               </View>
               <View>
@@ -249,14 +258,13 @@ const EventDetail = () => {
               </View>
             </View>
             {/* Button */}
-          <View style={{ marginVertical: 20, marginHorizontal: 20 }}>
-            <SubmitButton
-              onPress={() => handleNavigate(item)}
-              titleButton="REGISTER"
-            />
+            <View style={{ marginVertical: 20, marginHorizontal: 20 }}>
+              <SubmitButton
+                onPress={() => handleNavigate(item)}
+                titleButton="REGISTER"
+              />
+            </View>
           </View>
-          </View>
-          
         </ScrollView>
       </View>
     </View>
