@@ -2,42 +2,52 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import PostDto from '../../dtos/collaborator/post.dto';
 import { postService } from '../../services/collaborator/post.service';
 import DataPost from '../../models/collaborator/dataPost.model';
+import { AxiosError } from 'axios';
+import ViewPostCategoryResponse from '../../dtos/collaborator/response/viewPostCategory.dto';
 
 interface PostState {
   post: PostDto | null;
+  postCategory: ViewPostCategoryResponse | null;
   loading: boolean;
   error: string;
   // Thêm các trường khác liên quan đến người dùng nếu cần thiết
 }
 
 const initialState: PostState = {
-  post: {
-    metadata: {
-      page: undefined,
-      size: undefined,
-      total: undefined,
-    },
-    data: [],
-    isError: false,
-    message: '',
-  },
+  post: null,
+  postCategory: null,
   loading: false,
   error: '',
 };
 
 export const getAllPost = createAsyncThunk(
   'post/getAll',
-  async (_, { rejectWithValue }) => {
+  async (params: { Page: number, PageSize: number}, { rejectWithValue }) => {
     try {
       console.log('Có vô post');
-      const response = await postService.getAllPost();
+      const response = await postService.getAllPost(params);
       // console.log("<PostSlice> Post: ", JSON.stringify(response.data.data))
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.message);
+      const axiosError = error as AxiosError;
+      return rejectWithValue(axiosError.response?.data);
     }
   }
 );
+
+export const getAllPostCategory = createAsyncThunk(
+  'post/category/getAll',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await postService.getAllPostCategory();
+      return response.data;
+    } catch (error: any) {
+      const axiosError = error as AxiosError;
+      return rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+
 export const searchPostByPostCode = createAsyncThunk(
   'post/searchPost',
   async (searchPost: string, { rejectWithValue }) => {
@@ -45,10 +55,10 @@ export const searchPostByPostCode = createAsyncThunk(
       console.log('Có vô post');
       const response = await postService.searchPostByPostCode(searchPost);
       // console.log("<PostSlice> Post: ", JSON.stringify(response.data.data))
-      return response.data
+      return response.data;
     } catch (error: any) {
-      console.log(error)
-      return rejectWithValue(error.message);
+      const axiosError = error as AxiosError;
+      return rejectWithValue(axiosError.response?.data);
     }
   }
 );
@@ -67,6 +77,18 @@ export const postSlice = createSlice({
         state.post = action.payload;
       })
       .addCase(getAllPost.rejected, (state, action) => {
+        state.error = String(action.payload);
+        state.loading = false;
+      })
+      .addCase(getAllPostCategory.pending, (state) => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(getAllPostCategory.fulfilled, (state, action) => {
+        state.loading = false;
+        state.postCategory = action.payload;
+      })
+      .addCase(getAllPostCategory.rejected, (state, action) => {
         state.error = String(action.payload);
         state.loading = false;
       })

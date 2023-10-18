@@ -15,4 +15,14 @@ export const authService = {
     
     return axiosClient.get(url);
   },
+  admission_loginGoogle: (payload: LoginGoogleDto): Promise<AxiosResponse<LoginUserDto>> => {
+    const url = '/api/admission/admission-account/login';
+
+    return axiosClient.post(url, { ...payload });
+  },
+  admission_getUserInfo: (): Promise<AxiosResponse<GetUserInfoDto>> => {
+    const url = '/api/admission/admission-account/getAccountByToken/authorization';
+    
+    return axiosClient.get(url);
+  },
 };

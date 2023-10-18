@@ -55,15 +55,40 @@ export const collab_loginGoogle = createAsyncThunk(
   }
 );
 
-export const collab_loadAuthState = createAsyncThunk(
-  'auth/loadAuthState',
+export const collab_getUserInfo = createAsyncThunk(
+  'auth/getUserInfo',
   async (_, { rejectWithValue }) => {
     try {
-      const accessToken = await AsyncStorage.getItem(AppConstants.ACCESS_TOKEN);
-      if (accessToken) {
-        return true;
-      }
-      return false;
+      console.log('Có vô getUserInfo');
+      const response = await authService.collab_getUserInfo();
+      return response.data.data;
+    } catch (error: any) {
+      const axiosError = error as AxiosError;
+      console.log(error);
+      return rejectWithValue(error.message);
+    }
+  }
+); 
+
+export const admission_loginGoogle = createAsyncThunk(
+  'auth-admission/login-google',
+  async (JWT: string, { rejectWithValue }) => {
+    try {
+      console.log('<AuthSlice> JWT: ', JWT);
+      const result = await authService.admission_loginGoogle({
+        idToken: JWT,
+        fcmToken: '',
+      });
+      console.log("<AuthSlice> ResData: ", JSON.stringify(result.data.data))
+      await AsyncStorage.setItem(
+        AppConstants.ACCESS_TOKEN,
+        result.data.data.access_token
+      );
+      await AsyncStorage.setItem(
+        AppConstants.ID_TOKEN,
+        JWT
+      );
+      return result.data;
     } catch (error) {
       const axiosError = error as AxiosError;
       console.log(error);
@@ -73,16 +98,12 @@ export const collab_loadAuthState = createAsyncThunk(
   }
 );
 
-export const collab_getUserInfo = createAsyncThunk(
-  'auth/getUserInfo',
+export const admission_getUserInfo = createAsyncThunk(
+  'auth-admission/getUserInfo',
   async (_, { rejectWithValue }) => {
     try {
       console.log('Có vô getUserInfo');
-      const response = await authService.collab_getUserInfo();
-      // console.log(
-      //     '<AuthSlice> User Info: ' +
-      //         JSON.stringify(response.data.data, null, 2)
-      // );
+      const response = await authService.admission_getUserInfo();
       return response.data.data;
     } catch (error: any) {
       const axiosError = error as AxiosError;
@@ -91,6 +112,7 @@ export const collab_getUserInfo = createAsyncThunk(
     }
   }
 ); 
+
 export const collab_logout = createAsyncThunk(
   'auth/logout',
   async (_, { rejectWithValue }) => {
@@ -113,6 +135,25 @@ export const collab_logout = createAsyncThunk(
     }
   }
 );
+
+export const collab_loadAuthState = createAsyncThunk(
+  'auth/loadAuthState',
+  async (_, { rejectWithValue }) => {
+    try {
+      const accessToken = await AsyncStorage.getItem(AppConstants.ACCESS_TOKEN);
+      if (accessToken) {
+        return true;
+      }
+      return false;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      console.log(error);
+      console.error(error);
+      return rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
