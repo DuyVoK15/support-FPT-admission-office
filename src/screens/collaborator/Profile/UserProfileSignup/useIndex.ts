@@ -3,8 +3,8 @@ import React from 'react'
 import { useAppDispatch } from '../../../../app/store';
 import { AccountInfoSignup } from '../../../../models/collaborator/account.model';
 import { formatToISO_8601 } from '../../../../utils/formats';
-import { signupAccountInformation } from '../../../../features/collaborator/collab.accountSlice';
 import { useForm } from 'react-hook-form';
+import { collab_signupAccountInformation } from '../../../../features/collaborator/collab.accountSlice';
 
 const useUserProfileSignup = () => {
     const dispatch = useAppDispatch();
@@ -76,7 +76,7 @@ const useUserProfileSignup = () => {
           identityBackImg: data.identityBackImg,
           taxNumber: data.taxNumber,
         } as AccountInfoSignup;
-        await dispatch(signupAccountInformation(AccountInfoSignup));
+        await dispatch(collab_signupAccountInformation(AccountInfoSignup));
     console.log(JSON.stringify(AccountInfoSignup, null, 2))
       };
 const handlers = {onSubmit, handleSubmit, setValue}

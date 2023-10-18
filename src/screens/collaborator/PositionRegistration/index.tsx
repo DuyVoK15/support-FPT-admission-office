@@ -87,6 +87,9 @@ const PositionRegistration = () => {
       } else if (resRejectedData?.errorCode===4004) {
         Alert.alert("Notifications", "Can not register the same post!")
 
+      }else if (resRejectedData?.errorCode===4012) {
+        Alert.alert("Notifications", "Need certificate to register this position!")
+
       }
       console.log('Vị trí số: ', index);
     });

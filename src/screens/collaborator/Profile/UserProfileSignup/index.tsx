@@ -15,7 +15,6 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { COLORS } from '../../../../constants/Colors';
 import { ScreenWidth } from '../../../../constants/Demesions';
 import { useAppDispatch } from '../../../../app/store';
-import { signupAccountInformation } from '../../../../features/collaborator/collab.accountSlice';
 import { AccountInfoSignup } from '../../../../models/collaborator/account.model';
 import { isAccountInformationValid } from '../../../../utils/validates';
 import {
