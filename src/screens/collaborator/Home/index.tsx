@@ -38,19 +38,25 @@ import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
 import FilterModal from '../../../components/collaborator/Home/FilterModal';
 import { SHADOWS } from '../../../constants/Shadows';
 import UpdateBookingPopup from '../../../components/collaborator/Home/UpdateBookingPopup';
+import usePushNotifications from '../../../../usePushNotifications';
 
 const Home = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const [textSearch, setTextSearch] = useState<string>('');
 
+  if (Platform.OS !== 'ios') {
+    const { expoPushToken } = usePushNotifications();
+    console.log('expoPushToken: ', expoPushToken);
+  }
+  
   const dispatch = useAppDispatch();
   const fetchPost = async () => {
     const params = {
       Page: 1,
-      PageSize: 30,
+      PageSize: 5,
     };
     await dispatch(getAllPost(params)).then((res) => {
-      console.log('Alo: ', JSON.stringify(res, null, 2));
+      // console.log('Alo: ', JSON.stringify(res, null, 2));
     });
   };
   useEffect(() => {
