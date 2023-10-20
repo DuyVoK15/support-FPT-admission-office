@@ -12,6 +12,7 @@ type UserInfo = {
     postPermission: boolean;
     isPremium: boolean;
     isActive: boolean;
+    isBanned: boolean;
     createAt: string;
     updateAt: string;
     // accountMonthlyReport: {

@@ -95,7 +95,7 @@ const BackImagePicker = (props: BackImagePickerProps) => {
         })
         .catch((error) => {
           // Xử lý lỗi nếu có
-          console.error('Lỗi khi lấy URL hình ảnh:', error);
+          console.log('Lỗi khi lấy URL hình ảnh:', error);
           
         });
         
@@ -116,7 +116,7 @@ const BackImagePicker = (props: BackImagePickerProps) => {
       console.log('Xóa ảnh thành công');
     } catch (error) {
       setImagePicker(imgUndefined);
-      console.error('Lỗi khi xóa ảnh:', error);
+      console.log('Lỗi khi xóa ảnh:', error);
     }
   };
 

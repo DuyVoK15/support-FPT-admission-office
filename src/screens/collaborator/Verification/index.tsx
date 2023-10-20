@@ -6,24 +6,22 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import Header from '../../../components/shared/Header/Back';
-import Backward from '../../../components/shared/Direction/Backward/Backward';
-import { ScreenHeight, ScreenWidth } from '../../../constants/Demesions';
 import { useNavigation } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
 import SubmitButton from '../../../components/shared/Button/SubmitButton';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
-import { COLORS } from '../../../constants/Colors';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Button } from 'react-native';
 import {
   CodeField,
   Cursor,
   useBlurOnFulfill,
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
-import { collab_enableAccount, collab_verifyAccount } from '../../../features/collaborator/collab.accountSlice';
+import {
+  collab_enableAccount,
+  collab_verifyAccount,
+} from '../../../features/collaborator/collab.accountSlice';
 import UpdateEnableAccountResponse from '../../../dtos/collaborator/response/updateEnableAccount.dto';
 import { useAppDispatch } from '../../../app/store';
 import { useAppSelector } from '../../../app/hooks';
@@ -45,98 +43,110 @@ const Verification = () => {
   const enableResponse = useAppSelector(
     (state) => state.collab_account.enableResponse
   );
+
   const handleEnableAccount = async () => {
     try {
       await dispatch(collab_enableAccount()).then((res) => {
         console.log(JSON.stringify(res, null, 2));
       });
     } catch (error) {
-      
-    }
-  }
-  const handleVerifyOtp = async (code: number) => {
-    try {
-      console.log(code);
-      await dispatch(collab_verifyAccount({code: 111111})).then((res) => {
-        console.log(JSON.stringify(res, null, 2));
-      });
-    } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
 
-  const [isPlaying, setIsPlaying] = useState<boolean>(true);
+  const handleVerifyOtp = async (code: number) => {
+    try {
+      console.log(code);
+      await dispatch(collab_verifyAccount({ code })).then((res) => {
+        console.log(JSON.stringify(res, null, 2));
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Header style={{justifyContent: "center",}}>
-        <Text style={{fontFamily: FONTS_FAMILY.Ubuntu_500Medium, fontSize: 26, marginBottom: 10, color: "#FFF"}}>Verification</Text>
+      <Header style={{ justifyContent: 'center' }}>
+        <Text
+          style={{
+            fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
+            fontSize: 26,
+            marginBottom: 10,
+            color: '#FFF',
+          }}
+        >
+          Verification
+        </Text>
       </Header>
-      <View style={styles.containerBox}>
-        <View style={styles.containerTextTitle}>
-          <Text style={styles.textTitle}>
-            The OTP code has been sent to the email you linked to your account.
-            Please check mailbox.
-          </Text>
-        </View>
-
-        <CodeField
-          ref={ref}
-          {...props}
-          // Use `caretHidden={false}` when users can't paste a text value, because context menu doesn't appear
-          value={value}
-          onChangeText={setValue}
-          cellCount={6}
-          rootStyle={styles.codeFieldRoot}
-          keyboardType="number-pad"
-          textContentType="oneTimeCode"
-          renderCell={({ index, symbol, isFocused }) => (
-            <View
-              key={index}
-              onLayout={getCellOnLayoutHandler(index)}
-              style={[styles.cell, isFocused && styles.focusCell]}
-            >
-              <Text style={styles.textCell}>{symbol || (isFocused ? <Cursor /> : null)}</Text>
-            </View>
-          )}
-        />
-
-        <View style={styles.containerCountDownTime}>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.countDownTime}>
-              {enableResponse
-                ? 'Time Remaining: ' + enableResponse?.data?.expirationDate
-                : ''}
+      {enableResponse?.status?.success ===true ? (
+        <View style={styles.containerBox}>
+          <View style={styles.containerTextTitle}>
+            <Text style={styles.textTitle}>
+              The OTP code has been sent to the email you linked to your
+              account. Please check mailbox.
             </Text>
           </View>
-          <TouchableOpacity style={{ flex: 0 }}>
-            <Text style={styles.resendOtp}>Resend OTP</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.containerButton}>
-          <SubmitButton onPress={handleEnableAccount} titleButton="Send OTP" />
-        </View>
-        <View style={styles.containerButton}>
-          <SubmitButton onPress={()=>handleVerifyOtp(parseInt(value))} titleButton="Verify OTP" />
-        </View>
-        {/* <View style={styles.containerCountDown}>
-          <CountdownCircleTimer
-            isPlaying={isPlaying}
-            duration={10}
-            colors={['#004777', '#F7B801', '#A30000', '#A30000']}
-            colorsTime={[10, 6, 3, 0]}
-            onComplete={() => ({ shouldRepeat: true, delay: 2 })}
-            updateInterval={1}
-          >
-            {({ remainingTime, color }) => (
-              <Text style={{ color, fontSize: 40 }}>{remainingTime}</Text>
+
+          <CodeField
+            ref={ref}
+            {...props}
+            // Use `caretHidden={false}` when users can't paste a text value, because context menu doesn't appear
+            value={value}
+            onChangeText={setValue}
+            cellCount={6}
+            rootStyle={styles.codeFieldRoot}
+            keyboardType="number-pad"
+            textContentType="oneTimeCode"
+            renderCell={({ index, symbol, isFocused }) => (
+              <View
+                key={index}
+                onLayout={getCellOnLayoutHandler(index)}
+                style={[styles.cell, isFocused && styles.focusCell]}
+              >
+                <Text style={styles.textCell}>
+                  {symbol || (isFocused ? <Cursor /> : null)}
+                </Text>
+              </View>
             )}
-          </CountdownCircleTimer>
-          <Button
-            title="Toggle Playing"
-            onPress={() => setIsPlaying((prev) => !prev)}
           />
-        </View> */}
-      </View>
+
+          <View style={styles.containerCountDownTime}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.countDownTime}>
+                {enableResponse
+                  ? 'Time Remaining: ' + enableResponse?.data?.expirationDate
+                  : ''}
+              </Text>
+            </View>
+            <TouchableOpacity style={{ flex: 0 }}>
+              <Text style={styles.resendOtp}>Resend OTP</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.containerButton}>
+            <SubmitButton
+              onPress={() => handleVerifyOtp(parseInt(value))}
+              titleButton="Verify OTP"
+            />
+          </View>
+        </View>
+      ) : (
+        <View style={styles.containerBox}>
+          <View style={[styles.containerTextTitle, { marginVertical: 30 }]}>
+            <Text style={styles.textTitle}>
+              You must send OTP for verifying your account first! Click above.
+            </Text>
+          </View>
+
+          <View style={styles.containerButton}>
+            <SubmitButton
+              onPress={handleEnableAccount}
+              titleButton="Send OTP"
+            />
+          </View>
+        </View>
+      )}
     </View>
   );
 };
@@ -182,10 +192,10 @@ const styles = StyleSheet.create({
     // borderWidth: 2,
     // borderColor: '#00000030',
     borderRadius: 5,
-    backgroundColor: "#FFF",
+    backgroundColor: '#FFF',
     ...SHADOWS.SHADOW_03,
-    alignItems: "center",
-    justifyContent: "center"
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   textCell: {
     fontFamily: FONTS_FAMILY.Ubuntu_400Regular,

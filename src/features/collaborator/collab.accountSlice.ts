@@ -54,9 +54,9 @@ export const collab_updateProfile = createAsyncThunk(
       return response.data;
     } catch (error) {
       const axiosError = error as AxiosError;
-      console.log('Axios: ', axiosError.response?.status);
+      console.log('Axios: ', axiosError.response?.data);
       // console.log(JSON.stringify(axiosError, null, 2));
-      return rejectWithValue(axiosError.response?.status);
+      return rejectWithValue(axiosError.response?.data);
     }
   }
 );
@@ -89,7 +89,7 @@ export const collab_enableAccount = createAsyncThunk(
       const axiosError = error as AxiosError;
       console.log(error);
       console.log(axiosError.message);
-      return rejectWithValue(axiosError.response?.status);
+      return rejectWithValue(axiosError.response);
     }
   }
 );

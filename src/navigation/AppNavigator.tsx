@@ -26,40 +26,11 @@ import GetUserInfoDto from '../dtos/collaborator/getUserInfo.dto';
 import { UserInfo } from '../models/collaborator/userInfo.model';
 import Verification from '../screens/collaborator/Verification';
 import RoleId from '../enums/shared/RoleIdEnum';
+import HomeCollaboratorStackScreen from './collaborator/HomeStack/HomeCollaboratorStack';
+import HomeAdmissionStackScreen from './collaborator/HomeStack/HomeAdmissionStack';
 
 const AuthStackScreen: React.FC = () => {
   return <LoginScreen />;
-};
-
-const HomeCollaboratorStack =
-  createNativeStackNavigator<HomeCollaboratorStackNavigatorParamList>();
-const HomeCollaboratorStackScreen = () => {
-  return (
-    <HomeCollaboratorStack.Navigator>
-      <HomeCollaboratorStack.Screen
-        name={'HOME_TAB'}
-        component={BottomTabs}
-        options={{
-          headerShown: false,
-        }}
-      />
-    </HomeCollaboratorStack.Navigator>
-  );
-};
-
-const HomeAdmissionStack = createNativeStackNavigator();
-const HomeAdmissionStackScreen: React.FC = () => {
-  return (
-    <HomeAdmissionStack.Navigator>
-      <HomeAdmissionStack.Screen
-        name={ROUTES.HOME_TAB}
-        component={AdmissionBottomTabs}
-        options={{
-          headerShown: false,
-        }}
-      />
-    </HomeAdmissionStack.Navigator>
-  );
 };
 
 const AppNavigator: FC = () => {
@@ -143,12 +114,18 @@ const AppNavigator: FC = () => {
       const parseUserInfo: UserInfo = JSON.parse(userInfo);
       console.log(parseUserInfo);
 
-      if (collab_isAuthenticated === false && parseUserInfo?.roleId === RoleId.COLLAB_ROLE) {
+      if (
+        collab_isAuthenticated === false &&
+        parseUserInfo?.roleId === RoleId.COLLAB_ROLE
+      ) {
         setIsLogin(true);
         collab_loadAuthState();
       }
 
-      if (admission_isAuthenticated === false && parseUserInfo?.roleId === RoleId.ADMISSION_ROLE) {
+      if (
+        admission_isAuthenticated === false &&
+        parseUserInfo?.roleId === RoleId.ADMISSION_ROLE
+      ) {
         setIsLogin(true);
         admission_loadAuthState();
       }
@@ -164,14 +141,16 @@ const AppNavigator: FC = () => {
   }, []);
 
   useEffect(() => {
-    if (collab_isAuthenticated && collab_userInfo?.roleId === RoleId.COLLAB_ROLE) {
+    if (
+      collab_isAuthenticated &&
+      collab_userInfo?.roleId === RoleId.COLLAB_ROLE
+    ) {
       fetchCollab_userInfo();
     }
   }, [collab_loadingAccount, collab_isAuthenticated]);
 
-
-
-  return collab_isAuthenticated && collab_userInfo?.roleId === RoleId.COLLAB_ROLE ? (
+  return collab_isAuthenticated &&
+    collab_userInfo?.roleId === RoleId.COLLAB_ROLE ? (
     collab_userInfo?.isActive ? (
       collab_userInfo?.accountInformation! ? (
         <HomeCollaboratorStackScreen />
@@ -181,13 +160,13 @@ const AppNavigator: FC = () => {
     ) : (
       <Verification />
     )
-  ) : admission_isAuthenticated && admission_userInfo?.roleId === RoleId.ADMISSION_ROLE ? (
+  ) : admission_isAuthenticated &&
+    admission_userInfo?.roleId === RoleId.ADMISSION_ROLE ? (
     <HomeAdmissionStackScreen />
   ) : (
     <AuthStackScreen />
   );
   {
-    
   }
 };
 

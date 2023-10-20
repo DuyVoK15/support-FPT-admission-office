@@ -95,7 +95,7 @@ const FrontImagePicker = (props: FrontImagePickerProps) => {
         })
         .catch((error) => {
           // Xử lý lỗi nếu có
-          console.error('Lỗi khi lấy URL hình ảnh:', error);
+          console.log('Lỗi khi lấy URL hình ảnh:', error);
         });
     } catch (error) {
       setUploading(false);
@@ -112,7 +112,7 @@ const FrontImagePicker = (props: FrontImagePickerProps) => {
       props.setValue("accountInformation.identityFrontImg", "");
       console.log('Xóa ảnh thành công');
     } catch (error) {
-      console.error('Lỗi khi xóa ảnh:', error);
+      console.log('Lỗi khi xóa ảnh:', error);
     }
   };
   return (

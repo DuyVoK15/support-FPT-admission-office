@@ -13,12 +13,30 @@ import { FONTS_FAMILY } from '../../../constants/Fonts';
 import { COLORS } from '../../../constants/Colors';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { ScreenHeight, ScreenWidth } from '../../../constants/Demesions';
-import PriorityBar from '../../shared/ProgressBar/PriorityBar';
 import CategorySelection from './CategorySelection';
 import DateWorkingPicker from './DateWorkingPicker';
-import { formatDateToDDMMYYYY } from '../../../utils/formats';
+import { formatDateToDDMMYYYY, formatToDate, formatToISO_8601 } from '../../../utils/formats';
+import { Controller, useForm } from 'react-hook-form';
+import SubmitButton from '../../shared/Button/SubmitButton';
+import { useAppDispatch } from '../../../app/store';
+import { getAllPost } from '../../../features/collaborator/collab.postSlice';
+import FilterPostPayload from '../../../dtos/collaborator/payload/filterPost.dto';
 
 const FilterModal = () => {
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      DateFrom: '',
+      PostCategory: {
+        PostCategoryDescription: '',
+      },
+    },
+  });
+
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const toggleModalVisible = () => {
     setIsModalVisible(!isModalVisible);
@@ -37,11 +55,21 @@ const FilterModal = () => {
 
   const handleConfirmDateWorkPicker = (date: Date) => {
     console.log('A date has been picked: ', formatDateToDDMMYYYY(date));
-    // handlers.setValue(
-    //   'accountInformation.identityIssueDate',
-    //   formatDateToDDMMYYYY(date)
-    // );
+    setValue('DateFrom', date.toISOString());
     hideDateWotrkPicker();
+  };
+
+  const handleClearOption = () => {
+    setValue('DateFrom', "");
+    setValue('PostCategory.PostCategoryDescription', "");
+  }
+
+  const dispatch = useAppDispatch();
+  const handleSubmitFilterPost = async (data: FilterPostPayload) => {
+    console.log(data);
+    await dispatch(getAllPost(data)).then((res) => {
+      console.log(JSON.stringify(res, null, 2));
+    });
   };
   return (
     <View>
@@ -176,7 +204,13 @@ const FilterModal = () => {
                   style={{ flex: 1, flexDirection: 'row' }}
                   onStartShouldSetResponder={() => true}
                 >
-                  <CategorySelection />
+                  <Controller
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <CategorySelection setValue={setValue} />
+                    )}
+                    name="PostCategory.PostCategoryDescription"
+                  />
                 </View>
               </ScrollView>
             </View>
@@ -192,11 +226,28 @@ const FilterModal = () => {
               </Text>
             </View>
             <View>
-              <DateWorkingPicker
-                isVisible={isDateWorkPickerVisible}
-                onPress={showDateWotrkPicker}
-                onCancel={hideDateWotrkPicker}
-                onConfirm={handleConfirmDateWorkPicker}
+              <Controller
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <DateWorkingPicker
+                    isVisible={isDateWorkPickerVisible}
+                    value={formatToDate({dateProp: value})}
+                    onPress={showDateWotrkPicker}
+                    onCancel={hideDateWotrkPicker}
+                    onConfirm={handleConfirmDateWorkPicker}
+                  />
+                )}
+                name="DateFrom"
+              />
+            </View>
+            <View>
+              <SubmitButton
+                onPress={handleSubmit(handleSubmitFilterPost)}
+                titleButton="Apply filter"
+              />
+              <SubmitButton
+                onPress={handleSubmit(handleClearOption)}
+                titleButton="Clear"
               />
             </View>
           </View>

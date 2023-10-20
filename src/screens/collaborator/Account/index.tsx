@@ -34,9 +34,14 @@ const Account = () => {
   const dispatch = useAppDispatch();
   const userInfo = useAppSelector((state) => state.collab_auth.userInfo);
   const fetchUserInfo = async () => {
-    await dispatch(collab_getUserInfo()).catch((error) => {
+    try {
+      await dispatch(collab_getUserInfo()).then((res)=> {
+        console.log(JSON.stringify(res, null, 2));
+      });
+    } catch (error) {
       console.log(error);
-    });
+    }
+    
     unwrapResult;
   };
 

@@ -48,8 +48,7 @@ export const collab_loginGoogle = createAsyncThunk(
       return result.data;
     } catch (error) {
       const axiosError = error as AxiosError;
-      console.log(error);
-      console.error(error);
+      console.log(axiosError?.response?.data);
       return rejectWithValue(axiosError.response?.data);
     }
   }
@@ -65,7 +64,7 @@ export const collab_getUserInfo = createAsyncThunk(
     } catch (error: any) {
       const axiosError = error as AxiosError;
       console.log(error);
-      return rejectWithValue(error.message);
+      return rejectWithValue(axiosError.response?.data);
     }
   }
 ); 
@@ -92,7 +91,6 @@ export const admission_loginGoogle = createAsyncThunk(
     } catch (error) {
       const axiosError = error as AxiosError;
       console.log(error);
-      console.error(error);
       return rejectWithValue(axiosError.response?.data);
     }
   }
@@ -108,7 +106,7 @@ export const admission_getUserInfo = createAsyncThunk(
     } catch (error: any) {
       const axiosError = error as AxiosError;
       console.log(error);
-      return rejectWithValue(error.message);
+      return rejectWithValue(axiosError.response?.data);
     }
   }
 ); 
@@ -131,7 +129,9 @@ export const collab_logout = createAsyncThunk(
       
       return true;
     } catch (error: any) {
-      return rejectWithValue(error.message); 
+      const axiosError = error as AxiosError;
+      console.log(error)
+      return rejectWithValue(axiosError.response?.data); 
     }
   }
 );
@@ -147,8 +147,6 @@ export const collab_loadAuthState = createAsyncThunk(
       return false;
     } catch (error) {
       const axiosError = error as AxiosError;
-      console.log(error);
-      console.error(error);
       return rejectWithValue(axiosError.response?.data);
     }
   }

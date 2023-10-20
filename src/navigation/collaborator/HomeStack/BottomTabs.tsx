@@ -13,8 +13,6 @@ import { HomeCollaboratorStackNavigatorParamList } from '../../../../type';
 import MapTab from './MainTabs/MapTab';
 import AccountStackNavigator from './MainStack/AccountStackNavigator';
 import HomeStackNavigator from './MainStack/HomeStackNavigator';
-import { View } from 'react-native';
-import { ScreenHeight, ScreenWidth } from '../../../constants/Demesions';
 
 const Tab = createBottomTabNavigator<HomeCollaboratorStackNavigatorParamList>();
 const BottomTabs: React.FC = () => {

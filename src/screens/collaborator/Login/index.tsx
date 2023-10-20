@@ -28,8 +28,11 @@ import {
 } from '../../../features/admission/admission.authSlice';
 import GetUserInfoDto from '../../../dtos/collaborator/getUserInfo.dto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ErrorStatus from '../../../dtos/collaborator/response/errorStatus.dto';
+import { useToast } from 'react-native-toast-notifications';
 
 const Login = () => {
+  const toast = useToast();
   const dispatch = useAppDispatch();
   const [initializing, setInitializing] = useState<boolean>(true);
   const [user, setUser] = useState<FirebaseAuthTypes.User | null | undefined>();
@@ -123,19 +126,40 @@ const Login = () => {
                       .then(async (token) => {
                         console.log('<Login> Có token');
                         await dispatch(collab_loginGoogle(token)).then(
-                          async () => {
-                            console.log('<Login> Đnhap okie');
-                            await dispatch(collab_getUserInfo()).then( async (res) => {
-                              const data = res?.payload as GetUserInfoDto;
-                              console.log(JSON.stringify(data, null, 2));
-                              await AsyncStorage.setItem("userInfo", JSON.stringify(data));
-                            });
+                          async (res) => {
+                            console.log(JSON.stringify(res, null, 2));
+                            const requestStatus = res?.meta?.requestStatus;
+                            if (requestStatus === 'rejected') {
+                              const resRejectedData =
+                                res?.payload as ErrorStatus;
+                              if (resRejectedData?.statusCode === 400) {
+                                if (resRejectedData?.errorCode === 4006) {
+                                  toast.show(
+                                    'You must login with gmail @fpt.!ádasdasdasdasdasdasdasdasd',
+                                    { type: 'danger' }
+                                  );
+                                }
+                              }
+                            } else {
+                              console.log('<Login> Đnhap okie');
+                              await dispatch(collab_getUserInfo()).then(
+                                async (res) => {
+                                  console.log(JSON.stringify(res, null, 2));
+                                  const data = res?.payload as GetUserInfoDto;
+
+                                  await AsyncStorage.setItem(
+                                    'userInfo',
+                                    JSON.stringify(data)
+                                  );
+                                }
+                              );
+                            }
                           }
                         );
                         console.log('<LoginScreen> JWT: ', token);
                       })
                       .catch((error) => {
-                        console.error(
+                        console.log(
                           '<LoginScreen> Error getting ID token:',
                           error
                         );
@@ -149,26 +173,47 @@ const Login = () => {
                       .then(async (token) => {
                         console.log('<Login> Có token');
                         await dispatch(admission_loginGoogle(token)).then(
-                          async () => {
-                            console.log('<Login> Đnhap okie');
-                            await dispatch(admission_getUserInfo()).then( async (res) => {
-                              const data = res?.payload as GetUserInfoDto;
-                              console.log(JSON.stringify(data, null, 2));
-                              await AsyncStorage.setItem("userInfo", JSON.stringify(data));
-                            });;
+                          async (res) => {
+                            console.log(JSON.stringify(res, null, 2));
+                            const requestStatus = res?.meta?.requestStatus;
+                            if (requestStatus === 'rejected') {
+                              const resRejectedData =
+                                res?.payload as ErrorStatus;
+                              if (resRejectedData?.statusCode === 400) {
+                                if (resRejectedData?.errorCode === 4006) {
+                                  toast.show(
+                                    'You must login with gmail @fpt.!ádasdasdasdasdasdasdasdasd',
+                                    { type: 'danger' }
+                                  );
+                                }
+                              }
+                            } else {
+                              console.log('<Login> Đnhap okie');
+                              await dispatch(admission_getUserInfo()).then(
+                                async (res) => {
+                                  const data = res?.payload as GetUserInfoDto;
+                                  console.log(JSON.stringify(data, null, 2));
+                                  await AsyncStorage.setItem(
+                                    'userInfo',
+                                    JSON.stringify(data)
+                                  );
+                                }
+                              );
+                            }
                           }
                         );
                         console.log('<LoginScreen> JWT: ', token);
                       })
                       .catch((error) => {
-                        console.error(
+                        console.log(
                           '<LoginScreen> Error getting ID token:',
                           error
                         );
                       });
                   }
                   break;
-                  default: console.log("Vui lòng chọn");
+                default:
+                  console.log('Vui lòng chọn');
               }
             })
           }

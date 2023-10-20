@@ -1,31 +1,36 @@
 import {
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
+  TouchableOpacityComponent,
   View,
+  ViewProps,
 } from 'react-native';
 import React, { Component, useState } from 'react';
 import { ScreenWidth } from '../../../../constants/Demesions';
 import { COLORS } from '../../../../constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePickerModal, {
+  DateTimePickerProps,
   ReactNativeModalDateTimePickerProps,
 } from 'react-native-modal-datetime-picker';
+import { DefaultTheme, TextInput } from 'react-native-paper';
+import { FONTS_FAMILY } from '../../../../constants/Fonts';
+import { formatToDate } from '../../../../utils/formats';
 
-type DatePickerFieldProps = View['props'] &
-  TouchableOpacity['props'] &
-  ReactNativeModalDateTimePickerProps & {
-    label?: string;
-    value?: string;
-    onPress?: () => void;
-  };
+interface DatePickerFieldProps extends ViewProps, DateTimePickerProps {
+  label?: string;
+  value?: string;
+  onFocus?: () => void;
+  onPress?: () => void;
+}
 
 const DatePickerField = (props: DatePickerFieldProps) => {
   const {
     label,
     value,
     id,
+    onPress,
     onConfirm,
     onCancel,
     isVisible,
@@ -33,33 +38,25 @@ const DatePickerField = (props: DatePickerFieldProps) => {
     ...otherProps
   } = props;
 
+  const theme = DefaultTheme;
   return (
-    <View style={[{ elevation: 2 }, style]} {...otherProps}>
-      <Text style={{ fontSize: 16 }}>{label}</Text>
-      <TouchableOpacity
-        style={[
-          {
-            flexDirection: 'row',
-            height: 50,
-            borderWidth: 1,
-            borderColor: COLORS.grey_icon,
-            borderRadius: 5,
-            paddingLeft: 15,
-            marginVertical: 10,
-            alignItems: 'center',
-          },
-          style,
-        ]}
-        onPress={props.onPress}
-      >
-        <Text style={{ flex: 1 }}>{value ? value : '--/--/----'}</Text>
-        <Ionicons
-          style={{ marginRight: 10 }}
-          name="calendar"
-          size={30}
-          color={COLORS.grey_icon}
-        />
+    <View style={[{ elevation: 2 }]} {...otherProps}>
+      <TouchableOpacity onPress={onPress}>
+        <View pointerEvents="none">
+          <TextInput
+            mode="outlined"
+            label={label}
+            value={value ? formatToDate({dateProp: value}) : ''}
+            theme={theme}
+            outlineColor={COLORS.super_light_orange} // Màu outline
+            editable={false}
+            contentStyle={{ fontFamily: FONTS_FAMILY.Ubuntu_400Regular }}
+            style={{ backgroundColor: '#fffefe' }}
+            // {...otherProps}
+          />
+        </View>
       </TouchableOpacity>
+
       <DateTimePickerModal
         id={id}
         isVisible={isVisible}

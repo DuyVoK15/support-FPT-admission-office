@@ -32,14 +32,24 @@ import { Data } from '../../../models/collaborator/dataPost.model';
 import CreatePostRegistrationDto from '../../../dtos/collaborator/payload/createPostRegistration.dto';
 import CreatePostRegistrationResponse from '../../../dtos/collaborator/response/createPostRegistration.dto';
 import ErrorStatus from '../../../dtos/collaborator/response/errorStatus.dto';
+import ConfirmAlert from '../../../components/shared/AwesomeAlert/ConfirmAlert';
+import { useToast } from 'react-native-toast-notifications';
+import {format_Time_To_HHss, format_ISODateString_To_DayOfWeekMonthDDYYYY } from '../../../utils/formats';
 
 const PositionRegistration = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const route = useRoute();
   const { item } = route?.params as { item: Data };
+  const [showAlert, setShowAlert] = useState<boolean>(false);
 
-  const [selectedId, setSelectedId] = useState<string | undefined>();
-  const [textNote, setTextNote] = useState<string>('');
+  const showAlertHandler = () => {
+    setShowAlert(true);
+  };
+
+  const hideAlertHandler = () => {
+    setShowAlert(false);
+  };
+
   const [isSelectedBusOption, setIsSelectedBusOption] = useState(
     Array(20).fill(false)
   );
@@ -66,7 +76,11 @@ const PositionRegistration = () => {
   useEffect(() => {
     console.log(JSON.stringify(item, null, 2));
   }, []);
+  const toast = useToast();
 
+  // useEffect(() => {
+  //   toast.show("Hello World", {type: 'danger'});
+  // }, []);
   const dispatch = useAppDispatch();
   const handleSubmit = async (
     index?: number,
@@ -74,25 +88,47 @@ const PositionRegistration = () => {
     postId?: number,
     positionId?: number
   ) => {
-    const params = {
-      schoolBusOption,
-      postId,
-      positionId,
-    } as CreatePostRegistrationDto;
-    await dispatch(createPostRegistration(params)).then((res) => {
-      const resRejectedData = res.payload as ErrorStatus;
-      console.log(JSON.stringify(res, null, 2));
-      if(resRejectedData?.errorCode===4013){
-        Alert.alert("Notifications", "This post is done!")
-      } else if (resRejectedData?.errorCode===4004) {
-        Alert.alert("Notifications", "Can not register the same post!")
+    try {
+      const params = {
+        schoolBusOption,
+        postId,
+        positionId,
+      } as CreatePostRegistrationDto;
+      await dispatch(createPostRegistration(params)).then((res) => {
+        const requestStatus = res?.meta?.requestStatus;
 
-      }else if (resRejectedData?.errorCode===4012) {
-        Alert.alert("Notifications", "Need certificate to register this position!")
+        console.log(JSON.stringify(res, null, 2));
 
-      }
-      console.log('Vị trí số: ', index);
-    });
+        if (requestStatus === 'rejected') {
+          const resRejectedData = res.payload as ErrorStatus;
+          if (resRejectedData?.errorCode === 4013) {
+            toast.show('This post is done!', { type: 'danger' });
+          }
+          if (resRejectedData?.errorCode === 4004) {
+            toast.show('Can not register the same post!', { type: 'danger' });
+          }
+          if (resRejectedData?.errorCode === 4012) {
+            toast.show('Need certificate to register this position!', {
+              type: 'danger',
+            });
+          }
+          if (resRejectedData?.errorCode === 4007) {
+            toast.show('Must sent registration 1 day before the event!', {
+              type: 'danger',
+            });
+          }
+        }
+
+        if (requestStatus === 'fulfilled') {
+          toast.show('Registered successfully!', { type: 'success' });
+        }
+        console.log('Vị trí số: ', index);
+        hideAlertHandler();
+      });
+    } catch (error) {
+      hideAlertHandler();
+      console.log(error);
+    }
   };
 
   return (
@@ -176,7 +212,9 @@ const PositionRegistration = () => {
                                   fontSize: 16,
                                 }}
                               >
-                                Monday, December 24, 2022
+                                {item?.dateFrom
+                                  ? format_ISODateString_To_DayOfWeekMonthDDYYYY(item?.dateFrom)
+                                  : ''}
                               </Text>
                             </View>
                             <View style={{ marginBottom: 4 }}>
@@ -186,7 +224,12 @@ const PositionRegistration = () => {
                                   fontSize: 14,
                                 }}
                               >
-                                6:00 - 12:00 (GMT +7)
+                                {position?.timeFrom && position?.timeTo
+                                  ? format_Time_To_HHss(position?.timeFrom) +
+                                    ' - ' +
+                                    format_Time_To_HHss(position?.timeTo) +
+                                    ' (GMT +7)'
+                                  : ''}
                               </Text>
                             </View>
                           </View>
@@ -208,7 +251,9 @@ const PositionRegistration = () => {
                                   fontSize: 16,
                                 }}
                               >
-                                Trường Đại học FPT HCM
+                                {position?.schoolName
+                                  ? position?.schoolName
+                                  : ''}
                               </Text>
                             </View>
                             <View
@@ -223,9 +268,7 @@ const PositionRegistration = () => {
                                   fontSize: 14,
                                 }}
                               >
-                                Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành
-                                Phố Thủ Đức, Thành phố Hồ Chí Minh 700000, Việt
-                                Nam
+                                {position?.location ? position?.location : ''}
                               </Text>
                             </View>
                           </View>
@@ -257,7 +300,7 @@ const PositionRegistration = () => {
                                   fontSize: 14,
                                 }}
                               >
-                                16 / 20 collaborators
+                                {position?.registerAmount && position?.amount ? position?.registerAmount + " / " + position?.amount +  " collaborators" :""}
                               </Text>
                             </View>
                           </View>
@@ -289,14 +332,7 @@ const PositionRegistration = () => {
                       </View>
                       <View>
                         <SubmitButton
-                          onPress={() =>
-                            handleSubmit(
-                              index + 1,
-                              isSelectedBusOption[index],
-                              position?.postId,
-                              position?.id
-                            )
-                          }
+                          onPress={showAlertHandler}
                           style={{
                             marginHorizontal: 40,
                             height: 40,
@@ -304,6 +340,23 @@ const PositionRegistration = () => {
                           }}
                           textStyle={{ fontSize: 16 }}
                           titleButton="REGISTER NOW"
+                        />
+                        <ConfirmAlert
+                          show={showAlert}
+                          title="CONFIRM"
+                          message="Are you sure Are you sure you want to apply for this position?"
+                          confirmText="Yes"
+                          cancelText="No"
+                          confirmButtonColor={COLORS.orange_button}
+                          onConfirmPressed={() =>
+                            handleSubmit(
+                              index + 1,
+                              isSelectedBusOption[index],
+                              position.postId,
+                              position.id
+                            )
+                          }
+                          onCancelPressed={hideAlertHandler}
                         />
                       </View>
                     </View>

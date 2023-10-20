@@ -50,7 +50,6 @@ export const admission_loginGoogle = createAsyncThunk(
     } catch (error) {
       const axiosError = error as AxiosError;
       console.log(error);
-      console.error(error);
       return rejectWithValue(axiosError.response?.data);
     }
   }
@@ -68,7 +67,6 @@ export const admission_loadAuthState = createAsyncThunk(
     } catch (error) {
       const axiosError = error as AxiosError;
       console.log(error);
-      console.error(error);
       return rejectWithValue(axiosError.response?.data);
     }
   }

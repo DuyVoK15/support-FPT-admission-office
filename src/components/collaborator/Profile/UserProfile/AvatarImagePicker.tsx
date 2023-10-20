@@ -103,7 +103,7 @@ const AvatarImagePicker = (props: AvatarImageProps) => {
         .catch((error) => {
           // Xử lý lỗi nếu có
           setUploading(false);
-          console.error('Lỗi khi lấy URL hình ảnh:', error);
+          console.log('Lỗi khi lấy URL hình ảnh:', error);
         });
     } catch (error) {
       setUploading(false);

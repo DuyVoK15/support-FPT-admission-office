@@ -10,7 +10,7 @@ export async function getRefreshIdToken() {
       AsyncStorage.setItem(AppConstants.ID_TOKEN, token);
       console.log('Refresh Token:', token);
     } catch (error) {
-      console.error('Error getting refresh token:', error);
+      console.log('Error getting refresh token:', error);
     }
   }
 }

@@ -14,8 +14,17 @@ import { Data } from '../../../models/collaborator/dataPost.model';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
 import { SHADOWS } from '../../../constants/Shadows';
 import { ScreenHeight } from '../../../constants/Demesions';
+import {
+  format_ISODateString_To_DDMonthYYYY,
+  format_ISODateString_To_DayOfWeek,
+  format_Time_To_HHss,
+} from '../../../utils/formats';
+import { useWindowDimensions } from 'react-native';
+import RenderHtml from 'react-native-render-html';
 
 const EventDetail = () => {
+  const { width } = useWindowDimensions();
+
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const route = useRoute();
   const { item } = route?.params as { item: Data };
@@ -57,19 +66,33 @@ const EventDetail = () => {
           <View style={{ marginHorizontal: 20 }}>
             {/* ---------------------------------- */}
             <View>
-              <View style={{ flexDirection: "row", marginBottom: 10, alignItems: "center" }}>
-                <View style={{flex: 1}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  marginBottom: 10,
+                  alignItems: 'center',
+                }}
+              >
+                <View style={{ flex: 1 }}>
                   <Text
                     style={{
                       fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
                       fontSize: 20,
                     }}
                   >
-                    {item ? item?.postCategory.postCategoryDescription : "NO EVENT"}
+                    {item
+                      ? item?.postCategory.postCategoryDescription
+                      : 'NO EVENT'}
                   </Text>
                 </View>
-                <View style={{flex: 0}}>
-                  <Text style={{fontFamily: FONTS_FAMILY.Ubuntu_400Regular_Italic}}>{item ? "Postcode: " + "#"+ item?.postCode : ""}</Text>
+                <View style={{ flex: 0 }}>
+                  <Text
+                    style={{
+                      fontFamily: FONTS_FAMILY.Ubuntu_400Regular_Italic,
+                    }}
+                  >
+                    {item ? 'Postcode: ' + '#' + item?.postCode : ''}
+                  </Text>
                 </View>
               </View>
 
@@ -94,7 +117,8 @@ const EventDetail = () => {
                       marginVertical: 2,
                     }}
                   >
-                    10 July, 2023
+                    {item?.dateFrom &&
+                      format_ISODateString_To_DDMonthYYYY(item?.dateFrom)}
                   </Text>
                   <Text
                     style={{
@@ -104,7 +128,16 @@ const EventDetail = () => {
                       marginVertical: 2,
                     }}
                   >
-                    Tuesday, 4:00PM - 9:00PM
+                    {item?.dateFrom &&
+                      item?.postPositions?.[0]?.timeFrom &&
+                      item?.postPositions?.[0]?.timeTo &&
+                      format_ISODateString_To_DayOfWeek(item?.dateFrom) +
+                        ', ' +
+                        format_Time_To_HHss(
+                          item?.postPositions?.[0]?.timeFrom
+                        ) +
+                        ' - ' +
+                        format_Time_To_HHss(item?.postPositions?.[0]?.timeTo)}
                   </Text>
                 </View>
               </View>
@@ -232,7 +265,14 @@ const EventDetail = () => {
                 </Text>
               </View>
               <View>
-                <Text>{item?.postDescription}</Text>
+                {item?.postDescription ? (
+                  <RenderHtml
+                    source={{ html: item?.postDescription }}
+                    contentWidth={width}
+                  />
+                ) : (
+                  <View />
+                )}
               </View>
             </View>
             {/* ---------------------------------- */}

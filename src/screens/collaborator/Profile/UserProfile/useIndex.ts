@@ -3,10 +3,14 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../../../app/store';
 import { useForm } from 'react-hook-form';
 import { UserInfoUpdate } from '../../../../models/collaborator/userInfo.model';
-import { loadStatusCode, updateProfile } from '../../../../features/collaborator/collab.accountSlice';
 import { useAppSelector } from '../../../../app/hooks';
+
 import { collab_getUserInfo } from '../../../../features/collaborator/collab.authSlice';
 import { formatDateToDDMMYYYY, formatToDate } from '../../../../utils/formats';
+import {
+  collab_loadStatusCode,
+  collab_updateProfile,
+} from '../../../../features/collaborator/collab.accountSlice';
 
 const useUserProfile = () => {
   const dispatch = useAppDispatch();
@@ -38,9 +42,7 @@ const useUserProfile = () => {
     defaultValues: {
       name: userInfo?.name ? userInfo?.name : '',
       phone: userInfo?.phone ? userInfo?.phone : '',
-      dateOfBirth: userInfo?.dateOfBirth
-        ? formatToDate({ dateProp: userInfo?.dateOfBirth })
-        : '',
+      dateOfBirth: userInfo?.dateOfBirth ? userInfo?.dateOfBirth : '',
       imgUrl: userInfo?.imgUrl ? userInfo?.imgUrl : '',
       accountInformation: {
         identityNumber: userInfo?.accountInformation?.identityNumber
@@ -56,9 +58,7 @@ const useUserProfile = () => {
           ? userInfo?.accountInformation?.address
           : '',
         identityIssueDate: userInfo?.accountInformation?.identityIssueDate
-          ? formatToDate({
-              dateProp: userInfo?.accountInformation?.identityIssueDate,
-            })
+          ? userInfo?.accountInformation?.identityIssueDate
           : '',
         placeOfIssue: userInfo?.accountInformation?.placeOfIssue
           ? userInfo?.accountInformation?.placeOfIssue
@@ -85,7 +85,7 @@ const useUserProfile = () => {
       accountInformation: data.accountInformation,
     } as UserInfoUpdate;
     console.log(JSON.stringify(AccountInfoUpdate, null, 2));
-    await dispatch(updateProfile(AccountInfoUpdate)).then((res) => {
+    await dispatch(collab_updateProfile(AccountInfoUpdate)).then((res) => {
       console.log(JSON.stringify(res, null, 2));
     });
 
@@ -93,11 +93,10 @@ const useUserProfile = () => {
       console.log('alo', error);
     });
     setTimeout(async () => {
-      await dispatch(loadStatusCode()).catch((error) => {
+      await dispatch(collab_loadStatusCode()).catch((error) => {
         console.log('alo', error);
       });
-    }, 4000)
-  
+    }, 4000);
   };
 
   // Date Of Birth
@@ -112,9 +111,9 @@ const useUserProfile = () => {
     setIsDateOfBirthPickerVisible(false);
   };
 
-  const handleConfirmDateOfBirthPicker = (date: any) => {
-    console.log('A date has been picked: ', formatDateToDDMMYYYY(date));
-    handlers.setValue('dateOfBirth', formatDateToDDMMYYYY(date));
+  const handleConfirmDateOfBirthPicker = (date: Date) => {
+    console.log('A date has been picked: ', date);
+    handlers.setValue('dateOfBirth', date.toISOString());
     hideDateOfBirthPicker();
   };
 
@@ -133,10 +132,10 @@ const useUserProfile = () => {
   };
 
   const handleConfirmIdentityIssueDatePicker = (date: Date) => {
-    console.log('A date has been picked: ', formatDateToDDMMYYYY(date));
+    console.log('A date has been picked: ', date);
     handlers.setValue(
       'accountInformation.identityIssueDate',
-      formatDateToDDMMYYYY(date)
+      date.toISOString()
     );
     hideIdentityIssueDatePicker();
   };

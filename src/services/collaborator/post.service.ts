@@ -3,12 +3,10 @@ import { AxiosResponse } from 'axios';
 import axiosClient from '../axiosClient';
 import PostDto from '../../dtos/collaborator/post.dto';
 import ViewPostCategoryResponse from '../../dtos/collaborator/response/viewPostCategory.dto';
+import FilterPostPayload from '../../dtos/collaborator/payload/filterPost.dto';
 
 export const postService = {
-  getAllPost: (params: {
-    Page: number,
-    PageSize: number,
-  }): Promise<AxiosResponse<PostDto>> => {
+  getAllPost: (params: FilterPostPayload): Promise<AxiosResponse<PostDto>> => {
     const url = '/api/post/getAll';
     console.log('Ahihi');
     return axiosClient.get(url, {params});

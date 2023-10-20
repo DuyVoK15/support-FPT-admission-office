@@ -76,3 +76,55 @@ export const timeAgo = (props: DateProps): string => {
   }
   
 };
+
+export function format_ISODateString_To_DayOfWeekMonthDDYYYY(isoDateString:string) {
+  const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+  const date = new Date(isoDateString);
+  const dayOfWeek = daysOfWeek[date.getDay()];
+  const month = months[date.getMonth()];
+  const day = date.getDate();
+  const year = date.getFullYear();
+
+  const customDateString = `${dayOfWeek}, ${month} ${day}, ${year}`;
+  return customDateString;
+}
+
+export function format_ISODateString_To_DayOfWeek(isoDateString:string) {
+  const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+  const date = new Date(isoDateString);
+  const dayOfWeek = daysOfWeek[date.getDay()];
+
+  const customDateString = `${dayOfWeek}`;
+  return customDateString;
+}
+
+export function format_ISODateString_To_DDMonthYYYY(isoDateString: string) {
+  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+  const date = new Date(isoDateString);
+  const day = date.getDate();
+  const monthIndex = date.getMonth();
+  const year = date.getFullYear();
+
+  const customDateString = `${day} ${months[monthIndex]}, ${year}`;
+  return customDateString;
+}
+
+
+// Format time string HH:mm:ss to HH:mm
+export function format_Time_To_HHss(inputTime: string) {
+  const timeParts = inputTime.split(':'); // Tách chuỗi theo dấu ':'
+  
+  if (timeParts.length === 3) {
+    // Đảm bảo rằng chuỗi có 3 phần tử (giờ, phút, giây)
+    const formattedTime = `${timeParts[0]}:${timeParts[1]}`;
+    return formattedTime;
+  } else {
+    return "Invalid time format";
+  }
+}
+
+

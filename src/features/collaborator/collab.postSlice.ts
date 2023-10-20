@@ -4,6 +4,7 @@ import { postService } from '../../services/collaborator/post.service';
 import DataPost from '../../models/collaborator/dataPost.model';
 import { AxiosError } from 'axios';
 import ViewPostCategoryResponse from '../../dtos/collaborator/response/viewPostCategory.dto';
+import FilterPostPayload from '../../dtos/collaborator/payload/filterPost.dto';
 
 interface PostState {
   post: PostDto | null;
@@ -22,7 +23,7 @@ const initialState: PostState = {
 
 export const getAllPost = createAsyncThunk(
   'post/getAll',
-  async (params: { Page: number, PageSize: number}, { rejectWithValue }) => {
+  async (params: FilterPostPayload, { rejectWithValue }) => {
     try {
       console.log('Có vô post');
       const response = await postService.getAllPost(params);

@@ -13,6 +13,7 @@ type UserInfoLogin = {
         imgUrl: string,
         postPermission: boolean,
         isPremium: boolean,
+        isBanned: boolean;
         isActive: boolean,
         createAt: string,
         updateAt: string,
