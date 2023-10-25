@@ -5,7 +5,7 @@ import createAuthRefreshInterceptor, {
 import AppConstants from '../enums/collaborator/app';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const axiosClient = axios.create({
-    baseURL: "http://54.179.223.200",
+    baseURL: "https://dev.supfamof.id.vn",
     headers: {
         'content-type': 'application/json',
         'Access-Control-Allow-Origin': '*',

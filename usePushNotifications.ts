@@ -61,7 +61,7 @@ const usePushNotifications = (): PushNotificationState => {
         lightColor: '#FF231F7C',
       });
     }
-
+    console.log(token);
     return token;
   }
 

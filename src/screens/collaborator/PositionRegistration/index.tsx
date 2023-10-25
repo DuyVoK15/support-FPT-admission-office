@@ -300,7 +300,7 @@ const PositionRegistration = () => {
                                   fontSize: 14,
                                 }}
                               >
-                                {position?.registerAmount && position?.amount ? position?.registerAmount + " / " + position?.amount +  " collaborators" :""}
+                                {position?.registerAmount || position?.amount ? position?.registerAmount + " / " + position?.amount +  " collaborators" :""}
                               </Text>
                             </View>
                           </View>

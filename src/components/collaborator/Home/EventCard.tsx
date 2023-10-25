@@ -12,7 +12,6 @@ type EventCardProps = TouchableOpacity['props'] & {
   timeAgo?: string;
   titleEvent?: string;
   schoolName?: string;
-  currentPeopleAmount?: number;
   totalPeopleAmount?: number;
   location?: string;
 };
@@ -23,12 +22,14 @@ export default class EventCard extends Component<EventCardProps> {
     return (
       <TouchableOpacity
         style={{
-          width: ScreenWidth * 0.6,
-          height: ScreenWidth * 0.7,
+          marginTop: 5,
+          marginLeft: 5,
+          width: ScreenWidth * 0.7,
+          height: ScreenWidth * 0.8,
           backgroundColor: 'white',
           marginRight: 30,
           padding: 10,
-          borderRadius: 15,
+          borderRadius: 30,
           shadowColor: '#000',
           shadowOffset: {
             width: 0,
@@ -45,18 +46,20 @@ export default class EventCard extends Component<EventCardProps> {
             style={{
               alignItems: 'center',
               backgroundColor: COLORS.light_black,
-              borderRadius: 10,
+              borderRadius: 20,
               marginBottom: 10,
             }}
           >
             <Image
               style={{
-                height: 150,
+                height: 170,
                 width: '100%',
-                borderRadius: 10,
+                borderRadius: 20,
                 resizeMode: 'cover',
               }}
-              source={{uri: 'https://cdnimg.vietnamplus.vn/t870/uploaded/xpcwvovt/2020_11_13/ttxvn_viet_duc_5.jpg'}}
+              source={{
+                uri: 'https://cdnimg.vietnamplus.vn/t870/uploaded/xpcwvovt/2020_11_13/ttxvn_viet_duc_5.jpg',
+              }}
             />
           </View>
 
@@ -99,7 +102,7 @@ export default class EventCard extends Component<EventCardProps> {
                   color: COLORS.light_grey,
                 }}
               >
-                {this.props.schoolName?.slice(0, 30) + "..."}
+                {this.props.schoolName?.slice(0, 30) + '...'}
               </Text>
             </View>
           </View>
@@ -123,27 +126,27 @@ export default class EventCard extends Component<EventCardProps> {
                   color: COLORS.grey_icon,
                 }}
               >
-                {this.props.location?.slice(0, 30) + "..."}
+                {this.props.location?.slice(0, 30) + '...'}
               </Text>
             </View>
           </View>
           <DashedLine
-                style={{ marginVertical: 10 }}
-                dashGap={0}
-                dashThickness={1}
-                dashLength={8}
-                dashColor={COLORS.super_light_grey}
-              />
+            style={{ marginVertical: 10 }}
+            dashGap={0}
+            dashThickness={1}
+            dashLength={8}
+            dashColor={COLORS.super_light_grey}
+          />
 
           <View style={{ flex: 1 }}>
             <Text
               style={{
-                fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
-                fontSize: 12,
+                fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
+                fontSize: 14,
                 color: COLORS.red_date,
               }}
             >
-              JUl 24 - 7:00
+              JUlY 24 - 7:00
             </Text>
           </View>
         </View>

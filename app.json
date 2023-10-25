@@ -1,8 +1,10 @@
 {
   "expo": {
-    "name": "support-FPT-admission-office",
+    "name": "SupFAmOf",
     "slug": "support-FPT-admission-office",
     "version": "1.0.0",
+    "privacy": "public",
+    "description": "App to support FPT Addmision Officer to manage event and collaborators",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -54,7 +56,14 @@
       },
       "package": "com.duybpz389.supportFPTadmissionoffice",
       "googleServicesFile": "./google-services.json",
-      "softwareKeyboardLayoutMode": "pan"
+      "useNextNotificationsApi": true,
+      "softwareKeyboardLayoutMode": "pan",
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.FOREGROUND_SERVICE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -63,6 +72,12 @@
       "eas": {
         "projectId": "3ece840e-cc13-491e-90c8-0883dbae4b3d"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/3ece840e-cc13-491e-90c8-0883dbae4b3d"
     }
   }
 }

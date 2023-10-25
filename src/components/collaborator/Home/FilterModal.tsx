@@ -68,7 +68,7 @@ const FilterModal = () => {
   const handleSubmitFilterPost = async (data: FilterPostPayload) => {
     console.log(data);
     await dispatch(getAllPost(data)).then((res) => {
-      console.log(JSON.stringify(res, null, 2));
+      // console.log(JSON.stringify(res, null, 2));
     });
   };
   return (

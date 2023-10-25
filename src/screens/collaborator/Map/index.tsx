@@ -49,7 +49,7 @@ export default function Map() {
         style={styles.map}
       >
         <Marker
-          coordinate={{ latitude: 37.78825 , longitude: -122.4324 }}
+          coordinate={{ latitude: location?.coords?.latitude ? location?.coords?.latitude : 0 , longitude: location?.coords?.longitude ?location?.coords?.longitude:0 }}
           image={require('../../../assets/Images/ic_location.png')}
         />
       </MapView>

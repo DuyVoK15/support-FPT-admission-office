@@ -116,6 +116,9 @@ const Login = () => {
         <LoginButton
           onPress={() =>
             onGoogleButtonPress().then(() => {
+              if(gmailSelected===GmailSelectedEnum.NO_SELECT){
+                toast.show("Please selected an gmail type @!", {type: "danger"})
+              }
               console.log('User signed in!');
               const currentUser = auth().currentUser;
               switch (gmailSelected) {

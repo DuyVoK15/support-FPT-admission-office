@@ -43,12 +43,6 @@ import usePushNotifications from '../../../../usePushNotifications';
 const Home = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const [textSearch, setTextSearch] = useState<string>('');
-
-  if (Platform.OS !== 'ios') {
-    const { expoPushToken } = usePushNotifications();
-    console.log('expoPushToken: ', expoPushToken);
-  }
-  
   const dispatch = useAppDispatch();
   const fetchPost = async () => {
     const params = {
@@ -56,7 +50,7 @@ const Home = () => {
       PageSize: 5,
     };
     await dispatch(getAllPost(params)).then((res) => {
-      // console.log('Alo: ', JSON.stringify(res, null, 2));
+      console.log('Alo: ', JSON.stringify(res, null, 2));
     });
   };
   useEffect(() => {
@@ -66,7 +60,7 @@ const Home = () => {
   const postList = useAppSelector((state) => state.collab_post.post);
   const handleSearchPost = async (postCode: string) => {
     await dispatch(searchPostByPostCode(postCode)).then((res) => {
-      console.log(JSON.stringify(res, null, 2));
+      // console.log(JSON.stringify(res, null, 2));
     });
   };
   const handleNavigate = (item: Data) => {
@@ -246,7 +240,7 @@ const Home = () => {
             </TouchableOpacity>
           </View>
 
-          <View style={{ height: ScreenWidth * 0.75, marginTop: 20 }}>
+          <View style={{ height: ScreenWidth * 0.85, marginTop: 20 }}>
             <ScrollView horizontal scrollEventThrottle={16}>
               {postList ? (
                 postList?.data?.map((post, index) => (
@@ -262,7 +256,7 @@ const Home = () => {
                     timeAgo={timeAgo({
                       dateProp: post?.createAt,
                     })}
-                    titleEvent={post?.postCategory.postCategoryDescription}
+                    titleEvent={post?.postCategory?.postCategoryDescription + "ádasdhkahsdasdhj"}
                     schoolName={post?.postPositions?.[0].location}
                     location={post?.postPositions[0].location}
                   />
@@ -313,7 +307,7 @@ const Home = () => {
             </TouchableOpacity>
           </View>
 
-          <View style={{ height: ScreenWidth * 0.75, marginTop: 20 }}>
+          {/* <View style={{ height: ScreenWidth * 0.85, marginTop: 20 }}>
             <ScrollView horizontal scrollEventThrottle={16}>
               {postList?.data.map((post, index) => (
                 <EventCard
@@ -335,7 +329,7 @@ const Home = () => {
                 />
               ))}
             </ScrollView>
-          </View>
+          </View> */}
         </View>
       </ScrollView>
       {/* <UpdateBookingPopup /> */}
@@ -348,6 +342,7 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#FFFFFF"
   },
   viewHeader: {
     height: ScreenHeight / 4.5,

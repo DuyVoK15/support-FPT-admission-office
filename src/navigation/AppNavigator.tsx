@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import React, { FC, useEffect, useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ROUTES } from '../constants/Routes';
@@ -28,12 +28,19 @@ import Verification from '../screens/collaborator/Verification';
 import RoleId from '../enums/shared/RoleIdEnum';
 import HomeCollaboratorStackScreen from './collaborator/HomeStack/HomeCollaboratorStack';
 import HomeAdmissionStackScreen from './collaborator/HomeStack/HomeAdmissionStack';
+import usePushNotifications from '../../usePushNotifications';
 
 const AuthStackScreen: React.FC = () => {
   return <LoginScreen />;
 };
 
 const AppNavigator: FC = () => {
+  if (Platform.OS !== 'ios') {
+    const { expoPushToken } = usePushNotifications();
+    console.log('expoPushToken: ', expoPushToken);
+  }
+  
+
   const dispatch = useAppDispatch();
   const collab_isAuthenticated = useAppSelector(
     (state) => state.collab_auth.isAuthenticated
