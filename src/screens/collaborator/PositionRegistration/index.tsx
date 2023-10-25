@@ -1,5 +1,6 @@
 import {
   Alert,
+  Button,
   ScrollView,
   StyleSheet,
   Text,
@@ -34,7 +35,11 @@ import CreatePostRegistrationResponse from '../../../dtos/collaborator/response/
 import ErrorStatus from '../../../dtos/collaborator/response/errorStatus.dto';
 import ConfirmAlert from '../../../components/shared/AwesomeAlert/ConfirmAlert';
 import { useToast } from 'react-native-toast-notifications';
-import {format_Time_To_HHss, format_ISODateString_To_DayOfWeekMonthDDYYYY } from '../../../utils/formats';
+import {
+  format_Time_To_HHss,
+  format_ISODateString_To_DayOfWeekMonthDDYYYY,
+} from '../../../utils/formats';
+import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
 
 const PositionRegistration = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -213,7 +218,9 @@ const PositionRegistration = () => {
                                 }}
                               >
                                 {item?.dateFrom
-                                  ? format_ISODateString_To_DayOfWeekMonthDDYYYY(item?.dateFrom)
+                                  ? format_ISODateString_To_DayOfWeekMonthDDYYYY(
+                                      item?.dateFrom
+                                    )
                                   : ''}
                               </Text>
                             </View>
@@ -300,7 +307,12 @@ const PositionRegistration = () => {
                                   fontSize: 14,
                                 }}
                               >
-                                {position?.registerAmount || position?.amount ? position?.registerAmount + " / " + position?.amount +  " collaborators" :""}
+                                {position?.registerAmount || position?.amount
+                                  ? position?.registerAmount +
+                                    ' / ' +
+                                    position?.amount +
+                                    ' collaborators'
+                                  : ''}
                               </Text>
                             </View>
                           </View>
@@ -359,6 +371,18 @@ const PositionRegistration = () => {
                           onCancelPressed={hideAlertHandler}
                         />
                       </View>
+                      <Button
+                        title={'dialog box'}
+                        onPress={() =>
+                          Dialog.show({
+                            type: ALERT_TYPE.DANGER,
+                            title: 'Danger',
+                            textBody: 'Congrats! this is dialog box success',
+                            button: 'close',
+                            autoClose: 100,
+                          })
+                        }
+                      />
                     </View>
                   )}
                 </View>

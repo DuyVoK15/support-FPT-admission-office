@@ -39,8 +39,14 @@ import FilterModal from '../../../components/collaborator/Home/FilterModal';
 import { SHADOWS } from '../../../constants/Shadows';
 import UpdateBookingPopup from '../../../components/collaborator/Home/UpdateBookingPopup';
 import usePushNotifications from '../../../../usePushNotifications';
+import { Image } from 'react-native';
 
 const Home = () => {
+  const arrayTest = [1, 2, 3, 4, 5, 6, 7, 8];
+  const containerGap = 15;
+  const cardGap = 15;
+  const cardWidth = (ScreenWidth - cardGap - containerGap * 2) / 2;
+
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const [textSearch, setTextSearch] = useState<string>('');
   const dispatch = useAppDispatch();
@@ -202,7 +208,7 @@ const Home = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <View style={{ flex: 1, paddingTop: 20, marginHorizontal: 20 }}>
+        <View style={{ flex: 1, paddingTop: 20, marginHorizontal: 15 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <View style={{ flex: 1 }}>
               <Text
@@ -256,7 +262,10 @@ const Home = () => {
                     timeAgo={timeAgo({
                       dateProp: post?.createAt,
                     })}
-                    titleEvent={post?.postCategory?.postCategoryDescription + "ádasdhkahsdasdhj"}
+                    titleEvent={
+                      post?.postCategory?.postCategoryDescription +
+                      'ádasdhkahsdasdhj'
+                    }
                     schoolName={post?.postPositions?.[0].location}
                     location={post?.postPositions[0].location}
                   />
@@ -269,7 +278,7 @@ const Home = () => {
         </View>
 
         {/* Scroll vertical */}
-        <View style={{ flex: 1, paddingTop: 20, marginHorizontal: 20 }}>
+        <View style={{ flex: 1, paddingTop: 20, marginHorizontal: 15 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <View style={{ flex: 1 }}>
               <Text
@@ -307,6 +316,74 @@ const Home = () => {
             </TouchableOpacity>
           </View>
 
+          <View style={{ marginVertical: 10 }}>
+            <ScrollView>
+              <View
+                style={{
+                  flex: 1,
+                  marginTop: 2,
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
+                  justifyContent: 'center',
+                  columnGap: cardGap - 2,
+                  rowGap: cardGap - 2,
+                }}
+              >
+                {arrayTest.map((test, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={{
+                      height: cardWidth + 40,
+                      width: cardWidth,
+                      backgroundColor: '#FFF',
+                      borderRadius: 20,
+                      // justifyContent: 'center',
+                      // alignItems: 'center',
+                      ...SHADOWS.SHADOW_01,
+                    }}
+                  >
+                    <View style={{ margin: 10, backgroundColor: '#FFFFFF' }}>
+                      <Image
+                        style={{ width: '100%', height: 100, borderRadius: 15 }}
+                        source={require('../../../assets/Images/ic_fpt_university_hcm.jpg')}
+                      />
+                      <View style={{ marginTop: 10 }}>
+                        <Text
+                          style={{
+                            fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
+                            fontSize: 18,
+                          }}
+                        >
+                          OPEN DAY
+                        </Text>
+                      </View>
+                      <View style={{ marginTop: 10 }}>
+                        <Text
+                          style={{
+                            fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
+                            fontSize: 12,
+                            color: COLORS.red_date
+                          }}
+                        >
+                          Friday, DECEMBER 20 - 6:00
+                        </Text>
+                      </View>
+                      <View style={{ marginTop: 10 }}>
+                        <Text
+                          style={{
+                            fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+                            fontSize: 14,
+                          }}
+                        >
+                          THPT Lương Thế Vinh
+                        </Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </ScrollView>
+          </View>
           {/* <View style={{ height: ScreenWidth * 0.85, marginTop: 20 }}>
             <ScrollView horizontal scrollEventThrottle={16}>
               {postList?.data.map((post, index) => (
@@ -342,7 +419,7 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF"
+    backgroundColor: '#FFFFFF',
   },
   viewHeader: {
     height: ScreenHeight / 4.5,
