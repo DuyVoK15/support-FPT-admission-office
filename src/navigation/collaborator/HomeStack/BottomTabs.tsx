@@ -2,7 +2,7 @@ import { Platform, StyleSheet } from 'react-native';
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { ROUTES } from '../../../constants/Routes';
-import { FontAwesome, Ionicons } from '@expo/vector-icons';
+import { Entypo, FontAwesome, Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../../constants/Colors';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import AccountTab from './MainTabs/AccountTab';
@@ -33,7 +33,7 @@ const BottomTabs: React.FC = () => {
           },
           tabBarLabelStyle: {
             marginBottom: Platform.OS === 'ios' ? 0 : 5,
-            fontSize: 11,
+            fontSize: 10,
           },
         }}
       >
@@ -43,7 +43,7 @@ const BottomTabs: React.FC = () => {
           options={{
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
-              <Ionicons name="home" color={color} size={size} />
+              <Entypo name="home" size={26} color={color} />
             ),
             tabBarLabel: 'Home',
           }}
@@ -54,7 +54,7 @@ const BottomTabs: React.FC = () => {
           options={{
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
-              <Ionicons name="calendar" color={color} size={size} />
+              <Ionicons name="calendar" color={color} size={26} />
             ),
             tabBarLabel: 'Event',
           }}
@@ -65,7 +65,7 @@ const BottomTabs: React.FC = () => {
           options={{
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
-              <Ionicons name="map" color={color} size={size} />
+              <Ionicons name="map" color={color} size={26} />
             ),
             tabBarLabel: 'Map',
           }}
@@ -76,7 +76,7 @@ const BottomTabs: React.FC = () => {
           options={{
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
-              <FontAwesome name="calendar-check-o" color={color} size={size} />
+              <FontAwesome name="calendar-check-o" color={color} size={26} />
             ),
             tabBarLabel: 'Booking',
           }}
@@ -87,7 +87,7 @@ const BottomTabs: React.FC = () => {
           options={{
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
-              <Ionicons name="person" color={color} size={size} />
+              <Ionicons name="person" color={color} size={26} />
             ),
             tabBarLabel: 'Account',
           }}
