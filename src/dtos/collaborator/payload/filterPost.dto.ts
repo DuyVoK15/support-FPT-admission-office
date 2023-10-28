@@ -1,13 +1,6 @@
 export default interface FilterPostPayload {
   DateFrom?: string;
-  PostCategory?: {
-    Id?: string;
-    PostCategoryDescription?: string;
-    PostCategoryType?: string;
-    IsActive?: boolean;
-    CreateAt?: string;
-    UpdateAt?: string;
-  };
+  PostCategoryId?: number;
   Page?: number;
   PageSize?: number;
 }

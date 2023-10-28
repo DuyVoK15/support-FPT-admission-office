@@ -31,9 +31,7 @@ const FilterModal = () => {
   } = useForm({
     defaultValues: {
       DateFrom: '',
-      PostCategory: {
-        PostCategoryDescription: '',
-      },
+      PostCategoryId: 0,
     },
   });
 
@@ -61,14 +59,14 @@ const FilterModal = () => {
 
   const handleClearOption = () => {
     setValue('DateFrom', "");
-    setValue('PostCategory.PostCategoryDescription', "");
+    setValue('PostCategoryId', 0);
   }
 
   const dispatch = useAppDispatch();
   const handleSubmitFilterPost = async (data: FilterPostPayload) => {
     console.log(data);
     await dispatch(getAllPost(data)).then((res) => {
-      // console.log(JSON.stringify(res, null, 2));
+      console.log(JSON.stringify(res, null, 2));
     });
   };
   return (
@@ -206,10 +204,11 @@ const FilterModal = () => {
                 >
                   <Controller
                     control={control}
+                    rules={{required: true}}
                     render={({ field: { onChange, value } }) => (
                       <CategorySelection setValue={setValue} />
                     )}
-                    name="PostCategory.PostCategoryDescription"
+                    name="PostCategoryId"
                   />
                 </View>
               </ScrollView>

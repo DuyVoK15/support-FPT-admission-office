@@ -9,6 +9,7 @@ export type Data = {
     accountId: number;
     postCategoryId: number;
     postCode: string;
+    postImg: string;
     postDescription: string;
     priority: number;
     dateFrom: string;
@@ -18,6 +19,9 @@ export type Data = {
     attendanceComplete: boolean;
     createAt: string;
     updateAt: string;
+    timeFrom: string;
+    timeTo: string;
+    totalAmountPosition: number;
     registerAmount: number;
     account: {
       id: number;

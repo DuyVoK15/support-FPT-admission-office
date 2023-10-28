@@ -14,6 +14,8 @@ type EventCardProps = TouchableOpacity['props'] & {
   schoolName?: string;
   totalPeopleAmount?: number;
   location?: string;
+  dateFrom?: string;
+  timeFrom?: string;
 };
 
 export default class EventCard extends Component<EventCardProps> {
@@ -22,12 +24,9 @@ export default class EventCard extends Component<EventCardProps> {
     return (
       <TouchableOpacity
         style={{
-          marginTop: 5,
-          marginLeft: 5,
           width: ScreenWidth * 0.7,
           height: ScreenWidth * 0.8,
           backgroundColor: 'white',
-          marginRight: 30,
           padding: 10,
           borderRadius: 30,
           shadowColor: '#000',
@@ -146,7 +145,7 @@ export default class EventCard extends Component<EventCardProps> {
                 color: COLORS.red_date,
               }}
             >
-              JUlY 24 - 7:00
+              {this.props.dateFrom} - {this.props.timeFrom}
             </Text>
           </View>
         </View>
