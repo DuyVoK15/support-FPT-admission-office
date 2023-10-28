@@ -1,9 +1,12 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import { Image, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
+import React, { FC } from 'react';
 
-const AppIcon = () => {
+interface AppIconProps {
+  style?: StyleProp<ViewStyle>;
+}
+const AppIcon: FC<AppIconProps> = (props) => {
   return (
-    <View style={{ flex: 1, marginTop: 100 }}>
+    <View style={[{ marginTop: 0 }, props.style]}>
       <Image
         style={{ height: 185, width: 195 }}
         source={require('../../../assets/Images/ic_app.png')}

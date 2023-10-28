@@ -21,8 +21,8 @@ const CategorySelection = (props: CategorySelectionProps) => {
   );
 
   // const [categorySelected, setCategorySelected] = useState<string>();
-  const handleSelectedPostCategory = (index: number, category: string) => {
-    props.setValue("PostCategory.PostCategoryDescription",category); 
+  const handleSelectedPostCategory = (index: number, category: number) => {
+    props.setValue("PostCategoryId",category); 
     // setCategorySelected(category);
     const updatedStatus = Array(postCategoryList?.data?.length).fill(false);
     updatedStatus[index] = true;
@@ -41,13 +41,13 @@ const CategorySelection = (props: CategorySelectionProps) => {
   return (
     <View style={{ flex: 1, flexDirection: 'row' }}>
       {postCategoryList &&
-        postCategoryList?.data.map((category, index) => (
+        postCategoryList?.data?.map((category, index) => (
           <TouchableOpacity
             key={index}
             onPress={() =>
               handleSelectedPostCategory(
                 index,
-                category?.postCategoryDescription
+                category?.id
               )
             }
             style={{ marginRight: 20, alignItems: 'center' }}

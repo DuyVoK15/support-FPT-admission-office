@@ -1,18 +1,23 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
+import React, { FC } from 'react';
+import { FONTS_FAMILY } from '../../../constants/Fonts';
 
-const AppVersion = () => {
+interface AppVersionProps {
+  style?: StyleProp<ViewStyle>;
+}
+const AppVersion: FC<AppVersionProps> = (props) => {
   return (
-    <View style={{flex: 0.2}}>
+    <View style={props.style}>
       <Text style={styles.versionText}>Version 1.0.0</Text>
     </View>
-  )
-}
+  );
+};
 
 export default AppVersion;
 
 const styles = StyleSheet.create({
-    versionText: {
-        fontSize: 15
-    }
-})
+  versionText: {
+    fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+    fontSize: 15,
+  },
+});
