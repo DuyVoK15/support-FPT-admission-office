@@ -13,6 +13,7 @@ import { HomeCollaboratorStackNavigatorParamList } from '../../../../type';
 import MapTab from './MainTabs/MapTab';
 import AccountStackNavigator from './MainStack/AccountStackNavigator';
 import HomeStackNavigator from './MainStack/HomeStackNavigator';
+import EventStackNavigator from './MainStack/EventStackNavigator';
 
 const Tab = createBottomTabNavigator<HomeCollaboratorStackNavigatorParamList>();
 const BottomTabs: React.FC = () => {
@@ -50,7 +51,7 @@ const BottomTabs: React.FC = () => {
         />
         <Tab.Screen
           name={'EVENT_STACK_NAVIGATOR'}
-          component={EventTab}
+          component={EventStackNavigator}
           options={{
             headerShown: false,
             tabBarIcon: ({ color, size }) => (

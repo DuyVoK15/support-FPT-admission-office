@@ -30,6 +30,8 @@ import GetUserInfoDto from '../../../dtos/collaborator/getUserInfo.dto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ErrorStatus from '../../../dtos/collaborator/response/errorStatus.dto';
 import { useToast } from 'react-native-toast-notifications';
+import { FONTS_FAMILY } from '../../../constants/Fonts';
+import { SHADOWS } from '../../../constants/Shadows';
 
 const Login = () => {
   const toast = useToast();
@@ -88,13 +90,26 @@ const Login = () => {
         style={{
           flex: 1,
           alignItems: 'center',
-          justifyContent: 'space-around',
+          justifyContent: 'space-between',
         }}
-      >
-        <AppIcon />
-        <CampusSelection />
+      > 
+        <AppIcon style={{ flex: 1 }} />
+        <CampusSelection style={{ flex: 2 }} />
         <SelectDropdown
+          dropdownStyle={{
+            borderTopLeftRadius: 5,
+            borderTopRightRadius: 5,
+            borderBottomLeftRadius: 15,
+            borderBottomRightRadius: 15,
+          }}
+          rowTextStyle={{ fontFamily: FONTS_FAMILY.Ubuntu_400Regular, fontSize: 16 }}
+          buttonStyle={{ borderRadius: 5, ...SHADOWS.SHADOW_06 }}
+          buttonTextStyle={{
+            fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+            fontSize: 16,
+          }}
           data={roles}
+          defaultValue={GmailSelectedEnum.NO_SELECT}
           onSelect={(selectedItem) => {
             if (selectedItem === GmailSelectedEnum.COLLABORATOR) {
               setGmailSelected(GmailSelectedEnum.COLLABORATOR);
@@ -114,10 +129,13 @@ const Login = () => {
           }}
         />
         <LoginButton
+          style={{ flex: 1 }}
           onPress={() =>
             onGoogleButtonPress().then(() => {
-              if(gmailSelected===GmailSelectedEnum.NO_SELECT){
-                toast.show("Please selected an gmail type @!", {type: "danger"})
+              if (gmailSelected === GmailSelectedEnum.NO_SELECT) {
+                toast.show('Please selected an gmail type @!', {
+                  type: 'danger',
+                });
               }
               console.log('User signed in!');
               const currentUser = auth().currentUser;
@@ -222,7 +240,7 @@ const Login = () => {
           }
         />
         <Text>{user?.displayName}</Text>
-        <AppVersion />
+        <AppVersion style={{ flex: 0 }} />
       </SafeAreaView>
     </ImageBackground>
   );

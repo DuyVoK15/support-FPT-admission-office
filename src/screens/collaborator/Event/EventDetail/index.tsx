@@ -1,28 +1,28 @@
 import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
-import React, { useEffect } from 'react';
-import Header from '../../../components/shared/Header/Back';
-import Backward from '../../../components/shared/Direction/Backward/Backward';
-import BackwardBlur from '../../../components/shared/Direction/Backward/BackwardBlur';
+import React, { FC, useEffect } from 'react';
+import Header from '../../../../components/shared/Header/Back';
+import Backward from '../../../../components/shared/Direction/Backward/Backward';
+import BackwardBlur from '../../../../components/shared/Direction/Backward/BackwardBlur';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { FONTS_FAMILY } from '../../../constants/Fonts';
-import { COLORS } from '../../../constants/Colors';
-import SubmitButton from '../../../components/shared/Button/SubmitButton';
+import { FONTS_FAMILY } from '../../../../constants/Fonts';
+import { COLORS } from '../../../../constants/Colors';
+import SubmitButton from '../../../../components/shared/Button/SubmitButton';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Data } from '../../../models/collaborator/dataPost.model';
-import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
-import { SHADOWS } from '../../../constants/Shadows';
-import { ScreenHeight } from '../../../constants/Demesions';
+import { Data } from '../../../../models/collaborator/dataPost.model';
+import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
+import { SHADOWS } from '../../../../constants/Shadows';
+import { ScreenHeight } from '../../../../constants/Demesions';
 import {
   format_ISODateString_To_DDMonthYYYY,
   format_ISODateString_To_DayOfWeek,
   format_Time_To_HHss,
-} from '../../../utils/formats';
+} from '../../../../utils/formats';
 import { useWindowDimensions } from 'react-native';
 import RenderHtml from 'react-native-render-html';
 
-const EventDetail = () => {
+const EventDetail:FC = () => {
   const { width } = useWindowDimensions();
 
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -106,7 +106,7 @@ const EventDetail = () => {
                 <View>
                   <Image
                     style={{ height: 48, width: 48 }}
-                    source={require('../../../assets/Images/ic_calendar.png')}
+                    source={require('../../../../assets/Images/ic_calendar.png')}
                   />
                 </View>
                 <View style={{ marginLeft: 20 }}>
@@ -152,7 +152,7 @@ const EventDetail = () => {
                 <View>
                   <Image
                     style={{ height: 48, width: 48 }}
-                    source={require('../../../assets/Images/ic_location.png')}
+                    source={require('../../../../assets/Images/ic_location.png')}
                   />
                 </View>
                 <View style={{ marginLeft: 20 }}>
@@ -207,7 +207,7 @@ const EventDetail = () => {
                       backgroundColor: 'black',
                       borderRadius: 10,
                     }}
-                    source={require('../../../assets/Images/ic_calendar.png')}
+                    source={require('../../../../assets/Images/ic_calendar.png')}
                   />
                 </View>
                 <View style={{ marginLeft: 20 }}>

@@ -113,6 +113,16 @@ export function format_ISODateString_To_DDMonthYYYY(isoDateString: string) {
   return customDateString;
 }
 
+export function format_ISODateString_To_MonthDD(isoDateString: string) {
+  const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+
+  const date = new Date(isoDateString);
+  const day = date.getDate();
+  const monthIndex = date.getMonth();
+
+  const customDateString = `${months[monthIndex]} ${day}`;
+  return customDateString;
+}
 
 // Format time string HH:mm:ss to HH:mm
 export function format_Time_To_HHss(inputTime: string) {

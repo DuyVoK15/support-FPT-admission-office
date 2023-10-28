@@ -93,6 +93,7 @@ const PositionRegistration = () => {
     postId?: number,
     positionId?: number
   ) => {
+    hideAlertHandler();
     try {
       const params = {
         schoolBusOption,
@@ -128,7 +129,6 @@ const PositionRegistration = () => {
           toast.show('Registered successfully!', { type: 'success' });
         }
         console.log('Vị trí số: ', index);
-        hideAlertHandler();
       });
     } catch (error) {
       hideAlertHandler();
