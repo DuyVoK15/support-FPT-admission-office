@@ -4,6 +4,7 @@ export type HomeCollaboratorStackNavigatorParamList = {
   HOME: undefined;
   HOME_TAB: undefined;
   HOME_STACK_NAVIGATOR: undefined;
+  HOME_EVENT_DETAIL: undefined;
   MAP: undefined;
   MAP_STACK_NAVIGATOR: undefined;
   BOOKING: undefined;
@@ -13,6 +14,8 @@ export type HomeCollaboratorStackNavigatorParamList = {
   EVENT: undefined;
   EVENT_STACK_NAVIGATOR: undefined;
   EVENT_DETAIL: undefined;
+  POST_UPCOMMING: undefined;
+  POST_MISSING_SLOT: undefined;
   PROFILE: undefined;
   PROFILE_SIGNUP: undefined;
   CERTIFICATE_HISTORY: undefined;
@@ -33,6 +36,8 @@ export type HomeCollaboratorScreenNavigationProp = NativeStackScreenProps<
   EVENT,
   EVENT_STACK_NAVIGATOR,
   EVENT_DETAIL,
+  POST_UPCOMMING,
+  POST_MISSING_SLOT,
   MAP,
   MAP_STACK_NAVIGATOR,
   BOOKING,
