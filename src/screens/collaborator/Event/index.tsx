@@ -33,7 +33,7 @@ const Event = () => {
             <Text
               style={{
                 fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
-                fontSize: 20,
+                fontSize: 24,
               }}
             >
                ALL Events

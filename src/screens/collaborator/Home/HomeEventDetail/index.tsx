@@ -22,7 +22,7 @@ import {
 import { useWindowDimensions } from 'react-native';
 import RenderHtml from 'react-native-render-html';
 
-const HomeEventDetail:FC = () => {
+const HomeEventDetail: FC = () => {
   const { width } = useWindowDimensions();
 
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -207,7 +207,9 @@ const HomeEventDetail:FC = () => {
                       backgroundColor: 'black',
                       borderRadius: 10,
                     }}
-                    source={require('../../../../assets/Images/ic_calendar.png')}
+                    source={{
+                      uri: item?.account?.imgUrl ? item?.account?.imgUrl : '',
+                    }}
                   />
                 </View>
                 <View style={{ marginLeft: 20 }}>

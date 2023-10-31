@@ -207,7 +207,7 @@ const EventDetail:FC = () => {
                       backgroundColor: 'black',
                       borderRadius: 10,
                     }}
-                    source={require('../../../../assets/Images/ic_calendar.png')}
+                    source={{uri: item?.account?.imgUrl ? item?.account?.imgUrl : ""}}
                   />
                 </View>
                 <View style={{ marginLeft: 20 }}>
