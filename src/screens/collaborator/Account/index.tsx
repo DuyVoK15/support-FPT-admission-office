@@ -171,7 +171,7 @@ const Account = () => {
               </View>
               <View style={styles.column2}>
                 <View>
-                  <Text style={styles.text}>Tax</Text>
+                  <Text style={styles.text}>My Contract</Text>
                 </View>
               </View>
               <View style={styles.column3}>
