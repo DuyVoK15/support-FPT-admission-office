@@ -1,15 +1,16 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import BookingTab from '../MainTabs/BookingTab';
+import BookingTab from '../MainTabs/RegistrationTab';
+import RegistrationTab from '../MainTabs/RegistrationTab';
 
 const Stack = createNativeStackNavigator();
-const BookingStackNavigator = () => {
+const RegistrationStackNavigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name={'BOOKING'}
-        component={BookingTab}
+        name={'REGISTRATION'}
+        component={RegistrationTab}
         options={{
           headerShown: false,       
         }}
@@ -18,4 +19,4 @@ const BookingStackNavigator = () => {
   )
 }
 
-export default BookingStackNavigator
+export default RegistrationStackNavigator;
