@@ -6,12 +6,16 @@ import UserProfile from '../../../../screens/collaborator/Profile/UserProfile';
 import CertificateHistory from '../../../../screens/collaborator/Certificate';
 import Wallet from '../../../../screens/collaborator/Wallet';
 import Verification from '../../../../screens/collaborator/Verification';
-import Notification from '../../../../screens/collaborator/Notification';
+import Notification from '../../../../screens/collaborator/Notification/AccountNotification';
 import Security from '../../../../screens/collaborator/Security';
 import UserProfileSignup from '../../../../screens/collaborator/Profile/UserProfileSignup';
 import UserProfileDisable from '../../../../screens/collaborator/Profile/UserProfileDisable';
+import Contract from '../../../../screens/collaborator/Contract';
+import { HomeCollaboratorStackNavigatorParamList } from '../../../../../type';
+import AccountNotification from '../../../../screens/collaborator/Notification/AccountNotification';
 
-const Stack = createNativeStackNavigator();
+const Stack =
+  createNativeStackNavigator<HomeCollaboratorStackNavigatorParamList>();
 const AccountStackNavigator = () => {
   return (
     <Stack.Navigator>
@@ -58,8 +62,8 @@ const AccountStackNavigator = () => {
         }}
       />
       <Stack.Screen
-        name={'NOTIFICATION'}
-        component={Notification}
+        name={'ACCOUNT_NOTIFICATION'}
+        component={AccountNotification}
         options={{
           headerShown: false,
         }}
@@ -75,6 +79,14 @@ const AccountStackNavigator = () => {
       <Stack.Screen
         name={'PROFILE_SIGNUP'}
         component={UserProfileSignup}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name={'CONTRACT'}
+        component={Contract}
         options={{
           headerShown: false,
         }}

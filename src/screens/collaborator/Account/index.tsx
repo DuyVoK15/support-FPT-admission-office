@@ -160,7 +160,7 @@ const Account = () => {
 
             <TouchableOpacity
               style={styles.containerRow}
-              onPress={() => navigation.navigate('VERIFICATION')}
+              onPress={() => navigation.navigate('CONTRACT')}
             >
               <View style={styles.column1}>
                 <MaterialIcons

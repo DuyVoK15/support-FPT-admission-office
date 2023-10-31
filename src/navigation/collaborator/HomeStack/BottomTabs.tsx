@@ -1,20 +1,14 @@
 import { Platform, StyleSheet } from 'react-native';
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { ROUTES } from '../../../constants/Routes';
 import { Entypo, FontAwesome, Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../../constants/Colors';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import AccountTab from './MainTabs/AccountTab';
-import BookingTab from './MainTabs/BookingTab';
-import EventTab from './MainTabs/EventTab';
-import HomeTab from './MainTabs/HomeTab';
 import { HomeCollaboratorStackNavigatorParamList } from '../../../../type';
 import MapTab from './MainTabs/MapTab';
 import AccountStackNavigator from './MainStack/AccountStackNavigator';
 import HomeStackNavigator from './MainStack/HomeStackNavigator';
 import EventStackNavigator from './MainStack/EventStackNavigator';
-import RegistrationTab from './MainTabs/BookingTab';
+import RegistrationStackNavigator from './MainStack/RegistrationStackNavigator';
 
 const Tab = createBottomTabNavigator<HomeCollaboratorStackNavigatorParamList>();
 const BottomTabs: React.FC = () => {
@@ -74,7 +68,7 @@ const BottomTabs: React.FC = () => {
         />
         <Tab.Screen
           name={'REGISTRATION_STACK_NAVIGATOR'}
-          component={RegistrationTab}
+          component={RegistrationStackNavigator}
           options={{
             headerShown: false,
             tabBarIcon: ({ color, size }) => (

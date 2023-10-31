@@ -21,7 +21,10 @@ export type HomeCollaboratorStackNavigatorParamList = {
   PROFILE_SIGNUP: undefined;
   CERTIFICATE_HISTORY: undefined;
   WALLET: undefined;
-  NOTIFICATION: undefined;
+  CONTRACT: undefined;
+  ACCOUNT_NOTIFICATION: undefined;
+  EVENT_NOTIFICATION: undefined;
+  HOME_NOTIFICATION: undefined;
   VERIFICATION: undefined;
   POSITION_REGISTRATION: undefined;
   SECURITY: undefined;
@@ -50,7 +53,10 @@ export type HomeCollaboratorScreenNavigationProp = NativeStackScreenProps<
   PROFILE_SIGNUP,
   CERTIFICATE_HISTORY,
   WALLET,
-  NOTIFICATION,
+  CONTRACT,
+  ACCOUNT_NOTIFICATION,
+  EVENT_NOTIFICATION,
+  HOME_NOTIFICATION,
   VERIFICATION,
   SECURITY,
   USER_PROFILE_DISABLE
