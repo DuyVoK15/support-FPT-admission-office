@@ -7,6 +7,7 @@ import collab_postReducer from '../features/collaborator/collab.postSlice';
 import collab_postRegistrationReducer from '../features/collaborator/collab.postRegistrationSlice';
 import collab_accountReducer from'../features/collaborator/collab.accountSlice';
 import collab_certificateReducer from '../features/collaborator/collab.certificateSlice';
+import collab_contractReducer from '../features/collaborator/collab.contractSlice';
 import admission_authReducer from '../features/admission/admission.authSlice';
 
 export const store = configureStore({
@@ -16,6 +17,7 @@ export const store = configureStore({
     collab_account: collab_accountReducer,
     collab_postRegistration: collab_postRegistrationReducer,
     collab_certificate: collab_certificateReducer,
+    collab_contract: collab_contractReducer,
     // Thêm reducers khác nếu cần thiết
     admission_auth: admission_authReducer, 
   },

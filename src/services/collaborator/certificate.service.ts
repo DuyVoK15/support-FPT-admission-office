@@ -1,4 +1,4 @@
-// PostService.ts
+// certificate.service.ts
 import { AxiosResponse } from 'axios';
 import axiosClient from '../axiosClient';
 import PostDto from '../../dtos/collaborator/post.dto';
