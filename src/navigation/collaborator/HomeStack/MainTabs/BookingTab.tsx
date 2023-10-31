@@ -1,13 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import Booking from '../../../../screens/collaborator/Booking'
+import Booking from '../../../../screens/collaborator/Registration'
+import Registration from '../../../../screens/collaborator/Registration'
 
-const BookingTab: React.FC = () => {
+const RegistrationTab: React.FC = () => {
   return (
-    <Booking />
+    <Registration />
   )
 }
 
-export default BookingTab;
+export default RegistrationTab;
 
 const styles = StyleSheet.create({})

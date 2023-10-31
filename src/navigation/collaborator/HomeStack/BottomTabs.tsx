@@ -14,6 +14,7 @@ import MapTab from './MainTabs/MapTab';
 import AccountStackNavigator from './MainStack/AccountStackNavigator';
 import HomeStackNavigator from './MainStack/HomeStackNavigator';
 import EventStackNavigator from './MainStack/EventStackNavigator';
+import RegistrationTab from './MainTabs/BookingTab';
 
 const Tab = createBottomTabNavigator<HomeCollaboratorStackNavigatorParamList>();
 const BottomTabs: React.FC = () => {
@@ -72,14 +73,14 @@ const BottomTabs: React.FC = () => {
           }}
         />
         <Tab.Screen
-          name={'BOOKING_STACK_NAVIGATOR'}
-          component={BookingTab}
+          name={'REGISTRATION_STACK_NAVIGATOR'}
+          component={RegistrationTab}
           options={{
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <FontAwesome name="calendar-check-o" color={color} size={26} />
             ),
-            tabBarLabel: 'Booking',
+            tabBarLabel: 'Registration',
           }}
         />
         <Tab.Screen

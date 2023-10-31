@@ -21,7 +21,7 @@ import { useAppSelector } from '../../../../app/hooks';
 import { getAllPostRegistration } from '../../../../features/collaborator/collab.postRegistrationSlice';
 import useIndex from '../useIndex';
 
-const Booking_Pending = () => {
+const Registration_Pending = () => {
  
   const { handlers, state, props } = useIndex();
 
@@ -302,7 +302,7 @@ const Booking_Pending = () => {
   );
 };
 
-export default Booking_Pending;
+export default Registration_Pending;
 
 const styles = StyleSheet.create({
   container: {

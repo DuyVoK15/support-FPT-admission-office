@@ -12,7 +12,7 @@ const EventTab = createMaterialTopTabNavigator();
 const EventTopTabs = () => {
   return (
     <EventTab.Navigator
-      initialRouteName="POST_UPCOMMING"
+      initialRouteName="EVENT_UPCOMMING"
       
       screenOptions={{
         tabBarItemStyle:   {

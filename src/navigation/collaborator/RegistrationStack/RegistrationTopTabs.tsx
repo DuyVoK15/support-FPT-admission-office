@@ -4,16 +4,16 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { COLORS } from '../../../constants/Colors';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
 import { ScreenWidth } from '../../../constants/Demesions';
-import PendingTab from './BookingTab/PendingTab';
-import ConfirmTab from './BookingTab/ConfirmTab';
-import CompletedTab from './BookingTab/CompletedTab';
+import PendingTab from './RegistrationTab/PendingTab';
+import ConfirmTab from './RegistrationTab/ConfirmTab';
+import CompletedTab from './RegistrationTab/CompletedTab';
 
 const Tab = createMaterialTopTabNavigator();
 
-const BookingTopTabs = () => {
+const RegistrationTopTabs = () => {
   return (
     <Tab.Navigator
-      initialRouteName="BOOKING_PENDING"
+      initialRouteName="REGISTRATION_PENDING"
       screenOptions={{
         tabBarActiveTintColor: COLORS.orange_icon,
         tabBarInactiveTintColor: COLORS.grey_icon,
@@ -38,7 +38,7 @@ const BookingTopTabs = () => {
       }}
     >
       <Tab.Screen
-        name={'BOOKING_PENDING'}
+        name={'REGISTRATION_PENDING'}
         component={PendingTab}
         options={{
           tabBarStyle: {
@@ -48,7 +48,7 @@ const BookingTopTabs = () => {
         }}
       />
       <Tab.Screen
-        name={'BOOKING_CONFIRM'}
+        name={'REGISTRATION_CONFIRM'}
         component={ConfirmTab}
         options={{
           tabBarStyle: {
@@ -58,7 +58,7 @@ const BookingTopTabs = () => {
         }}
       />
       <Tab.Screen
-        name={'BOOKING_COMPLETED'}
+        name={'REGISTRATION_COMPLETED'}
         component={CompletedTab}
         options={{
           tabBarStyle: {
@@ -72,6 +72,6 @@ const BookingTopTabs = () => {
   );
 };
 
-export default BookingTopTabs;
+export default RegistrationTopTabs;
 
 const styles = StyleSheet.create({});

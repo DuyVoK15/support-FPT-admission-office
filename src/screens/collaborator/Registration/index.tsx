@@ -2,11 +2,11 @@ import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import Header from '../../../components/shared/Header/Back';
 import Backward from '../../../components/shared/Direction/Backward/Backward';
-import BookingTopTabs from '../../../navigation/collaborator/BookingStack/BookingTopTabs';
 import { ScreenHeight } from '../../../constants/Demesions';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
+import RegistrationTopTabs from '../../../navigation/collaborator/RegistrationStack/RegistrationTopTabs';
 
-const Booking = () => {
+const Registration = () => {
   return (
     <View style={{ flex: 1 }}>
       <Header style={{ height: ScreenHeight / 9, flexDirection: "column", alignItems: "center", justifyContent: "flex-end" }}>
@@ -18,11 +18,11 @@ const Booking = () => {
           </Text>
         </View>
       </Header>
-      <BookingTopTabs />
+      <RegistrationTopTabs />
     </View>
   );
 };
 
-export default Booking;
+export default Registration;
 
 const styles = StyleSheet.create({});

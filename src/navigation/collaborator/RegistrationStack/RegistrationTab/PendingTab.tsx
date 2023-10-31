@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import Booking_Pending from '../../../../screens/collaborator/Booking/Pending';
+import Booking_Pending from '../../../../screens/collaborator/Registration/Pending';
 
 const PendingTab = () => {
   return (

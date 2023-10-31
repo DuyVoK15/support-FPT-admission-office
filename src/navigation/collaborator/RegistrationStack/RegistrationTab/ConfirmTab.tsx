@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import Booking_Confirm from '../../../../screens/collaborator/Booking/Confirm';
+import Booking_Confirm from '../../../../screens/collaborator/Registration/Confirm';
 
 const ConfirmTab = () => {
   return (

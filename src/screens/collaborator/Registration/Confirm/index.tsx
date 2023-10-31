@@ -15,7 +15,7 @@ import DashedLine from 'react-native-dashed-line';
 import useIndex from '../useIndex';
 import { RefreshControl } from 'react-native';
 
-const Booking_Completed = () => {
+const Registration_Confirm = () => {
   const [isShowDetail, setIsShowDetail] = useState<boolean[]>(
     Array(20).fill(false)
   );
@@ -40,7 +40,7 @@ const Booking_Completed = () => {
         >
           {props?.postRegistrationList ? (
             props?.postRegistrationList?.data
-              .filter((postRegistration) => postRegistration?.status === 8)
+              .filter((postRegistration) => postRegistration?.status === 2)
               .map((postRegistration, index) => (
                 <View
                   key={postRegistration?.registrationCode}
@@ -137,7 +137,7 @@ const Booking_Completed = () => {
                       <View style={styles.statusRow}>
                         <View>
                           <Text style={styles.thirdText}>
-                            {postRegistration?.status === 8 ? 'Completed' : ''}
+                            {postRegistration?.status === 2 ? 'Confirm' : ''}
                           </Text>
                         </View>
                         <View style={styles.statusDot} />
@@ -294,9 +294,9 @@ const Booking_Completed = () => {
       </View>
     </View>
   );
-}
+};
 
-export default Booking_Completed;
+export default Registration_Confirm;
 
 const styles = StyleSheet.create({
   container: {
@@ -372,7 +372,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: 'black',
     marginVertical: 5,
-    textAlign: "center"
+    textAlign: 'center',
   },
   containerStatus: {
     position: 'absolute',
@@ -398,7 +398,7 @@ const styles = StyleSheet.create({
     height: 12,
     marginLeft: 5,
     borderRadius: 100,
-    backgroundColor: 'green',
+    backgroundColor: COLORS.super_dark_orange,
   },
   containerViewDetail: {
     alignItems: 'center',
