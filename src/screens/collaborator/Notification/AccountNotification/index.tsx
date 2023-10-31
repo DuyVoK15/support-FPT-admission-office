@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
-import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
-import { ScreenHeight } from '../../../constants/Demesions';
-import Header from '../../../components/shared/Header/Back';
-import Backward from '../../../components/shared/Direction/Backward/Backward';
+import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
+import { ScreenHeight } from '../../../../constants/Demesions';
+import Header from '../../../../components/shared/Header/Back';
+import Backward from '../../../../components/shared/Direction/Backward/Backward';
 
-const Notification = () => {
+const AccountNotification = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
 
   return (
@@ -18,6 +18,6 @@ const Notification = () => {
   )
 }
 
-export default Notification
+export default AccountNotification;
 
 const styles = StyleSheet.create({})
