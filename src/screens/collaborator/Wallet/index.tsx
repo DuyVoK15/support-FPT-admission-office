@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import Header from '../../../components/shared/Header/Back';
 import Backward from '../../../components/shared/Direction/Backward/Backward';
@@ -7,9 +7,12 @@ import { useNavigation } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
 import { Fontisto } from '@expo/vector-icons';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
+import useIndex from './useIndex';
 
 const Wallet = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
+  const { handlers, props, state } = useIndex();
+
   return (
     <View style={styles.container}>
       <Header>
@@ -23,7 +26,7 @@ const Wallet = () => {
         <View>
           <Text style={styles.textTitle}>History</Text>
         </View>
-        <View style={styles.walletBox}>
+        <TouchableOpacity style={styles.walletBox} onPress={()=> handlers.getRegistrationByReportId({accountReportId: 2})}>
           <View style={styles.walletContent}>
             <View style={{ flex: 1 }}>
               <Fontisto name="wallet" size={24} color="black" />
@@ -38,11 +41,11 @@ const Wallet = () => {
               </View>
             </View>
 
-            <View style={{ flex: 0}}>
+            <View style={{ flex: 0 }}>
               <Text style={styles.textPrice}>+ 300.000 VNĐ</Text>
             </View>
           </View>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -58,7 +61,7 @@ const styles = StyleSheet.create({
   },
   textTitle: {
     fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
-    fontSize: 18
+    fontSize: 18,
   },
   walletBox: {
     backgroundColor: 'white',
@@ -75,21 +78,21 @@ const styles = StyleSheet.create({
   },
   walletContent: {
     flexDirection: 'row',
-    alignItems: "center",
-    justifyContent: "space-between",
+    alignItems: 'center',
+    justifyContent: 'space-between',
     margin: 15,
   },
   textDate: {
     fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
-    fontSize: 15
+    fontSize: 15,
   },
   textTime: {
     fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
-    fontSize: 15
+    fontSize: 15,
   },
   textPrice: {
     fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
     fontSize: 15,
-    color: "green"
+    color: 'green',
   },
 });
