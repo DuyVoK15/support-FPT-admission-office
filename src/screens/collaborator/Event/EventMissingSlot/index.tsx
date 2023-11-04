@@ -11,6 +11,7 @@ import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
 import { useAppDispatch } from '../../../../app/store';
 import {
   getAllPost,
+  getAllPostMissingSlot,
   searchPostByPostCode,
 } from '../../../../features/collaborator/collab.postSlice';
 import { useAppSelector } from '../../../../app/hooks';
@@ -18,6 +19,8 @@ import { Data } from '../../../../models/collaborator/dataPost.model';
 import { cardGap } from '../../../../constants/Demesions';
 import { format_ISODateString_To_DayOfWeekMonthDDYYYY } from '../../../../utils/formats';
 import EventCardWrap from '../../../../components/collaborator/Home/EventCardWrap';
+import MissingSlotPagination from '../../../../components/shared/Pagination/MissingSlotPagination';
+import { imageNotFoundUri } from '../../../../utils/images';
 
 const EventMissingSlot = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -25,20 +28,21 @@ const EventMissingSlot = () => {
     'https://dci.edu.vn/wp-content/themes/consultix/images/no-image-found-360x250.png';
   const [textSearch, setTextSearch] = useState<string>('');
   const dispatch = useAppDispatch();
+  const SIZE_PAGING = 8;
   const fetchPost = async () => {
     const params = {
       Page: 1,
-      PageSize: 20,
+      PageSize: SIZE_PAGING,
     };
-    await dispatch(getAllPost(params)).then((res) => {
-      console.log('Alo: ', JSON.stringify(res, null, 2));
+    await dispatch(getAllPostMissingSlot(params)).then((res) => {
+      // console.log('Alo: ', JSON.stringify(res, null, 2));
     });
   };
   useEffect(() => {
     fetchPost();
   }, []);
 
-  const postList = useAppSelector((state) => state.collab_post.post);
+  const postList = useAppSelector((state) => state.collab_post.postMissingSlot);
   const handleSearchPost = async (postCode: string) => {
     await dispatch(searchPostByPostCode(postCode)).then((res) => {
       // console.log(JSON.stringify(res, null, 2));
@@ -85,7 +89,7 @@ const EventMissingSlot = () => {
                 <View key={index}>
                   <EventCardWrap
                     onPress={() => handleNavigate(post)}
-                    imageUrl={post?.postImg ? post?.postImg : imgUndefind}
+                    imageUrl={post?.postImg ? post?.postImg : imageNotFoundUri}
                     title={
                       post?.postCategory?.postCategoryDescription
                         ? post?.postCategory?.postCategoryDescription
@@ -110,6 +114,14 @@ const EventMissingSlot = () => {
             <View />
           )}
         </View>
+        {postList?.metadata && (
+          <View>
+            <MissingSlotPagination
+              size={SIZE_PAGING}
+              total={Number(postList?.metadata?.total)}
+            />
+          </View>
+        )}
       </ScrollView>
     </View>
   );

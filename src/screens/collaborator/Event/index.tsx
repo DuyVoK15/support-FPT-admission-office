@@ -22,30 +22,49 @@ const Event = () => {
     <View style={styles.container}>
       <View style={{ marginTop: 50, marginHorizontal: 15 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <TouchableOpacity style={{ flex: 1 }} onPress={() => navigation.navigate("HOME")}>
+          <TouchableOpacity
+            style={{ flex: 1 }}
+            onPress={() => navigation.navigate('HOME')}
+          >
             <Image
               style={{ height: 50, width: 50, resizeMode: 'contain' }}
               source={require('../../../assets/Images/ic_app_no_text.png')}
             />
           </TouchableOpacity>
 
-          <View style={{ flex: 3, alignItems: "center" }}>
+          <View style={{ flex: 3, alignItems: 'center' }}>
             <Text
               style={{
                 fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
                 fontSize: 24,
               }}
             >
-               ALL Events
+              ALL Events
             </Text>
           </View>
-          <View style={{ flex: 1, alignItems: "flex-end" }}>
-            <Ionicons
-              name="notifications"
-              size={30}
-              color={COLORS.orange_button}
-            />
-          </View>
+          <TouchableOpacity
+            style={{ flex: 1, alignItems: 'flex-end' }}
+            onPress={() => {
+              navigation.navigate("EVENT_NOTIFICATION");
+            }}
+          >
+            <View
+              style={{
+                width: 45,
+                height: 45,
+                borderRadius: 100,
+                backgroundColor: '#fff2d4',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Ionicons
+                name="notifications"
+                size={30}
+                color={COLORS.orange_button}
+              />
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
 

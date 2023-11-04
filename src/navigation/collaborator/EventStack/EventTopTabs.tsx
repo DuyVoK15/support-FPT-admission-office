@@ -6,22 +6,22 @@ import { ScreenWidth } from '../../../constants/Demesions';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
 import EventUpcommingTab from './EventTab/EventUpcommingTab';
 import EventMissingSlotTab from './EventTab/EventMissingSlotTab';
+import { HomeCollaboratorStackNavigatorParamList } from '../../../../type';
 
-
-const EventTab = createMaterialTopTabNavigator();
+const EventTab =
+  createMaterialTopTabNavigator<HomeCollaboratorStackNavigatorParamList>();
 const EventTopTabs = () => {
   return (
     <EventTab.Navigator
       initialRouteName="EVENT_UPCOMMING"
-      
       screenOptions={{
-        tabBarItemStyle:   {
+        tabBarItemStyle: {
           // borderRadius: 100,
           backgroundColor: '#FFF',
           // marginHorizontal: 10
           // ...SHADOWS.SHADOW_01
         },
-        tabBarPressColor: "blue",
+        tabBarPressColor: 'blue',
         tabBarActiveTintColor: COLORS.orange_icon,
         tabBarInactiveTintColor: COLORS.grey_icon,
         // tabBarStyle: {
@@ -29,8 +29,7 @@ const EventTopTabs = () => {
         //   alignItems: 'center',
         // },
         tabBarIndicatorStyle: {
-          backgroundColor: "transparent",
-        
+          backgroundColor: 'transparent',
         },
 
         tabBarLabelStyle: {
@@ -48,7 +47,7 @@ const EventTopTabs = () => {
           tabBarStyle: {
             // marginTop: 50,
           },
-          tabBarLabel: 'Event Upcomming',
+          tabBarLabel: 'Upcomming Event',
         }}
       />
       <EventTab.Screen
@@ -58,7 +57,7 @@ const EventTopTabs = () => {
           tabBarStyle: {
             // marginTop: 50,
           },
-          tabBarLabel: 'Event Missing Slot',
+          tabBarLabel: 'Re-Open Event',
         }}
       />
     </EventTab.Navigator>

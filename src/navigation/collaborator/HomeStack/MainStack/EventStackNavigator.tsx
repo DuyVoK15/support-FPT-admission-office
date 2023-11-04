@@ -1,12 +1,15 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { View, Text } from 'react-native';
+import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import EventTab from '../MainTabs/EventTab';
 import EventDetail from '../../../../screens/collaborator/Event/EventDetail';
 import HomeEventDetail from '../../../../screens/collaborator/Home/HomeEventDetail';
 import PositionRegistration from '../../../../screens/collaborator/PositionRegistration';
+import { HomeCollaboratorStackNavigatorParamList } from '../../../../../type';
+import EventNotification from '../../../../screens/collaborator/Notification/EventNotification';
 
-const Stack = createNativeStackNavigator();
+const Stack =
+  createNativeStackNavigator<HomeCollaboratorStackNavigatorParamList>();
 const EventStackNavigator = () => {
   return (
     <Stack.Navigator>
@@ -14,7 +17,7 @@ const EventStackNavigator = () => {
         name={'EVENT'}
         component={EventTab}
         options={{
-          headerShown: false,       
+          headerShown: false,
         }}
       />
       <Stack.Screen
@@ -31,8 +34,15 @@ const EventStackNavigator = () => {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name={'EVENT_NOTIFICATION'}
+        component={EventNotification}
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
-  )
-}
+  );
+};
 
-export default EventStackNavigator
+export default EventStackNavigator;

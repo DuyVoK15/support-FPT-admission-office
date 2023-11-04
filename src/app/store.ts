@@ -5,12 +5,13 @@ import { useDispatch } from 'react-redux';
 import collab_authReducer from '../features/collaborator/collab.authSlice';
 import collab_postReducer from '../features/collaborator/collab.postSlice';
 import collab_postRegistrationReducer from '../features/collaborator/collab.postRegistrationSlice';
-import collab_accountReducer from'../features/collaborator/collab.accountSlice';
+import collab_accountReducer from '../features/collaborator/collab.accountSlice';
 import collab_certificateReducer from '../features/collaborator/collab.certificateSlice';
 import collab_contractReducer from '../features/collaborator/collab.contractSlice';
-import collab_reportReducer from '..//features/collaborator/collab.reportSlice';
-import admission_authReducer from '../features/admission/admission.authSlice';
+import collab_reportReducer from '../features/collaborator/collab.reportSlice';
+import collab_complaintReducer from '../features/collaborator/collab.complaintSlice';
 
+import admission_authReducer from '../features/admission/admission.authSlice';
 
 export const store = configureStore({
   reducer: {
@@ -21,8 +22,9 @@ export const store = configureStore({
     collab_certificate: collab_certificateReducer,
     collab_contract: collab_contractReducer,
     collab_report: collab_reportReducer,
+    collab_complaint: collab_complaintReducer,
     // Thêm reducers khác nếu cần thiết
-    admission_auth: admission_authReducer, 
+    admission_auth: admission_authReducer,
   },
 });
 

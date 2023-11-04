@@ -14,7 +14,7 @@ const Registration = () => {
           <Text
             style={{ fontFamily: FONTS_FAMILY.Ubuntu_500Medium, fontSize: 24 }}
           >
-            My Booking
+            My Registration
           </Text>
         </View>
       </Header>

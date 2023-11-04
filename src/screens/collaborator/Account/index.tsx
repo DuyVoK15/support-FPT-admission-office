@@ -26,7 +26,11 @@ import SubmitButton from '../../../components/shared/Button/SubmitButton';
 import Header from '../../../components/shared/Header/Header';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SHADOWS } from '../../../constants/Shadows';
-import { collab_getUserInfo, collab_logout } from '../../../features/collaborator/collab.authSlice';
+import {
+  collab_getUserInfo,
+  collab_logout,
+} from '../../../features/collaborator/collab.authSlice';
+import { imageUndefinedUserUri } from '../../../utils/images';
 
 const Account = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -35,13 +39,13 @@ const Account = () => {
   const userInfo = useAppSelector((state) => state.collab_auth.userInfo);
   const fetchUserInfo = async () => {
     try {
-      await dispatch(collab_getUserInfo()).then((res)=> {
+      await dispatch(collab_getUserInfo()).then((res) => {
         console.log(JSON.stringify(res, null, 2));
       });
     } catch (error) {
       console.log(error);
     }
-    
+
     unwrapResult;
   };
 
@@ -50,7 +54,9 @@ const Account = () => {
   }, []);
 
   const handleLogout = async () => {
-    await dispatch(collab_logout());
+    await dispatch(collab_logout({ expoToken: '' })).then((res) => {
+      console.log(JSON.stringify(res, null, 2));
+    });
   };
 
   return (
@@ -60,17 +66,18 @@ const Account = () => {
           <Text style={styles.textHeader}>My Account</Text>
         </View>
 
-        <LinearGradient colors={['#FF8C00', '#FFA07A']} // Mã màu cam và màu cam kết hợp
-      start={{ x: 0.5, y: 0 }} // Bắt đầu từ giữa màn hình ở dưới cùng
-      end={{ x: 0.5, y: 1 }}   // Kết thúc ở giữa màn hình ở trên cùng
-      locations={[0, 1]}
-      
-      style={styles.containerInfoBox}>
+        <LinearGradient
+          colors={['#FF8C00', '#FFA07A']} // Mã màu cam và màu cam kết hợp
+          start={{ x: 0.5, y: 0 }} // Bắt đầu từ giữa màn hình ở dưới cùng
+          end={{ x: 0.5, y: 1 }} // Kết thúc ở giữa màn hình ở trên cùng
+          locations={[0, 1]}
+          style={styles.containerInfoBox}
+        >
           <View style={styles.containerInfoContent}>
             <View style={styles.avatarStyle}>
               <Image
                 source={{
-                  uri: userInfo?.imgUrl,
+                  uri: userInfo?.imgUrl ? userInfo?.imgUrl : imageUndefinedUserUri,
                 }}
                 style={{ width: 57, height: 57, borderRadius: 100 }}
               />
@@ -241,7 +248,10 @@ const Account = () => {
           </View>
 
           <View style={styles.containerColumn}>
-            <TouchableOpacity onPress={() => navigation.navigate("PROFILE_SIGNUP")} style={styles.containerRow}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('PROFILE_SIGNUP')}
+              style={styles.containerRow}
+            >
               <View style={styles.column1}>
                 <MaterialIcons
                   name="connect-without-contact"
@@ -359,7 +369,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     paddingTop: 30,
     borderRadius: 10,
-   ...SHADOWS.SHADOW_03
+    ...SHADOWS.SHADOW_03,
   },
   containerRow: {
     flexDirection: 'row',
@@ -374,7 +384,7 @@ const styles = StyleSheet.create({
   containerInfoBox: {
     borderRadius: 10,
     backgroundColor: COLORS.orange_icon,
-    
+
     marginBottom: 10,
   },
   containerInfoContent: {
