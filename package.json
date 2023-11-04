@@ -76,7 +76,8 @@
     "react-native-select-dropdown": "^3.4.0",
     "react-native-tab-view": "^3.5.2",
     "react-native-toast-notifications": "^3.4.0",
-    "react-redux": "^8.1.2"
+    "react-redux": "^8.1.2",
+    "expo-asset": "~8.10.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
