@@ -23,7 +23,7 @@ const initialState: AuthState = {
   role: -1,
   userInfoLogin: null,
   userInfo: null,
-  loading: false, 
+  loading: false,
   error: '',
 };
 
@@ -34,17 +34,14 @@ export const collab_loginGoogle = createAsyncThunk(
       console.log('<AuthSlice> JWT: ', JWT);
       const result = await authService.collab_loginGoogle({
         idToken: JWT,
-        fcmToken: '',
+        expoPushToken: '',
       });
-      console.log("<AuthSlice> ResData: ", JSON.stringify(result.data.data))
+      console.log('<AuthSlice> ResData: ', JSON.stringify(result.data.data));
       await AsyncStorage.setItem(
         AppConstants.ACCESS_TOKEN,
         result.data.data.access_token
       );
-      await AsyncStorage.setItem(
-        AppConstants.ID_TOKEN,
-        JWT
-      );
+      await AsyncStorage.setItem(AppConstants.ID_TOKEN, JWT);
       return result.data;
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -67,7 +64,7 @@ export const collab_getUserInfo = createAsyncThunk(
       return rejectWithValue(axiosError.response?.data);
     }
   }
-); 
+);
 
 export const admission_loginGoogle = createAsyncThunk(
   'auth-admission/login-google',
@@ -76,17 +73,14 @@ export const admission_loginGoogle = createAsyncThunk(
       console.log('<AuthSlice> JWT: ', JWT);
       const result = await authService.admission_loginGoogle({
         idToken: JWT,
-        fcmToken: '',
+        expoPushToken: '',
       });
-      console.log("<AuthSlice> ResData: ", JSON.stringify(result.data.data))
+      console.log('<AuthSlice> ResData: ', JSON.stringify(result.data.data));
       await AsyncStorage.setItem(
         AppConstants.ACCESS_TOKEN,
         result.data.data.access_token
       );
-      await AsyncStorage.setItem(
-        AppConstants.ID_TOKEN,
-        JWT
-      );
+      await AsyncStorage.setItem(AppConstants.ID_TOKEN, JWT);
       return result.data;
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -109,11 +103,11 @@ export const admission_getUserInfo = createAsyncThunk(
       return rejectWithValue(axiosError.response?.data);
     }
   }
-); 
+);
 
 export const collab_logout = createAsyncThunk(
   'auth/logout',
-  async (_, { rejectWithValue }) => {
+  async (params: { expoToken: string }, { rejectWithValue }) => {
     try {
       console.log('Có vô logout');
       await auth()
@@ -121,17 +115,19 @@ export const collab_logout = createAsyncThunk(
         .then(() => console.log('Current user signed out!'));
       await AsyncStorage.removeItem(AppConstants.ACCESS_TOKEN);
       await AsyncStorage.removeItem(AppConstants.ID_TOKEN);
-      await AsyncStorage.removeItem("userInfo");
+      await AsyncStorage.removeItem('userInfo');
       // await GoogleSignin.revokeAccess();
       await GoogleSignin.signOut().then(() => {
-        console.log("Google sign out!")
-      }); 
+        console.log('Google sign out!');
+      });
+      // const response = await authService.collab_logout(params);
       
+
       return true;
     } catch (error: any) {
       const axiosError = error as AxiosError;
-      console.log(error)
-      return rejectWithValue(axiosError.response?.data); 
+      console.log(error);
+      return rejectWithValue(axiosError.response?.data);
     }
   }
 );
@@ -159,7 +155,7 @@ export const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(collab_logout.pending, (state) => {
-        console.log("pending out")
+        console.log('pending out');
         state.loading = true;
         state.error = '';
       })
@@ -167,8 +163,8 @@ export const authSlice = createSlice({
         state.isAuthenticated = false;
         state.role = -1;
         state.loading = false;
-        state.userInfoLogin = null; 
-      }) 
+        state.userInfoLogin = null;
+      })
       .addCase(collab_logout.rejected, (state, action) => {
         state.error = String(action.payload);
         state.loading = false;
@@ -204,7 +200,7 @@ export const authSlice = createSlice({
       })
       .addCase(collab_loadAuthState.fulfilled, (state, action) => {
         state.isAuthenticated = true;
-        state.loading = false;     
+        state.loading = false;
       })
       .addCase(collab_loadAuthState.rejected, (state, action) => {
         state.error = String(action.payload);

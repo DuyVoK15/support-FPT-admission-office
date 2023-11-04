@@ -6,21 +6,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Header from '../../../../components/shared/Header/Back';
-import Backward from '../../../../components/shared/Direction/Backward/Backward';
-import ProfileTextInput from '../../../../components/collaborator/Profile/UserProfile/ProfileTextInput';
 import ProfileSignupTextInput from '../../../../components/collaborator/Profile/UserProfileSignup/ProfileSignupTextInput';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { COLORS } from '../../../../constants/Colors';
-import { ScreenWidth } from '../../../../constants/Demesions';
-import { useAppDispatch } from '../../../../app/store';
-import { AccountInfoSignup } from '../../../../models/collaborator/account.model';
-import { isAccountInformationValid } from '../../../../utils/validates';
 import {
   formatDateToDDMMYYYY,
-  formatToDate,
-  formatToISO_8601,
 } from '../../../../utils/formats';
 import { FONTS_FAMILY } from '../../../../constants/Fonts';
 import SubmitButton from '../../../../components/shared/Button/SubmitButton';

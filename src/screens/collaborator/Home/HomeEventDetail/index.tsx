@@ -21,11 +21,14 @@ import {
 } from '../../../../utils/formats';
 import { useWindowDimensions } from 'react-native';
 import RenderHtml from 'react-native-render-html';
+import { imageNotFoundUri } from '../../../../utils/images';
 
 const HomeEventDetail: FC = () => {
+  // Get Width of Windows
   const { width } = useWindowDimensions();
 
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
+  // Get item data from 
   const route = useRoute();
   const { item } = route?.params as { item: Data };
   const handleNavigate = (item: Data) => {
@@ -40,7 +43,7 @@ const HomeEventDetail: FC = () => {
       <ImageBackground
         style={{ height: 250, width: '100%' }}
         source={{
-          uri: 'https://cdnimg.vietnamplus.vn/t870/uploaded/xpcwvovt/2020_11_13/ttxvn_viet_duc_5.jpg',
+          uri: item?.postImg ? item?.postImg : imageNotFoundUri,
         }}
       >
         <BackwardBlur

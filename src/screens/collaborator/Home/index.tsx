@@ -63,9 +63,9 @@ const Home = () => {
       console.log('Alo: ', JSON.stringify(res, null, 2));
     });
   };
-  useEffect(() => {
-    fetchPost();
-  }, []);
+  // useEffect(() => {
+  //   fetchPost();
+  // }, []);
 
   const postList = useAppSelector((state) => state.collab_post.post);
   const handleSearchPost = async (postCode: string) => {
@@ -137,7 +137,7 @@ const Home = () => {
               </View>
             </View>
             <TouchableOpacity
-              onPress={() => navigation.navigate('NOTIFICATION')}
+              onPress={() => navigation.navigate('HOME_NOTIFICATION')}
               style={{
                 width: 40,
                 height: 40,
@@ -235,6 +235,11 @@ const Home = () => {
 
             <TouchableOpacity
               style={{ flexDirection: 'row', alignItems: 'center' }}
+              onPress={() =>
+                navigation.navigate('EVENT_STACK_NAVIGATOR', {
+                  screen: 'EVENT',
+                })
+              }
             >
               <View>
                 <Text
@@ -314,6 +319,13 @@ const Home = () => {
 
             <TouchableOpacity
               style={{ flexDirection: 'row', alignItems: 'center' }}
+              onPress={
+                () =>
+                  navigation.navigate('EVENT_STACK_NAVIGATOR', {
+                    screen: 'EVENT',
+                  })
+                // () => console.log('navigation')
+              }
             >
               <View>
                 <Text
@@ -368,6 +380,16 @@ const Home = () => {
                           post?.dateFrom ? post?.dateFrom : ''
                         )}
                         schoolName={post?.postPositions[0]?.schoolName}
+                        totalRegisterAmount={
+                          post?.registerAmount
+                            ? String(post?.registerAmount)
+                            : '0'
+                        }
+                        totalAmountPosition={
+                          post?.totalAmountPosition
+                            ? String(post?.totalAmountPosition)
+                            : '0'
+                        }
                       />
                     </View>
                   ))
@@ -376,7 +398,6 @@ const Home = () => {
               )}
             </View>
           </View>
-          
         </View>
       </ScrollView>
       {/* <UpdateBookingPopup /> */}

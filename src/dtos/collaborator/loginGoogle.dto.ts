@@ -1,6 +1,5 @@
-interface LoginGoogleDto {
+export default interface LoginGoogleParams {
     idToken: string;
-    fcmToken: string;
+    expoPushToken: string;
 }
 
-export default LoginGoogleDto;

@@ -31,7 +31,7 @@ const FilterModal = () => {
   } = useForm({
     defaultValues: {
       DateFrom: '',
-      PostCategoryId: 0,
+      PostCategoryId: null,
     },
   });
 
@@ -59,7 +59,7 @@ const FilterModal = () => {
 
   const handleClearOption = () => {
     setValue('DateFrom', "");
-    setValue('PostCategoryId', 0);
+    setValue('PostCategoryId', null);
   }
 
   const dispatch = useAppDispatch();

@@ -92,42 +92,52 @@ const Login = () => {
           alignItems: 'center',
           justifyContent: 'space-between',
         }}
-      > 
-        <AppIcon style={{ flex: 1 }} />
+      >
+        <AppIcon style={{ flex: 0, marginTop: 50 }} />
         <CampusSelection style={{ flex: 2 }} />
-        <SelectDropdown
-          dropdownStyle={{
-            borderTopLeftRadius: 5,
-            borderTopRightRadius: 5,
-            borderBottomLeftRadius: 15,
-            borderBottomRightRadius: 15,
-          }}
-          rowTextStyle={{ fontFamily: FONTS_FAMILY.Ubuntu_400Regular, fontSize: 16 }}
-          buttonStyle={{ borderRadius: 5, ...SHADOWS.SHADOW_06 }}
-          buttonTextStyle={{
-            fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
-            fontSize: 16,
-          }}
-          data={roles}
-          defaultValue={GmailSelectedEnum.NO_SELECT}
-          onSelect={(selectedItem) => {
-            if (selectedItem === GmailSelectedEnum.COLLABORATOR) {
-              setGmailSelected(GmailSelectedEnum.COLLABORATOR);
-            } else if (selectedItem === GmailSelectedEnum.ADMISSION_OFFICER) {
-              setGmailSelected(GmailSelectedEnum.ADMISSION_OFFICER);
-            }
-          }}
-          buttonTextAfterSelection={(selectedItem, index) => {
-            // text represented after item is selected
-            // if data array is an array of objects then return selectedItem.property to render after item is selected
-            return selectedItem;
-          }}
-          rowTextForSelection={(item, index) => {
-            // text represented for each item in dropdown
-            // if data array is an array of objects then return item.property to represent item in dropdown
-            return item;
-          }}
-        />
+        <View style={{marginBottom: 10}}>
+          <SelectDropdown
+            dropdownStyle={{
+              borderTopLeftRadius: 5,
+              borderTopRightRadius: 5,
+              borderBottomLeftRadius: 15,
+              borderBottomRightRadius: 15,
+            }}
+            rowTextStyle={{
+              fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+              fontSize: 16,
+            }}
+            buttonStyle={{
+              backgroundColor: '#FFF',
+              borderRadius: 5,
+              ...SHADOWS.SHADOW_06,
+            }}
+            buttonTextStyle={{
+              fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+              fontSize: 16,
+            }}
+            data={roles}
+            defaultValue={GmailSelectedEnum.NO_SELECT}
+            onSelect={(selectedItem) => {
+              if (selectedItem === GmailSelectedEnum.COLLABORATOR) {
+                setGmailSelected(GmailSelectedEnum.COLLABORATOR);
+              } else if (selectedItem === GmailSelectedEnum.ADMISSION_OFFICER) {
+                setGmailSelected(GmailSelectedEnum.ADMISSION_OFFICER);
+              }
+            }}
+            buttonTextAfterSelection={(selectedItem, index) => {
+              // text represented after item is selected
+              // if data array is an array of objects then return selectedItem.property to render after item is selected
+              return selectedItem;
+            }}
+            rowTextForSelection={(item, index) => {
+              // text represented for each item in dropdown
+              // if data array is an array of objects then return item.property to represent item in dropdown
+              return item;
+            }}
+          />
+        </View>
+
         <LoginButton
           style={{ flex: 1 }}
           onPress={() =>

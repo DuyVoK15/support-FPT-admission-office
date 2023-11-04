@@ -29,19 +29,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 16,
-    paddingHorizontal: 48,
+    paddingHorizontal: 46,
     backgroundColor: '#F09101',
     borderRadius: 10,
     ...SHADOWS.SHADOW_09
   },
   iconGoogle: {
-    height: 26,
-    width: 26,
+    height: 28,
+    width: 28,
     marginHorizontal: 6,
   },
   text: {
     fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
-    fontSize: 16,
+    fontSize: 18,
     marginHorizontal: 6,
   },
 });
