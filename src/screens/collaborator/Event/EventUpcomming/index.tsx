@@ -30,7 +30,14 @@ const EventUpcomming: FC = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const dispatch = useAppDispatch();
   const postList = useAppSelector((state) => state.collab_post.postUpcomming);
-
+  const list = useAppSelector((state) => state.collab_post.postUpcomming.data);
+  const page = useAppSelector(
+    (state) => state.collab_post.postUpcomming.metadata.page
+  );
+  console.log("object",page)
+  const total = useAppSelector(
+    (state) => state.collab_post.postUpcomming.metadata.total
+  );
   // const SIZE_PAGING = 8;
   // const [totalPost, setTotalPost] = useState<number | null>();
   // const remainder = Number(postList?.metadata?.total) % SIZE_PAGING;
@@ -89,107 +96,52 @@ const EventUpcomming: FC = () => {
   };
 
   // Pagination scroll
-  const [postData, setPostData] = useState<{
-    postList: DataPost | [];
-    totalPage: number | null;
-    isLoading: boolean;
-  }>({
-    postList: [],
-    totalPage: 1,
-    isLoading: true,
-  });
-  const initialPage = 1;
-  const defaultPageSize = 10;
-  const initialPagination = {
-    page: initialPage,
-    pageSize: defaultPageSize,
-    isLoading: false,
-  };
-  const [pagination, setPagination] = useState<{
-    page: number;
-    pageSize: number;
-    isLoading: boolean;
-  }>(initialPagination);
 
-  const fetchPost = useCallback(async () => {
-    console.log('==============================');
-    console.log(pagination);
-    console.log(postData.totalPage);
-    console.log('==============================');
+  const fetchPost = async () => {
     try {
       await dispatch(
         getAllPostUpcomming({
-          Page: pagination.page,
-          PageSize: pagination.pageSize,
+          Page: 1,
+          PageSize: 6,
           Sort: 'CreateAt',
         })
-      ).then((res) => {
-        const postDto = res.payload as PostDto;
-        setPostData({
-          postList:
-            pagination.page === 1
-              ? postDto?.data
-              : ([...postData.postList, ...postDto?.data] as DataPost),
-          totalPage:
-            Number(postDto?.metadata?.total) % defaultPageSize === 0
-              ? Number(postDto?.metadata?.total) / defaultPageSize
-              : Math.floor(Number(postDto?.metadata?.total) / defaultPageSize) +
-                1,
-          isLoading: false,
-        });
-        // console.log('kaka', JSON.stringify(postDto.data));
-      });
-      console.log(postData.postList.length);
+      );
     } catch (error) {
       console.log('Lỗi khi tải dữ liệu', error);
     }
-  }, [pagination]);
+  };
 
   // Sử dụng useEffect để gọi API khi currentPage thay đổi
   useEffect(() => {
     fetchPost();
-  }, [fetchPost]);
+  }, []);
 
-  const onRefresh = () => {
-    setPagination({
-      ...pagination,
-      page: initialPage,
-      pageSize: defaultPageSize,
-      isLoading: true,
-    });
-    setPostData({
-      ...postData,
-      isLoading: true,
-    });
+  // Refresh fetch
+  const [loading, setLoading] = useState<boolean>(false);
+  const onRefresh = useCallback(() => {
+    setLoading(true);
     setTimeout(() => {
-      setPagination({
-        ...pagination,
-        page: initialPage,
-        pageSize: defaultPageSize,
-        isLoading: false,
-      });
-      setPostData({
-        ...postData,
-        isLoading: false,
-      });
+      fetchPost();
+      setLoading(false);
     }, 1000);
+  }, []);
+
+  const handleEndReached = async () => {
+    console.log('Vô endreached');
+    if((Number(page) - 1) * 6 < Number(total)) {
+      await dispatch(
+        getAllPostUpcomming({ Page: Number(page), PageSize: 6, Sort: 'CreateAt' })
+      );
+    }
+    
   };
 
-  const handleEndReached = () => {
-    console.log('Vô endreached');
-    if (pagination.page < Number(postData?.totalPage)) {
-      pagination.page++;
-      setPagination({
-        ...pagination,
-        page: pagination.page,
-        pageSize: defaultPageSize,
-        isLoading: true,
-      });
-      setPostData({
-        ...postData,
-        isLoading: true,
-      });
-    }
+  const renderLoadingFooter = () => {
+    return (Number(page) - 1) * 6 < Number(total) ? (
+      <View>
+        <ActivityIndicator size={'large'} color={'red'} />
+      </View>
+    ) : null;
   };
 
   type ItemProps = {
@@ -230,7 +182,7 @@ const EventUpcomming: FC = () => {
     <View style={styles.container}>
       <FlatList
         scrollEventThrottle={16}
-        data={postData?.postList}
+        data={list}
         renderItem={renderItem}
         numColumns={2}
         columnWrapperStyle={{
@@ -245,11 +197,9 @@ const EventUpcomming: FC = () => {
         }}
         keyExtractor={(item, index) => index.toString()}
         refreshControl={
-          <RefreshControl
-            refreshing={postData.isLoading}
-            onRefresh={onRefresh}
-          />
+          <RefreshControl refreshing={loading} onRefresh={onRefresh} />
         }
+        ListFooterComponent={renderLoadingFooter}
         onEndReached={handleEndReached}
       />
 

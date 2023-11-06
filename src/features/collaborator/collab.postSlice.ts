@@ -8,22 +8,75 @@ import FilterPostPayload from '../../dtos/collaborator/payload/filterPost.dto';
 import MetaDataPost from '../../models/collaborator/metaDataPost.model';
 
 interface PostState {
-  post: PostDto | null;
-  postUpcomming: PostDto | null;
-  postMissingSlot: PostDto | null;
-  metaDataPost: MetaDataPost | null;
-  postCategory: ViewPostCategoryResponse | null;
+  post: PostDto;
+  postUpcomming: PostDto;
+  postReOpen: PostDto;
+  postMissingSlot: PostDto;
+  metaDataPost: MetaDataPost;
+  postCategory: ViewPostCategoryResponse;
   loading: boolean;
   error: string;
   // Thêm các trường khác liên quan đến người dùng nếu cần thiết
 }
 
+const intitialPage = 1;
+const ITEM_SIZE = 10;
 const initialState: PostState = {
-  post: null,
-  postUpcomming: null,
-  postMissingSlot: null,
-  metaDataPost: null,
-  postCategory: null,
+  post: {
+    metadata: {
+      page: intitialPage,
+      size: ITEM_SIZE,
+      total: 0,
+    },
+    data: [],
+    isError: false,
+    message: '',
+  },
+  postUpcomming: {
+    metadata: {
+      page: intitialPage,
+      size: ITEM_SIZE,
+      total: 0,
+    },
+    data: [],
+    isError: false,
+    message: '',
+  },
+  postReOpen: {
+    metadata: {
+      page: intitialPage,
+      size: ITEM_SIZE,
+      total: 0,
+    },
+    data: [],
+    isError: false,
+    message: '',
+  },
+  postMissingSlot: {
+    metadata: {
+      page: intitialPage,
+      size: ITEM_SIZE,
+      total: 0,
+    },
+    data: [],
+    isError: false,
+    message: '',
+  },
+  metaDataPost: {
+    page: undefined,
+    size: undefined,
+    total: undefined,
+  },
+  postCategory: {
+    metadata: {
+      page: 1,
+      size: ITEM_SIZE,
+      total: 0,
+    },
+    data: [],
+    isError: false,
+    message: '',
+  },
   loading: false,
   error: '',
 };
@@ -34,7 +87,6 @@ export const getAllPost = createAsyncThunk(
     try {
       console.log('Có vô post');
       const response = await postService.getAllPost(params);
-      // console.log("<PostSlice> Post: ", JSON.stringify(response.data.data))
       return response.data;
     } catch (error: any) {
       const axiosError = error as AxiosError;
@@ -49,8 +101,27 @@ export const getAllPostUpcomming = createAsyncThunk(
     try {
       console.log('Có vô post');
       const response = await postService.getAllPost(params);
-      // console.log("<PostSlice> Post: ", JSON.stringify(response.data.data))
-      return response.data;
+      return {
+        response_data: response.data,
+        query: params,
+      };
+    } catch (error: any) {
+      const axiosError = error as AxiosError;
+      return rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+
+export const getPostReOpen = createAsyncThunk(
+  'post/reopen/getAll',
+  async (params: FilterPostPayload, { rejectWithValue }) => {
+    try {
+      console.log('Có vô post');
+      const response = await postService.getPostReOpen(params);
+      return {
+        response_data: response.data,
+        query: params,
+      };
     } catch (error: any) {
       const axiosError = error as AxiosError;
       return rejectWithValue(axiosError.response?.data);
@@ -64,7 +135,6 @@ export const getAllPostMissingSlot = createAsyncThunk(
     try {
       console.log('Có vô post');
       const response = await postService.getAllPost(params);
-      // console.log("<PostSlice> Post: ", JSON.stringify(response.data.data))
       return response.data;
     } catch (error: any) {
       const axiosError = error as AxiosError;
@@ -79,7 +149,6 @@ export const getMetaDataPost = createAsyncThunk(
     try {
       console.log('Có vô post');
       const response = await postService.getAllPost(params);
-      // console.log("<PostSlice> Post: ", JSON.stringify(response.data.data))
       return response.data;
     } catch (error: any) {
       const axiosError = error as AxiosError;
@@ -107,7 +176,6 @@ export const searchPostByPostCode = createAsyncThunk(
     try {
       console.log('Có vô post');
       const response = await postService.searchPostByPostCode(searchPost);
-      // console.log("<PostSlice> Post: ", JSON.stringify(response.data.data))
       return response.data;
     } catch (error: any) {
       const axiosError = error as AxiosError;
@@ -139,9 +207,37 @@ export const postSlice = createSlice({
       })
       .addCase(getAllPostUpcomming.fulfilled, (state, action) => {
         state.loading = false;
-        state.postUpcomming = action.payload;
+        const newData = action.payload.response_data.data;
+        const page = Number(action.payload.query.Page);
+        page > 1
+          ? (state.postUpcomming.data as DataPost).push(...newData)
+          : (state.postUpcomming.data = newData);
+        state.postUpcomming.metadata.page =
+          page + 1;
+        state.postUpcomming.metadata.total =
+          action.payload.response_data.metadata.total;
       })
       .addCase(getAllPostUpcomming.rejected, (state, action) => {
+        state.error = String(action.payload);
+        state.loading = false;
+      })
+      .addCase(getPostReOpen.pending, (state) => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(getPostReOpen.fulfilled, (state, action) => {
+        state.loading = false;
+        const newData = action.payload.response_data.data;
+        const page = Number(action.payload.query.Page);
+        page > 1
+          ? (state.postReOpen.data as DataPost).push(...newData)
+          : (state.postReOpen.data = newData);
+        state.postReOpen.metadata.page =
+          page + 1;
+        state.postReOpen.metadata.total =
+          action.payload.response_data.metadata.total;
+      })
+      .addCase(getPostReOpen.rejected, (state, action) => {
         state.error = String(action.payload);
         state.loading = false;
       })

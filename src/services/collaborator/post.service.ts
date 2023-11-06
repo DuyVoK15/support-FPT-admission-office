@@ -8,12 +8,14 @@ import FilterPostPayload from '../../dtos/collaborator/payload/filterPost.dto';
 export const postService = {
   getAllPost: (params: FilterPostPayload): Promise<AxiosResponse<PostDto>> => {
     const url = '/api/post/getAll';
-    console.log('Ahihi');
+    return axiosClient.get(url, {params});
+  },
+  getPostReOpen: (params: FilterPostPayload): Promise<AxiosResponse<PostDto>> => {
+    const url = '/api/post/getReOpen';
     return axiosClient.get(url, {params});
   },
   searchPostByPostCode: (searchPost: string): Promise<AxiosResponse<PostDto>> => {
     const url = '/api/post/search';
-    console.log('Ahihi');
     return axiosClient.get(url, {
       params: {
         searchPost,

@@ -13,7 +13,7 @@ export default interface ViewPostCategoryResponse {
       createAt: string;
       updateAt: string;
     },
-  ];
+  ] | [];
   isError: boolean;
   message: string;
 }

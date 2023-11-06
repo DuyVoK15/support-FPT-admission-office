@@ -1,8 +1,8 @@
 export default interface FilterPostPayload {
   DateFrom?: string;
   PostCategoryId?: number | null;
-  Page?: number;
-  PageSize?: number;
+  Page?: number | 1;
+  PageSize?: number | 0;
   Sort?: string;
   Status?: number;
 }

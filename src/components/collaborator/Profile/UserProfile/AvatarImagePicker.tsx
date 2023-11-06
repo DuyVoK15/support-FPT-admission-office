@@ -56,7 +56,6 @@ const AvatarImagePicker = (props: AvatarImageProps) => {
         const xhr = new XMLHttpRequest();
         xhr.onload = () => {
           resolve(xhr.response);
-          console.log('alo');
         };
         xhr.onerror = (e) => {
           reject(new TypeError('Network request failed!'));
@@ -65,17 +64,11 @@ const AvatarImagePicker = (props: AvatarImageProps) => {
         xhr.responseType = 'blob';
         xhr.open('GET', uri, true);
         xhr.send(null);
-        console.log('đã chạy vô blob');
       });
-      console.log('đã chạy vô blob2');
       const filename = imagePicker.substring(imagePicker.lastIndexOf('/') + 1);
-      console.log('đã chạy vô blob3');
       const storageRef = firebase.storage().ref();
-      console.log('đã chạy vô blob4');
       const ref = storageRef.child(filename);
-      console.log('đã chạy vô blob5', JSON.stringify(ref, null, 2));
       await ref.put(blob);
-      console.log('đã chạy vô blob6');
       storageRef
         .child(filename)
         .getDownloadURL()
