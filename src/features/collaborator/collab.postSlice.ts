@@ -6,14 +6,15 @@ import { AxiosError } from 'axios';
 import ViewPostCategoryResponse from '../../dtos/collaborator/response/viewPostCategory.dto';
 import FilterPostPayload from '../../dtos/collaborator/payload/filterPost.dto';
 import MetaDataPost from '../../models/collaborator/metaDataPost.model';
+import { DataCategory } from '../../models/collaborator/postCategory.model';
 
 interface PostState {
   post: PostDto;
   postUpcomming: PostDto;
   postReOpen: PostDto;
   postMissingSlot: PostDto;
-  metaDataPost: MetaDataPost;
   postCategory: ViewPostCategoryResponse;
+  postCategoryId: number | null;
   loading: boolean;
   error: string;
   // Thêm các trường khác liên quan đến người dùng nếu cần thiết
@@ -62,11 +63,6 @@ const initialState: PostState = {
     isError: false,
     message: '',
   },
-  metaDataPost: {
-    page: undefined,
-    size: undefined,
-    total: undefined,
-  },
   postCategory: {
     metadata: {
       page: 1,
@@ -77,6 +73,7 @@ const initialState: PostState = {
     isError: false,
     message: '',
   },
+  postCategoryId: null,
   loading: false,
   error: '',
 };
@@ -143,13 +140,12 @@ export const getAllPostMissingSlot = createAsyncThunk(
   }
 );
 
-export const getMetaDataPost = createAsyncThunk(
-  'post/getMetaData',
-  async (params: FilterPostPayload, { rejectWithValue }) => {
+export const getAllPostCategory = createAsyncThunk(
+  'post/category/getAll',
+  async (_, { rejectWithValue }) => {
     try {
-      console.log('Có vô post');
-      const response = await postService.getAllPost(params);
-      return response.data;
+      const response = await postService.getAllPostCategory();
+      return response.data.data;
     } catch (error: any) {
       const axiosError = error as AxiosError;
       return rejectWithValue(axiosError.response?.data);
@@ -157,12 +153,15 @@ export const getMetaDataPost = createAsyncThunk(
   }
 );
 
-export const getAllPostCategory = createAsyncThunk(
-  'post/category/getAll',
-  async (_, { rejectWithValue }) => {
+export const getPostCategoryIdById = createAsyncThunk(
+  'post/category/getId',
+  async (params: { Id: number | null }, { rejectWithValue }) => {
     try {
-      const response = await postService.getAllPostCategory();
-      return response.data;
+      if (params.Id === null) {
+        return null;
+      }
+      const response = await postService.getAllPostCategory(params);
+      return response.data.data[0]?.id;
     } catch (error: any) {
       const axiosError = error as AxiosError;
       return rejectWithValue(axiosError.response?.data);
@@ -212,8 +211,7 @@ export const postSlice = createSlice({
         page > 1
           ? (state.postUpcomming.data as DataPost).push(...newData)
           : (state.postUpcomming.data = newData);
-        state.postUpcomming.metadata.page =
-          page + 1;
+        state.postUpcomming.metadata.page = page + 1;
         state.postUpcomming.metadata.total =
           action.payload.response_data.metadata.total;
       })
@@ -232,8 +230,7 @@ export const postSlice = createSlice({
         page > 1
           ? (state.postReOpen.data as DataPost).push(...newData)
           : (state.postReOpen.data = newData);
-        state.postReOpen.metadata.page =
-          page + 1;
+        state.postReOpen.metadata.page = page + 1;
         state.postReOpen.metadata.total =
           action.payload.response_data.metadata.total;
       })
@@ -259,9 +256,31 @@ export const postSlice = createSlice({
       })
       .addCase(getAllPostCategory.fulfilled, (state, action) => {
         state.loading = false;
-        state.postCategory = action.payload;
+        const allCategory: DataCategory = {
+          id: null,
+          postCategoryDescription: 'All',
+          postCategoryType: 'ALL',
+          isActive: true,
+          createAt: '',
+          updateAt: '',
+        };
+
+        state.postCategory.data = [allCategory, ...action.payload];
       })
       .addCase(getAllPostCategory.rejected, (state, action) => {
+        state.error = String(action.payload);
+        state.loading = false;
+      })
+      .addCase(getPostCategoryIdById.pending, (state) => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(getPostCategoryIdById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.postCategoryId =
+          action.payload === null ? null : Number(action.payload);
+      })
+      .addCase(getPostCategoryIdById.rejected, (state, action) => {
         state.error = String(action.payload);
         state.loading = false;
       })

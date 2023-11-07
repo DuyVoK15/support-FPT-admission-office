@@ -8,13 +8,17 @@ import FilterPostPayload from '../../dtos/collaborator/payload/filterPost.dto';
 export const postService = {
   getAllPost: (params: FilterPostPayload): Promise<AxiosResponse<PostDto>> => {
     const url = '/api/post/getAll';
-    return axiosClient.get(url, {params});
+    return axiosClient.get(url, { params });
   },
-  getPostReOpen: (params: FilterPostPayload): Promise<AxiosResponse<PostDto>> => {
+  getPostReOpen: (
+    params: FilterPostPayload
+  ): Promise<AxiosResponse<PostDto>> => {
     const url = '/api/post/getReOpen';
-    return axiosClient.get(url, {params});
+    return axiosClient.get(url, { params });
   },
-  searchPostByPostCode: (searchPost: string): Promise<AxiosResponse<PostDto>> => {
+  searchPostByPostCode: (
+    searchPost: string
+  ): Promise<AxiosResponse<PostDto>> => {
     const url = '/api/post/search';
     return axiosClient.get(url, {
       params: {
@@ -22,8 +26,10 @@ export const postService = {
       },
     });
   },
-  getAllPostCategory: () : Promise<AxiosResponse<ViewPostCategoryResponse>> => {
+  getAllPostCategory: (params?: {
+    Id: number | null;
+  }): Promise<AxiosResponse<ViewPostCategoryResponse>> => {
     const url = '/api/admission/admission-post-category/getAll';
-    return axiosClient.get(url);
-  }
+    return axiosClient.get(url, { params });
+  },
 };

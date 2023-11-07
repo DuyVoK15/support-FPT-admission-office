@@ -1,19 +1,15 @@
+import { DataCategory } from "../../../models/collaborator/postCategory.model";
+
 export default interface ViewPostCategoryResponse {
   metadata: {
     page: number;
     size: number;
     total: number;
   };
-  data: [
-    {
-      id: number;
-      postCategoryDescription: string;
-      postCategoryType: string;
-      isActive: boolean;
-      createAt: string;
-      updateAt: string;
-    },
-  ] | [];
+  data: 
+    DataCategory[]
+ | [];
   isError: boolean;
   message: string;
 }
+

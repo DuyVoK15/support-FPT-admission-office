@@ -7,13 +7,15 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
 import { useAppDispatch } from '../../../../app/store';
 import {
   getAllPost,
+  getAllPostCategory,
   getAllPostUpcomming,
+  getPostCategoryIdById,
   searchPostByPostCode,
 } from '../../../../features/collaborator/collab.postSlice';
 import { useAppSelector } from '../../../../app/hooks';
@@ -25,19 +27,42 @@ import UpcommingPagination from '../../../../components/shared/Pagination/Upcomm
 import { imageNotFoundUri } from '../../../../utils/images';
 import CategoryFilterList from '../../../../components/collaborator/Home/CategoryFilterList';
 import PostDto from '../../../../dtos/collaborator/post.dto';
+import { COLORS } from '../../../../constants/Colors';
+import { MyContext } from '../../../../context/stateContext';
 
 const EventUpcomming: FC = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
+  
+  const context = useContext(MyContext);
+  if (context === null) {
+    // Handle the case when the context is null, e.g., provide a default value or throw an error.
+    return null;
+  }
+
+  const { id, setId } = context;
+  
   const dispatch = useAppDispatch();
-  const postList = useAppSelector((state) => state.collab_post.postUpcomming);
+  const postCategoryId = useAppSelector(
+    (state) => state.collab_post.postCategoryId
+  );
+  const postCategoryList = useAppSelector(
+    (state) => state.collab_post.postCategory
+  );
+  const fetchPostCategory = async () => {
+    try {
+      await dispatch(getAllPostCategory());
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const list = useAppSelector((state) => state.collab_post.postUpcomming.data);
   const page = useAppSelector(
     (state) => state.collab_post.postUpcomming.metadata.page
   );
-  console.log("object",page)
   const total = useAppSelector(
     (state) => state.collab_post.postUpcomming.metadata.total
   );
+  const postLoading = useAppSelector((state) => state.collab_post.loading);
   // const SIZE_PAGING = 8;
   // const [totalPost, setTotalPost] = useState<number | null>();
   // const remainder = Number(postList?.metadata?.total) % SIZE_PAGING;
@@ -97,46 +122,61 @@ const EventUpcomming: FC = () => {
 
   // Pagination scroll
 
-  const fetchPost = async () => {
+  const fetchPost = useCallback( async () => {
     try {
       await dispatch(
         getAllPostUpcomming({
           Page: 1,
           PageSize: 6,
+          PostCategoryId: id,
           Sort: 'CreateAt',
         })
       );
     } catch (error) {
       console.log('Lỗi khi tải dữ liệu', error);
     }
-  };
+  },[id]);
 
-  // Sử dụng useEffect để gọi API khi currentPage thay đổi
+  // Sử dụng useEffect để gọi API khi postCategoryId thay đổi
   useEffect(() => {
+    // Check
     fetchPost();
+  }, [fetchPost]);
+
+  useEffect(() => {
+    fetchPostCategory();
   }, []);
 
-  // Refresh fetch
+  // Refresh fetchPost()
   const [loading, setLoading] = useState<boolean>(false);
-  const onRefresh = useCallback(() => {
+  const onRefresh = useCallback(async () => {
+    await dispatch(getPostCategoryIdById({ Id: null }));
+    setId(null);
     setLoading(true);
     setTimeout(() => {
+      console.log('id: ', id);
       fetchPost();
       setLoading(false);
     }, 1000);
   }, []);
 
   const handleEndReached = async () => {
-    console.log('Vô endreached');
-    if((Number(page) - 1) * 6 < Number(total)) {
+    console.log("vô đây")
+
+    if ((Number(page) - 1) * 6 < Number(total)) {
       await dispatch(
-        getAllPostUpcomming({ Page: Number(page), PageSize: 6, Sort: 'CreateAt' })
+        getAllPostUpcomming({
+          Page: Number(page),
+          PageSize: 6,
+          PostCategoryId: id,
+          Sort: 'CreateAt',
+        })
       );
     }
-    
   };
 
   const renderLoadingFooter = () => {
+
     return (Number(page) - 1) * 6 < Number(total) ? (
       <View>
         <ActivityIndicator size={'large'} color={'red'} />
@@ -175,44 +215,18 @@ const EventUpcomming: FC = () => {
   };
 
   const renderItem = ({ item }: { item: Data }) => {
-    return <Item post={item} />;
+    return  <Item post={item} />;
   };
 
   return (
     <View style={styles.container}>
-      <FlatList
-        scrollEventThrottle={16}
-        data={list}
-        renderItem={renderItem}
-        numColumns={2}
-        columnWrapperStyle={{
-          flex: 1,
-          marginVertical: 5,
-          marginHorizontal: 15,
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          columnGap: cardGap - 2,
-          // rowGap: cardGap - 2,
-        }}
-        keyExtractor={(item, index) => index.toString()}
-        refreshControl={
-          <RefreshControl refreshing={loading} onRefresh={onRefresh} />
-        }
-        ListFooterComponent={renderLoadingFooter}
-        onEndReached={handleEndReached}
-      />
-
-      {/* <ScrollView
-        scrollEventThrottle={16}
-        onScroll={handleScroll}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      > */}
-      {/* <CategoryFilterList />
-        <View
-          style={{
+      
+        <FlatList
+          scrollEventThrottle={16}
+          data={list}
+          renderItem={renderItem}
+          numColumns={2}
+          columnWrapperStyle={{
             flex: 1,
             marginVertical: 5,
             marginHorizontal: 15,
@@ -220,40 +234,20 @@ const EventUpcomming: FC = () => {
             flexWrap: 'wrap',
             justifyContent: 'center',
             columnGap: cardGap - 2,
-            rowGap: cardGap - 2,
+            // rowGap: cardGap - 2,
           }}
-        >
-          {postList ? (
-            postList?.data?.map((post, index) => (
-              <View key={index}>
-                <EventCardWrap
-                  onPress={() => handleNavigate(post)}
-                  imageUrl={post?.postImg ? post?.postImg : imageNotFoundUri}
-                  title={
-                    post?.postCategory?.postCategoryDescription
-                      ? post?.postCategory?.postCategoryDescription
-                      : ''
-                  }
-                  dateTime={format_ISODateString_To_DayOfWeekMonthDDYYYY(
-                    post?.dateFrom ? post?.dateFrom : ''
-                  )}
-                  schoolName={post?.postPositions[0]?.schoolName}
-                  totalRegisterAmount={
-                    post?.registerAmount ? String(post?.registerAmount) : '0'
-                  }
-                  totalAmountPosition={
-                    post?.totalAmountPosition
-                      ? String(post?.totalAmountPosition)
-                      : '0'
-                  }
-                  status={post?.status}
-                />
-              </View>
-            ))
-          ) : (
-            <View />
-          )}
-        </View> */}
+          keyExtractor={(item, index) => index.toString()}
+          refreshControl={
+            <RefreshControl  refreshing={loading} onRefresh={onRefresh} />
+          }
+          ListEmptyComponent={<ActivityIndicator size={'large'} color={'purple'} />}
+          ListHeaderComponent={
+            <CategoryFilterList postCategoryList={postCategoryList} postCategoryId={postCategoryId} />
+          }
+          ListFooterComponent={renderLoadingFooter}
+          onEndReached={handleEndReached}
+          // onEndReachedThreshold={0.5}
+        />
 
       {/* {postList?.metadata && (
           <View>
