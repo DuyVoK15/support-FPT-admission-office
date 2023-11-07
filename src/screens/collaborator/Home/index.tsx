@@ -46,6 +46,7 @@ import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
 import FilterModal from '../../../components/collaborator/Home/FilterModal';
 import { SHADOWS } from '../../../constants/Shadows';
 import EventCardWrap from '../../../components/collaborator/Home/EventCardWrap';
+import { imageNotFoundUri } from '../../../utils/images';
 
 const Home = () => {
   const arrayTest = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -58,14 +59,15 @@ const Home = () => {
     const params = {
       Page: 1,
       PageSize: 20,
+      Sort: "CreateAt"
     };
     await dispatch(getAllPost(params)).then((res) => {
       console.log('Alo: ', JSON.stringify(res, null, 2));
     });
   };
-  // useEffect(() => {
-  //   fetchPost();
-  // }, []);
+  useEffect(() => {
+    fetchPost();
+  }, []);
 
   const postList = useAppSelector((state) => state.collab_post.post);
   const handleSearchPost = async (postCode: string) => {
@@ -363,14 +365,12 @@ const Home = () => {
             >
               {postList ? (
                 postList?.data
-                  ?.filter(
-                    (post) => post?.registerAmount < post?.totalAmountPosition
-                  )
+                  
                   .map((post, index) => (
                     <View key={index}>
                       <EventCardWrap
                         onPress={() => handleNavigate(post)}
-                        imageUrl={post?.postImg ? post?.postImg : imgUndefind}
+                        imageUrl={post?.postImg ? post?.postImg : imageNotFoundUri}
                         title={
                           post?.postCategory?.postCategoryDescription
                             ? post?.postCategory?.postCategoryDescription
