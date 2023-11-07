@@ -9,7 +9,8 @@ import MetaDataPost from '../../models/collaborator/metaDataPost.model';
 import { DataCategory } from '../../models/collaborator/postCategory.model';
 
 interface PostState {
-  post: PostDto;
+  postHomeUpcomming: PostDto;
+  postHomeReOpen: PostDto;
   postUpcomming: PostDto;
   postReOpen: PostDto;
   postMissingSlot: PostDto;
@@ -23,7 +24,17 @@ interface PostState {
 const intitialPage = 1;
 const ITEM_SIZE = 10;
 const initialState: PostState = {
-  post: {
+  postHomeUpcomming: {
+    metadata: {
+      page: intitialPage,
+      size: ITEM_SIZE,
+      total: 0,
+    },
+    data: [],
+    isError: false,
+    message: '',
+  },
+  postHomeReOpen: {
     metadata: {
       page: intitialPage,
       size: ITEM_SIZE,
@@ -85,6 +96,40 @@ export const getAllPost = createAsyncThunk(
       console.log('Có vô post');
       const response = await postService.getAllPost(params);
       return response.data;
+    } catch (error: any) {
+      const axiosError = error as AxiosError;
+      return rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+
+export const getHomePostUpcomming = createAsyncThunk(
+  'post/home-upcomming/getAll',
+  async (params: FilterPostPayload, { rejectWithValue }) => {
+    try {
+      console.log('Có vô post');
+      const response = await postService.getAllPost(params);
+      return {
+        response_data: response.data,
+        query: params,
+      };
+    } catch (error: any) {
+      const axiosError = error as AxiosError;
+      return rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+
+export const getHomePostReOpen = createAsyncThunk(
+  'post/home-reopen/getAll',
+  async (params: FilterPostPayload, { rejectWithValue }) => {
+    try {
+      console.log('Có vô post');
+      const response = await postService.getPostReOpen(params);
+      return {
+        response_data: response.data,
+        query: params,
+      };
     } catch (error: any) {
       const axiosError = error as AxiosError;
       return rejectWithValue(axiosError.response?.data);
@@ -188,15 +233,27 @@ export const postSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getAllPost.pending, (state) => {
+      .addCase(getHomePostUpcomming.pending, (state) => {
         state.loading = true;
         state.error = '';
       })
-      .addCase(getAllPost.fulfilled, (state, action) => {
+      .addCase(getHomePostUpcomming.fulfilled, (state, action) => {
         state.loading = false;
-        state.post = action.payload;
+        state.postHomeUpcomming = action.payload.response_data;
       })
-      .addCase(getAllPost.rejected, (state, action) => {
+      .addCase(getHomePostUpcomming.rejected, (state, action) => {
+        state.error = String(action.payload);
+        state.loading = false;
+      })
+      .addCase(getHomePostReOpen.pending, (state) => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(getHomePostReOpen.fulfilled, (state, action) => {
+        state.loading = false;
+        state.postHomeReOpen = action.payload.response_data;
+      })
+      .addCase(getHomePostReOpen.rejected, (state, action) => {
         state.error = String(action.payload);
         state.loading = false;
       })
@@ -290,7 +347,7 @@ export const postSlice = createSlice({
       })
       .addCase(searchPostByPostCode.fulfilled, (state, action) => {
         state.loading = false;
-        state.post = action.payload;
+        state.postHomeUpcomming = action.payload;
       })
       .addCase(searchPostByPostCode.rejected, (state, action) => {
         state.error = String(action.payload);
