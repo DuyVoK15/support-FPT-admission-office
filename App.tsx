@@ -33,6 +33,7 @@ import {
 } from '@expo/vector-icons';
 import usePushNotifications from './usePushNotifications';
 import { AlertNotificationRoot } from 'react-native-alert-notification';
+import { MyContextProvider } from './src/context/stateContext';
 
 export default function App() {
   const [fontsLoaded, fontError] = useFonts({
@@ -74,10 +75,12 @@ export default function App() {
           swipeEnabled={true}
         >
           <Provider store={store}>
-            <NavigationContainer>
-              <AppNavigator />
-              <StatusBar backgroundColor="transparent" translucent={true} />
-            </NavigationContainer>
+            <MyContextProvider>
+              <NavigationContainer>
+                <AppNavigator />
+                <StatusBar backgroundColor="transparent" translucent={true} />
+              </NavigationContainer>
+            </MyContextProvider>
           </Provider>
         </ToastProvider>
       </AlertNotificationRoot>
