@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Platform, Text, View, StyleSheet } from 'react-native';
 import Device from 'expo-device';
 import * as Location from 'expo-location';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 
 export default function Map() {
   const [location, setLocation] = useState<Location.LocationObject | null>(
@@ -12,12 +12,9 @@ export default function Map() {
 
   useEffect(() => {
     (async () => {
-      if (Platform.OS === 'android' && !Device.isDevice) {
-        setErrorMsg(
-          'Oops, this will not work on Snack in an Android Emulator. Try it on your device!'
-        );
-        return;
-      }
+      // if (Platform.OS === 'android') {
+      //   Location.setGoogleApiKey;
+      // }
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         setErrorMsg('Permission to access location was denied');
@@ -40,6 +37,7 @@ export default function Map() {
   return (
     <View style={styles.container}>
       <MapView
+        // provider={PROVIDER_GOOGLE}
         initialRegion={{
           latitude: 37.78825,
           longitude: -122.4324,
@@ -49,7 +47,14 @@ export default function Map() {
         style={styles.map}
       >
         <Marker
-          coordinate={{ latitude: location?.coords?.latitude ? location?.coords?.latitude : 0 , longitude: location?.coords?.longitude ?location?.coords?.longitude:0 }}
+          coordinate={{
+            latitude: location?.coords?.latitude
+              ? location?.coords?.latitude
+              : 0,
+            longitude: location?.coords?.longitude
+              ? location?.coords?.longitude
+              : 0,
+          }}
           image={require('../../../assets/Images/ic_location.png')}
         />
       </MapView>
