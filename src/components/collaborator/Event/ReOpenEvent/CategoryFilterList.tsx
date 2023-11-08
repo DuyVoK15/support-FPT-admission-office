@@ -6,12 +6,12 @@ import {
   View,
 } from 'react-native';
 import React, { FC, useContext, useEffect, useState } from 'react';
-import { FONTS_FAMILY } from '../../../constants/Fonts';
-import { useAppSelector } from '../../../app/hooks';
-import ViewPostCategoryResponse from '../../../dtos/collaborator/response/viewPostCategory.dto';
-import { useAppDispatch } from '../../../app/store';
-import { getPostCategoryIdById } from '../../../features/collaborator/collab.postSlice';
-import { MyContext } from '../../../context/stateContext';
+import { FONTS_FAMILY } from '../../../../constants/Fonts';
+import { useAppSelector } from '../../../../app/hooks';
+import ViewPostCategoryResponse from '../../../../dtos/collaborator/response/viewPostCategory.dto';
+import { useAppDispatch } from '../../../../app/store';
+import { getPostCategoryIdById } from '../../../../features/collaborator/collab.postSlice';
+import { MyContext } from '../../../../context/stateContext';
 
 interface CategoryFilterListProps {
   postCategoryList: ViewPostCategoryResponse;

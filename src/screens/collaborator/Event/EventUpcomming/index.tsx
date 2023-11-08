@@ -25,7 +25,7 @@ import { format_ISODateString_To_DayOfWeekMonthDDYYYY } from '../../../../utils/
 import EventCardWrap from '../../../../components/collaborator/Home/EventCardWrap';
 import UpcommingPagination from '../../../../components/shared/Pagination/UpcommingPagination';
 import { imageNotFoundUri } from '../../../../utils/images';
-import CategoryFilterList from '../../../../components/collaborator/Home/CategoryFilterList';
+import CategoryFilterList from '../../../../components/collaborator/Event/UpcommingEvent/CategoryFilterList';
 import PostDto from '../../../../dtos/collaborator/post.dto';
 import { COLORS } from '../../../../constants/Colors';
 import { MyContext } from '../../../../context/stateContext';

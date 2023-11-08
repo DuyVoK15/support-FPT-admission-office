@@ -7,6 +7,7 @@ import { FONTS_FAMILY } from '../../../constants/Fonts';
 import EventUpcommingTab from './EventTab/EventUpcommingTab';
 import EventMissingSlotTab from './EventTab/EventMissingSlotTab';
 import { HomeCollaboratorStackNavigatorParamList } from '../../../../type';
+import EventReOpenTab from './EventTab/EventReOpenTab';
 
 const EventTab =
   createMaterialTopTabNavigator<HomeCollaboratorStackNavigatorParamList>();
@@ -51,8 +52,8 @@ const EventTopTabs = () => {
         }}
       />
       <EventTab.Screen
-        name={'EVENT_MISSING_SLOT'}
-        component={EventMissingSlotTab}
+        name={'EVENT_REOPEN'}
+        component={EventReOpenTab}
         options={{
           tabBarStyle: {
             // marginTop: 50,

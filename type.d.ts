@@ -17,6 +17,7 @@ export type HomeCollaboratorStackNavigatorParamList = {
   EVENT_DETAIL: undefined;
   EVENT_UPCOMMING: undefined;
   EVENT_MISSING_SLOT: undefined;
+  EVENT_REOPEN: undefined;
   PROFILE: undefined;
   PROFILE_SIGNUP: undefined;
   CERTIFICATE_HISTORY: undefined;
@@ -43,6 +44,7 @@ export type HomeCollaboratorScreenNavigationProp = NativeStackScreenProps<
   EVENT_DETAIL,
   EVENT_UPCOMMING,
   EVENT_MISSING_SLOT,
+  EVENT_REOPEN,
   MAP,
   MAP_STACK_NAVIGATOR,
   REGISTRATION,
