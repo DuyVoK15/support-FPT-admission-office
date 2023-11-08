@@ -27,6 +27,8 @@ import { FONTS_FAMILY } from '../../../constants/Fonts';
 import { useAppDispatch } from '../../../app/store';
 import {
   getAllPost,
+  getHomePostReOpen,
+  getHomePostUpcomming,
   searchPostByPostCode,
 } from '../../../features/collaborator/collab.postSlice';
 import { useAppSelector } from '../../../app/hooks';
@@ -59,17 +61,26 @@ const Home = () => {
     const params = {
       Page: 1,
       PageSize: 20,
-      Sort: "CreateAt"
+      Sort: 'CreateAt',
     };
-    await dispatch(getAllPost(params)).then((res) => {
-      console.log('Alo: ', JSON.stringify(res, null, 2));
+    await dispatch(getHomePostUpcomming(params)).then((res) => {
+      // console.log('Alo: ', JSON.stringify(res, null, 2));
+    });
+    await dispatch(getHomePostReOpen(params)).then((res) => {
+      // console.log('Alo: ', JSON.stringify(res, null, 2));
     });
   };
   useEffect(() => {
     fetchPost();
   }, []);
 
-  const postList = useAppSelector((state) => state.collab_post.post);
+  const postHomeUpcommingList = useAppSelector(
+    (state) => state.collab_post.postHomeUpcomming
+  );
+  const postHomeReOpenList = useAppSelector(
+    (state) => state.collab_post.postHomeReOpen
+  );
+
   const handleSearchPost = async (postCode: string) => {
     await dispatch(searchPostByPostCode(postCode)).then((res) => {
       // console.log(JSON.stringify(res, null, 2));
@@ -138,19 +149,21 @@ const Home = () => {
                 </Text>
               </View>
             </View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('HOME_NOTIFICATION')}
-              style={{
-                width: 40,
-                height: 40,
-                backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                justifyContent: 'center',
-                alignItems: 'center',
-                borderRadius: 100,
-              }}
-            >
-              <Ionicons name="notifications" size={30} color="white" />
-            </TouchableOpacity>
+            <View style={{flex: 1, alignItems: "flex-end"}}>         
+              <TouchableOpacity
+                onPress={() => navigation.navigate('HOME_NOTIFICATION')}
+                style={{
+                  width: 40,
+                  height: 40,
+                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: 100,
+                }}
+              >
+                <Ionicons name="notifications" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
           </View>
 
           <View
@@ -266,8 +279,8 @@ const Home = () => {
 
           <View style={{ height: ScreenWidth * 0.85, marginTop: 20 }}>
             <ScrollView horizontal scrollEventThrottle={16}>
-              {postList ? (
-                postList?.data?.map((post, index) => (
+              {postHomeUpcommingList ? (
+                postHomeUpcommingList?.data?.map((post, index) => (
                   <View
                     key={index}
                     style={{ marginTop: 5, marginHorizontal: 15 }}
@@ -363,36 +376,36 @@ const Home = () => {
                 rowGap: cardGap - 2,
               }}
             >
-              {postList ? (
-                postList?.data
-                  
-                  .map((post, index) => (
-                    <View key={index}>
-                      <EventCardWrap
-                        onPress={() => handleNavigate(post)}
-                        imageUrl={post?.postImg ? post?.postImg : imageNotFoundUri}
-                        title={
-                          post?.postCategory?.postCategoryDescription
-                            ? post?.postCategory?.postCategoryDescription
-                            : ''
-                        }
-                        dateTime={format_ISODateString_To_DayOfWeekMonthDDYYYY(
-                          post?.dateFrom ? post?.dateFrom : ''
-                        )}
-                        schoolName={post?.postPositions[0]?.schoolName}
-                        totalRegisterAmount={
-                          post?.registerAmount
-                            ? String(post?.registerAmount)
-                            : '0'
-                        }
-                        totalAmountPosition={
-                          post?.totalAmountPosition
-                            ? String(post?.totalAmountPosition)
-                            : '0'
-                        }
-                      />
-                    </View>
-                  ))
+              {postHomeReOpenList ? (
+                postHomeReOpenList?.data.map((post, index) => (
+                  <View key={index}>
+                    <EventCardWrap
+                      onPress={() => handleNavigate(post)}
+                      imageUrl={
+                        post?.postImg ? post?.postImg : imageNotFoundUri
+                      }
+                      title={
+                        post?.postCategory?.postCategoryDescription
+                          ? post?.postCategory?.postCategoryDescription
+                          : ''
+                      }
+                      dateTime={format_ISODateString_To_DayOfWeekMonthDDYYYY(
+                        post?.dateFrom ? post?.dateFrom : ''
+                      )}
+                      schoolName={post?.postPositions[0]?.schoolName}
+                      totalRegisterAmount={
+                        post?.registerAmount
+                          ? String(post?.registerAmount)
+                          : '0'
+                      }
+                      totalAmountPosition={
+                        post?.totalAmountPosition
+                          ? String(post?.totalAmountPosition)
+                          : '0'
+                      }
+                    />
+                  </View>
+                ))
               ) : (
                 <View />
               )}
