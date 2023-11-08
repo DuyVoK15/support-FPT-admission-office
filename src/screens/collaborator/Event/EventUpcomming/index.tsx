@@ -30,17 +30,18 @@ import PostDto from '../../../../dtos/collaborator/post.dto';
 import { COLORS } from '../../../../constants/Colors';
 import { MyContext } from '../../../../context/stateContext';
 
+const PAGE_SIZE_DEFAULT = 30;
 const EventUpcomming: FC = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
-  
+
   const context = useContext(MyContext);
   if (context === null) {
     // Handle the case when the context is null, e.g., provide a default value or throw an error.
     return null;
   }
 
-  const { id, setId } = context;
-  
+  const { postUpcommingCategoryId, setPostUpcommingCategoryId } = context;
+
   const dispatch = useAppDispatch();
   const postCategoryId = useAppSelector(
     (state) => state.collab_post.postCategoryId
@@ -122,53 +123,53 @@ const EventUpcomming: FC = () => {
 
   // Pagination scroll
 
-  const fetchPost = useCallback( async () => {
+  const fetchPost = async () => {
     try {
       await dispatch(
         getAllPostUpcomming({
           Page: 1,
-          PageSize: 6,
-          PostCategoryId: id,
+          PageSize: PAGE_SIZE_DEFAULT,
+          PostCategoryId: postUpcommingCategoryId,
           Sort: 'CreateAt',
         })
       );
     } catch (error) {
       console.log('Lỗi khi tải dữ liệu', error);
     }
-  },[id]);
-
+  };
+  const [loading, setLoading] = useState<boolean>(false);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
   // Sử dụng useEffect để gọi API khi postCategoryId thay đổi
   useEffect(() => {
     // Check
     fetchPost();
-  }, [fetchPost]);
+  }, [refreshing, postUpcommingCategoryId]);
 
   useEffect(() => {
     fetchPostCategory();
   }, []);
 
   // Refresh fetchPost()
-  const [loading, setLoading] = useState<boolean>(false);
   const onRefresh = useCallback(async () => {
-    await dispatch(getPostCategoryIdById({ Id: null }));
-    setId(null);
     setLoading(true);
     setTimeout(() => {
-      console.log('id: ', id);
-      fetchPost();
+      console.log('id: ', postUpcommingCategoryId);
+      setRefreshing(!refreshing);
+
+      setPostUpcommingCategoryId(null);
       setLoading(false);
     }, 1000);
   }, []);
 
   const handleEndReached = async () => {
-    console.log("vô đây")
+    console.log('vô đây');
 
-    if ((Number(page) - 1) * 6 < Number(total)) {
+    if ((Number(page) - 1) * PAGE_SIZE_DEFAULT < Number(total)) {
       await dispatch(
         getAllPostUpcomming({
           Page: Number(page),
-          PageSize: 6,
-          PostCategoryId: id,
+          PageSize: PAGE_SIZE_DEFAULT,
+          PostCategoryId: postUpcommingCategoryId,
           Sort: 'CreateAt',
         })
       );
@@ -176,8 +177,7 @@ const EventUpcomming: FC = () => {
   };
 
   const renderLoadingFooter = () => {
-
-    return (Number(page) - 1) * 6 < Number(total) ? (
+    return (Number(page) - 1) * PAGE_SIZE_DEFAULT < Number(total) ? (
       <View>
         <ActivityIndicator size={'large'} color={'red'} />
       </View>
@@ -215,39 +215,44 @@ const EventUpcomming: FC = () => {
   };
 
   const renderItem = ({ item }: { item: Data }) => {
-    return  <Item post={item} />;
+    return <Item post={item} />;
   };
 
   return (
     <View style={styles.container}>
-      
-        <FlatList
-          scrollEventThrottle={16}
-          data={list}
-          renderItem={renderItem}
-          numColumns={2}
-          columnWrapperStyle={{
-            flex: 1,
-            marginVertical: 5,
-            marginHorizontal: 15,
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            columnGap: cardGap - 2,
-            // rowGap: cardGap - 2,
-          }}
-          keyExtractor={(item, index) => index.toString()}
-          refreshControl={
-            <RefreshControl  refreshing={loading} onRefresh={onRefresh} />
-          }
-          ListEmptyComponent={<ActivityIndicator size={'large'} color={'purple'} />}
-          ListHeaderComponent={
-            <CategoryFilterList postCategoryList={postCategoryList} postCategoryId={postCategoryId} />
-          }
-          ListFooterComponent={renderLoadingFooter}
-          onEndReached={handleEndReached}
-          // onEndReachedThreshold={0.5}
-        />
+      <FlatList
+        scrollEventThrottle={16}
+        data={list}
+        // extraData={list}
+        renderItem={renderItem}
+        numColumns={2}
+        columnWrapperStyle={{
+          flex: 1,
+          marginVertical: 5,
+          marginHorizontal: 15,
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          columnGap: cardGap - 2,
+          // rowGap: cardGap - 2,
+        }}
+        keyExtractor={(item, index) => index.toString()}
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+        }
+        ListEmptyComponent={
+          <ActivityIndicator size={'large'} color={'purple'} />
+        }
+        ListHeaderComponent={
+          <CategoryFilterList
+            postCategoryList={postCategoryList}
+            postCategoryId={postCategoryId}
+          />
+        }
+        ListFooterComponent={renderLoadingFooter}
+        onEndReached={handleEndReached}
+        // onEndReachedThreshold={0.5}
+      />
 
       {/* {postList?.metadata && (
           <View>

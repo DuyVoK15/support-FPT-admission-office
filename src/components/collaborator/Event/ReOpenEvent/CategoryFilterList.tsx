@@ -24,9 +24,9 @@ const CategoryFilterList: FC<CategoryFilterListProps> = (props) => {
     // Handle the case when the context is null, e.g., provide a default value or throw an error.
     return null;
   }
-  const { id, setId } = context;
+  const { postReOpenCategoryId, setPostReOpenCategoryId } = context;
   const getPostCategoryId = async (Id: number | null) => {
-    setId(Id);
+    setPostReOpenCategoryId(Id);
     // await dispatch(getPostCategoryIdById({ Id })).then((res) => {
     //   console.log(JSON.stringify(res, null, 2));
     // });
@@ -47,7 +47,7 @@ const CategoryFilterList: FC<CategoryFilterListProps> = (props) => {
                 style={{
                   borderWidth: 3,
                   borderColor: '#FF930F',
-                  backgroundColor: id === category?.id ? '#FF930F' : '#FFF',
+                  backgroundColor: postReOpenCategoryId === category?.id ? '#FF930F' : '#FFF',
                   marginRight: 10,
                   borderRadius: 20,
                 }}
@@ -56,7 +56,7 @@ const CategoryFilterList: FC<CategoryFilterListProps> = (props) => {
                   <Text
                     style={{
                       fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
-                      color: id === category?.id ? '#FFF' : '#FF930F',
+                      color: postReOpenCategoryId === category?.id ? '#FFF' : '#FF930F',
                     }}
                   >
                     {category?.postCategoryDescription}

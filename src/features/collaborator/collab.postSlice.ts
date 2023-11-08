@@ -141,7 +141,7 @@ export const getAllPostUpcomming = createAsyncThunk(
   'post/upcomming/getAll',
   async (params: FilterPostPayload, { rejectWithValue }) => {
     try {
-      console.log('Có vô post');
+      console.log('Có vô getAllPostUpcomming');
       const response = await postService.getAllPost(params);
       return {
         response_data: response.data,
@@ -158,7 +158,7 @@ export const getPostReOpen = createAsyncThunk(
   'post/reopen/getAll',
   async (params: FilterPostPayload, { rejectWithValue }) => {
     try {
-      console.log('Có vô post');
+      console.log('Có vô getPostReOpen');
       const response = await postService.getPostReOpen(params);
       return {
         response_data: response.data,
@@ -175,7 +175,7 @@ export const getAllPostMissingSlot = createAsyncThunk(
   'post/missingSlot/getAll',
   async (params: FilterPostPayload, { rejectWithValue }) => {
     try {
-      console.log('Có vô post');
+      // console.log('Có vô post');
       const response = await postService.getAllPost(params);
       return response.data;
     } catch (error: any) {

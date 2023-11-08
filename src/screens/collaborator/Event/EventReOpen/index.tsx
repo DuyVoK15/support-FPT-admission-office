@@ -41,7 +41,7 @@ const EventReOpen: FC = () => {
     return null;
   }
 
-  const { id, setId } = context;
+  const { postReOpenCategoryId, setPostReOpenCategoryId } = context;
   
   const dispatch = useAppDispatch();
   const postCategoryId = useAppSelector(
@@ -78,26 +78,26 @@ const EventReOpen: FC = () => {
 
   // Pagination scroll
 
-  const fetchPost = useCallback( async () => {
+  const fetchPost = async () => {
     try {
       await dispatch(
         getPostReOpen({
           Page: 1,
           PageSize: 6,
-          PostCategoryId: id,
+          PostCategoryId: postReOpenCategoryId,
           Sort: 'CreateAt',
         })
       );
     } catch (error) {
       console.log('Lỗi khi tải dữ liệu', error);
     }
-  },[id]);
+  };
 
   // Sử dụng useEffect để gọi API khi postCategoryId thay đổi
   useEffect(() => {
     // Check
     fetchPost();
-  }, [fetchPost]);
+  }, [postReOpenCategoryId]);
 
   useEffect(() => {
     fetchPostCategory();
@@ -107,10 +107,10 @@ const EventReOpen: FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const onRefresh = useCallback(async () => {
     await dispatch(getPostCategoryIdById({ Id: null }));
-    setId(null);
+    setPostReOpenCategoryId(null);
     setLoading(true);
     setTimeout(() => {
-      console.log('id: ', id);
+      console.log('id: ', postReOpenCategoryId);
       fetchPost();
       setLoading(false);
     }, 1000);
@@ -124,7 +124,7 @@ const EventReOpen: FC = () => {
         getPostReOpen({
           Page: Number(page),
           PageSize: 6,
-          PostCategoryId: id,
+          PostCategoryId: postReOpenCategoryId,
           Sort: 'CreateAt',
         })
       );
