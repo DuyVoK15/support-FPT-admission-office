@@ -30,7 +30,7 @@ import {
 } from '../../../features/collaborator/collab.postRegistrationSlice';
 import { getAllPost } from '../../../features/collaborator/collab.postSlice';
 import { Data } from '../../../models/collaborator/dataPost.model';
-import CreatePostRegistrationDto from '../../../dtos/collaborator/payload/createPostRegistration.dto';
+import CreatePostRegistrationDto from '../../../dtos/collaborator/parameter/createPostRegistration.dto';
 import CreatePostRegistrationResponse from '../../../dtos/collaborator/response/createPostRegistration.dto';
 import ErrorStatus from '../../../dtos/collaborator/response/errorStatus.dto';
 import ConfirmAlert from '../../../components/shared/AwesomeAlert/ConfirmAlert';
@@ -165,7 +165,7 @@ const PositionRegistration = () => {
                       <Text style={styles.textPositionNum}>
                         Vị trí {index + 1}: {''}
                         <Text style={styles.textPositionNum_2}>
-                          {position ? position?.positionName : 'No value'}
+                          {position?.positionName ? position?.positionName : 'No value'}
                         </Text>
                       </Text>
                     </View>

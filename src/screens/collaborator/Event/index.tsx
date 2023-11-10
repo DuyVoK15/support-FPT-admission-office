@@ -2,7 +2,7 @@ import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { useAppDispatch } from '../../../app/store';
 import { searchPostByPostCode } from '../../../features/collaborator/collab.postSlice';
-import UpdateAvatarDto from '../../../dtos/collaborator/payload/updateAvatar.dto';
+import UpdateAvatarDto from '../../../dtos/collaborator/parameter/updateAvatar.dto';
 import { collab_updateAvatar } from '../../../features/collaborator/collab.accountSlice';
 import Header from '../../../components/shared/Header/Back';
 import { ScreenHeight } from '../../../constants/Demesions';

@@ -6,7 +6,7 @@ import {
 import { AccountInfoSignup } from '../../models/collaborator/account.model';
 import { AxiosError } from 'axios';
 import { accountService } from '../../services/collaborator/account.service';
-import UpdateAvatarDto from '../../dtos/collaborator/payload/updateAvatar.dto';
+import UpdateAvatarDto from '../../dtos/collaborator/parameter/updateAvatar.dto';
 import GetUserInfoDto from '../../dtos/collaborator/getUserInfo.dto';
 import StatusInfo from '../../models/collaborator/statusInfo.model';
 import { useState } from 'react';

@@ -3,10 +3,10 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import ViewPostRegistrationDto from '../../dtos/collaborator/response/viewPostRegistration.dto';
 import CreatePostRegistrationResponse from '../../dtos/collaborator/response/createPostRegistration.dto';
-import DeletePostRegistraionResponse from '../../dtos/collaborator/response/deletePostRegistration.dto';
+import DeletePostRegistraionResponse from '../../dtos/collaborator/response/cancelPostRegistration.dto';
 import UpdatePostRegistrationResponse from '../../dtos/collaborator/response/updatePostRegistration.dto';
-import CreatePostRegistrationDto from '../../dtos/collaborator/payload/createPostRegistration.dto';
-import UpdatePostRegistrationPayload from '../../dtos/collaborator/payload/updatePostRegistration.dto';
+import CreatePostRegistrationDto from '../../dtos/collaborator/parameter/createPostRegistration.dto';
+import UpdatePostRegistrationPayload from '../../dtos/collaborator/parameter/updatePostRegistration.dto';
 
 interface PostRegistrationState {
   postRegistration: ViewPostRegistrationDto | null;

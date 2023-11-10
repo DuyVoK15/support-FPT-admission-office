@@ -34,6 +34,7 @@ import {
 import usePushNotifications from './usePushNotifications';
 import { AlertNotificationRoot } from 'react-native-alert-notification';
 import { MyContextProvider } from './src/context/stateContext';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function App() {
   const [fontsLoaded, fontError] = useFonts({
@@ -77,8 +78,10 @@ export default function App() {
           <Provider store={store}>
             <MyContextProvider>
               <NavigationContainer>
-                <AppNavigator />
-                <StatusBar backgroundColor="transparent" translucent={true} />
+                <SafeAreaProvider>
+                  <AppNavigator />
+                  <StatusBar backgroundColor="transparent" translucent={true} />
+                </SafeAreaProvider>
               </NavigationContainer>
             </MyContextProvider>
           </Provider>

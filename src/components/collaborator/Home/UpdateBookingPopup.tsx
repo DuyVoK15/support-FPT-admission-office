@@ -1,6 +1,8 @@
 import {
   Button,
   Image,
+  SafeAreaView,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -46,6 +48,12 @@ export function usePagerScrollHandler(handlers: any, dependencies?: any) {
 
 const UpdateBookingPopup = () => {
   const dispatch = useAppDispatch();
+  const testList = [
+    { id: 1, name: 'Duy' },
+    { id: 2, name: 'Hải' },
+    { id: 3, name: 'Phúc' },
+    { id: 4, name: 'Nhân' },
+  ];
   const postRegistrationList = useAppSelector(
     (state) => state.collab_postRegistration.postRegistration
   );
@@ -79,7 +87,8 @@ const UpdateBookingPopup = () => {
     },
   });
   return (
-    <View style={{ flex: 1, marginHorizontal: 5 }}>
+    <View style={{ marginHorizontal: 5 }}>
+      <StatusBar backgroundColor="transparent" translucent={true} />
       <TouchableOpacity onPress={toggleModal}>
         <LinearGradient
           colors={['#00b09b', '#96c93d']}
@@ -131,7 +140,7 @@ const UpdateBookingPopup = () => {
             }}
             onPageScroll={handler}
           >
-            {postRegistrationList?.data.map((registration, index) => (
+            {testList?.map((obj, index) => (
               <View
                 key={index}
                 style={{
@@ -150,14 +159,24 @@ const UpdateBookingPopup = () => {
                     }}
                   />
                 </View>
-                <View>
+                <View style={{ marginHorizontal: 15 }}>
                   <Button title="Hide modal" onPress={toggleModal} />
+                  <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flexDirection: 'row' }}>
+                      <Text style={{fontFamily: FONTS_FAMILY.Ubuntu_500Medium, fontSize: 15}}>Registration Date: </Text>
+                      <Text>Tuesday, 15 November 2023</Text>
+                    </View>
+                  </View>
                 </View>
               </View>
             ))}
           </AnimatedPager>
-          <View style={{ height: 200, backgroundColor: 'green' }}>
-            <Progress.Bar progress={numberPage/8} color='red' width={ScreenWidth} />
+          <View style={{ height: 100, backgroundColor: 'green' }}>
+            <Progress.Bar
+              progress={numberPage / 3}
+              color="red"
+              width={ScreenWidth}
+            />
           </View>
         </View>
       </ReactNativeModal>

@@ -1,14 +1,15 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { ActivityIndicator } from 'react-native'
 
-const Loading = () => {
+const LoadingScreen = () => {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Loading........</Text>
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <ActivityIndicator size={"large"} color={'orange'} />
     </View>
   )
 }
 
-export default Loading
+export default LoadingScreen;
 
 const styles = StyleSheet.create({})

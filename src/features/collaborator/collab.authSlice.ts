@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit';
-
 import { authService } from '../../services/collaborator/auth.service';
 import { AxiosError } from 'axios';
 import { RootState } from '../../app/store';
@@ -9,12 +8,18 @@ import auth from '@react-native-firebase/auth';
 import { UserInfo } from '../../models/collaborator/userInfo.model';
 import UserInfoLogin from '../../models/collaborator/userInfoLogin.model';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import LoadAuthStateResponse from '../../dtos/collaborator/response/loadAuthState.dto';
+
+GoogleSignin.configure({});
 
 interface AuthState {
   isAuthenticated: boolean;
   role: number;
   userInfoLogin: UserInfoLogin | null;
   userInfo: UserInfo | null;
+  user_loading: boolean;
+  auth_loading: boolean;
+  load_auth_state_loading: boolean;
   loading: boolean;
   error: string;
 }
@@ -23,6 +28,9 @@ const initialState: AuthState = {
   role: -1,
   userInfoLogin: null,
   userInfo: null,
+  user_loading: true,
+  auth_loading: false,
+  load_auth_state_loading: true,
   loading: false,
   error: '',
 };
@@ -36,7 +44,7 @@ export const collab_loginGoogle = createAsyncThunk(
         idToken: JWT,
         expoPushToken: '',
       });
-      console.log('<AuthSlice> ResData: ', JSON.stringify(result.data.data));
+      // console.log('<AuthSlice> ResData: ', JSON.stringify(result.data.data));
       await AsyncStorage.setItem(
         AppConstants.ACCESS_TOKEN,
         result.data.data.access_token
@@ -61,6 +69,82 @@ export const collab_getUserInfo = createAsyncThunk(
     } catch (error: any) {
       const axiosError = error as AxiosError;
       console.log(error);
+      return rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+
+export const resetUserLoading = createAsyncThunk(
+  'auth/resetUserLoading',
+  async (_, { rejectWithValue }) => {
+    try {
+      return true;
+    } catch (error: any) {
+      const axiosError = error as AxiosError;
+      console.log(error);
+      return rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+
+export const collab_reloadGetUserInfo = createAsyncThunk(
+  'auth/reloadGetUserInfo',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await authService.collab_getUserInfo();
+      return response.data.data;
+    } catch (error: any) {
+      const axiosError = error as AxiosError;
+      console.log(error);
+      return rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+
+export const collab_logout = createAsyncThunk(
+  'auth/logout',
+  async (params: { expoToken: string }, { rejectWithValue }) => {
+    try {
+      console.log('Có vô logout');
+      await auth()
+        .signOut()
+        .then(() => console.log('Current user signed out!'));
+      await AsyncStorage.removeItem(AppConstants.ACCESS_TOKEN);
+      await AsyncStorage.removeItem(AppConstants.ID_TOKEN);
+      await AsyncStorage.removeItem(AppConstants.USER_INFO);
+      // await GoogleSignin.revokeAccess();
+      await GoogleSignin.signOut().then(() => {
+        console.log('Google sign out!');
+      });
+      // const response = await authService.collab_logout(params);
+
+      return true;
+    } catch (error: any) {
+      const axiosError = error as AxiosError;
+      console.log('<Collab_logout>: ', error);
+      return rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+
+export const collab_loadAuthState = createAsyncThunk(
+  'auth/loadAuthState',
+  async (_, { rejectWithValue }) => {
+    try {
+      const accessToken = await AsyncStorage.getItem(AppConstants.ACCESS_TOKEN);
+      const roleId = await AsyncStorage.getItem(AppConstants.ROLE_ID);
+      if (accessToken) {
+        return {
+          isAuthenticated: true,
+          roleId: roleId,
+        } as LoadAuthStateResponse;
+      }
+      return {
+        isAuthenticated: false,
+        roleId: -1,
+      } as LoadAuthStateResponse;
+    } catch (error) {
+      const axiosError = error as AxiosError;
       return rejectWithValue(axiosError.response?.data);
     }
   }
@@ -105,8 +189,8 @@ export const admission_getUserInfo = createAsyncThunk(
   }
 );
 
-export const collab_logout = createAsyncThunk(
-  'auth/logout',
+export const admission_logout = createAsyncThunk(
+  'auth-admission/logout',
   async (params: { expoToken: string }, { rejectWithValue }) => {
     try {
       console.log('Có vô logout');
@@ -115,34 +199,17 @@ export const collab_logout = createAsyncThunk(
         .then(() => console.log('Current user signed out!'));
       await AsyncStorage.removeItem(AppConstants.ACCESS_TOKEN);
       await AsyncStorage.removeItem(AppConstants.ID_TOKEN);
-      await AsyncStorage.removeItem('userInfo');
+      await AsyncStorage.removeItem(AppConstants.USER_INFO);
       // await GoogleSignin.revokeAccess();
       await GoogleSignin.signOut().then(() => {
         console.log('Google sign out!');
       });
       // const response = await authService.collab_logout(params);
-      
 
       return true;
     } catch (error: any) {
       const axiosError = error as AxiosError;
       console.log(error);
-      return rejectWithValue(axiosError.response?.data);
-    }
-  }
-);
-
-export const collab_loadAuthState = createAsyncThunk(
-  'auth/loadAuthState',
-  async (_, { rejectWithValue }) => {
-    try {
-      const accessToken = await AsyncStorage.getItem(AppConstants.ACCESS_TOKEN);
-      if (accessToken) {
-        return true;
-      }
-      return false;
-    } catch (error) {
-      const axiosError = error as AxiosError;
       return rejectWithValue(axiosError.response?.data);
     }
   }
@@ -154,6 +221,42 @@ export const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(collab_loginGoogle.pending, (state) => {
+        state.auth_loading = true;
+        state.error = '';
+      })
+      .addCase(collab_loginGoogle.fulfilled, (state, action) => {
+        state.isAuthenticated = true;
+        state.role = action.payload.data.account.roleId;
+        state.auth_loading = false;
+      })
+      .addCase(collab_loginGoogle.rejected, (state, action) => {
+        state.error = String(action.payload);
+        state.auth_loading = false;
+      })
+      .addCase(collab_getUserInfo.pending, (state) => {
+        state.user_loading = true;
+        state.error = '';
+      })
+      .addCase(collab_getUserInfo.fulfilled, (state, action) => {
+        state.user_loading = false;
+        state.userInfo = action.payload;
+      })
+      .addCase(collab_getUserInfo.rejected, (state, action) => {
+        state.error = String(action.payload);
+        state.user_loading = false;
+      })
+      .addCase(resetUserLoading.pending, (state) => {
+        state.user_loading = true;
+        state.error = '';
+      })
+      .addCase(resetUserLoading.fulfilled, (state, action) => {
+        state.user_loading = false;
+      })
+      .addCase(resetUserLoading.rejected, (state, action) => {
+        state.error = String(action.payload);
+        state.user_loading = false;
+      })
       .addCase(collab_logout.pending, (state) => {
         console.log('pending out');
         state.loading = true;
@@ -169,49 +272,80 @@ export const authSlice = createSlice({
         state.error = String(action.payload);
         state.loading = false;
       })
-      .addCase(collab_loginGoogle.pending, (state) => {
-        state.loading = true;
+      .addCase(collab_reloadGetUserInfo.pending, (state) => {
+        // state.user_loading = true;
         state.error = '';
       })
-      .addCase(collab_loginGoogle.fulfilled, (state, action) => {
-        state.isAuthenticated = true;
-        state.role = action.payload.data.account.roleId;
-        state.loading = false;
-      })
-      .addCase(collab_loginGoogle.rejected, (state, action) => {
-        state.error = String(action.payload);
-        state.loading = false;
-      })
-      .addCase(collab_getUserInfo.pending, (state) => {
-        state.loading = true;
-        state.error = '';
-      })
-      .addCase(collab_getUserInfo.fulfilled, (state, action) => {
-        state.loading = false;
+      .addCase(collab_reloadGetUserInfo.fulfilled, (state, action) => {
+        // state.user_loading = false;
         state.userInfo = action.payload;
       })
-      .addCase(collab_getUserInfo.rejected, (state, action) => {
+      .addCase(collab_reloadGetUserInfo.rejected, (state, action) => {
         state.error = String(action.payload);
-        state.loading = false;
+        // state.user_loading = false;
       })
       .addCase(collab_loadAuthState.pending, (state) => {
-        state.loading = true;
+        state.load_auth_state_loading = true;
         state.error = '';
       })
       .addCase(collab_loadAuthState.fulfilled, (state, action) => {
-        state.isAuthenticated = true;
-        state.loading = false;
+        action.payload.isAuthenticated === true
+          ? (state.isAuthenticated = true)
+          : (state.isAuthenticated = false);
+        state.role = Number(action.payload.roleId);
+        state.load_auth_state_loading = false;
       })
       .addCase(collab_loadAuthState.rejected, (state, action) => {
         state.error = String(action.payload);
-        state.loading = false;
+        state.isAuthenticated = false;
+        state.load_auth_state_loading = false;
       })
-      .addMatcher(isAnyOf(collab_loginGoogle.fulfilled), (state, action) => {
+      .addCase(admission_loginGoogle.pending, (state) => {
+        state.auth_loading = true;
+        state.error = '';
+      })
+      .addCase(admission_loginGoogle.fulfilled, (state, action) => {
         state.isAuthenticated = true;
         state.role = action.payload.data.account.roleId;
+        state.auth_loading = false;
+      })
+      .addCase(admission_loginGoogle.rejected, (state, action) => {
+        state.error = String(action.payload);
+        state.auth_loading = false;
+      })
+      .addCase(admission_getUserInfo.pending, (state) => {
+        state.user_loading = true;
+        state.error = '';
+      })
+      .addCase(admission_getUserInfo.fulfilled, (state, action) => {
+        state.user_loading = false;
+        state.userInfo = action.payload;
+      })
+      .addCase(admission_getUserInfo.rejected, (state, action) => {
+        state.error = String(action.payload);
+        state.user_loading = false;
+      })
+      .addCase(admission_logout.pending, (state) => {
+        console.log('pending out');
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(admission_logout.fulfilled, (state) => {
+        state.isAuthenticated = false;
+        state.role = -1;
         state.loading = false;
-        state.userInfoLogin = action.payload.data;
+        state.userInfoLogin = null;
+      })
+      .addCase(admission_logout.rejected, (state, action) => {
+        state.error = String(action.payload);
+        state.loading = false;
       });
+    // .addMatcher(isAnyOf(collab_loginGoogle.fulfilled), (state, action) => {
+    //   state.isAuthenticated = true;
+    //   state.role = action.payload.data.account.roleId;
+    //   state.loading = false;
+    //   state.userInfoLogin = action.payload.data;
+    // });
   },
 });
 

@@ -22,7 +22,6 @@ import { getAllPostRegistration } from '../../../../features/collaborator/collab
 import useIndex from '../useIndex';
 
 const Registration_Pending = () => {
- 
   const { handlers, state, props } = useIndex();
 
   return (
@@ -59,8 +58,8 @@ const Registration_Pending = () => {
                           <Text style={styles.textFirst}>General</Text>
                           <Text style={styles.textFirst_2}>
                             {
-                              postRegistration?.postRegistrationDetail?.post
-                                .postCategory?.postCategoryDescription
+                              postRegistration?.post.postCategory
+                                ?.postCategoryDescription
                             }
                           </Text>
                         </View>
@@ -84,10 +83,7 @@ const Registration_Pending = () => {
                         >
                           <Text style={styles.textSecond}>Position</Text>
                           <Text style={styles.textSecond_2}>
-                            {
-                              postRegistration?.postRegistrationDetail
-                                ?.postPosition?.positionName
-                            }
+                            {postRegistration?.postPosition?.positionName}
                           </Text>
                         </View>
                         <View
@@ -120,7 +116,9 @@ const Registration_Pending = () => {
                       />
                       {state.isShowDetail[index] === false ? (
                         <View style={styles.containerViewDetail}>
-                          <TouchableOpacity onPress={() => handlers.toggleDetail(index)}>
+                          <TouchableOpacity
+                            onPress={() => handlers.toggleDetail(index)}
+                          >
                             <Entypo
                               name="chevron-down"
                               size={30}
@@ -217,10 +215,7 @@ const Registration_Pending = () => {
                                     maxWidth: 270,
                                   }}
                                 >
-                                  {
-                                    postRegistration?.postRegistrationDetail
-                                      ?.postPosition?.location
-                                  }
+                                  {postRegistration?.postPosition?.location}
                                 </Text>
                               </View>
                             </View>
@@ -256,11 +251,9 @@ const Registration_Pending = () => {
                                     marginVertical: 2,
                                   }}
                                 >
-                                  {postRegistration?.postRegistrationDetail
-                                    ?.postPosition?.salary
+                                  {postRegistration?.postPosition?.salary
                                     ? String(
-                                        postRegistration?.postRegistrationDetail
-                                          ?.postPosition?.salary
+                                        postRegistration?.postPosition?.salary
                                       ) + ' VNĐ'
                                     : ''}
                                 </Text>

@@ -28,7 +28,7 @@ const BottomTabs: React.FC = () => {
             height: Platform.OS === 'ios' ? 30 + 50 : 60,
           },
           tabBarLabelStyle: {
-            marginBottom: Platform.OS === 'ios' ? 0 : 5,
+            marginBottom: Platform.OS === 'ios' ? 0 : 10,
             fontSize: 10,
           },
         }}

@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Platform,
   RefreshControl,
   ScrollView,
@@ -49,6 +50,10 @@ import FilterModal from '../../../components/collaborator/Home/FilterModal';
 import { SHADOWS } from '../../../constants/Shadows';
 import EventCardWrap from '../../../components/collaborator/Home/EventCardWrap';
 import { imageNotFoundUri } from '../../../utils/images';
+import UpdateBookingPopup from '../../../components/collaborator/Home/UpdateBookingPopup';
+import { getAllPostRegistration } from '../../../features/collaborator/collab.postRegistrationSlice';
+import Verification from '../Verification';
+import LoadingScreen from '../../../components/shared/Loading/Loading';
 
 const Home = () => {
   const arrayTest = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -71,8 +76,20 @@ const Home = () => {
     });
   };
   useEffect(() => {
+    console.log("tao vô đây 1")
     fetchPost();
   }, []);
+  const fetchPostRegistration = async () => {
+    await dispatch(getAllPostRegistration());
+  };
+  useEffect(() => {
+    console.log("tao vô đây 2")
+
+    fetchPostRegistration();
+  }, []);
+  const postRegistrationList = useAppSelector(
+    (state) => state.collab_postRegistration.postRegistration
+  );
 
   const postHomeUpcommingList = useAppSelector(
     (state) => state.collab_post.postHomeUpcomming
@@ -149,7 +166,7 @@ const Home = () => {
                 </Text>
               </View>
             </View>
-            <View style={{flex: 1, alignItems: "flex-end"}}>         
+            <View style={{ flex: 1, alignItems: 'flex-end' }}>
               <TouchableOpacity
                 onPress={() => navigation.navigate('HOME_NOTIFICATION')}
                 style={{
@@ -287,6 +304,7 @@ const Home = () => {
                   >
                     <EventCard
                       onPress={() => handleNavigate(post)}
+                      imageUrl={post?.postImg ? post?.postImg : imageNotFoundUri}
                       currentDay={formatToDay({
                         dateProp: post?.dateFrom,
                       })}
@@ -412,8 +430,12 @@ const Home = () => {
             </View>
           </View>
         </View>
+        
       </ScrollView>
-      {/* <UpdateBookingPopup /> */}
+
+      {
+      true
+      && <UpdateBookingPopup />}
     </View>
   );
 };

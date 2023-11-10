@@ -1,5 +1,6 @@
 import {
   ImageBackground,
+  Platform,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -15,6 +16,8 @@ import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useAppDispatch } from '../../../app/store';
 import {
+  admission_getUserInfo,
+  admission_loginGoogle,
   collab_getUserInfo,
   collab_loginGoogle,
 } from '../../../features/collaborator/collab.authSlice';
@@ -22,16 +25,15 @@ import { useAppSelector } from '../../../app/hooks';
 import Loading from '../../../components/shared/Loading/Loading';
 import GmailSelectedEnum from '../../../enums/shared/GmailSelectedEnum';
 import SelectDropdown from 'react-native-select-dropdown';
-import {
-  admission_getUserInfo,
-  admission_loginGoogle,
-} from '../../../features/admission/admission.authSlice';
 import GetUserInfoDto from '../../../dtos/collaborator/getUserInfo.dto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ErrorStatus from '../../../dtos/collaborator/response/errorStatus.dto';
 import { useToast } from 'react-native-toast-notifications';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
 import { SHADOWS } from '../../../constants/Shadows';
+import LoginUserDto from '../../../dtos/collaborator/login.user.dto';
+import AppConstants from '../../../enums/collaborator/app';
+import usePushNotifications from '../../../../usePushNotifications';
 
 const Login = () => {
   const toast = useToast();
@@ -81,6 +83,11 @@ const Login = () => {
     return subscriber; // unsubscribe on unmount
   }, []);
 
+  if (Platform.OS !== 'ios') {
+    const { expoPushToken } = usePushNotifications();
+    console.log('expoPushToken: ', expoPushToken);
+  }
+
   return (
     <ImageBackground
       style={{ height: '100%', width: '100%' }}
@@ -95,7 +102,7 @@ const Login = () => {
       >
         <AppIcon style={{ flex: 0, marginTop: 50 }} />
         <CampusSelection style={{ flex: 2 }} />
-        <View style={{marginBottom: 10}}>
+        <View style={{ marginBottom: 10 }}>
           <SelectDropdown
             dropdownStyle={{
               borderTopLeftRadius: 5,
@@ -158,32 +165,35 @@ const Login = () => {
                         console.log('<Login> Có token');
                         await dispatch(collab_loginGoogle(token)).then(
                           async (res) => {
-                            console.log(JSON.stringify(res, null, 2));
                             const requestStatus = res?.meta?.requestStatus;
-                            if (requestStatus === 'rejected') {
-                              const resRejectedData =
-                                res?.payload as ErrorStatus;
-                              if (resRejectedData?.statusCode === 400) {
-                                if (resRejectedData?.errorCode === 4006) {
-                                  toast.show(
-                                    'You must login with gmail @fpt.!ádasdasdasdasdasdasdasdasd',
-                                    { type: 'danger' }
-                                  );
+                            switch (requestStatus) {
+                              case 'rejected':
+                                const resRejectedData =
+                                  res?.payload as ErrorStatus;
+                                if (resRejectedData?.statusCode === 400) {
+                                  if (resRejectedData?.errorCode === 4006) {
+                                    toast.show(
+                                      'You must login with gmail @fpt.!ádasdasdasdasdasdasdasdasd',
+                                      { type: 'danger' }
+                                    );
+                                  }
                                 }
-                              }
-                            } else {
-                              console.log('<Login> Đnhap okie');
-                              await dispatch(collab_getUserInfo()).then(
-                                async (res) => {
-                                  console.log(JSON.stringify(res, null, 2));
-                                  const data = res?.payload as GetUserInfoDto;
+                                break;
+                              case 'fulfilled':
+                                const data = res.payload as LoginUserDto;
+                                await AsyncStorage.setItem(
+                                  AppConstants.ROLE_ID,
+                                  JSON.stringify(data?.data?.account?.roleId)
+                                );
 
-                                  await AsyncStorage.setItem(
-                                    'userInfo',
-                                    JSON.stringify(data)
-                                  );
-                                }
-                              );
+                                await AsyncStorage.setItem(
+                                  AppConstants.USER_INFO,
+                                  JSON.stringify(data?.data?.account)
+                                );
+                                await dispatch(collab_getUserInfo());
+                                break;
+                              default:
+                                console.log('default');
                             }
                           }
                         );
@@ -205,31 +215,35 @@ const Login = () => {
                         console.log('<Login> Có token');
                         await dispatch(admission_loginGoogle(token)).then(
                           async (res) => {
-                            console.log(JSON.stringify(res, null, 2));
                             const requestStatus = res?.meta?.requestStatus;
-                            if (requestStatus === 'rejected') {
-                              const resRejectedData =
-                                res?.payload as ErrorStatus;
-                              if (resRejectedData?.statusCode === 400) {
-                                if (resRejectedData?.errorCode === 4006) {
-                                  toast.show(
-                                    'You must login with gmail @fpt.!ádasdasdasdasdasdasdasdasd',
-                                    { type: 'danger' }
-                                  );
+                            switch (requestStatus) {
+                              case 'rejected':
+                                const resRejectedData =
+                                  res?.payload as ErrorStatus;
+                                if (resRejectedData?.statusCode === 400) {
+                                  if (resRejectedData?.errorCode === 4006) {
+                                    toast.show(
+                                      'You must login with gmail @fpt.!ádasdasdasdasdasdasdasdasd',
+                                      { type: 'danger' }
+                                    );
+                                  }
                                 }
-                              }
-                            } else {
-                              console.log('<Login> Đnhap okie');
-                              await dispatch(admission_getUserInfo()).then(
-                                async (res) => {
-                                  const data = res?.payload as GetUserInfoDto;
-                                  console.log(JSON.stringify(data, null, 2));
-                                  await AsyncStorage.setItem(
-                                    'userInfo',
-                                    JSON.stringify(data)
-                                  );
-                                }
-                              );
+                                break;
+                              case 'fulfilled':
+                                const data = res.payload as LoginUserDto;
+                                await AsyncStorage.setItem(
+                                  AppConstants.ROLE_ID,
+                                  JSON.stringify(data?.data?.account?.roleId)
+                                );
+
+                                await AsyncStorage.setItem(
+                                  AppConstants.USER_INFO,
+                                  JSON.stringify(data?.data?.account)
+                                );
+                                await dispatch(admission_getUserInfo());
+                                break;
+                              default:
+                                console.log('default');
                             }
                           }
                         );

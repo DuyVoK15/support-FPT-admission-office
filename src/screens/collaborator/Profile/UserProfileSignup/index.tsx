@@ -6,21 +6,24 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import Header from '../../../../components/shared/Header/Back';
 import ProfileSignupTextInput from '../../../../components/collaborator/Profile/UserProfileSignup/ProfileSignupTextInput';
 import { COLORS } from '../../../../constants/Colors';
-import {
-  formatDateToDDMMYYYY,
-} from '../../../../utils/formats';
+import { formatDateToDDMMYYYY } from '../../../../utils/formats';
 import { FONTS_FAMILY } from '../../../../constants/Fonts';
 import SubmitButton from '../../../../components/shared/Button/SubmitButton';
 import DashedLine from 'react-native-dashed-line';
 import { Controller, useForm } from 'react-hook-form';
 import useUserProfileSignup from './useIndex';
 import DatePickerField from '../../../../components/collaborator/Profile/UserProfileSignup/DatePickerModal';
+import { UserInfo } from '../../../../models/collaborator/userInfo.model';
+import { ScreenWidth } from '../../../../constants/Demesions';
 
-const UserProfileSignup = () => {
+interface UserProfileSignupProps {
+  userInfo: UserInfo | null;
+}
+const UserProfileSignup: FC<UserProfileSignupProps> = (data) => {
   const { handlers, props } = useUserProfileSignup();
   // IdentityIssueDate
   const [
@@ -47,6 +50,50 @@ const UserProfileSignup = () => {
         <Text style={styles.titleHeader}>Sign-up Account Information</Text>
       </Header>
       <View style={{ marginTop: 20, marginBottom: 110 }}>
+        <View
+          style={{
+            marginHorizontal: 20,
+            marginBottom: 20,
+            alignItems: 'center',
+          }}
+        >
+          <View
+            style={{
+              flexDirection: 'row',
+
+              alignItems: 'center',
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
+                fontSize: 20,
+              }}
+            >
+              {data?.userInfo?.name && 'Hello, '}
+            </Text>
+            <Text
+              style={{
+                fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
+                fontSize: 20,
+              }}
+            >
+              {data?.userInfo?.name ? data?.userInfo?.name + '!' : 'No name!'}
+            </Text>
+          </View>
+          <View style={{ marginTop: 5, maxWidth: ScreenWidth * 0.8 }}>
+            <Text
+              style={{
+                fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
+                color: COLORS?.red_date,
+                textAlign: "center",
+              }}
+            >
+              Please fill your all information before exploring! Thank you!
+            </Text>
+          </View>
+        </View>
+
         <ScrollView
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={16}
@@ -59,7 +106,6 @@ const UserProfileSignup = () => {
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <ProfileSignupTextInput
-                 
                   label="Citizen Identification Number"
                   placeholder="Citizen Identification Number *"
                   onChangeText={onChange}
@@ -75,8 +121,7 @@ const UserProfileSignup = () => {
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <ProfileSignupTextInput
-
-                label="Citizen Identification Issue Address"
+                  label="Citizen Identification Issue Address"
                   placeholder="Citizen Identification Issue Address *"
                   onChangeText={onChange}
                   value={value}
@@ -91,7 +136,6 @@ const UserProfileSignup = () => {
               }}
               render={({ field: { value } }) => (
                 <DatePickerField
-      
                   label="Identity Issue Date"
                   id={'3'}
                   isVisible={isIdentityIssueDatePickerVisible}
@@ -112,7 +156,6 @@ const UserProfileSignup = () => {
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <ProfileSignupTextInput
-                
                   label="Citizen Identification Issue Place"
                   placeholder="Citizen Identification Issue Place *"
                   onChangeText={onChange}
@@ -129,7 +172,6 @@ const UserProfileSignup = () => {
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <ProfileSignupTextInput
-        
                   label="Student ID"
                   placeholder="Student ID *"
                   onChangeText={onChange}
@@ -146,7 +188,6 @@ const UserProfileSignup = () => {
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <ProfileSignupTextInput
-
                   label="Facebook Profile URL"
                   placeholder="Facebook Profile URL *"
                   onChangeText={onChange}
@@ -163,7 +204,6 @@ const UserProfileSignup = () => {
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <ProfileSignupTextInput
-                 
                   label="Tax Number"
                   placeholder="Tax Number"
                   onChangeText={onChange}

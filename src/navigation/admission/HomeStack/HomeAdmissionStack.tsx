@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import AdmissionBottomTabs from '../../admission/HomeStack/BottomTabs';
+import AdmissionBottomTabs from './BottomTabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const HomeAdmissionStack = createNativeStackNavigator();

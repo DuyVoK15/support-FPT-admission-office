@@ -9,6 +9,7 @@ import DashedLine from 'react-native-dashed-line';
 type EventCardProps = TouchableOpacity['props'] & {
   currentDay?: string;
   currentMonth?: string;
+  imageUrl?: string;
   timeAgo?: string;
   titleEvent?: string;
   schoolName?: string;
@@ -57,7 +58,7 @@ export default class EventCard extends Component<EventCardProps> {
                 resizeMode: 'cover',
               }}
               source={{
-                uri: 'https://cdnimg.vietnamplus.vn/t870/uploaded/xpcwvovt/2020_11_13/ttxvn_viet_duc_5.jpg',
+                uri: this.props.imageUrl,
               }}
             />
           </View>

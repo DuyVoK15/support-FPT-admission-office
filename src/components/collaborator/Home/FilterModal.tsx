@@ -20,7 +20,7 @@ import { Controller, useForm } from 'react-hook-form';
 import SubmitButton from '../../shared/Button/SubmitButton';
 import { useAppDispatch } from '../../../app/store';
 import { getAllPost } from '../../../features/collaborator/collab.postSlice';
-import FilterPostPayload from '../../../dtos/collaborator/payload/filterPost.dto';
+import FilterPostPayload from '../../../dtos/collaborator/parameter/filterPost.dto';
 
 const FilterModal = () => {
   const {

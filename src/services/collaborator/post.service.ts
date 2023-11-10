@@ -3,7 +3,7 @@ import { AxiosResponse } from 'axios';
 import axiosClient from '../axiosClient';
 import PostDto from '../../dtos/collaborator/post.dto';
 import ViewPostCategoryResponse from '../../dtos/collaborator/response/viewPostCategory.dto';
-import FilterPostPayload from '../../dtos/collaborator/payload/filterPost.dto';
+import FilterPostPayload from '../../dtos/collaborator/parameter/filterPost.dto';
 
 export const postService = {
   getAllPost: (params: FilterPostPayload): Promise<AxiosResponse<PostDto>> => {

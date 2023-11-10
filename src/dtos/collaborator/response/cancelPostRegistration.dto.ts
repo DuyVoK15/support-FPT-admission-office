@@ -1,4 +1,4 @@
-export default interface DeletePostRegistraionResponse {
+export default interface CancelPostRegistraionResponse {
   status: {
     success: boolean;
     message: string;

@@ -3,7 +3,7 @@ import axiosClient from '../axiosClient';
 import { AccountInfoSignup } from '../../models/collaborator/account.model';
 import GetUserInfoDto from '../../dtos/collaborator/getUserInfo.dto';
 import { UserInfoUpdate } from '../../models/collaborator/userInfo.model';
-import UpdateAvatarDto from '../../dtos/collaborator/payload/updateAvatar.dto';
+import UpdateAvatarDto from '../../dtos/collaborator/parameter/updateAvatar.dto';
 import UpdateEnableAccountResponse from '../../dtos/collaborator/response/updateEnableAccount.dto';
 import ViewVerifyAccountResponse from '../../dtos/collaborator/response/viewVerifyAccount.dto';
 

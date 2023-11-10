@@ -29,8 +29,10 @@ import { SHADOWS } from '../../../constants/Shadows';
 import {
   collab_getUserInfo,
   collab_logout,
+  collab_reloadGetUserInfo,
 } from '../../../features/collaborator/collab.authSlice';
 import { imageUndefinedUserUri } from '../../../utils/images';
+import Animated from 'react-native-reanimated';
 
 const Account = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -39,7 +41,7 @@ const Account = () => {
   const userInfo = useAppSelector((state) => state.collab_auth.userInfo);
   const fetchUserInfo = async () => {
     try {
-      await dispatch(collab_getUserInfo()).then((res) => {
+      await dispatch(collab_reloadGetUserInfo()).then((res) => {
         console.log(JSON.stringify(res, null, 2));
       });
     } catch (error) {
@@ -94,7 +96,7 @@ const Account = () => {
         </LinearGradient>
       </View>
 
-      <ScrollView
+      <Animated.ScrollView
         showsVerticalScrollIndicator={false}
         //   refreshControl={
         //     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -320,7 +322,7 @@ const Account = () => {
             titleButton="SIGN OUT"
           />
         </View>
-      </ScrollView>
+      </Animated.ScrollView>
     </View>
   );
 };
@@ -334,11 +336,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   containerHeader: {
-    marginHorizontal: 20,
+    marginHorizontal: 15,
     marginTop: 40,
   },
   containerItem: {
-    marginHorizontal: 20,
+    marginHorizontal: 15,
   },
   containerTextHeader: {
     marginVertical: 20,

@@ -5,7 +5,10 @@ import { useForm } from 'react-hook-form';
 import { UserInfoUpdate } from '../../../../models/collaborator/userInfo.model';
 import { useAppSelector } from '../../../../app/hooks';
 
-import { collab_getUserInfo } from '../../../../features/collaborator/collab.authSlice';
+import {
+  collab_getUserInfo,
+  collab_reloadGetUserInfo,
+} from '../../../../features/collaborator/collab.authSlice';
 import { formatDateToDDMMYYYY, formatToDate } from '../../../../utils/formats';
 import {
   collab_loadStatusCode,
@@ -18,7 +21,11 @@ const useUserProfile = () => {
   const statusCode = useAppSelector((state) => state.collab_account.statusCode);
 
   const fetchUserInfo = async () => {
-    await dispatch(collab_getUserInfo());
+    try {
+      await dispatch(collab_reloadGetUserInfo());
+    } catch (error) {
+      console.log(error);
+    }
   };
   useEffect(() => {
     fetchUserInfo();
