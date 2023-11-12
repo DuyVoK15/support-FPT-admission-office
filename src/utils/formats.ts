@@ -124,6 +124,21 @@ export function format_ISODateString_To_MonthDD(isoDateString: string) {
   return customDateString;
 }
 
+export function format_ISODateString_To_DayOfWeekMonthDD(isoDateString: string) {
+  const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  const date: Date = new Date(isoDateString);
+  const dayOfWeek = daysOfWeek[date.getDay()];
+  const monthIndex = date.getMonth();
+  const day = date.getDate();
+
+  const customDateString = `${dayOfWeek}, ${months[monthIndex]} ${day}`;
+
+
+  return customDateString;
+}
+
 // Format time string HH:mm:ss to HH:mm
 export function format_Time_To_HHss(inputTime: string) {
   const timeParts = inputTime.split(':'); // Tách chuỗi theo dấu ':'
