@@ -1,82 +1,78 @@
-import { AccountInfo } from './account.model';
-
-type DataPost = [
-  Data
-];
-
-export type Data = {
+export interface DataPost {
   id: number;
-    accountId: number;
-    postCategoryId: number;
-    postCode: string;
-    postImg: string;
-    postDescription: string;
-    priority: number;
-    dateFrom: string;
-    dateTo: string;
+  accountId: number;
+  postCategoryId: number;
+  postCode: string;
+  postImg: string;
+  postDescription: string;
+  priority: number;
+  dateFrom: string;
+  dateTo: string;
+  isPremium: boolean;
+  status: number;
+  createAt: string;
+  updateAt: string;
+  timeFrom: string;
+  timeTo: string;
+  registerAmount: number;
+  totalAmountPosition: number;
+  account: {
+    id: number;
+    roleId: number;
+    accountInformationId: number;
+    name: string;
+    email: string;
+    phone: string;
+    dateOfBirth: string;
+    imgUrl: string;
+    postPermission: boolean;
     isPremium: boolean;
-    status: number;
-    attendanceComplete: boolean;
+    isActive: boolean;
+    isBanned: boolean;
     createAt: string;
     updateAt: string;
-    timeFrom: string;
-    timeTo: string;
-    totalAmountPosition: number;
-    registerAmount: number;
-    account: {
+    accountInformation: {
       id: number;
-      roleId: number;
-      accountInformationId: number;
-      name: string;
-      email: string;
-      phone: string;
-      dateOfBirth: string;
-      imgUrl: string;
-      postPermission: boolean;
-      isPremium: boolean;
-      isActive: boolean;
-      createAt: string;
-      updateAt: string;
-      accountInformation: AccountInfo;
+      accountId: number;
+      identityNumber: string;
+      idStudent: string;
+      fbUrl: string;
+      address: string;
+      identityIssueDate: string;
+      placeOfIssue: string;
+      identityFrontImg: string;
+      identityBackImg: string;
+      taxNumber: string;
     };
-    postCategory: {
+  };
+  postCategory: {
+    id: number;
+    postCategoryDescription: string;
+    postCategoryType: string;
+    isActive: boolean;
+    createAt: string;
+    updateAt: string;
+  };
+  postPositions: [
+    {
       id: number;
-      postCategoryDescription: string;
-      postCategoryType: string;
-      isActive: boolean;
-      createAt: string;
-      updateAt: string;
-    };
-    postPositions: [
-      {
-        id: number;
-        postId: number;
-        trainingCertificateId: number;
-        positionName: string;
-        schoolName: string;
-        location: string;
-        timeFrom: string;
-        timeTo:  string;
-        isBusService: boolean;
-        amount: number;
-        salary: number;
-        registerAmount: number;
-      },
-    ];
-    trainingPositions: [
-      {
-        id: number;
-        postId: number;
-        trainingCertificateId: number;
-        positionName: string;
-        location: string;
-        timeFrom: string;
-        timeTo: string;
-        isBusService: boolean;
-        amount: number;
-        salary: number;
-        registerAmount: number;
-      },
-    ];
+      postId: number;
+      trainingCertificateId: number;
+      documentId: number;
+      positionName: string;
+      positionDescription: string;
+      schoolName: string;
+      location: string;
+      date: string;
+      latitude: string;
+      longitude: string;
+      timeFrom: string;
+      timeTo: string;
+      status: number;
+      isBusService: boolean;
+      amount: number;
+      salary: number;
+      registerAmount: number;
+    },
+  ];
 }
-export default DataPost;
