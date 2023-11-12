@@ -37,4 +37,11 @@ export const authService = {
 
     return axiosClient.get(url);
   },
+  admission_logout: (params: {
+    expoToken: string;
+  }): Promise<AxiosResponse<null>> => {
+    const url = '/api/admission/admission-account/logout';
+
+    return axiosClient.put(url, { params });
+  },
 };

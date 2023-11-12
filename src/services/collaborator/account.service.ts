@@ -11,7 +11,6 @@ export const accountService = {
   collab_signupAccountInfo: (
     payload: AccountInfoSignup
   ): Promise<AxiosResponse<GetUserInfoDto>> => {
-    console.log('HIHI ', payload);
     const url = '/api/account/createAccountInformation';
 
     return axiosClient.post(url, { ...payload });
