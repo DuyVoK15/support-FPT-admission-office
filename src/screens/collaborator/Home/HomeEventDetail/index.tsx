@@ -1,4 +1,11 @@
-import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
+import {
+  Image,
+  ImageBackground,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, { FC, useEffect } from 'react';
 import Header from '../../../../components/shared/Header/Back';
 import Backward from '../../../../components/shared/Direction/Backward/Backward';
@@ -10,7 +17,6 @@ import { FONTS_FAMILY } from '../../../../constants/Fonts';
 import { COLORS } from '../../../../constants/Colors';
 import SubmitButton from '../../../../components/shared/Button/SubmitButton';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Data } from '../../../../models/collaborator/dataPost.model';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
 import { SHADOWS } from '../../../../constants/Shadows';
 import { ScreenHeight } from '../../../../constants/Demesions';
@@ -22,16 +28,17 @@ import {
 import { useWindowDimensions } from 'react-native';
 import RenderHtml from 'react-native-render-html';
 import { imageNotFoundUri } from '../../../../utils/images';
+import { DataPost } from '../../../../models/collaborator/dataPost.model';
 
 const HomeEventDetail: FC = () => {
   // Get Width of Windows
   const { width } = useWindowDimensions();
 
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
-  // Get item data from 
+  // Get item data from
   const route = useRoute();
-  const { item } = route?.params as { item: Data };
-  const handleNavigate = (item: Data) => {
+  const { item } = route?.params as { item: DataPost };
+  const handleNavigate = (item: DataPost) => {
     navigation.navigate('POSITION_REGISTRATION', { item });
   };
   useEffect(() => {
@@ -58,7 +65,10 @@ const HomeEventDetail: FC = () => {
           position: 'absolute',
           top: 222,
           width: '100%',
-          height: ScreenHeight - 222 - 80,
+          height:
+            Platform.OS === 'ios'
+              ? ScreenHeight - 222 - 80
+              : ScreenHeight - 222 - 20,
           backgroundColor: 'white',
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,

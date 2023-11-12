@@ -44,16 +44,20 @@ import {
 import { COLORS } from '../../../constants/Colors';
 import { useNavigation } from '@react-navigation/native';
 import { ROUTES } from '../../../constants/Routes';
-import { Data } from '../../../models/collaborator/dataPost.model';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
 import FilterModal from '../../../components/collaborator/Home/FilterModal';
 import { SHADOWS } from '../../../constants/Shadows';
 import EventCardWrap from '../../../components/collaborator/Home/EventCardWrap';
 import { imageNotFoundUri } from '../../../utils/images';
-import UpdateBookingPopup from '../../../components/collaborator/Home/UpdateBookingPopup';
-import { getAllPostRegistration } from '../../../features/collaborator/collab.postRegistrationSlice';
+import UpdateBookingPopup from '../../../components/collaborator/Home/HomeRegistrationPopup';
+import {
+  getAllCheckInPostRegistration,
+  getAllPostRegistration,
+} from '../../../features/collaborator/collab.postRegistrationSlice';
 import Verification from '../Verification';
 import LoadingScreen from '../../../components/shared/Loading/Loading';
+import HomeRegistrationPopup from '../../../components/collaborator/Home/HomeRegistrationPopup';
+import { DataPost } from '../../../models/collaborator/dataPost.model';
 
 const Home = () => {
   const arrayTest = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -76,20 +80,21 @@ const Home = () => {
     });
   };
   useEffect(() => {
-    console.log("tao vô đây 1")
+    console.log('tao vô đây 1');
     fetchPost();
   }, []);
-  const fetchPostRegistration = async () => {
-    await dispatch(getAllPostRegistration());
+
+  const checkInPostRegistrationList = useAppSelector(
+    (state) => state.collab_postRegistration.checkInPostRegistration
+  );
+  const fetchCheckInPostRegistration = async () => {
+    await dispatch(getAllCheckInPostRegistration({}));
   };
   useEffect(() => {
-    console.log("tao vô đây 2")
+    console.log('tao vô đây 2');
 
-    fetchPostRegistration();
+    fetchCheckInPostRegistration();
   }, []);
-  const postRegistrationList = useAppSelector(
-    (state) => state.collab_postRegistration.postRegistration
-  );
 
   const postHomeUpcommingList = useAppSelector(
     (state) => state.collab_post.postHomeUpcomming
@@ -97,13 +102,12 @@ const Home = () => {
   const postHomeReOpenList = useAppSelector(
     (state) => state.collab_post.postHomeReOpen
   );
-
   const handleSearchPost = async (postCode: string) => {
     await dispatch(searchPostByPostCode(postCode)).then((res) => {
       // console.log(JSON.stringify(res, null, 2));
     });
   };
-  const handleNavigate = (item: Data) => {
+  const handleNavigate = (item: DataPost) => {
     navigation.navigate('HOME_EVENT_DETAIL', { item });
   };
 
@@ -296,7 +300,7 @@ const Home = () => {
 
           <View style={{ height: ScreenWidth * 0.85, marginTop: 20 }}>
             <ScrollView horizontal scrollEventThrottle={16}>
-              {postHomeUpcommingList ? (
+              {postHomeUpcommingList?.data ? (
                 postHomeUpcommingList?.data?.map((post, index) => (
                   <View
                     key={index}
@@ -304,21 +308,49 @@ const Home = () => {
                   >
                     <EventCard
                       onPress={() => handleNavigate(post)}
-                      imageUrl={post?.postImg ? post?.postImg : imageNotFoundUri}
-                      currentDay={formatToDay({
-                        dateProp: post?.dateFrom,
-                      })}
-                      currentMonth={formatToMonthString({
-                        dateProp: post?.dateFrom,
-                      })}
-                      timeAgo={timeAgo({
-                        dateProp: post?.createAt,
-                      })}
-                      titleEvent={post?.postCategory?.postCategoryDescription}
-                      schoolName={post?.postPositions?.[0]?.schoolName}
-                      location={post?.postPositions[0]?.location}
-                      dateFrom={format_ISODateString_To_MonthDD(post?.dateFrom)}
-                      timeFrom={format_Time_To_HHss(post?.timeFrom)}
+                      imageUrl={
+                        post?.postImg ? post?.postImg : imageNotFoundUri
+                      }
+                      timeAgo={
+                        post?.createAt
+                          ? timeAgo({
+                              dateProp: post?.createAt,
+                            })
+                            ? timeAgo({
+                                dateProp: post?.createAt,
+                              })
+                            : 'No value'
+                          : 'No value'
+                      }
+                      titleEvent={
+                        post?.postCategory?.postCategoryDescription
+                          ? post?.postCategory?.postCategoryDescription
+                          : 'No value'
+                      }
+                      schoolName={
+                        post?.postPositions?.[0]?.schoolName
+                          ? post?.postPositions?.[0]?.schoolName
+                          : 'No value'
+                      }
+                      location={
+                        post?.postPositions[0]?.location
+                          ? post?.postPositions[0]?.location
+                          : 'No value'
+                      }
+                      dateFrom={
+                        post?.dateFrom
+                          ? format_ISODateString_To_MonthDD(post?.dateFrom)
+                            ? format_ISODateString_To_MonthDD(post?.dateFrom)
+                            : 'No value'
+                          : 'No value'
+                      }
+                      timeFrom={
+                        post?.timeFrom
+                          ? format_Time_To_HHss(post?.timeFrom)
+                            ? format_Time_To_HHss(post?.timeFrom)
+                            : 'No value'
+                          : 'No value'
+                      }
                     />
                   </View>
                 ))
@@ -430,12 +462,11 @@ const Home = () => {
             </View>
           </View>
         </View>
-        
       </ScrollView>
 
-      {
-      true
-      && <UpdateBookingPopup />}
+      {Number(checkInPostRegistrationList?.data?.length) > 0 && (
+        <HomeRegistrationPopup />
+      )}
     </View>
   );
 };
