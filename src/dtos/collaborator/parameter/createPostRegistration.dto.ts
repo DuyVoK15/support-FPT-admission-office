@@ -1,4 +1,4 @@
-export default interface CreatePostRegistrationDto {
+export default interface CreatePostRegistrationParam {
   schoolBusOption: boolean,
   positionId: number,
 };

@@ -1,6 +1,7 @@
 export interface FilterPostRegistration {
-  Page?: number | 1;
-  PageSize?: number;
+  Page?: number | null;
+  PageSize?: number | null;
   Sort?: string | null;
   Order?: string | null;
+  Status?: number | null;
 }

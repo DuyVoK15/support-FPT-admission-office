@@ -1,5 +1,5 @@
 import DataViewPostRegistration from "../../../models/collaborator/postRegistration.model";
 
-export default interface ViewPostRegistrationDto  {
+export default interface ViewPostRegistrationResponse  {
     data: DataViewPostRegistration[] | [];
 }
