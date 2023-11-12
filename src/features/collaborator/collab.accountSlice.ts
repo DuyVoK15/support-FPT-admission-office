@@ -41,7 +41,7 @@ export const collab_signupAccountInformation = createAsyncThunk(
     } catch (error) {
       const axiosError = error as AxiosError;
       console.log(error);
-      return rejectWithValue(axiosError.response?.status);
+      return rejectWithValue(axiosError.response?.data);
     }
   }
 );
