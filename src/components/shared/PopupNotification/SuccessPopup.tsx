@@ -13,7 +13,7 @@ import Modal from 'react-native-modal';
 import { AntDesign, Entypo, FontAwesome, Ionicons } from '@expo/vector-icons';
 
 type SuccessPopupProps = {
-  message: string;
+  message: string | JSX.Element;
 }
 const SuccessPopup = (props: SuccessPopupProps) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);

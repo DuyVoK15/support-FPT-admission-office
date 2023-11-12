@@ -29,7 +29,6 @@ import {
   getAllPostRegistration,
 } from '../../../features/collaborator/collab.postRegistrationSlice';
 import { getAllPost } from '../../../features/collaborator/collab.postSlice';
-import { Data } from '../../../models/collaborator/dataPost.model';
 import CreatePostRegistrationDto from '../../../dtos/collaborator/parameter/createPostRegistration.dto';
 import CreatePostRegistrationResponse from '../../../dtos/collaborator/response/createPostRegistration.dto';
 import ErrorStatus from '../../../dtos/collaborator/response/errorStatus.dto';
@@ -40,11 +39,13 @@ import {
   format_ISODateString_To_DayOfWeekMonthDDYYYY,
 } from '../../../utils/formats';
 import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
+import CreatePostRegistrationParam from '../../../dtos/collaborator/parameter/createPostRegistration.dto';
+import { DataPost } from '../../../models/collaborator/dataPost.model';
 
 const PositionRegistration = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const route = useRoute();
-  const { item } = route?.params as { item: Data };
+  const { item } = route?.params as { item: DataPost };
   const [showAlert, setShowAlert] = useState<boolean>(false);
 
   const showAlertHandler = () => {
@@ -56,20 +57,8 @@ const PositionRegistration = () => {
   };
 
   const [isSelectedBusOption, setIsSelectedBusOption] = useState(
-    Array(20).fill(false)
+    Array(item?.postPositions.length).fill(false)
   );
-  const [openPositionNumber, setOpenPositionNumber] = useState(
-    Array(20).fill(false)
-  );
-  const [errorMessage, setErrorMessage] = useState<string[]>(
-    Array(20).fill('')
-  );
-
-  const togglePositionNumber = (index: number) => {
-    const updatedStatus = [...openPositionNumber];
-    updatedStatus[index] = !updatedStatus[index];
-    setOpenPositionNumber(updatedStatus);
-  };
 
   const selectedBusOption = (index: number) => {
     const updatedStatus = [...isSelectedBusOption];
@@ -90,38 +79,44 @@ const PositionRegistration = () => {
   const handleSubmit = async (
     index?: number,
     schoolBusOption?: boolean,
-    postId?: number,
     positionId?: number
   ) => {
     hideAlertHandler();
     try {
       const params = {
         schoolBusOption,
-        postId,
         positionId,
-      } as CreatePostRegistrationDto;
+      } as CreatePostRegistrationParam;
       await dispatch(createPostRegistration(params)).then((res) => {
         const requestStatus = res?.meta?.requestStatus;
 
         console.log(JSON.stringify(res, null, 2));
-
+        const showToastError = (message: string) => {
+          toast.show(message, { type: 'danger' });
+        };
         if (requestStatus === 'rejected') {
           const resRejectedData = res.payload as ErrorStatus;
-          if (resRejectedData?.errorCode === 4013) {
-            toast.show('This post is done!', { type: 'danger' });
-          }
-          if (resRejectedData?.errorCode === 4004) {
-            toast.show('Can not register the same post!', { type: 'danger' });
-          }
-          if (resRejectedData?.errorCode === 4012) {
-            toast.show('Need certificate to register this position!', {
-              type: 'danger',
-            });
-          }
-          if (resRejectedData?.errorCode === 4007) {
-            toast.show('Must sent registration 1 day before the event!', {
-              type: 'danger',
-            });
+          switch (resRejectedData?.errorCode) {
+            case 4003:
+              showToastError('This position is confirmed enough slot!');
+              break;
+            case 4004:
+              showToastError('Can not register the same post!');
+              break;
+            case 4007:
+              showToastError('Must sent registration 1 day before the event!');
+              break;
+            case 4012:
+              showToastError('Need certificate to register this position!');
+              break;
+            case 4013:
+              showToastError('This post is done!');
+              break;
+            case 4015:
+              showToastError('Position is not found!');
+              break;
+            default:
+              showToastError('Undefined error!');
           }
         }
 
@@ -136,6 +131,15 @@ const PositionRegistration = () => {
     }
   };
 
+  const [positionId, setPosisitionId] = useState<number | null>(null);
+
+  const handleSetPositionId = (id: number | null) => {
+    if (positionId !== id) {
+      setPosisitionId(id);
+    } else {
+      setPosisitionId(null);
+    }
+  };
   return (
     <View style={styles.container}>
       <Header>
@@ -145,249 +149,262 @@ const PositionRegistration = () => {
         />
       </Header>
 
+      <View
+        style={{ marginTop: 10, marginHorizontal: 20, alignItems: 'center' }}
+      >
+        <Text
+          style={{ fontFamily: FONTS_FAMILY?.Ubuntu_500Medium, fontSize: 26 }}
+        >
+          Choose your position
+        </Text>
+      </View>
       <ScrollView>
         <View style={styles.positionContent}>
           <Text style={styles.textPosition} numberOfLines={1}>
             Positions
           </Text>
-          {item ? (
-            item?.postPositions.map((position, index) => (
-              <View key={index + 1} style={styles.containerEveryPosition}>
-                <View style={styles.everyPosition}>
-                  <TouchableOpacity
-                    onPress={() => togglePositionNumber(index)}
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <View style={{ flex: 1 }}>
-                      <Text style={styles.textPositionNum}>
-                        Vị trí {index + 1}: {''}
-                        <Text style={styles.textPositionNum_2}>
-                          {position?.positionName ? position?.positionName : 'No value'}
-                        </Text>
-                      </Text>
-                    </View>
-
-                    <View
+          {item?.postPositions ? (
+            item?.postPositions.map((position, index) => {
+              const INDEX = index + 1;
+              return (
+                <View key={INDEX} style={styles.containerEveryPosition}>
+                  <View style={styles.everyPosition}>
+                    <TouchableOpacity
+                      onPress={() => handleSetPositionId(position?.id)}
                       style={{
-                        paddingHorizontal: 5,
-                        paddingVertical: 2,
+                        flexDirection: 'row',
+                        alignItems: 'center',
                       }}
                     >
-                      {openPositionNumber[index] === true ? (
-                        <Entypo
-                          name="chevron-small-up"
-                          size={26}
-                          color="black"
-                        />
-                      ) : (
-                        <Entypo
-                          name="chevron-small-down"
-                          size={26}
-                          color="black"
-                        />
-                      )}
-                    </View>
-                  </TouchableOpacity>
-                  {openPositionNumber[index] && (
-                    <View style={{}}>
-                      <DashedLine
-                        style={{ marginVertical: 10 }}
-                        dashGap={0}
-                        dashThickness={1}
-                        dashLength={10}
-                        dashColor={COLORS.super_light_grey}
-                      />
-                      <View>
-                        <View style={styles.column}>
-                          <View style={styles.contentRow}>
-                            <Ionicons
-                              name="md-calendar"
-                              size={28}
-                              color={COLORS.orange_icon}
-                            />
-                          </View>
-                          <View style={{ marginLeft: 15 }}>
-                            <View style={{ marginBottom: 4 }}>
-                              <Text
-                                style={{
-                                  fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
-                                  fontSize: 16,
-                                }}
-                              >
-                                {item?.dateFrom
-                                  ? format_ISODateString_To_DayOfWeekMonthDDYYYY(
-                                      item?.dateFrom
-                                    )
-                                  : ''}
-                              </Text>
-                            </View>
-                            <View style={{ marginBottom: 4 }}>
-                              <Text
-                                style={{
-                                  fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
-                                  fontSize: 14,
-                                }}
-                              >
-                                {position?.timeFrom && position?.timeTo
-                                  ? format_Time_To_HHss(position?.timeFrom) +
-                                    ' - ' +
-                                    format_Time_To_HHss(position?.timeTo) +
-                                    ' (GMT +7)'
-                                  : ''}
-                              </Text>
-                            </View>
-                          </View>
-                        </View>
-                        {/* COLUMN 2 */}
-                        <View style={styles.column}>
-                          <View style={styles.contentRow}>
-                            <Ionicons
-                              name="location-sharp"
-                              size={28}
-                              color={COLORS.orange_icon}
-                            />
-                          </View>
-                          <View style={{ marginLeft: 15 }}>
-                            <View style={{ marginBottom: 4 }}>
-                              <Text
-                                style={{
-                                  fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
-                                  fontSize: 16,
-                                }}
-                              >
-                                {position?.schoolName
-                                  ? position?.schoolName
-                                  : ''}
-                              </Text>
-                            </View>
-                            <View
-                              style={{
-                                marginBottom: 4,
-                                maxWidth: ScreenWidth * 0.6,
-                              }}
-                            >
-                              <Text
-                                style={{
-                                  fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
-                                  fontSize: 14,
-                                }}
-                              >
-                                {position?.location ? position?.location : ''}
-                              </Text>
-                            </View>
-                          </View>
-                        </View>
-                        {/* COLUMN 3 */}
-                        <View style={[styles.column, { marginBottom: 0 }]}>
-                          <View style={styles.contentRow}>
-                            <Ionicons
-                              name="md-calendar"
-                              size={28}
-                              color={COLORS.orange_icon}
-                            />
-                          </View>
-                          <View style={{ marginLeft: 15 }}>
-                            <View style={{ marginBottom: 4 }}>
-                              <Text
-                                style={{
-                                  fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
-                                  fontSize: 16,
-                                }}
-                              >
-                                Attendee Number
-                              </Text>
-                            </View>
-                            <View style={{ marginBottom: 4 }}>
-                              <Text
-                                style={{
-                                  fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
-                                  fontSize: 14,
-                                }}
-                              >
-                                {position?.registerAmount || position?.amount
-                                  ? position?.registerAmount +
-                                    ' / ' +
-                                    position?.amount +
-                                    ' collaborators'
-                                  : ''}
-                              </Text>
-                            </View>
-                          </View>
-                        </View>
+                      <View style={{ flex: 1 }}>
+                        <Text style={styles.textPositionNum}>
+                          Position {INDEX}: {''}
+                          <Text style={styles.textPositionNum_2}>
+                            {position?.positionName
+                              ? position?.positionName
+                              : 'No value'}
+                          </Text>
+                        </Text>
                       </View>
 
-                      <DashedLine
-                        style={{ marginVertical: 10 }}
-                        dashGap={0}
-                        dashThickness={1}
-                        dashLength={10}
-                        dashColor={COLORS.super_light_grey}
-                      />
+                      <View
+                        style={{
+                          paddingHorizontal: 5,
+                          paddingVertical: 2,
+                        }}
+                      >
+                        {positionId === position?.id ? (
+                          <Entypo
+                            name="chevron-small-up"
+                            size={26}
+                            color="black"
+                          />
+                        ) : (
+                          <Entypo
+                            name="chevron-small-down"
+                            size={26}
+                            color="black"
+                          />
+                        )}
+                      </View>
+                    </TouchableOpacity>
+                    {positionId === position?.id && (
+                      <View style={{}}>
+                        <DashedLine
+                          style={{ marginVertical: 10 }}
+                          dashGap={0}
+                          dashThickness={1}
+                          dashLength={10}
+                          dashColor={COLORS.super_light_grey}
+                        />
+                        <View>
+                          <View style={styles.column}>
+                            <View style={styles.contentRow}>
+                              <Ionicons
+                                name="md-calendar"
+                                size={28}
+                                color={COLORS.orange_icon}
+                              />
+                            </View>
+                            <View style={{ marginLeft: 15 }}>
+                              <View style={{ marginBottom: 4 }}>
+                                <Text
+                                  style={{
+                                    fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
+                                    fontSize: 16,
+                                  }}
+                                >
+                                  {position?.date
+                                    ? format_ISODateString_To_DayOfWeekMonthDDYYYY(
+                                        position?.date
+                                      )
+                                    : ''}
+                                </Text>
+                              </View>
+                              <View style={{ marginBottom: 4 }}>
+                                <Text
+                                  style={{
+                                    fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+                                    fontSize: 14,
+                                  }}
+                                >
+                                  {position?.timeFrom && position?.timeTo
+                                    ? format_Time_To_HHss(position?.timeFrom) +
+                                      ' - ' +
+                                      format_Time_To_HHss(position?.timeTo) +
+                                      ' (GMT +7)'
+                                    : ''}
+                                </Text>
+                              </View>
+                            </View>
+                          </View>
+                          {/* COLUMN 2 */}
+                          <View style={styles.column}>
+                            <View style={styles.contentRow}>
+                              <Ionicons
+                                name="location-sharp"
+                                size={28}
+                                color={COLORS.orange_icon}
+                              />
+                            </View>
+                            <View style={{ marginLeft: 15 }}>
+                              <View style={{ marginBottom: 4 }}>
+                                <Text
+                                  style={{
+                                    fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
+                                    fontSize: 16,
+                                  }}
+                                >
+                                  {position?.schoolName
+                                    ? position?.schoolName
+                                    : ''}
+                                </Text>
+                              </View>
+                              <View
+                                style={{
+                                  marginBottom: 4,
+                                  maxWidth: ScreenWidth * 0.6,
+                                }}
+                              >
+                                <Text
+                                  style={{
+                                    fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+                                    fontSize: 14,
+                                  }}
+                                >
+                                  {position?.location ? position?.location : ''}
+                                </Text>
+                              </View>
+                            </View>
+                          </View>
+                          {/* COLUMN 3 */}
+                          <View style={[styles.column, { marginBottom: 0 }]}>
+                            <View style={styles.contentRow}>
+                              <Ionicons
+                                name="md-calendar"
+                                size={28}
+                                color={COLORS.orange_icon}
+                              />
+                            </View>
+                            <View style={{ marginLeft: 15 }}>
+                              <View style={{ marginBottom: 4 }}>
+                                <Text
+                                  style={{
+                                    fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
+                                    fontSize: 16,
+                                  }}
+                                >
+                                  Attendee Number
+                                </Text>
+                              </View>
+                              <View style={{ marginBottom: 4 }}>
+                                <Text
+                                  style={{
+                                    fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+                                    fontSize: 14,
+                                  }}
+                                >
+                                  {position?.registerAmount || position?.amount
+                                    ? position?.registerAmount +
+                                      ' / ' +
+                                      position?.amount +
+                                      ' collaborators'
+                                    : ''}
+                                </Text>
+                              </View>
+                            </View>
+                          </View>
+                        </View>
 
-                      <View style={styles.section}>
-                        <Text style={styles.paragraph}>* Bus Service?</Text>
-                        <Switch
-                          disabled={position?.isBusService ? false : true}
-                          value={isSelectedBusOption[index]}
-                          onValueChange={(value) => selectedBusOption(index)}
-                          color={'#fcc995'}
-                          thumbColor={
-                            isSelectedBusOption[index]
-                              ? COLORS.orange_button
-                              : '#fff'
-                          }
-                          // style={{marginLeft: 10}}
+                        <DashedLine
+                          style={{ marginVertical: 10 }}
+                          dashGap={0}
+                          dashThickness={1}
+                          dashLength={10}
+                          dashColor={COLORS.super_light_grey}
                         />
-                      </View>
-                      <View>
-                        <SubmitButton
-                          onPress={showAlertHandler}
-                          style={{
-                            marginHorizontal: 40,
-                            height: 40,
-                            borderRadius: 10,
-                          }}
-                          textStyle={{ fontSize: 16 }}
-                          titleButton="REGISTER NOW"
-                        />
-                        <ConfirmAlert
-                          show={showAlert}
-                          title="CONFIRM"
-                          message="Are you sure Are you sure you want to apply for this position?"
-                          confirmText="Yes"
-                          cancelText="No"
-                          confirmButtonColor={COLORS.orange_button}
-                          onConfirmPressed={() =>
-                            handleSubmit(
-                              index + 1,
-                              isSelectedBusOption[index],
-                              position.postId,
-                              position.id
-                            )
-                          }
-                          onCancelPressed={hideAlertHandler}
-                        />
-                      </View>
-                      <Button
+
+                        <View style={styles.section}>
+                          <Text style={styles.paragraph}>* Bus Service?</Text>
+                          <Switch
+                            disabled={position?.isBusService ? false : true}
+                            value={isSelectedBusOption[index]}
+                            onValueChange={(value) => selectedBusOption(index)}
+                            color={'#fcc995'}
+                            thumbColor={
+                              isSelectedBusOption[index]
+                                ? COLORS.orange_button
+                                : '#fff'
+                            }
+                            // style={{marginLeft: 10}}
+                          />
+                        </View>
+                        <View>
+                          <SubmitButton
+                            onPress={showAlertHandler}
+                            style={{
+                              marginHorizontal: 40,
+                              height: 40,
+                              borderRadius: 10,
+                            }}
+                            textStyle={{ fontSize: 16 }}
+                            titleButton="REGISTER NOW"
+                          />
+                          <ConfirmAlert
+                            show={showAlert}
+                            title="CONFIRM"
+                            message="Are you sure Are you sure you want to apply for this position?"
+                            confirmText="Yes"
+                            cancelText="No"
+                            confirmButtonColor={COLORS.orange_button}
+                            onConfirmPressed={() =>
+                              handleSubmit(
+                                INDEX,
+                                isSelectedBusOption[index],
+                                position.id
+                              )
+                            }
+                            onCancelPressed={hideAlertHandler}
+                          />
+                        </View>
+                        {/* <Button
                         title={'dialog box'}
                         onPress={() =>
                           Dialog.show({
                             type: ALERT_TYPE.DANGER,
                             title: 'Danger',
                             textBody: 'Congrats! this is dialog box success',
-                            button: 'close',
-                            autoClose: 100,
+                            button: 'Close',
+                            // autoClose: 100,
                           })
                         }
-                      />
-                    </View>
-                  )}
+                      /> */}
+                      </View>
+                    )}
+                  </View>
                 </View>
-              </View>
-            ))
+              );
+            })
           ) : (
             <View />
           )}
@@ -429,6 +446,7 @@ export default PositionRegistration;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FFF',
   },
   containerScroll: {
     marginBottom: 20,
@@ -447,7 +465,7 @@ const styles = StyleSheet.create({
   },
   textPosition: {
     fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
-    fontSize: 20,
+    fontSize: 22,
     overflow: 'scroll',
   },
   containerEveryPosition: {
@@ -460,7 +478,7 @@ const styles = StyleSheet.create({
     margin: 15,
   },
   textPositionNum: {
-    fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
+    fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
     fontSize: 15,
   },
   textPositionNum_2: {

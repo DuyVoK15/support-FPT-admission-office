@@ -14,7 +14,7 @@ import {
   
 
   type ErrorPopupProps = {
-    message: string;
+    message: string | JSX.Element;
   }
   const ErrorPopup = (props: ErrorPopupProps) => {
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);

@@ -7,8 +7,6 @@ import { FONTS_FAMILY } from '../../../constants/Fonts';
 import DashedLine from 'react-native-dashed-line';
 
 type EventCardProps = TouchableOpacity['props'] & {
-  currentDay?: string;
-  currentMonth?: string;
   imageUrl?: string;
   timeAgo?: string;
   titleEvent?: string;
@@ -64,11 +62,11 @@ export default class EventCard extends Component<EventCardProps> {
           </View>
 
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <View style={{ alignItems: 'center' }}>
+            <View style={{ alignItems: 'center', marginBottom: 5 }}>
               <Text
                 style={{
                   fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
-                  fontSize: 15,
+                  fontSize: 18,
                 }}
               >
                 {this.props.titleEvent}
