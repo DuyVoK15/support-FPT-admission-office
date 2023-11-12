@@ -14,12 +14,17 @@ import { FONTS_FAMILY } from '../../../../constants/Fonts';
 import { COLORS } from '../../../../constants/Colors';
 import { ScreenWidth } from '../../../../constants/Demesions';
 import DashedLine from 'react-native-dashed-line';
-import { Entypo, FontAwesome, FontAwesome5 } from '@expo/vector-icons';
+import { Entypo, Feather, FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { SHADOWS } from '../../../../constants/Shadows';
 import { useAppDispatch } from '../../../../app/store';
 import { useAppSelector } from '../../../../app/hooks';
 import { getAllPostRegistration } from '../../../../features/collaborator/collab.postRegistrationSlice';
-import useIndex from '../useIndex';
+import useIndex from './useIndex';
+import {
+  format_ISODateString_To_DayOfWeekMonthDD,
+  format_Time_To_HHss,
+} from '../../../../utils/formats';
+import { imageNotFoundUri } from '../../../../utils/images';
 
 const Registration_Pending = () => {
   const { handlers, state, props } = useIndex();
@@ -36,7 +41,7 @@ const Registration_Pending = () => {
           }
         >
           <View style={{ marginTop: 20 }}>
-            {props?.postRegistrationList ? (
+            {props?.postRegistrationList?.data ? (
               props?.postRegistrationList?.data
                 .filter((postRegistration) => postRegistration?.status === 1)
                 .map((postRegistration, index) => (
@@ -50,23 +55,32 @@ const Registration_Pending = () => {
                           <Image
                             style={styles.image}
                             source={{
-                              uri: 'https://cdnimg.vietnamplus.vn/t870/uploaded/xpcwvovt/2020_11_13/ttxvn_viet_duc_5.jpg',
+                              uri: postRegistration?.post?.postImg
+                                ? postRegistration?.post?.postImg
+                                : imageNotFoundUri,
                             }}
                           />
                         </View>
                         <View style={{ flex: 1, marginLeft: 15 }}>
-                          <Text style={styles.textFirst}>General</Text>
+                          <Text style={styles.textFirst}>
+                            {postRegistration?.registrationCode
+                              ? 'Code: #' + postRegistration?.registrationCode
+                              : 'No value'}
+                          </Text>
+
+                          {/* <Text style={styles.textFirst}>General</Text> */}
                           <Text style={styles.textFirst_2}>
-                            {
-                              postRegistration?.post.postCategory
-                                ?.postCategoryDescription
-                            }
+                            {postRegistration?.post.postCategory
+                              ?.postCategoryDescription
+                              ? postRegistration?.post.postCategory
+                                  ?.postCategoryDescription
+                              : 'No value'}
                           </Text>
                         </View>
                       </View>
 
                       <DashedLine
-                        style={{ marginVertical: 10 }}
+                        style={{ marginVertical: 15 }}
                         dashGap={0}
                         dashThickness={1}
                         dashLength={8}
@@ -83,7 +97,9 @@ const Registration_Pending = () => {
                         >
                           <Text style={styles.textSecond}>Position</Text>
                           <Text style={styles.textSecond_2}>
-                            {postRegistration?.postPosition?.positionName}
+                            {postRegistration?.postPosition?.positionName
+                              ? postRegistration?.postPosition?.positionName
+                              : 'No value'}
                           </Text>
                         </View>
                         <View
@@ -94,7 +110,17 @@ const Registration_Pending = () => {
                           }}
                         >
                           <Text style={styles.textSecond}>Date</Text>
-                          <Text style={styles.textSecond_2}>Tue, JUL 24</Text>
+                          <Text style={styles.textSecond_2}>
+                            {postRegistration?.postPosition?.date
+                              ? format_ISODateString_To_DayOfWeekMonthDD(
+                                  postRegistration?.postPosition?.date
+                                )
+                                ? format_ISODateString_To_DayOfWeekMonthDD(
+                                    postRegistration?.postPosition?.date
+                                  )
+                                : 'No value'
+                              : 'No value'}
+                          </Text>
                         </View>
                         <View
                           style={{
@@ -104,9 +130,31 @@ const Registration_Pending = () => {
                           }}
                         >
                           <Text style={styles.textSecond}>Time</Text>
-                          <Text style={styles.textSecond_2}>6:00 AM</Text>
+                          <Text style={styles.textSecond_2}>
+                            {postRegistration?.postPosition?.timeFrom
+                              ? format_Time_To_HHss(
+                                  postRegistration?.postPosition?.timeFrom
+                                )
+                                ? format_Time_To_HHss(
+                                    postRegistration?.postPosition?.timeFrom
+                                  ) + ' AM'
+                                : 'No value'
+                              : 'No value'}
+                          </Text>
                         </View>
                       </View>
+
+                      <View style={styles.containerStatus}>
+                        <View style={styles.statusRow}>
+                          <View>
+                            <Text style={styles.thirdText}>
+                              Pending
+                            </Text>
+                          </View>
+                          <View style={styles.statusDot} />
+                        </View>
+                      </View>
+
                       <DashedLine
                         style={{ marginVertical: 10 }}
                         dashGap={0}
@@ -114,179 +162,40 @@ const Registration_Pending = () => {
                         dashLength={8}
                         dashColor={COLORS.super_light_grey}
                       />
-                      {state.isShowDetail[index] === false ? (
-                        <View style={styles.containerViewDetail}>
-                          <TouchableOpacity
-                            onPress={() => handlers.toggleDetail(index)}
+
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          marginTop: 10,
+                          alignItems: 'center',
+                          justifyContent: 'space-evenly',
+                        }}
+                      >                        
+                        <TouchableOpacity
+                          style={{
+                            paddingVertical: 12,
+                            width: 110,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            borderRadius: 15,
+                            backgroundColor: COLORS?.orange_button,
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                              fontSize: 15,
+                            }}
                           >
-                            <Entypo
-                              name="chevron-down"
-                              size={30}
-                              color={COLORS.light_grey}
-                            />
-                          </TouchableOpacity>
-                        </View>
-                      ) : (
-                        <View />
-                      )}
-
-                      <View style={styles.containerStatus}>
-                        <View style={styles.statusRow}>
-                          <View>
-                            <Text style={styles.thirdText}>
-                              {postRegistration?.status === 1
-                                ? 'Pending'
-                                : 'Status'}
-                            </Text>
-                          </View>
-                          <View style={styles.statusDot} />
-                        </View>
+                            Details
+                          </Text>
+                        </TouchableOpacity>
                       </View>
-
-                      {state.isShowDetail[index] ? (
-                        <View>
-                          <View style={styles.column}>
-                            <View
-                              style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                marginVertical: 5,
-                              }}
-                            >
-                              <View
-                                style={{
-                                  borderRadius: 10,
-                                  backgroundColor: COLORS.super_light_orange,
-                                  width: 50,
-                                  height: 50,
-                                  justifyContent: 'center',
-                                  alignItems: 'center',
-                                }}
-                              >
-                                <FontAwesome5
-                                  name="school"
-                                  size={24}
-                                  color={COLORS.super_dark_orange}
-                                />
-                              </View>
-                              <View style={{ marginLeft: 20 }}>
-                                <Text
-                                  style={{
-                                    fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
-                                    fontSize: 18,
-                                    marginVertical: 2,
-                                    maxWidth: 270,
-                                  }}
-                                >
-                                  FPT University
-                                </Text>
-                              </View>
-                            </View>
-                            {/* ------------------------ */}
-                            <View
-                              style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                marginVertical: 5,
-                              }}
-                            >
-                              <View
-                                style={{
-                                  borderRadius: 10,
-                                  backgroundColor: COLORS.super_light_orange,
-                                  width: 50,
-                                  height: 50,
-                                  justifyContent: 'center',
-                                  alignItems: 'center',
-                                }}
-                              >
-                                <Entypo
-                                  name="location"
-                                  size={30}
-                                  color={COLORS.super_dark_orange}
-                                />
-                              </View>
-                              <View style={{ marginLeft: 20 }}>
-                                <Text
-                                  style={{
-                                    fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
-                                    fontSize: 14,
-                                    marginVertical: 2,
-                                    maxWidth: 270,
-                                  }}
-                                >
-                                  {postRegistration?.postPosition?.location}
-                                </Text>
-                              </View>
-                            </View>
-                            {/* ------------------------ */}
-                            <View
-                              style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                marginVertical: 5,
-                              }}
-                            >
-                              <View
-                                style={{
-                                  borderRadius: 10,
-                                  backgroundColor: COLORS.super_light_orange,
-                                  width: 50,
-                                  height: 50,
-                                  justifyContent: 'center',
-                                  alignItems: 'center',
-                                }}
-                              >
-                                <FontAwesome
-                                  name="money"
-                                  size={30}
-                                  color={COLORS.super_dark_orange}
-                                />
-                              </View>
-                              <View style={{ marginLeft: 20 }}>
-                                <Text
-                                  style={{
-                                    fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
-                                    fontSize: 18,
-                                    marginVertical: 2,
-                                  }}
-                                >
-                                  {postRegistration?.postPosition?.salary
-                                    ? String(
-                                        postRegistration?.postPosition?.salary
-                                      ) + ' VNĐ'
-                                    : ''}
-                                </Text>
-                              </View>
-                            </View>
-                          </View>
-                          <DashedLine
-                            style={{ marginVertical: 10 }}
-                            dashGap={0}
-                            dashThickness={1}
-                            dashLength={8}
-                            dashColor={COLORS.super_light_grey}
-                          />
-                          <View style={styles.containerViewDetail}>
-                            <TouchableOpacity
-                              onPress={() => handlers.toggleDetail(index)}
-                            >
-                              <Entypo
-                                name="chevron-up"
-                                size={30}
-                                color={COLORS.light_grey}
-                              />
-                            </TouchableOpacity>
-                          </View>
-                        </View>
-                      ) : (
-                        <View />
-                      )}
                     </View>
                   </View>
                 ))
             ) : (
-              <View />
+              <View></View>
             )}
           </View>
         </ScrollView>
@@ -300,12 +209,12 @@ export default Registration_Pending;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#FFF',
   },
   containerItem: {
     marginBottom: 20,
-    marginHorizontal: 20,
-    backgroundColor: 'white',
+    marginHorizontal: 10,
+    backgroundColor: '#FFF',
     borderRadius: 15,
     shadowColor: '#000000',
     shadowOffset: {
@@ -314,7 +223,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.2,
     shadowRadius: 5.62,
-    elevation: 8,
+    elevation: 6,
   },
   containerRow: {
     margin: 15,

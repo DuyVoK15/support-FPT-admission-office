@@ -1,9 +1,8 @@
-import { View, Text } from 'react-native';
-import React, { useCallback, useEffect, useState } from 'react';
-import { useAppDispatch } from '../../../app/store';
-import { useAppSelector } from '../../../app/hooks';
-import { getAllPostRegistration } from '../../../features/collaborator/collab.postRegistrationSlice';
-import { RegistrationStatus } from '../../../enums/collaborator/RegistrationStatus';
+import { useCallback, useEffect, useState } from "react";
+import { useAppSelector } from "../../../../app/hooks";
+import { useAppDispatch } from "../../../../app/store";
+import { RegistrationStatus } from "../../../../enums/collaborator/RegistrationStatus";
+import { getAllPostRegistration } from "../../../../features/collaborator/collab.postRegistrationSlice";
 
 const useIndex = () => {
   const dispatch = useAppDispatch();
@@ -28,17 +27,8 @@ const useIndex = () => {
     }, 1000);
   }, []);
 
-  const [isShowDetail, setIsShowDetail] = useState<boolean[]>(
-    Array(20).fill(false)
-  );
-  const toggleDetail = (index: number) => {
-    const updatedStatus = [...isShowDetail];
-    updatedStatus[index] = !updatedStatus[index];
-    setIsShowDetail(updatedStatus);
-  };
-
-  const handlers = { onRefresh, toggleDetail };
-  const state = { refreshing, isShowDetail };
+  const handlers = { onRefresh };
+  const state = { refreshing };
   const props = { postRegistrationList };
 
   return {

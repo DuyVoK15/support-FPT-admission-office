@@ -10,21 +10,26 @@ import React, { useState } from 'react';
 import { COLORS } from '../../../../constants/Colors';
 import { FONTS_FAMILY } from '../../../../constants/Fonts';
 import { ScreenWidth } from '../../../../constants/Demesions';
-import { Entypo, FontAwesome, FontAwesome5 } from '@expo/vector-icons';
+import {
+  Entypo,
+  Feather,
+  FontAwesome,
+  FontAwesome5,
+  MaterialCommunityIcons,
+} from '@expo/vector-icons';
 import DashedLine from 'react-native-dashed-line';
-import useIndex from '../useIndex';
+import useIndex from './useIndex';
 import { RefreshControl } from 'react-native';
+import {
+  format_ISODateString_To_DayOfWeekMonthDD,
+  format_Time_To_HHss,
+} from '../../../../utils/formats';
+import { imageNotFoundUri } from '../../../../utils/images';
+import { useNavigation } from '@react-navigation/native';
+import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
 
 const Registration_Confirm = () => {
-  const [isShowDetail, setIsShowDetail] = useState<boolean[]>(
-    Array(20).fill(false)
-  );
-
-  const toggleDetail = (index: number) => {
-    const updatedStatus = [...isShowDetail];
-    updatedStatus[index] = !updatedStatus[index];
-    setIsShowDetail(updatedStatus);
-  };
+  const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const { handlers, state, props } = useIndex();
 
   return (
@@ -38,258 +43,202 @@ const Registration_Confirm = () => {
             />
           }
         >
-          {props?.postRegistrationList ? (
-            props?.postRegistrationList?.data
-              .filter((postRegistration) => postRegistration?.status === 2)
-              .map((postRegistration, index) => (
-                <View
-                  key={postRegistration?.registrationCode}
-                  style={styles.containerItem}
-                >
-                  <View style={styles.containerRow}>
-                    <View style={styles.firstRow}>
-                      <View style={styles.containerImage}>
-                        <Image
-                          style={styles.image}
-                          source={{
-                            uri: 'https://cdnimg.vietnamplus.vn/t870/uploaded/xpcwvovt/2020_11_13/ttxvn_viet_duc_5.jpg',
-                          }}
-                        />
-                      </View>
-                      <View style={{ flex: 1, marginLeft: 15 }}>
-                        <Text style={styles.textFirst}>General</Text>
-                        <Text style={styles.textFirst_2}>
-                          {
-                            postRegistration?.postRegistrationDetail?.post
-                              .postCategory?.postCategoryDescription
-                          }
-                        </Text>
-                      </View>
-                    </View>
-
-                    <DashedLine
-                      style={{ marginVertical: 10 }}
-                      dashGap={0}
-                      dashThickness={1}
-                      dashLength={8}
-                      dashColor={COLORS.super_light_grey}
-                    />
-
-                    <View style={styles.secondRow}>
-                      <View
-                        style={{
-                          flex: 4,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <Text style={styles.textSecond}>Position</Text>
-                        <Text style={styles.textSecond_2}>
-                          {
-                            postRegistration?.postRegistrationDetail
-                              ?.postPosition?.positionName
-                          }
-                        </Text>
-                      </View>
-                      <View
-                        style={{
-                          flex: 3,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <Text style={styles.textSecond}>Date</Text>
-                        <Text style={styles.textSecond_2}>Tue, JUL 24</Text>
-                      </View>
-                      <View
-                        style={{
-                          flex: 4,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <Text style={styles.textSecond}>Time</Text>
-                        <Text style={styles.textSecond_2}>6:00 AM</Text>
-                      </View>
-                    </View>
-                    <DashedLine
-                      style={{ marginVertical: 10 }}
-                      dashGap={0}
-                      dashThickness={1}
-                      dashLength={8}
-                      dashColor={COLORS.super_light_grey}
-                    />
-                    {isShowDetail[index] === false ? (
-                      <View style={styles.containerViewDetail}>
-                        <TouchableOpacity onPress={() => toggleDetail(index)}>
-                          <Entypo
-                            name="chevron-down"
-                            size={30}
-                            color={COLORS.light_grey}
+          <View style={{ marginTop: 5 }}>
+            {props?.postRegistrationList?.data ? (
+              props?.postRegistrationList?.data.map(
+                (postRegistration, index) => (
+                  <View
+                    key={postRegistration?.registrationCode}
+                    style={styles.containerItem}
+                  >
+                    <View style={styles.containerRow}>
+                      <View style={styles.firstRow}>
+                        <View style={styles.containerImage}>
+                          <Image
+                            style={styles.image}
+                            source={{
+                              uri: postRegistration?.post?.postImg
+                                ? postRegistration?.post?.postImg
+                                : imageNotFoundUri,
+                            }}
                           />
-                        </TouchableOpacity>
-                      </View>
-                    ) : (
-                      <View />
-                    )}
-
-                    <View style={styles.containerStatus}>
-                      <View style={styles.statusRow}>
-                        <View>
-                          <Text style={styles.thirdText}>
-                            {postRegistration?.status === 2 ? 'Confirm' : ''}
+                        </View>
+                        <View style={{ flex: 1, marginLeft: 15 }}>
+                          <Text style={styles.textFirst}>General</Text>
+                          <Text style={styles.textFirst_2}>
+                            {postRegistration?.post.postCategory
+                              ?.postCategoryDescription
+                              ? postRegistration?.post.postCategory
+                                  ?.postCategoryDescription
+                              : 'No value'}
                           </Text>
                         </View>
-                        <View style={styles.statusDot} />
+                      </View>
+
+                      <DashedLine
+                        style={{ marginVertical: 10 }}
+                        dashGap={0}
+                        dashThickness={1}
+                        dashLength={8}
+                        dashColor={COLORS.super_light_grey}
+                      />
+
+                      <View style={styles.secondRow}>
+                        <View
+                          style={{
+                            flex: 4,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                        >
+                          <Text style={styles.textSecond}>Position</Text>
+                          <Text style={styles.textSecond_2}>
+                            {postRegistration?.postPosition?.positionName
+                              ? postRegistration?.postPosition?.positionName
+                              : 'No value'}
+                          </Text>
+                        </View>
+                        <View
+                          style={{
+                            flex: 3,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                        >
+                          <Text style={styles.textSecond}>Date</Text>
+                          <Text style={styles.textSecond_2}>
+                            {postRegistration?.postPosition?.date
+                              ? format_ISODateString_To_DayOfWeekMonthDD(
+                                  postRegistration?.postPosition?.date
+                                )
+                                ? format_ISODateString_To_DayOfWeekMonthDD(
+                                    postRegistration?.postPosition?.date
+                                  )
+                                : 'No value'
+                              : 'No value'}
+                          </Text>
+                        </View>
+                        <View
+                          style={{
+                            flex: 4,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                        >
+                          <Text style={styles.textSecond}>Time</Text>
+                          <Text style={styles.textSecond_2}>
+                            {postRegistration?.postPosition?.timeFrom
+                              ? format_Time_To_HHss(
+                                  postRegistration?.postPosition?.timeFrom
+                                )
+                                ? format_Time_To_HHss(
+                                    postRegistration?.postPosition?.timeFrom
+                                  ) + ' AM'
+                                : 'No value'
+                              : 'No value'}
+                          </Text>
+                        </View>
+                      </View>
+
+                      <View style={styles.containerStatus}>
+                        <View style={styles.statusRow}>
+                          <View>
+                            <Text style={styles.thirdText}>Confirm</Text>
+                          </View>
+                          <View style={styles.statusDot} />
+                        </View>
+                      </View>
+
+                      <DashedLine
+                        style={{ marginVertical: 10 }}
+                        dashGap={0}
+                        dashThickness={1}
+                        dashLength={8}
+                        dashColor={COLORS.super_light_grey}
+                      />
+
+                      {/* Container Button */}
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          marginTop: 10,
+                          alignItems: 'center',
+                          justifyContent: 'space-evenly',
+                        }}
+                      >
+                        {/* Check In Button */}
+                        <TouchableOpacity
+                          style={{
+                            flexDirection: 'row',
+                            paddingVertical: 10,
+                            width: 110,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            borderRadius: 15,
+                            backgroundColor: '#00FF87',
+                          }}
+                        >
+                          <View style={{ flex: 1, marginLeft: 10 }}>
+                            <Text
+                              style={{
+                                fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                                fontSize: 15,
+                              }}
+                            >
+                              Check In
+                            </Text>
+                          </View>
+
+                          <View style={{ flex: 0, marginRight: 10 }}>
+                            <Feather name="log-in" size={20} color="black" />
+                          </View>
+                        </TouchableOpacity>
+
+                        {/* View Detail Button */}
+                        <TouchableOpacity
+                          onPress={() =>
+                            navigation.navigate('REGISTRATION_CONFIRM_DETAIL', {
+                              postRegistration,
+                            })
+                          }
+                          style={{
+                            flexDirection: 'row',
+                            paddingVertical: 10,
+                            width: 110,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            borderRadius: 15,
+                            backgroundColor: COLORS?.orange_button,
+                          }}
+                        >
+                          <View style={{ flex: 1, marginLeft: 15 }}>
+                            <Text
+                              style={{
+                                fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                                fontSize: 15,
+                              }}
+                            >
+                              Details
+                            </Text>
+                          </View>
+
+                          <View style={{ flex: 0, marginRight: 15 }}>
+                            <MaterialCommunityIcons
+                              name="details"
+                              size={20}
+                              color="black"
+                            />
+                          </View>
+                        </TouchableOpacity>
                       </View>
                     </View>
-
-                    {isShowDetail[index] ? (
-                      <View>
-                        <View style={styles.column}>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              marginVertical: 5,
-                            }}
-                          >
-                            <View
-                              style={{
-                                borderRadius: 10,
-                                backgroundColor: COLORS.super_light_orange,
-                                width: 50,
-                                height: 50,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                              }}
-                            >
-                              <FontAwesome5
-                                name="school"
-                                size={24}
-                                color={COLORS.super_dark_orange}
-                              />
-                            </View>
-                            <View style={{ marginLeft: 20 }}>
-                              <Text
-                                style={{
-                                  fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
-                                  fontSize: 18,
-                                  marginVertical: 2,
-                                  maxWidth: 270,
-                                }}
-                              >
-                                FPT University
-                              </Text>
-                            </View>
-                          </View>
-                          {/* ------------------------ */}
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              marginVertical: 5,
-                            }}
-                          >
-                            <View
-                              style={{
-                                borderRadius: 10,
-                                backgroundColor: COLORS.super_light_orange,
-                                width: 50,
-                                height: 50,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                              }}
-                            >
-                              <Entypo
-                                name="location"
-                                size={30}
-                                color={COLORS.super_dark_orange}
-                              />
-                            </View>
-                            <View style={{ marginLeft: 20 }}>
-                              <Text
-                                style={{
-                                  fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
-                                  fontSize: 14,
-                                  marginVertical: 2,
-                                  maxWidth: 270,
-                                }}
-                              >
-                                {
-                                  postRegistration?.postRegistrationDetail
-                                    ?.postPosition?.location
-                                }
-                              </Text>
-                            </View>
-                          </View>
-                          {/* ------------------------ */}
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              marginVertical: 5,
-                            }}
-                          >
-                            <View
-                              style={{
-                                borderRadius: 10,
-                                backgroundColor: COLORS.super_light_orange,
-                                width: 50,
-                                height: 50,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                              }}
-                            >
-                              <FontAwesome
-                                name="money"
-                                size={30}
-                                color={COLORS.super_dark_orange}
-                              />
-                            </View>
-                            <View style={{ marginLeft: 20 }}>
-                              <Text
-                                style={{
-                                  fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
-                                  fontSize: 18,
-                                  marginVertical: 2,
-                                }}
-                              >
-                                {postRegistration?.postRegistrationDetail
-                                  ?.salary
-                                  ? postRegistration?.postRegistrationDetail
-                                      ?.salary + ' VNĐ'
-                                  : ''}
-                              </Text>
-                            </View>
-                          </View>
-                        </View>
-                        <DashedLine
-                          style={{ marginVertical: 10 }}
-                          dashGap={0}
-                          dashThickness={1}
-                          dashLength={8}
-                          dashColor={COLORS.super_light_grey}
-                        />
-                        <View style={styles.containerViewDetail}>
-                          <TouchableOpacity onPress={() => toggleDetail(index)}>
-                            <Entypo
-                              name="chevron-up"
-                              size={30}
-                              color={COLORS.light_grey}
-                            />
-                          </TouchableOpacity>
-                        </View>
-                      </View>
-                    ) : (
-                      <View />
-                    )}
                   </View>
-                </View>
-              ))
-          ) : (
-            <View />
-          )}
+                )
+              )
+            ) : (
+              <View />
+            )}
+          </View>
         </ScrollView>
       </View>
     </View>
@@ -304,8 +253,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   containerItem: {
-    marginVertical: 20,
-    marginHorizontal: 20,
+    marginVertical: 15,
+    marginHorizontal: 10,
     backgroundColor: 'white',
     borderRadius: 15,
     shadowColor: '#000000',
