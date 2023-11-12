@@ -49,7 +49,7 @@ const UserProfileSignup: FC<UserProfileSignupProps> = (data) => {
       <Header style={{ justifyContent: 'center' }}>
         <Text style={styles.titleHeader}>Sign-up Account Information</Text>
       </Header>
-      <View style={{ marginTop: 20, marginBottom: 110 }}>
+      <View style={{ flex: 1, marginTop: 20, marginBottom: 20 }}>
         <View
           style={{
             marginHorizontal: 20,
@@ -86,7 +86,7 @@ const UserProfileSignup: FC<UserProfileSignupProps> = (data) => {
               style={{
                 fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
                 color: COLORS?.red_date,
-                textAlign: "center",
+                textAlign: 'center',
               }}
             >
               Please fill your all information before exploring! Thank you!
