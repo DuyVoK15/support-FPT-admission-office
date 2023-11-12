@@ -33,7 +33,7 @@ const CategoryFilterList: FC<CategoryFilterListProps> = (props) => {
   };
 
   return (
-    <View style={{ margin: 15 }}>
+    <View style={{ marginVertical: 15 }}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {props.postCategoryList?.data
