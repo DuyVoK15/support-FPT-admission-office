@@ -35,6 +35,8 @@ import usePushNotifications from './usePushNotifications';
 import { AlertNotificationRoot } from 'react-native-alert-notification';
 import { MyContextProvider } from './src/context/stateContext';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import ErrorPopup from './src/components/shared/PopupNotification/ErrorPopup';
+import SuccessPopup from './src/components/shared/PopupNotification/SuccessPopup';
 
 export default function App() {
   const [fontsLoaded, fontError] = useFonts({
@@ -56,24 +58,25 @@ export default function App() {
       <AlertNotificationRoot>
         <ToastProvider
           placement="bottom"
-          duration={5000}
+          duration={3000}
           animationType="zoom-in"
           animationDuration={250}
-          successColor="green"
-          dangerColor="red"
-          warningColor="orange"
+          successColor="#00FF87"
+          dangerColor="#F74C06"
+          warningColor="#FAB430"
           normalColor="gray"
-          successIcon={<AntDesign name="checkcircle" size={24} color="white" />}
-          dangerIcon={
-            <MaterialIcons name="dangerous" size={30} color="white" />
-          }
-          warningIcon={<FontAwesome name="warning" size={24} color="white" />}
-          style={{ bottom: 50 }}
-          textStyle={{ fontSize: 20 }}
+          // successIcon={<AntDesign name="checkcircle" size={24} color="white" />}
+          // dangerIcon={
+          //   <MaterialIcons name="dangerous" size={30} color="white" />
+          // }
+          // warningIcon={<FontAwesome name="warning" size={24} color="white" />}
+          style={{ bottom: 50, borderRadius: 20, marginHorizontal: 10 }}
+          
+          textStyle={{ fontSize: 16, textAlign: "center", color: "#2f302f" }}
           offset={50} // offset for both top and bottom toasts
           offsetTop={30}
           offsetBottom={40}
-          swipeEnabled={true}
+          swipeEnabled={true}         
         >
           <Provider store={store}>
             <MyContextProvider>
