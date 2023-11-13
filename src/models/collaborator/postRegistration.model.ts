@@ -1,4 +1,5 @@
 interface DataViewPostRegistration {
+  id: number;
   registrationCode: string;
   status: number;
   schoolBusOption: boolean;
