@@ -18,8 +18,7 @@ interface EventCardWrapProps extends TouchableOpacityProps {
 
 const EventCardWrap: FC<EventCardWrapProps> = (props) => {
   const { ...otherProps } = props;
-  const imgUndefind =
-    'https://dci.edu.vn/wp-content/themes/consultix/images/no-image-found-360x250.png';
+  
   return (
     <TouchableOpacity
       style={{
@@ -37,7 +36,6 @@ const EventCardWrap: FC<EventCardWrapProps> = (props) => {
             <Image
               style={{ width: '100%', height: 120, borderRadius: 15 }}
               source={{ uri: props.imageUrl }}
-              defaultSource={{ uri: imgUndefind }}
             />
             {props.totalAmountPosition && props.totalRegisterAmount && (
               <View

@@ -1,6 +1,7 @@
 import {
   Button,
   Image,
+  ImageBackground,
   SafeAreaView,
   StatusBar,
   StyleSheet,
@@ -15,7 +16,10 @@ import { COLORS } from '../../../constants/Colors';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
 import { useAppDispatch } from '../../../app/store';
-import { getAllCheckInPostRegistration, getAllPostRegistration } from '../../../features/collaborator/collab.postRegistrationSlice';
+import {
+  getAllCheckInPostRegistration,
+  getAllPostRegistration,
+} from '../../../features/collaborator/collab.postRegistrationSlice';
 import { useAppSelector } from '../../../app/hooks';
 import ReactNativeModal from 'react-native-modal';
 import PagerView from 'react-native-pager-view';
@@ -57,12 +61,12 @@ const HomeRegistrationPopup = () => {
   const checkInPostRegistrationList = useAppSelector(
     (state) => state.collab_postRegistration.checkInPostRegistration
   );
-  const fetchPostRegistration = async () => {
+  const fetchCheckInPostRegistration = async () => {
     await dispatch(getAllCheckInPostRegistration({}));
   };
-  // useEffect(() => {
-  //   fetchPostRegistration();
-  // }, []);
+  useEffect(() => {
+    fetchCheckInPostRegistration();
+  }, []);
 
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
 
@@ -140,44 +144,58 @@ const HomeRegistrationPopup = () => {
             }}
             onPageScroll={handler}
           >
-            {checkInPostRegistrationList?.data.map((obj, index) => (
+            {checkInPostRegistrationList?.data.map((registration, index) => (
               <View
                 key={index}
                 style={{
                   flex: 1,
                 }}
               >
-                <View>
-                  <Image
-                    style={{
-                      width: '100%',
-                      height: 250,
-                      resizeMode: 'cover',
-                    }}
-                    source={{
-                      uri: 'https://www.baokontum.com.vn/uploads/Image/2023/01/09/103359ta-con-meo.jpg',
-                    }}
-                  />
-                </View>
-                <View style={{ marginHorizontal: 15 }}>
-                  <Button title="Hide modal" onPress={toggleModal} />
-                  <View style={{ flexDirection: 'row' }}>
+                <ImageBackground
+                  style={{
+                    width: '100%',
+                    height: 300,
+                  }}
+                  source={{
+                    uri: 'https://www.baokontum.com.vn/uploads/Image/2023/01/09/103359ta-con-meo.jpg',
+                  }}
+                ></ImageBackground>
+                <View
+                  style={{
+                    position: 'absolute',
+                    backgroundColor: '#FFF',
+                    width: ScreenWidth * 0.8,
+                    left: ScreenWidth * 0.5 - (ScreenWidth * 0.8) / 2, // Điều chỉnh yourWidth dựa trên chiều rộng của View
+                    bottom: 5,
+                  }}
+                >
+                  <View style={{ marginHorizontal: 15, marginVertical: 15 }}>
+                    <Button title="Hide modal" onPress={toggleModal} />
                     <View style={{ flexDirection: 'row' }}>
-                      <Text style={{fontFamily: FONTS_FAMILY.Ubuntu_500Medium, fontSize: 15}}>Registration Date: </Text>
-                      <Text>Tuesday, 15 November 2023</Text>
+                      <View style={{ flexDirection: 'row' }}>
+                        <Text
+                          style={{
+                            fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
+                            fontSize: 15,
+                          }}
+                        >
+                          Registration Date:{' '}
+                        </Text>
+                        <Text>Tuesday, 15 November 2023</Text>
+                      </View>
                     </View>
                   </View>
                 </View>
               </View>
             ))}
           </AnimatedPager>
-          <View style={{ height: 100, backgroundColor: 'green' }}>
+          {/* <View style={{ height: 100, backgroundColor: 'green' }}>
             <Progress.Bar
               progress={numberPage / 3}
               color="red"
               width={ScreenWidth}
             />
-          </View>
+          </View> */}
         </View>
       </ReactNativeModal>
     </View>

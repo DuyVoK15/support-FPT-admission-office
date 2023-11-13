@@ -34,8 +34,6 @@ import {
 } from '../../../features/collaborator/collab.postSlice';
 import { useAppSelector } from '../../../app/hooks';
 import {
-  formatToDay,
-  formatToMonthString,
   format_ISODateString_To_DayOfWeekMonthDDYYYY,
   format_ISODateString_To_MonthDD,
   format_Time_To_HHss,
@@ -43,26 +41,16 @@ import {
 } from '../../../utils/formats';
 import { COLORS } from '../../../constants/Colors';
 import { useNavigation } from '@react-navigation/native';
-import { ROUTES } from '../../../constants/Routes';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
 import FilterModal from '../../../components/collaborator/Home/FilterModal';
 import { SHADOWS } from '../../../constants/Shadows';
 import EventCardWrap from '../../../components/collaborator/Home/EventCardWrap';
 import { imageNotFoundUri } from '../../../utils/images';
-import UpdateBookingPopup from '../../../components/collaborator/Home/HomeRegistrationPopup';
-import {
-  getAllCheckInPostRegistration,
-  getAllPostRegistration,
-} from '../../../features/collaborator/collab.postRegistrationSlice';
-import Verification from '../Verification';
-import LoadingScreen from '../../../components/shared/Loading/Loading';
+import { getAllCheckInPostRegistration } from '../../../features/collaborator/collab.postRegistrationSlice';
 import HomeRegistrationPopup from '../../../components/collaborator/Home/HomeRegistrationPopup';
 import { DataPost } from '../../../models/collaborator/dataPost.model';
 
 const Home = () => {
-  const arrayTest = [1, 2, 3, 4, 5, 6, 7, 8];
-  const imgUndefind =
-    'https://dci.edu.vn/wp-content/themes/consultix/images/no-image-found-360x250.png';
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const [textSearch, setTextSearch] = useState<string>('');
   const dispatch = useAppDispatch();
@@ -301,7 +289,9 @@ const Home = () => {
           <View style={{ height: ScreenWidth * 0.85, marginTop: 20 }}>
             <ScrollView horizontal scrollEventThrottle={16}>
               {postHomeUpcommingList?.data ? (
-                postHomeUpcommingList?.data?.map((post, index) => (
+                postHomeUpcommingList?.data
+                
+                .map((post, index) => (
                   <View
                     key={index}
                     style={{ marginTop: 5, marginHorizontal: 15 }}
@@ -378,7 +368,7 @@ const Home = () => {
                   fontSize: 24,
                 }}
               >
-                Post is missing slot
+                Post Re-Open
               </Text>
             </View>
 
@@ -426,7 +416,7 @@ const Home = () => {
                 rowGap: cardGap - 2,
               }}
             >
-              {postHomeReOpenList ? (
+              {postHomeReOpenList.data ? (
                 postHomeReOpenList?.data.map((post, index) => (
                   <View key={index}>
                     <EventCardWrap
