@@ -69,7 +69,7 @@ export const createPostRegistration = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       const axiosError = error as AxiosError;
-      console.log(axiosError.status);
+      // console.log(axiosError.status);
       return rejectWithValue(axiosError.response?.data);
     }
   }
@@ -155,6 +155,12 @@ export const postRegistrationSlice = createSlice({
             break;
           case RegistrationStatus.COMPLETED:
             state.postRegistrationCompleted = action.payload.response_data;
+            break;
+          case RegistrationStatus.CHECKIN:
+            state.postRegistrationConfirm = action.payload.response_data;
+            break;
+          case RegistrationStatus.CHECKOUT:
+            state.postRegistrationConfirm = action.payload.response_data;
             break;
           default:
             console.log('No status');
