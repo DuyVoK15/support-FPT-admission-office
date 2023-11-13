@@ -10,6 +10,8 @@ import collab_certificateReducer from '../features/collaborator/collab.certifica
 import collab_contractReducer from '../features/collaborator/collab.contractSlice';
 import collab_reportReducer from '../features/collaborator/collab.reportSlice';
 import collab_complaintReducer from '../features/collaborator/collab.complaintSlice';
+import collab_checkAttendanceReducer from '../features/collaborator/collab.checkAttendanceSlice';
+
 
 import admission_authReducer from '../features/admission/admission.authSlice';
 
@@ -23,6 +25,7 @@ export const store = configureStore({
     collab_contract: collab_contractReducer,
     collab_report: collab_reportReducer,
     collab_complaint: collab_complaintReducer,
+    collab_checkAttendance: collab_checkAttendanceReducer,
     // Thêm reducers khác nếu cần thiết
     admission_auth: admission_authReducer,
   },
