@@ -41,6 +41,7 @@ import {
 import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
 import CreatePostRegistrationParam from '../../../dtos/collaborator/parameter/createPostRegistration.dto';
 import { DataPost } from '../../../models/collaborator/dataPost.model';
+import useCustomToast from '../../../utils/toasts';
 
 const PositionRegistration = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -67,14 +68,8 @@ const PositionRegistration = () => {
     setIsSelectedBusOption(updatedStatus);
   };
 
-  useEffect(() => {
-    console.log(JSON.stringify(item, null, 2));
-  }, []);
-  const toast = useToast();
+  const { showToastError, showToastSuccess } = useCustomToast();
 
-  // useEffect(() => {
-  //   toast.show("Hello World", {type: 'danger'});
-  // }, []);
   const dispatch = useAppDispatch();
   const handleSubmit = async (
     index?: number,
@@ -87,44 +82,60 @@ const PositionRegistration = () => {
         schoolBusOption,
         positionId,
       } as CreatePostRegistrationParam;
-      await dispatch(createPostRegistration(params)).then((res) => {
-        const requestStatus = res?.meta?.requestStatus;
-
-        console.log(JSON.stringify(res, null, 2));
-        const showToastError = (message: string) => {
-          toast.show(message, { type: 'danger' });
-        };
-        if (requestStatus === 'rejected') {
-          const resRejectedData = res.payload as ErrorStatus;
-          switch (resRejectedData?.errorCode) {
-            case 4003:
-              showToastError('This position is confirmed enough slot!');
-              break;
-            case 4004:
-              showToastError('Can not register the same post!');
-              break;
-            case 4007:
-              showToastError('Must sent registration 1 day before the event!');
-              break;
-            case 4012:
-              showToastError('Need certificate to register this position!');
-              break;
-            case 4013:
-              showToastError('This post is done!');
-              break;
-            case 4015:
-              showToastError('Position is not found!');
-              break;
-            default:
-              showToastError('Undefined error!');
+      await dispatch(createPostRegistration(params))
+        .then((res) => {
+          const requestStatus = res?.meta?.requestStatus;
+          // console.log(JSON.stringify(res, null, 2));
+          if (requestStatus === 'rejected') {
+            const resRejectedData = res.payload as ErrorStatus;
+            switch (resRejectedData?.statusCode) {
+              case 400:
+                switch (resRejectedData?.errorCode) {
+                  case 4003:
+                    showToastError('This position is confirmed enough slot!');
+                    break;
+                  case 4004:
+                    showToastError('Can not register the same post!');
+                    break;
+                  case 4007:
+                    showToastError(
+                      'Must sent registration 1 day before the event!'
+                    );
+                    break;
+                  case 4012:
+                    showToastError(
+                      'Need certificate to register this position!'
+                    );
+                    break;
+                  case 4013:
+                    showToastError('This post is done!');
+                    break;
+                  case 4015:
+                    showToastError('Position is not found!');
+                    break;
+                  default:
+                    showToastError('Undefined error!');
+                }
+                break;
+              case 401:
+                showToastError('You are NOT PERMISSION!');
+                break;
+              case 404:
+                showToastError('404 NOT FOUND');
+                break;
+              default:
+                showToastError('Undefined error!');
+            }
           }
-        }
 
-        if (requestStatus === 'fulfilled') {
-          toast.show('Registered successfully!', { type: 'success' });
-        }
-        console.log('Vị trí số: ', index);
-      });
+          if (requestStatus === 'fulfilled') {
+            showToastSuccess('Registered successfully!');
+          }
+        })
+        .catch((error) => {
+          hideAlertHandler();
+          console.log(error);
+        });
     } catch (error) {
       hideAlertHandler();
       console.log(error);

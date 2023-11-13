@@ -1,4 +1,11 @@
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Button,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import { useAppDispatch } from '../../../app/store';
 import { searchPostByPostCode } from '../../../features/collaborator/collab.postSlice';
@@ -45,7 +52,7 @@ const Event = () => {
           <TouchableOpacity
             style={{ flex: 1, alignItems: 'flex-end' }}
             onPress={() => {
-              navigation.navigate("EVENT_NOTIFICATION");
+              navigation.navigate('EVENT_NOTIFICATION');
             }}
           >
             <View
@@ -67,7 +74,7 @@ const Event = () => {
           </TouchableOpacity>
         </View>
       </View>
-
+     
       <EventTopTabs />
     </View>
   );

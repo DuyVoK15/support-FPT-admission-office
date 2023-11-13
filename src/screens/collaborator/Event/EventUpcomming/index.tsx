@@ -5,6 +5,8 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React, { FC, useCallback, useContext, useEffect, useState } from 'react';
@@ -19,7 +21,6 @@ import {
   searchPostByPostCode,
 } from '../../../../features/collaborator/collab.postSlice';
 import { useAppSelector } from '../../../../app/hooks';
-import DataPost, { Data } from '../../../../models/collaborator/dataPost.model';
 import { cardGap } from '../../../../constants/Demesions';
 import { format_ISODateString_To_DayOfWeekMonthDDYYYY } from '../../../../utils/formats';
 import EventCardWrap from '../../../../components/collaborator/Home/EventCardWrap';
@@ -29,6 +30,10 @@ import CategoryFilterList from '../../../../components/collaborator/Event/Upcomm
 import PostDto from '../../../../dtos/collaborator/post.dto';
 import { COLORS } from '../../../../constants/Colors';
 import { MyContext } from '../../../../context/stateContext';
+import { DataPost } from '../../../../models/collaborator/dataPost.model';
+import { FontAwesome } from '@expo/vector-icons';
+import { FONTS_FAMILY } from '../../../../constants/Fonts';
+import Search from '../../../../components/collaborator/Event/UpcommingEvent/Search';
 
 const PAGE_SIZE_DEFAULT = 30;
 const EventUpcomming: FC = () => {
@@ -40,7 +45,7 @@ const EventUpcomming: FC = () => {
     return null;
   }
 
-  const { postUpcommingCategoryId, setPostUpcommingCategoryId } = context;
+  const { postUpcommingCategoryId, setPostUpcommingCategoryId, postUpcommingKeySearch } = context;
 
   const dispatch = useAppDispatch();
   const postCategoryId = useAppSelector(
@@ -111,13 +116,8 @@ const EventUpcomming: FC = () => {
   //   });
   // },[]);
 
-  const [textSearch, setTextSearch] = useState<string>('');
-  const handleSearchPost = async (postCode: string) => {
-    await dispatch(searchPostByPostCode(postCode)).then((res) => {
-      // console.log(JSON.stringify(res, null, 2));
-    });
-  };
-  const handleNavigate = (item: Data) => {
+
+  const handleNavigate = (item: DataPost) => {
     navigation.navigate('HOME_EVENT_DETAIL', { item });
   };
 
@@ -185,7 +185,7 @@ const EventUpcomming: FC = () => {
   };
 
   type ItemProps = {
-    post: Data;
+    post: DataPost;
   };
   const Item = ({ post }: ItemProps) => {
     return (
@@ -214,7 +214,7 @@ const EventUpcomming: FC = () => {
     );
   };
 
-  const renderItem = ({ item }: { item: Data }) => {
+  const renderItem = ({ item }: { item: DataPost }) => {
     return <Item post={item} />;
   };
 
@@ -244,10 +244,13 @@ const EventUpcomming: FC = () => {
           <ActivityIndicator size={'large'} color={'purple'} />
         }
         ListHeaderComponent={
-          <CategoryFilterList
-            postCategoryList={postCategoryList}
-            postCategoryId={postCategoryId}
-          />
+          <View style={{ marginHorizontal: 15, marginTop: 10 }}>
+            <Search />
+            <CategoryFilterList
+              postCategoryList={postCategoryList}
+              postCategoryId={postCategoryId}
+            />
+          </View>
         }
         ListFooterComponent={renderLoadingFooter}
         onEndReached={handleEndReached}

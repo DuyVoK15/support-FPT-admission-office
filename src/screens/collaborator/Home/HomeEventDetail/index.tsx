@@ -29,6 +29,7 @@ import { useWindowDimensions } from 'react-native';
 import RenderHtml from 'react-native-render-html';
 import { imageNotFoundUri } from '../../../../utils/images';
 import { DataPost } from '../../../../models/collaborator/dataPost.model';
+import { imageUndefinedUserUri } from '../../../../utils/images';
 
 const HomeEventDetail: FC = () => {
   // Get Width of Windows
@@ -93,8 +94,8 @@ const HomeEventDetail: FC = () => {
                       fontSize: 20,
                     }}
                   >
-                    {item
-                      ? item?.postCategory.postCategoryDescription
+                    {item?.postCategory?.postCategoryDescription
+                      ? item?.postCategory?.postCategoryDescription
                       : 'NO EVENT'}
                   </Text>
                 </View>
@@ -104,7 +105,7 @@ const HomeEventDetail: FC = () => {
                       fontFamily: FONTS_FAMILY.Ubuntu_400Regular_Italic,
                     }}
                   >
-                    {item ? 'Postcode: ' + '#' + item?.postCode : ''}
+                    {item?.postCode ? 'Postcode: ' + '#' + item?.postCode : ''}
                   </Text>
                 </View>
               </View>
@@ -221,7 +222,7 @@ const HomeEventDetail: FC = () => {
                       borderRadius: 10,
                     }}
                     source={{
-                      uri: item?.account?.imgUrl ? item?.account?.imgUrl : '',
+                      uri: item?.account?.imgUrl ? item?.account?.imgUrl : imageUndefinedUserUri,
                     }}
                   />
                 </View>
