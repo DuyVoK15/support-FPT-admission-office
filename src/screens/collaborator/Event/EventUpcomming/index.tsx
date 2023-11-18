@@ -45,8 +45,6 @@ const EventUpcomming: FC = () => {
     return null;
   }
 
-  const { postUpcommingCategoryId, setPostUpcommingCategoryId, postUpcommingKeySearch } = context;
-
   const dispatch = useAppDispatch();
   const postCategoryId = useAppSelector(
     (state) => state.collab_post.postCategoryId
@@ -116,13 +114,14 @@ const EventUpcomming: FC = () => {
   //   });
   // },[]);
 
-
   const handleNavigate = (item: DataPost) => {
     navigation.navigate('HOME_EVENT_DETAIL', { item });
   };
 
   // Pagination scroll
-
+  const [postUpcommingCategoryId, setPostUpcommingCategoryId] = useState<
+    number | null
+  >(null);
   const fetchPost = async () => {
     try {
       await dispatch(
@@ -139,7 +138,7 @@ const EventUpcomming: FC = () => {
   };
   const [loading, setLoading] = useState<boolean>(false);
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  // Sử dụng useEffect để gọi API khi postCategoryId thay đổi
+  // Sử dụng useEffect để gọi API khi postUpcommingCategoryId thay đổi
   useEffect(() => {
     // Check
     fetchPost();
@@ -248,7 +247,9 @@ const EventUpcomming: FC = () => {
             <Search />
             <CategoryFilterList
               postCategoryList={postCategoryList}
-              postCategoryId={postCategoryId}
+              // postUpcommingCategoryId={postUpcommingCategoryId}
+              postUpcommingCategoryId={postUpcommingCategoryId}
+              setPostUpcommingCategoryId={setPostUpcommingCategoryId}
             />
           </View>
         }

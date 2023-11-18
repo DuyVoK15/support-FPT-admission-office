@@ -15,18 +15,20 @@ import { MyContext } from '../../../../context/stateContext';
 
 interface CategoryFilterListProps {
   postCategoryList: ViewPostCategoryResponse;
-  postCategoryId: number | null;
+  // postCategoryId: number | null;
+  postUpcommingCategoryId: number | null;
+  setPostUpcommingCategoryId: (id: number | null) => void;
 }
 const CategoryFilterList: FC<CategoryFilterListProps> = (props) => {
   // const [id, setId] = useState<number | null>(null);
-  const context = useContext(MyContext);
-  if (context === null) {
-    // Handle the case when the context is null, e.g., provide a default value or throw an error.
-    return null;
-  }
-  const { postUpcommingCategoryId, setPostUpcommingCategoryId } = context;
+  // const context = useContext(MyContext);
+  // if (context === null) {
+  //   // Handle the case when the context is null, e.g., provide a default value or throw an error.
+  //   return null;
+  // }
+  // const { postUpcommingCategoryId, setPostUpcommingCategoryId } = context;
   const getPostCategoryId = async (Id: number | null) => {
-    setPostUpcommingCategoryId(Id);
+    props.setPostUpcommingCategoryId(Id);
     // await dispatch(getPostCategoryIdById({ Id })).then((res) => {
     //   console.log(JSON.stringify(res, null, 2));
     // });
@@ -47,7 +49,10 @@ const CategoryFilterList: FC<CategoryFilterListProps> = (props) => {
                 style={{
                   borderWidth: 3,
                   borderColor: '#FF930F',
-                  backgroundColor: postUpcommingCategoryId === category?.id ? '#FF930F' : '#FFF',
+                  backgroundColor:
+                    props.postUpcommingCategoryId === category?.id
+                      ? '#FF930F'
+                      : '#FFF',
                   marginRight: 10,
                   borderRadius: 20,
                 }}
@@ -56,7 +61,10 @@ const CategoryFilterList: FC<CategoryFilterListProps> = (props) => {
                   <Text
                     style={{
                       fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
-                      color: postUpcommingCategoryId === category?.id ? '#FFF' : '#FF930F',
+                      color:
+                        props.postUpcommingCategoryId === category?.id
+                          ? '#FFF'
+                          : '#FF930F',
                     }}
                   >
                     {category?.postCategoryDescription}
