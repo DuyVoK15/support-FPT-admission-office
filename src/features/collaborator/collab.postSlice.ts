@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import PostDto from '../../dtos/collaborator/post.dto';
 import { postService } from '../../services/collaborator/post.service';
-import DataPost from '../../models/collaborator/dataPost.model';
 import { AxiosError } from 'axios';
 import ViewPostCategoryResponse from '../../dtos/collaborator/response/viewPostCategory.dto';
 import FilterPostPayload from '../../dtos/collaborator/parameter/filterPost.dto';
 import MetaDataPost from '../../models/collaborator/metaDataPost.model';
 import { DataCategory } from '../../models/collaborator/postCategory.model';
+import { DataPost } from '../../models/collaborator/dataPost.model';
 
 interface PostState {
   postHomeUpcomming: PostDto;
@@ -266,7 +266,7 @@ export const postSlice = createSlice({
         const newData = action.payload.response_data.data;
         const page = Number(action.payload.query.Page);
         page > 1
-          ? (state.postUpcomming.data as DataPost).push(...newData)
+          ? (state.postUpcomming.data as DataPost[]).push(...newData)
           : (state.postUpcomming.data = newData);
         state.postUpcomming.metadata.page = page + 1;
         state.postUpcomming.metadata.total =
@@ -285,7 +285,7 @@ export const postSlice = createSlice({
         const newData = action.payload.response_data.data;
         const page = Number(action.payload.query.Page);
         page > 1
-          ? (state.postReOpen.data as DataPost).push(...newData)
+          ? (state.postReOpen.data as DataPost[]).push(...newData)
           : (state.postReOpen.data = newData);
         state.postReOpen.metadata.page = page + 1;
         state.postReOpen.metadata.total =

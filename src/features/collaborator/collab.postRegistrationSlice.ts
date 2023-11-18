@@ -15,8 +15,9 @@ import { RegistrationStatus } from '../../enums/collaborator/RegistrationStatus'
 interface PostRegistrationState {
   postRegistration: ViewPostRegistrationResponse | null;
   postRegistrationPending: ViewPostRegistrationResponse | null;
-  postRegistrationConfirm: ViewPostRegistrationResponse | null;
+  postRegistrationConfirmed: ViewPostRegistrationResponse | null;
   postRegistrationCompleted: ViewPostRegistrationResponse | null;
+  postRegistrationCancelled: ViewPostRegistrationResponse | null;
   createPostRegistration: CreatePostRegistrationResponse | null;
   deletePostRegistraion: DeletePostRegistraionResponse | null;
   updatePostRegistration: UpdatePostRegistrationResponse | null;
@@ -32,8 +33,9 @@ const initialState: PostRegistrationState = {
     data: [],
   },
   postRegistrationPending: null,
-  postRegistrationConfirm: null,
+  postRegistrationConfirmed: null,
   postRegistrationCompleted: null,
+  postRegistrationCancelled: null,
   createPostRegistration: null,
   deletePostRegistraion: null,
   updatePostRegistration: null,
@@ -45,6 +47,79 @@ const initialState: PostRegistrationState = {
 
 export const getAllPostRegistration = createAsyncThunk(
   'postRegistration/getAll',
+  async (params: FilterPostRegistration, { rejectWithValue }) => {
+    try {
+      const response =
+        await postRegistrationService.getAllPostRegistration(params);
+      return {
+        response_data: response.data,
+        query_data: params,
+      };
+    } catch (error: any) {
+      const axiosError = error as AxiosError;
+      console.log(axiosError.status);
+      return rejectWithValue(axiosError.response?.status);
+    }
+  }
+);
+
+export const getAllPostRegistration_Pending = createAsyncThunk(
+  'postRegistration/getAll/pending',
+  async (
+    params: FilterPostRegistration,
+    { rejectWithValue }
+  ) => {
+    try {
+      const response =
+        await postRegistrationService.getAllPostRegistration(params);
+      return {
+        response_data: response.data,
+        query_data: params,
+      };
+    } catch (error: any) {
+      const axiosError = error as AxiosError;
+      console.log(axiosError.status);
+      return rejectWithValue(axiosError.response?.status);
+    }
+  }
+);
+
+export const getAllPostRegistration_Confirmed = createAsyncThunk(
+  'postRegistration/getAll/confirmed',
+  async (params: FilterPostRegistration, { rejectWithValue }) => {
+    try {
+      const response =
+        await postRegistrationService.getAllPostRegistration(params);
+      return {
+        response_data: response.data,
+        query_data: params,
+      };
+    } catch (error: any) {
+      const axiosError = error as AxiosError;
+      console.log(axiosError.status);
+      return rejectWithValue(axiosError.response?.status);
+    }
+  }
+);
+export const getAllPostRegistration_Completed = createAsyncThunk(
+  'postRegistration/getAll/completed',
+  async (params: FilterPostRegistration, { rejectWithValue }) => {
+    try {
+      const response =
+        await postRegistrationService.getAllPostRegistration(params);
+      return {
+        response_data: response.data,
+        query_data: params,
+      };
+    } catch (error: any) {
+      const axiosError = error as AxiosError;
+      console.log(axiosError.status);
+      return rejectWithValue(axiosError.response?.status);
+    }
+  }
+);
+export const getAllPostRegistration_Cancelled = createAsyncThunk(
+  'postRegistration/getAll/cancelled',
   async (params: FilterPostRegistration, { rejectWithValue }) => {
     try {
       const response =
@@ -146,21 +221,19 @@ export const postRegistrationSlice = createSlice({
       .addCase(getAllPostRegistration.fulfilled, (state, action) => {
         state.loading = false;
         state.postRegistration = action.payload.response_data;
-        switch (action.payload.query_data.Status) {
-          case RegistrationStatus.PENDING:
+        let result = action.payload.query_data.RegistrationStatus?.join('-');
+        switch (result) {
+          case RegistrationStatus.PENDING.toString():
             state.postRegistrationPending = action.payload.response_data;
             break;
-          case RegistrationStatus.CONFIRM:
-            state.postRegistrationConfirm = action.payload.response_data;
+          case RegistrationStatus.CONFIRM + '-' + RegistrationStatus.CHECKIN:
+            state.postRegistrationConfirmed = action.payload.response_data;
             break;
-          case RegistrationStatus.COMPLETED:
+          case RegistrationStatus.CHECKOUT.toString():
             state.postRegistrationCompleted = action.payload.response_data;
             break;
-          case RegistrationStatus.CHECKIN:
-            state.postRegistrationConfirm = action.payload.response_data;
-            break;
-          case RegistrationStatus.CHECKOUT:
-            state.postRegistrationConfirm = action.payload.response_data;
+          case RegistrationStatus.CANCEL.toString():
+            state.postRegistrationCancelled = action.payload.response_data;
             break;
           default:
             console.log('No status');
@@ -170,6 +243,59 @@ export const postRegistrationSlice = createSlice({
         state.error = String(action.payload);
         state.loading = false;
       })
+      // Pending
+      .addCase(getAllPostRegistration_Pending.pending, (state) => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(getAllPostRegistration_Pending.fulfilled, (state, action) => {
+        state.loading = false;
+        state.postRegistrationPending = action.payload.response_data;
+      })
+      .addCase(getAllPostRegistration_Pending.rejected, (state, action) => {
+        state.error = String(action.payload);
+        state.loading = false;
+      })
+      // Confirmed
+      .addCase(getAllPostRegistration_Confirmed.pending, (state) => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(getAllPostRegistration_Confirmed.fulfilled, (state, action) => {
+        state.loading = false;
+        state.postRegistrationConfirmed = action.payload.response_data;
+      })
+      .addCase(getAllPostRegistration_Confirmed.rejected, (state, action) => {
+        state.error = String(action.payload);
+        state.loading = false;
+      }) 
+      // Completed
+      .addCase(getAllPostRegistration_Completed.pending, (state) => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(getAllPostRegistration_Completed.fulfilled, (state, action) => {
+        state.loading = false;
+        state.postRegistrationCompleted = action.payload.response_data;
+      })
+      .addCase(getAllPostRegistration_Completed.rejected, (state, action) => {
+        state.error = String(action.payload);
+        state.loading = false;
+      }) 
+      // Canncelled
+      .addCase(getAllPostRegistration_Cancelled.pending, (state) => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(getAllPostRegistration_Cancelled.fulfilled, (state, action) => {
+        state.loading = false;
+        state.postRegistrationCancelled = action.payload.response_data;
+      })
+      .addCase(getAllPostRegistration_Cancelled.rejected, (state, action) => {
+        state.error = String(action.payload);
+        state.loading = false;
+      })
+      // Create
       .addCase(createPostRegistration.pending, (state) => {
         state.loading = true;
         state.error = '';
@@ -182,6 +308,7 @@ export const postRegistrationSlice = createSlice({
         state.error = String(action.payload);
         state.loading = false;
       })
+      // Delete
       .addCase(cancelPostRegistration.pending, (state) => {
         state.loading = true;
         state.error = '';
@@ -198,6 +325,7 @@ export const postRegistrationSlice = createSlice({
         state.loading = true;
         state.error = '';
       })
+      // Update
       .addCase(updatePostRegistration.fulfilled, (state, action) => {
         state.loading = false;
         state.updatePostRegistration = action.payload;
