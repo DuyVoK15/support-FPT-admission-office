@@ -4,4 +4,5 @@ export interface FilterPostRegistration {
   Sort?: string | null;
   Order?: string | null;
   Status?: number | null;
+  RegistrationStatus?: number[] | [] ;
 }

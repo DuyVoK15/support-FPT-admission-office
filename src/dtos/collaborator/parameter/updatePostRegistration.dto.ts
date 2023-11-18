@@ -1,4 +1,4 @@
 export default interface UpdatePostRegistrationPayload {
-    schoolBusOption: boolean,
-    positionId: number
-  }
+  id: number | null;
+  positionId: number | null;
+}

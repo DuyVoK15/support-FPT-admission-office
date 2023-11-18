@@ -4,5 +4,5 @@ export interface CheckInParam {
   latitude: number | null;
 }
 export interface CheckOutParam {
-    postRegistrationId: number | null;
-  }
+  postRegistrationId: number | null;
+}
