@@ -139,6 +139,25 @@ export function format_ISODateString_To_DayOfWeekMonthDD(isoDateString: string) 
   return customDateString;
 }
 
+export function formatDateTimeForNotification(isoDateString: string) {
+  const date = new Date(isoDateString);
+  // Hàm lấy tên ngày trong tuần
+  const getDayOfWeek = (date: Date) => {
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    return days[date.getDay()];
+  }; 
+  
+  // Hàm lấy tên tháng
+  const getMonth = (date: Date) => {
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    return months[date.getMonth()];
+  };
+
+  const formattedDate = `${date.getHours()}:${date.getMinutes()}:${(String(date.getSeconds())).padStart(2, '0')} ${getDayOfWeek(date)}, ${getMonth(date)} ${date.getDate()}, ${date.getFullYear()}`;
+  
+return formattedDate;  
+}
+
 // Format time string HH:mm:ss to HH:mm
 export function format_Time_To_HHss(inputTime: string) {
   const timeParts = inputTime.split(':'); // Tách chuỗi theo dấu ':'
@@ -151,5 +170,7 @@ export function format_Time_To_HHss(inputTime: string) {
     return "Invalid time format";
   }
 }
+
+
 
 
