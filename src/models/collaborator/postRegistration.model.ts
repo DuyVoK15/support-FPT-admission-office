@@ -1,3 +1,5 @@
+import { DataPosition } from "./dataPosition.model";
+
 interface DataViewPostRegistration {
   id: number;
   registrationCode: string;
@@ -7,6 +9,7 @@ interface DataViewPostRegistration {
   updateAt: string;
   positionId: number;
   note: string;
+  postPositionsUnregistereds: DataPosition[] | [];
   post: {
     id: number;
     accountId: number;
@@ -60,26 +63,7 @@ interface DataViewPostRegistration {
       updateAt: string;
     };
   };
-  postPosition: {
-    id: number;
-    postId: number;
-    trainingCertificateId: number;
-    documentId: number;
-    positionName: string;
-    positionDescription: string;
-    schoolName: string;
-    location: string;
-    date: string;
-    latitude: string;
-    longitude: string;
-    timeFrom: string;
-    timeTo: string;
-    status: number;
-    isBusService: boolean;
-    amount: number;
-    salary: number;
-    registerAmount: number;
-  };
+  postPosition: DataPosition;
 }
 
 export default DataViewPostRegistration;

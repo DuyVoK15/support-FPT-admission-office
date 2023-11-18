@@ -1,3 +1,5 @@
+import { DataPosition } from "./dataPosition.model";
+
 export interface DataPost {
   id: number;
   accountId: number;
@@ -53,26 +55,5 @@ export interface DataPost {
     createAt: string;
     updateAt: string;
   };
-  postPositions: [
-    {
-      id: number;
-      postId: number;
-      trainingCertificateId: number;
-      documentId: number;
-      positionName: string;
-      positionDescription: string;
-      schoolName: string;
-      location: string;
-      date: string;
-      latitude: string;
-      longitude: string;
-      timeFrom: string;
-      timeTo: string;
-      status: number;
-      isBusService: boolean;
-      amount: number;
-      salary: number;
-      registerAmount: number;
-    },
-  ];
+  postPositions: DataPosition[] | [];
 }
