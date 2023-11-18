@@ -37,7 +37,10 @@ import { MyContextProvider } from './src/context/stateContext';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import ErrorPopup from './src/components/shared/PopupNotification/ErrorPopup';
 import SuccessPopup from './src/components/shared/PopupNotification/SuccessPopup';
-
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs([
+  'Sending `onAnimatedValueUpdate` with no listeners registered.',
+]);
 export default function App() {
   const [fontsLoaded, fontError] = useFonts({
     Ubuntu_300Light,
@@ -71,12 +74,11 @@ export default function App() {
           // }
           // warningIcon={<FontAwesome name="warning" size={24} color="white" />}
           style={{ bottom: 50, borderRadius: 20, marginHorizontal: 10 }}
-          
-          textStyle={{ fontSize: 16, textAlign: "center", color: "#2f302f" }}
+          textStyle={{ fontSize: 16, textAlign: 'center', color: '#2f302f' }}
           offset={50} // offset for both top and bottom toasts
           offsetTop={30}
           offsetBottom={40}
-          swipeEnabled={true}         
+          swipeEnabled={true}
         >
           <Provider store={store}>
             <MyContextProvider>
