@@ -12,7 +12,7 @@ export const attendanceService = {
   checkOutPostRegistration: (params: CheckOutParam): Promise<AxiosResponse<CheckAttendanceResponse>> => {
     const url = '/api/check-attendance/check-out';
 
-    return axiosClient.post(url, { params });
+    return axiosClient.post(url, { ...params });
   },
   
 };

@@ -16,7 +16,12 @@ export const postRegistrationService = {
     params: FilterPostRegistration
   ): Promise<AxiosResponse<ViewPostRegistrationDto>> => {
     const url = '/api/post-registration/getById';
-    return axiosClient.get(url, { params });
+    return axiosClient.get(url, {
+      params,
+      paramsSerializer: {
+        indexes: null,
+      },
+    });
   },
   createPostRegistration: (
     params: CreatePostRegistrationDto
@@ -34,7 +39,7 @@ export const postRegistrationService = {
     params: UpdatePostRegistrationPayload
   ): Promise<AxiosResponse<UpdatePostRegistrationResponse>> => {
     const url = '/api/post-registration/update';
-    return axiosClient.post(url, { params });
+    return axiosClient.post(url, { ...params });
   },
   getAllUpdateRequest: (
     params: FilterPostRegistration
