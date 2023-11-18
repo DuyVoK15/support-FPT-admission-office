@@ -7,6 +7,7 @@ import { FONTS_FAMILY } from '../../../constants/Fonts';
 import RegistrationTopTabs from '../../../navigation/collaborator/RegistrationStack/RegistrationTopTabs';
 
 const Registration = () => {
+  const item: string = "huhu";
   return (
     <View style={{ flex: 1 }}>
       <Header style={{ height: ScreenHeight / 9, flexDirection: "column", alignItems: "center", justifyContent: "flex-end" }}>
@@ -18,7 +19,7 @@ const Registration = () => {
           </Text>
         </View>
       </Header>
-      <RegistrationTopTabs />
+      <RegistrationTopTabs item={item}  />
     </View>
   );
 };

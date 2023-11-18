@@ -49,64 +49,13 @@ import { imageNotFoundUri } from '../../../utils/images';
 import { getAllCheckInPostRegistration } from '../../../features/collaborator/collab.postRegistrationSlice';
 import HomeRegistrationPopup from '../../../components/collaborator/Home/HomeRegistrationPopup';
 import { DataPost } from '../../../models/collaborator/dataPost.model';
+import useHome from './useHome';
+import { Controller } from 'react-hook-form';
+import SearchTextInput from '../../../components/collaborator/Home/SearchTextInput';
 
 const Home = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
-  const [textSearch, setTextSearch] = useState<string>('');
-  const dispatch = useAppDispatch();
-  const fetchPost = async () => {
-    const params = {
-      Page: 1,
-      PageSize: 20,
-      Sort: 'CreateAt',
-    };
-    await dispatch(getHomePostUpcomming(params)).then((res) => {
-      // console.log('Alo: ', JSON.stringify(res, null, 2));
-    });
-    await dispatch(getHomePostReOpen(params)).then((res) => {
-      // console.log('Alo: ', JSON.stringify(res, null, 2));
-    });
-  };
-  useEffect(() => {
-    console.log('tao vô đây 1');
-    fetchPost();
-  }, []);
-
-  const checkInPostRegistrationList = useAppSelector(
-    (state) => state.collab_postRegistration.checkInPostRegistration
-  );
-  const fetchCheckInPostRegistration = async () => {
-    await dispatch(getAllCheckInPostRegistration({}));
-  };
-  useEffect(() => {
-    console.log('tao vô đây 2');
-
-    fetchCheckInPostRegistration();
-  }, []);
-
-  const postHomeUpcommingList = useAppSelector(
-    (state) => state.collab_post.postHomeUpcomming
-  );
-  const postHomeReOpenList = useAppSelector(
-    (state) => state.collab_post.postHomeReOpen
-  );
-  const handleSearchPost = async (postCode: string) => {
-    await dispatch(searchPostByPostCode(postCode)).then((res) => {
-      // console.log(JSON.stringify(res, null, 2));
-    });
-  };
-  const handleNavigate = (item: DataPost) => {
-    navigation.navigate('HOME_EVENT_DETAIL', { item });
-  };
-
-  const [refreshing, setRefreshing] = useState<boolean>(false);
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    fetchPost();
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 1000);
-  }, []);
+  const { handlers, state, props } = useHome();
 
   return (
     <View style={styles.container}>
@@ -114,7 +63,7 @@ const Home = () => {
         <View
           style={{
             marginHorizontal: 20,
-            marginTop: Platform.OS === 'ios' ? 60 : 40,
+            marginTop: Platform.OS === 'ios' ? 56 : 40,
           }}
         >
           <View
@@ -175,57 +124,57 @@ const Home = () => {
             </View>
           </View>
 
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginTop: 30,
-            }}
-          >
+          <View style={{ marginTop: 25 }}>
             <View
               style={{
-                flex: 1,
                 flexDirection: 'row',
                 alignItems: 'center',
-                paddingVertical: 5,
-                marginRight: 20,
+                // marginTop: 25,
+                backgroundColor: '#FFF',
+                borderRadius: 18,
+                ...SHADOWS.SHADOW_03,
               }}
             >
               <TouchableOpacity
-                onPress={() => handleSearchPost(textSearch)}
-                style={{ marginRight: 10 }}
+                onPress={() => handlers.handleSubmit(handlers.onSubmit)}
+                style={{ position: 'absolute', left: 10 }}
               >
-                <FontAwesome name="search" size={32} color="white" />
-              </TouchableOpacity>
-              <View style={{ flex: 1 }}>
-                <TextInput
-                  value={textSearch}
-                  onChangeText={(value) => setTextSearch(value)}
-                  style={{
-                    fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
-                    fontSize: 18,
-                    color: COLORS.light_black,
-                  }}
-                  placeholder="Search by code, school...."
+                <FontAwesome
+                  name="search"
+                  size={28}
+                  color={COLORS?.orange_button}
                 />
-              </View>
-              <TouchableOpacity
-                style={{
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: 100,
-                  backgroundColor: COLORS.light_black,
-                  padding: 1,
-                }}
-                onPress={() => setTextSearch('')}
-              >
-                {textSearch && (
-                  <MaterialIcons name="clear" size={20} color="white" />
-                )}
               </TouchableOpacity>
-            </View>
 
-            <FilterModal />
+              <Controller
+                control={props.control}
+                rules={{
+                  required: false,
+                }}
+                render={({ field: { onChange, value } }) => (
+                  <SearchTextInput
+                    onChangeText={onChange}
+                    onSubmitEditing={handlers.handleSubmit(handlers.onSubmit)}
+                    value={value}
+                  />
+                )}
+                name="search"
+              />
+
+              {state.textSearch && (
+                <TouchableOpacity
+                  style={{
+                    position: 'absolute',
+                    borderRadius: 100,
+                    backgroundColor: COLORS.super_light_grey,
+                    right: 10,
+                  }}
+                  onPress={() => handlers.setTextSearch('')}
+                >
+                  <MaterialIcons name="clear" size={22} color="white" />
+                </TouchableOpacity>
+              )}
+            </View>
           </View>
         </View>
       </View>
@@ -233,7 +182,10 @@ const Home = () => {
       {/* Scroll vertical */}
       <ScrollView
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl
+            refreshing={state.refreshing}
+            onRefresh={handlers.onRefresh}
+          />
         }
         nestedScrollEnabled={true}
       >
@@ -288,16 +240,16 @@ const Home = () => {
 
           <View style={{ height: ScreenWidth * 0.85, marginTop: 20 }}>
             <ScrollView horizontal scrollEventThrottle={16}>
-              {postHomeUpcommingList?.data ? (
-                postHomeUpcommingList?.data
-                
-                .map((post, index) => (
+              {props.postHomeUpcommingList?.data ? (
+                props.postHomeUpcommingList?.data.map((post, index) => (
                   <View
                     key={index}
                     style={{ marginTop: 5, marginHorizontal: 15 }}
                   >
                     <EventCard
-                      onPress={() => handleNavigate(post)}
+                      onPress={() =>
+                        navigation.navigate('HOME_EVENT_DETAIL', { item: post })
+                      }
                       imageUrl={
                         post?.postImg ? post?.postImg : imageNotFoundUri
                       }
@@ -416,11 +368,13 @@ const Home = () => {
                 rowGap: cardGap - 2,
               }}
             >
-              {postHomeReOpenList.data ? (
-                postHomeReOpenList?.data.map((post, index) => (
+              {props.postHomeReOpenList.data ? (
+                props.postHomeReOpenList?.data.map((post, index) => (
                   <View key={index}>
                     <EventCardWrap
-                      onPress={() => handleNavigate(post)}
+                      onPress={() =>
+                        navigation.navigate('HOME_EVENT_DETAIL', { post })
+                      }
                       imageUrl={
                         post?.postImg ? post?.postImg : imageNotFoundUri
                       }
@@ -454,7 +408,7 @@ const Home = () => {
         </View>
       </ScrollView>
 
-      {Number(checkInPostRegistrationList?.data?.length) > 0 && (
+      {Number(props.checkInPostRegistrationList?.data?.length) > 0 && (
         <HomeRegistrationPopup />
       )}
     </View>

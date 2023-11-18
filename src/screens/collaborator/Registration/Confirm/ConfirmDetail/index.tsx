@@ -11,17 +11,17 @@ import { FONTS_FAMILY } from '../../../../../constants/Fonts';
 const Registration_Confirm_Detail = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const route = useRoute();
-  const { postRegistration } = route?.params as {
-    postRegistration: DataViewPostRegistration;
+  const { item } = route?.params as {
+    item: DataViewPostRegistration;
   };
-  console.log(JSON.stringify(postRegistration, null, 2));
+  console.log(JSON.stringify(item, null, 2));
   return (
     <View style={styles.container}>
       <ImageBackground
         style={{ width: '100%', height: 250 }}
         source={{
-          uri: postRegistration?.post?.postImg
-            ? postRegistration?.post?.postImg
+          uri: item?.post?.postImg
+            ? item?.post?.postImg
             : imageNotFoundUri,
         }}
       >

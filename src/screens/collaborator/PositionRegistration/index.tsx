@@ -85,33 +85,59 @@ const PositionRegistration = () => {
       await dispatch(createPostRegistration(params))
         .then((res) => {
           const requestStatus = res?.meta?.requestStatus;
-          // console.log(JSON.stringify(res, null, 2));
+          console.log(JSON.stringify(res, null, 2));
           if (requestStatus === 'rejected') {
             const resRejectedData = res.payload as ErrorStatus;
             switch (resRejectedData?.statusCode) {
               case 400:
                 switch (resRejectedData?.errorCode) {
+                  case 4001:
+                    showToastError(resRejectedData?.message);
+                    break;
+                  case 4002:
+                    showToastError(resRejectedData?.message);
+                    break;
                   case 4003:
-                    showToastError('This position is confirmed enough slot!');
+                    showToastError(resRejectedData?.message);
                     break;
                   case 4004:
-                    showToastError('Can not register the same post!');
+                    showToastError(resRejectedData?.message);
+                    break;
+                  case 4005:
+                    showToastError(resRejectedData?.message);
+                    break;
+                  case 4006:
+                    showToastError(resRejectedData?.message);
                     break;
                   case 4007:
-                    showToastError(
-                      'Must sent registration 1 day before the event!'
-                    );
+                    showToastError(resRejectedData?.message);
+                    break;
+                  case 4008:
+                    showToastError(resRejectedData?.message);
+                    break;
+                  case 4009:
+                    showToastError(resRejectedData?.message);
+                    break;
+                  case 4010:
+                    showToastError(resRejectedData?.message);
+                    break;
+                  case 4011:
+                    showToastError(resRejectedData?.message);
                     break;
                   case 4012:
-                    showToastError(
-                      'Need certificate to register this position!'
-                    );
+                    showToastError(resRejectedData?.message);
                     break;
                   case 4013:
-                    showToastError('This post is done!');
+                    showToastError(resRejectedData?.message);
+                    break;
+                  case 4014:
+                    showToastError(resRejectedData?.message);
                     break;
                   case 4015:
-                    showToastError('Position is not found!');
+                    showToastError(resRejectedData?.message);
+                    break;
+                  case 4016:
+                    showToastError(resRejectedData?.message);
                     break;
                   default:
                     showToastError('Undefined error!');
@@ -143,7 +169,6 @@ const PositionRegistration = () => {
   };
 
   const [positionId, setPosisitionId] = useState<number | null>(null);
-
   const handleSetPositionId = (id: number | null) => {
     if (positionId !== id) {
       setPosisitionId(id);

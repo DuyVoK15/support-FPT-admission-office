@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import Header from '../../../../components/shared/Header/Back';
 import Backward from '../../../../components/shared/Direction/Backward/Backward';
 import { FONTS_FAMILY } from '../../../../constants/Fonts';
@@ -25,181 +25,193 @@ import {
   format_Time_To_HHss,
 } from '../../../../utils/formats';
 import { imageNotFoundUri } from '../../../../utils/images';
+import RegistrationEmpty from '../../../../components/shared/Empty/RegistrationEmpty';
+import DataViewPostRegistration from '../../../../models/collaborator/postRegistration.model';
+import { FlashList } from '@shopify/flash-list';
+import DetailButton from '../../../../components/shared/Button/DetailButton';
+import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
+import { useNavigation } from '@react-navigation/native';
 
-const Registration_Pending = () => {
+interface Registration_PendingProps {
+  item: string | null;
+}
+const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
+  const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
+
   const { handlers, state, props } = useIndex();
+  const renderItem = ({ item }: { item: DataViewPostRegistration }) => {
+    return (
+      <View style={styles.containerItem}>
+        <View style={styles.containerRow}>
+          <View style={styles.firstRow}>
+            <View style={styles.containerImage}>
+              <Image
+                style={styles.image}
+                source={{
+                  uri: item?.post?.postImg
+                    ? item?.post?.postImg
+                    : imageNotFoundUri,
+                }}
+              />
+            </View>
+            <View style={{ flex: 1, marginLeft: 15 }}>
+              <Text style={styles.textFirst}>General</Text>
 
+              {/* <Text style={styles.textFirst}>General</Text> */}
+              <Text style={styles.textFirst_2}>
+                {item?.post.postCategory?.postCategoryDescription
+                  ? item?.post.postCategory?.postCategoryDescription
+                  : 'No value'}
+              </Text>
+              <Text style={styles.textFirst_3}>
+                {item?.registrationCode
+                  ? 'Code: ' + item?.registrationCode
+                  : 'No value'}
+              </Text>
+            </View>
+          </View>
+
+          <DashedLine
+            style={{ marginVertical: 15 }}
+            dashGap={0}
+            dashThickness={1}
+            dashLength={8}
+            dashColor={COLORS.super_light_grey}
+          />
+
+          <View style={styles.secondRow}>
+            <View
+              style={{
+                flex: 4,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Text style={styles.textSecond}>Position</Text>
+              <Text style={styles.textSecond_2}>
+                {item?.postPosition?.positionName
+                  ? item?.postPosition?.positionName
+                  : 'No value'}
+              </Text>
+            </View>
+            <View
+              style={{
+                flex: 3,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Text style={styles.textSecond}>Date</Text>
+              <Text style={styles.textSecond_2}>
+                {item?.postPosition?.date
+                  ? format_ISODateString_To_DayOfWeekMonthDD(
+                      item?.postPosition?.date
+                    )
+                    ? format_ISODateString_To_DayOfWeekMonthDD(
+                        item?.postPosition?.date
+                      )
+                    : 'No value'
+                  : 'No value'}
+              </Text>
+            </View>
+            <View
+              style={{
+                flex: 4,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Text style={styles.textSecond}>Time</Text>
+              <Text style={styles.textSecond_2}>
+                {item?.postPosition?.timeFrom
+                  ? format_Time_To_HHss(item?.postPosition?.timeFrom)
+                    ? format_Time_To_HHss(item?.postPosition?.timeFrom) + ' AM'
+                    : 'No value'
+                  : 'No value'}
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.containerStatus}>
+            <View style={styles.statusRow}>
+              <View>
+                <Text style={styles.thirdText}>Pending</Text>
+              </View>
+              <View
+                style={[
+                  styles.statusDot,
+                  { backgroundColor: COLORS?.orange_button },
+                ]}
+              />
+            </View>
+          </View>
+
+          <DashedLine
+            style={{ marginVertical: 10 }}
+            dashGap={0}
+            dashThickness={1}
+            dashLength={8}
+            dashColor={COLORS.super_light_grey}
+          />
+
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 10,
+              alignItems: 'center',
+              justifyContent: 'space-evenly',
+            }}
+          >
+            <DetailButton
+              onPress={() =>
+                navigation.navigate('REGISTRATION_PENDING_DETAIL', {
+                  item,
+                })
+              }
+            />
+          </View>
+
+          <View style={{ flexDirection: 'row', marginTop: 5 }}>
+            <View style={{ flex: 1 }}></View>
+            <View>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('REQUEST_CHANGE_POSITION_PENDING', {
+                    item,
+                  })
+                }
+              >
+                <Text
+                  style={{
+                    fontFamily: FONTS_FAMILY?.Ubuntu_400Regular_Italic,
+                    fontSize: 13,
+                    textDecorationLine: 'underline',
+                  }}
+                >
+                  Change position
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </View>
+    );
+  };
   return (
     <View style={styles.container}>
-      <View>
-        <ScrollView
-          refreshControl={
-            <RefreshControl
-              refreshing={state.refreshing}
-              onRefresh={handlers.onRefresh}
-            />
-          }
-        >
-          <View style={{ marginTop: 20 }}>
-            {props?.postRegistrationList?.data ? (
-              props?.postRegistrationList?.data
-                .filter((postRegistration) => postRegistration?.status === 1)
-                .map((postRegistration, index) => (
-                  <View
-                    key={postRegistration?.registrationCode}
-                    style={styles.containerItem}
-                  >
-                    <View style={styles.containerRow}>
-                      <View style={styles.firstRow}>
-                        <View style={styles.containerImage}>
-                          <Image
-                            style={styles.image}
-                            source={{
-                              uri: postRegistration?.post?.postImg
-                                ? postRegistration?.post?.postImg
-                                : imageNotFoundUri,
-                            }}
-                          />
-                        </View>
-                        <View style={{ flex: 1, marginLeft: 15 }}>
-                          <Text style={styles.textFirst}>
-                            {postRegistration?.registrationCode
-                              ? 'Code: #' + postRegistration?.registrationCode
-                              : 'No value'}
-                          </Text>
-
-                          {/* <Text style={styles.textFirst}>General</Text> */}
-                          <Text style={styles.textFirst_2}>
-                            {postRegistration?.post.postCategory
-                              ?.postCategoryDescription
-                              ? postRegistration?.post.postCategory
-                                  ?.postCategoryDescription
-                              : 'No value'}
-                          </Text>
-                        </View>
-                      </View>
-
-                      <DashedLine
-                        style={{ marginVertical: 15 }}
-                        dashGap={0}
-                        dashThickness={1}
-                        dashLength={8}
-                        dashColor={COLORS.super_light_grey}
-                      />
-
-                      <View style={styles.secondRow}>
-                        <View
-                          style={{
-                            flex: 4,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <Text style={styles.textSecond}>Position</Text>
-                          <Text style={styles.textSecond_2}>
-                            {postRegistration?.postPosition?.positionName
-                              ? postRegistration?.postPosition?.positionName
-                              : 'No value'}
-                          </Text>
-                        </View>
-                        <View
-                          style={{
-                            flex: 3,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <Text style={styles.textSecond}>Date</Text>
-                          <Text style={styles.textSecond_2}>
-                            {postRegistration?.postPosition?.date
-                              ? format_ISODateString_To_DayOfWeekMonthDD(
-                                  postRegistration?.postPosition?.date
-                                )
-                                ? format_ISODateString_To_DayOfWeekMonthDD(
-                                    postRegistration?.postPosition?.date
-                                  )
-                                : 'No value'
-                              : 'No value'}
-                          </Text>
-                        </View>
-                        <View
-                          style={{
-                            flex: 4,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <Text style={styles.textSecond}>Time</Text>
-                          <Text style={styles.textSecond_2}>
-                            {postRegistration?.postPosition?.timeFrom
-                              ? format_Time_To_HHss(
-                                  postRegistration?.postPosition?.timeFrom
-                                )
-                                ? format_Time_To_HHss(
-                                    postRegistration?.postPosition?.timeFrom
-                                  ) + ' AM'
-                                : 'No value'
-                              : 'No value'}
-                          </Text>
-                        </View>
-                      </View>
-
-                      <View style={styles.containerStatus}>
-                        <View style={styles.statusRow}>
-                          <View>
-                            <Text style={styles.thirdText}>
-                              Pending
-                            </Text>
-                          </View>
-                          <View style={styles.statusDot} />
-                        </View>
-                      </View>
-
-                      <DashedLine
-                        style={{ marginVertical: 10 }}
-                        dashGap={0}
-                        dashThickness={1}
-                        dashLength={8}
-                        dashColor={COLORS.super_light_grey}
-                      />
-
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          marginTop: 10,
-                          alignItems: 'center',
-                          justifyContent: 'space-evenly',
-                        }}
-                      >                        
-                        <TouchableOpacity
-                          style={{
-                            paddingVertical: 12,
-                            width: 110,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            borderRadius: 15,
-                            backgroundColor: COLORS?.orange_button,
-                          }}
-                        >
-                          <Text
-                            style={{
-                              fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
-                              fontSize: 15,
-                            }}
-                          >
-                            Details
-                          </Text>
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                  </View>
-                ))
-            ) : (
-              <View></View>
-            )}
-          </View>
-        </ScrollView>
-      </View>
+      <FlashList
+        data={props.postRegistrationList?.data}
+        renderItem={renderItem}
+        estimatedItemSize={100}
+        refreshControl={
+          <RefreshControl
+            refreshing={state.refreshing}
+            onRefresh={handlers.onRefresh}
+          />
+        }
+        ListEmptyComponent={<RegistrationEmpty />}
+        ListHeaderComponentStyle={{ marginTop: 15 }}
+      />
     </View>
   );
 };
@@ -243,12 +255,17 @@ const styles = StyleSheet.create({
     fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
     fontSize: 13,
     color: COLORS.light_black,
-    marginBottom: 5,
   },
   textFirst_2: {
     fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
     fontSize: 16,
     color: 'black',
+    marginTop: 5,
+  },
+  textFirst_3: {
+    fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
+    fontSize: 12,
+    color: COLORS?.light_grey,
     marginTop: 5,
   },
   secondRow: {
@@ -306,7 +323,6 @@ const styles = StyleSheet.create({
     height: 12,
     marginLeft: 5,
     borderRadius: 100,
-    backgroundColor: 'green',
   },
   containerViewDetail: {
     alignItems: 'center',

@@ -1,8 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
-import { useAppSelector } from "../../../../app/hooks";
-import { useAppDispatch } from "../../../../app/store";
-import { RegistrationStatus } from "../../../../enums/collaborator/RegistrationStatus";
-import { getAllPostRegistration } from "../../../../features/collaborator/collab.postRegistrationSlice";
+import { useCallback, useEffect, useState } from 'react';
+import { useAppSelector } from '../../../../app/hooks';
+import { useAppDispatch } from '../../../../app/store';
+import { RegistrationStatus } from '../../../../enums/collaborator/RegistrationStatus';
+import {
+  getAllPostRegistration,
+  getAllPostRegistration_Pending,
+} from '../../../../features/collaborator/collab.postRegistrationSlice';
 
 const useIndex = () => {
   const dispatch = useAppDispatch();
@@ -10,9 +13,13 @@ const useIndex = () => {
     (state) => state.collab_postRegistration.postRegistrationPending
   );
   const fetchPostRegistration = async () => {
-    await dispatch(getAllPostRegistration({Status: RegistrationStatus.PENDING})).then((res) => {
+    await dispatch(
+      getAllPostRegistration_Pending({
+        RegistrationStatus: [RegistrationStatus.PENDING],
+      })
+    ).then((res) => {
       console.log(JSON.stringify(res, null, 2));
-    }); 
+    });
   };
   useEffect(() => {
     fetchPostRegistration();
