@@ -147,6 +147,7 @@ const PositionRegistration = () => {
                 showToastError('You are NOT PERMISSION!');
                 break;
               case 404:
+                showToastError(resRejectedData?.message)
                 showToastError('404 NOT FOUND');
                 break;
               default:
