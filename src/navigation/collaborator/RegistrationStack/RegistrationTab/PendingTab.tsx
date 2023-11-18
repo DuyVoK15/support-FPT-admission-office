@@ -1,10 +1,13 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { FC } from 'react'
 import Booking_Pending from '../../../../screens/collaborator/Registration/Pending';
 
-const PendingTab = () => {
+interface PendingTabProps {
+  item: string | null;
+}
+const PendingTab:FC<PendingTabProps> = (props) => {
   return (
-    <Booking_Pending />
+    <Booking_Pending item={props.item} />
   )
 }
 

@@ -14,9 +14,37 @@ interface RegistrationTopTabProps {
   item: string | null;
 }
 const RegistrationTopTabs: FC<RegistrationTopTabProps> = (props) => {
+ 
   return (
     <Tab.Navigator
       initialRouteName="REGISTRATION_PENDING"
+      screenListeners={({ navigation, route }) => ({
+        
+        tabPress: (e) => {
+          switch (route.name) {
+            case 'REGISTRATION_PENDING':
+              e.preventDefault();
+              navigation.navigate('REGISTRATION_PENDING');
+              break;
+            case 'REGISTRATION_CONFIRM':
+              e.preventDefault();
+              navigation.navigate('REGISTRATION_CONFIRM');
+              break;
+            case 'REGISTRATION_COMPLETED':
+              e.preventDefault();
+              navigation.navigate('REGISTRATION_COMPLETED');
+              break;
+            case 'REGISTRATION_CANCELLED':
+              e.preventDefault();
+              navigation.navigate('REGISTRATION_CANCELLED');
+              break;
+
+            default:
+              break;
+          }
+        },
+      })}
+      
       screenOptions={{
         tabBarScrollEnabled: true,
         tabBarActiveTintColor: COLORS.orange_icon,
@@ -27,15 +55,15 @@ const RegistrationTopTabs: FC<RegistrationTopTabProps> = (props) => {
         // },
         tabBarIndicatorStyle: {
           backgroundColor: COLORS.orange_icon,
-          height: 4,
+          height: 5,
           // width: ScreenWidth / 4.2,
-          // left: (ScreenWidth / 4 - (ScreenWidth / 4.2)) / 2,
+          // left: (ScreenWidth / 3 - (ScreenWidth / 4.2)),
           borderRadius: 20,
         },
         tabBarIndicatorContainerStyle: {},
         tabBarLabelStyle: {
           fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
-          fontSize: 15,
+          fontSize: 16,
           textTransform: 'none',
           // color: COLORS.orange_icon
         },

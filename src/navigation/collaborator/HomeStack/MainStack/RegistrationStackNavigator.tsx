@@ -1,9 +1,12 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { View, Text } from 'react-native';
+import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BookingTab from '../MainTabs/RegistrationTab';
 import RegistrationTab from '../MainTabs/RegistrationTab';
-import Registration_Confirm_Detail from '../../../../screens/collaborator/Registration/Confirm/ConfirmDetail';
+import Registration_Confirm_Detail from '../../../../screens/collaborator/Registration/Confirm/confirmDetail';
+import Registration_Pending_Detail from '../../../../screens/collaborator/Registration/Pending/pendingDetail';
+import RequestChangePosition from '../../../../screens/collaborator/Registration/Confirm/reqChangePosition';
+import RequestChangePositionPending from '../../../../screens/collaborator/Registration/Pending/reqChangePosition';
 
 const Stack = createNativeStackNavigator();
 const RegistrationStackNavigator = () => {
@@ -13,18 +16,39 @@ const RegistrationStackNavigator = () => {
         name={'REGISTRATION'}
         component={RegistrationTab}
         options={{
-          headerShown: false,       
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name={'REGISTRATION_PENDING_DETAIL'}
+        component={Registration_Pending_Detail}
+        options={{
+          headerShown: false,
         }}
       />
       <Stack.Screen
         name={'REGISTRATION_CONFIRM_DETAIL'}
         component={Registration_Confirm_Detail}
         options={{
-          headerShown: false,       
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name={'REQUEST_CHANGE_POSITION_CONFIRM'}
+        component={RequestChangePosition}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name={'REQUEST_CHANGE_POSITION_PENDING'}
+        component={RequestChangePositionPending}
+        options={{
+          headerShown: false,
         }}
       />
     </Stack.Navigator>
-  )
-}
+  );
+};
 
 export default RegistrationStackNavigator;
