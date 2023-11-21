@@ -21,7 +21,7 @@ const CategorySelection = (props: CategorySelectionProps) => {
   );
 
   // const [categorySelected, setCategorySelected] = useState<string>();
-  const handleSelectedPostCategory = (index: number, category: number) => {
+  const handleSelectedPostCategory = (index: number, category: number | null) => {
     props.setValue("PostCategoryId",category); 
     // setCategorySelected(category);
     const updatedStatus = Array(postCategoryList?.data?.length).fill(false);

@@ -8,45 +8,34 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, { FC, useCallback, useContext, useEffect, useState } from 'react';
+import React, { FC, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
 import { useAppDispatch } from '../../../../app/store';
 import {
-  getAllPost,
   getAllPostCategory,
-  getAllPostUpcomming,
-  getPostCategoryIdById,
-  getPostReOpen,
-  searchPostByPostCode,
+  getAllPostReOpen,
 } from '../../../../features/collaborator/collab.postSlice';
 import { useAppSelector } from '../../../../app/hooks';
-import DataPost, { Data } from '../../../../models/collaborator/dataPost.model';
 import { cardGap } from '../../../../constants/Demesions';
 import { format_ISODateString_To_DayOfWeekMonthDDYYYY } from '../../../../utils/formats';
 import EventCardWrap from '../../../../components/collaborator/Home/EventCardWrap';
-import UpcommingPagination from '../../../../components/shared/Pagination/UpcommingPagination';
 import { imageNotFoundUri } from '../../../../utils/images';
 import CategoryFilterList from '../../../../components/collaborator/Event/ReOpenEvent/CategoryFilterList';
 import PostDto from '../../../../dtos/collaborator/post.dto';
 import { COLORS } from '../../../../constants/Colors';
 import { MyContext } from '../../../../context/stateContext';
+import Search from '../../../../components/collaborator/Event/ReOpenEvent/Search';
+import FilterModalButton, { DataFilterReOpen } from '../../../../components/collaborator/Event/ReOpenEvent/FilterModalButton';
+import { DataPost } from '../../../../models/collaborator/dataPost.model';
 
+
+const PAGE_SIZE_DEFAULT = 20;
 const EventReOpen: FC = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
-  
-  const context = useContext(MyContext);
-  if (context === null) {
-    // Handle the case when the context is null, e.g., provide a default value or throw an error.
-    return null;
-  }
 
-  const { postReOpenCategoryId, setPostReOpenCategoryId } = context;
-  
   const dispatch = useAppDispatch();
-  const postCategoryId = useAppSelector(
-    (state) => state.collab_post.postCategoryId
-  );
+
   const postCategoryList = useAppSelector(
     (state) => state.collab_post.postCategory
   );
@@ -57,7 +46,6 @@ const EventReOpen: FC = () => {
       console.log(error);
     }
   };
-
   const list = useAppSelector((state) => state.collab_post.postReOpen.data);
   const page = useAppSelector(
     (state) => state.collab_post.postReOpen.metadata.page
@@ -66,84 +54,114 @@ const EventReOpen: FC = () => {
     (state) => state.collab_post.postReOpen.metadata.total
   );
   const postLoading = useAppSelector((state) => state.collab_post.loading);
-  const [textSearch, setTextSearch] = useState<string>('');
-  const handleSearchPost = async (postCode: string) => {
-    await dispatch(searchPostByPostCode(postCode)).then((res) => {
-      // console.log(JSON.stringify(res, null, 2));
-    });
-  };
-  const handleNavigate = (item: Data) => {
+
+  const handleNavigate = (item: DataPost) => {
     navigation.navigate('HOME_EVENT_DETAIL', { item });
   };
 
   // Pagination scroll
-
+  const [postReOpenCategoryDes, setPostReOpenCategoryDes] = useState<
+    string | null
+  >('All');
+  // Handle submit filter data
+  const [dataFilterReOpen, setDataFilterReOpen] =
+    useState<DataFilterReOpen | null>({
+      postReOpenCategoryId: null,
+      createAtStart: null,
+      createAtEnd: null,
+      dateFromStart: null,
+      dateFromEnd: null,
+      searchText: null,
+      sort: 'CreateAt',
+      order: 'DESCENDING',
+    });
+  const [loading, setLoading] = useState<boolean>(false);
+  
+  // Fetch post / Call disptach to redux Call API
   const fetchPost = async () => {
     try {
       await dispatch(
-        getPostReOpen({
+        getAllPostReOpen({
           Page: 1,
-          PageSize: 6,
-          PostCategoryId: postReOpenCategoryId,
-          Sort: 'CreateAt',
+          PageSize: PAGE_SIZE_DEFAULT,
+          PostCategoryId: dataFilterReOpen?.postReOpenCategoryId,
+          Sort: dataFilterReOpen?.sort,
+          Order: dataFilterReOpen?.order,
+          Search: dataFilterReOpen?.searchText,
+          CreateAtStart: dataFilterReOpen?.createAtStart,
+          CreateAtEnd: dataFilterReOpen?.createAtEnd,
+          DateFromStart: dataFilterReOpen?.dateFromStart,
+          DateFromEnd: dataFilterReOpen?.dateFromEnd,
         })
-      );
+      ).then((res) => {
+        console.log('===============Data==============');
+        console.log(JSON.stringify(res, null, 2));
+      });
     } catch (error) {
-      console.log('Lỗi khi tải dữ liệu', error);
+      console.log('Error: ', error);
     }
   };
 
-  // Sử dụng useEffect để gọi API khi postCategoryId thay đổi
+  // Sử dụng useEffect để gọi API khi postReOpenCategoryId thay đổi
   useEffect(() => {
-    // Check
-    fetchPost();
-  }, [postReOpenCategoryId]);
+    fetchPost();fetchPostCategory();
+  }, [dataFilterReOpen]);
 
   useEffect(() => {
-    fetchPostCategory();
+    
   }, []);
 
-  // Refresh fetchPost()
-  const [loading, setLoading] = useState<boolean>(false);
+  // Refresh function fetchPost()
   const onRefresh = useCallback(async () => {
-    await dispatch(getPostCategoryIdById({ Id: null }));
-    setPostReOpenCategoryId(null);
     setLoading(true);
     setTimeout(() => {
-      console.log('id: ', postReOpenCategoryId);
-      fetchPost();
+      setDataFilterReOpen({
+        postReOpenCategoryId: null,
+        createAtStart: null,
+        createAtEnd: null,
+        dateFromStart: null,
+        dateFromEnd: null,
+        searchText: null,
+        sort: 'CreateAt',
+        order: 'DESCENDING',
+      });
+      setPostReOpenCategoryDes('All');
       setLoading(false);
-    }, 1000);
+    }, 500);
   }, []);
-
-  const handleEndReached = async () => {
-    console.log("vô đây")
-
-    if ((Number(page) - 1) * 6 < Number(total)) {
-      await dispatch(
-        getPostReOpen({
-          Page: Number(page),
-          PageSize: 6,
-          PostCategoryId: postReOpenCategoryId,
-          Sort: 'CreateAt',
-        })
-      );
-    }
+  // Render header JSX
+  const renderListHeader = () => {
+    return <View style={{ marginHorizontal: 15, marginTop: 10 }}></View>;
   };
-
+  // Render footer loader JSX
   const renderLoadingFooter = () => {
-
-    return (Number(page) - 1) * 6 < Number(total) ? (
+    return (Number(page) - 1) * PAGE_SIZE_DEFAULT < Number(total) ? (
       <View>
         <ActivityIndicator size={'large'} color={'red'} />
       </View>
     ) : null;
   };
-
-  type ItemProps = {
-    post: Data;
+  // Scroll to end to load more next page
+  const handleEndReached = async () => {
+    if ((Number(page) - 1) * PAGE_SIZE_DEFAULT < Number(total)) {
+      await dispatch(
+        getAllPostReOpen({
+          Page: Number(page),
+          PageSize: PAGE_SIZE_DEFAULT,
+          PostCategoryId: dataFilterReOpen?.postReOpenCategoryId,
+          Sort: dataFilterReOpen?.sort,
+          Order: dataFilterReOpen?.order,
+          Search: dataFilterReOpen?.searchText,
+          CreateAtStart: dataFilterReOpen?.createAtStart,
+          CreateAtEnd: dataFilterReOpen?.createAtEnd,
+          DateFromStart: dataFilterReOpen?.dateFromStart,
+          DateFromEnd: dataFilterReOpen?.dateFromEnd,
+        })
+      );
+    }
   };
-  const Item = ({ post }: ItemProps) => {
+  // Custom Item JSX
+  const Item = ({ post }: { post: DataPost }) => {
     return (
       <View>
         <EventCardWrap
@@ -164,59 +182,75 @@ const EventReOpen: FC = () => {
           totalAmountPosition={
             post?.totalAmountPosition ? String(post?.totalAmountPosition) : '0'
           }
-          status={post?.status}
+          status={post?.status ? String(post?.status) : 'No Status'}
+          timeAgo={post?.createAt ? post?.createAt : ''}
         />
       </View>
     );
   };
+  // Use useMemo to prevent re-render Item when excecute some thing in Component
+  const memoizedRenderItem = useMemo(() => {
+    // console.log('Re-render nè 1');
 
-  const renderItem = ({ item }: { item: Data }) => {
-    return  <Item post={item} />;
-  };
+    const renderItem = ({ item }: { item: DataPost }) => {
+      // console.log('Re-render nè 1');
+
+      return <Item post={item} />;
+    };
+    return renderItem;
+  }, [list]);
 
   return (
     <View style={styles.container}>
-      
-        <FlatList
-          scrollEventThrottle={16}
-          data={list}
-          renderItem={renderItem}
-          numColumns={2}
-          columnWrapperStyle={{
-            flex: 1,
-            marginVertical: 5,
-            marginHorizontal: 15,
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            columnGap: cardGap - 2,
-            // rowGap: cardGap - 2,
-          }}
-          keyExtractor={(item, index) => index.toString()}
-          refreshControl={
-            <RefreshControl  refreshing={loading} onRefresh={onRefresh} />
-          }
-          ListEmptyComponent={<ActivityIndicator size={'large'} color={'purple'} />}
-          ListHeaderComponent={
-            <CategoryFilterList postCategoryList={postCategoryList} postCategoryId={postCategoryId} />
-          }
-          ListFooterComponent={renderLoadingFooter}
-          onEndReached={handleEndReached}
-          // onEndReachedThreshold={0.5}
+      <View style={{ marginTop: 10, marginHorizontal: 15 }}>
+        <View style={{ flexDirection: 'row' }}>
+          <Search
+            postReOpenCategoryDes={postReOpenCategoryDes}
+            total={total ? Number(total) : 0}
+            dataFilterReOpen={dataFilterReOpen}
+            setDataFilterReOpen={setDataFilterReOpen}
+          />
+          <FilterModalButton
+            dataFilterReOpen={dataFilterReOpen}
+            setDataFilterReOpen={setDataFilterReOpen}
+          />
+        </View>
+        <CategoryFilterList
+          postCategoryList={postCategoryList}
+          dataFilterReOpen={dataFilterReOpen}
+          setDataFilterReOpen={setDataFilterReOpen}
+          postReOpenCategoryDes={postReOpenCategoryDes}
+          setPostReOpenCategoryDes={setPostReOpenCategoryDes}
         />
-
-      {/* {postList?.metadata && (
-          <View>
-            <UpcommingPagination
-              isChecked={isChecked}
-              pageList={pageList}
-              handleSelectedItem={handleSelectedItem}
-              
-            />
-          </View>
-        )} */}
-      {/* {loading && <ActivityIndicator size="large" color="#0000ff" />}
-      </ScrollView> */}
+      </View>
+      <FlatList
+        scrollEventThrottle={16}
+        data={list}
+        // extraData={list}
+        renderItem={memoizedRenderItem}
+        numColumns={2}
+        columnWrapperStyle={{
+          flex: 1,
+          marginVertical: 5,
+          marginHorizontal: 15,
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          columnGap: cardGap - 2,
+          // rowGap: cardGap - 2,
+        }}
+        keyExtractor={(item, index) => index.toString()}
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+        }
+        ListEmptyComponent={
+          <ActivityIndicator size={'large'} color={'purple'} />
+        }
+        ListHeaderComponent={renderListHeader}
+        ListFooterComponent={renderLoadingFooter}
+        onEndReached={handleEndReached}
+        // onEndReachedThreshold={0.5}
+      />
     </View>
   );
 };

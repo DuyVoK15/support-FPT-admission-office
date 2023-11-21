@@ -5,35 +5,38 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import { FONTS_FAMILY } from '../../../../constants/Fonts';
-import { useAppSelector } from '../../../../app/hooks';
 import ViewPostCategoryResponse from '../../../../dtos/collaborator/response/viewPostCategory.dto';
-import { useAppDispatch } from '../../../../app/store';
-import { getPostCategoryIdById } from '../../../../features/collaborator/collab.postSlice';
-import { MyContext } from '../../../../context/stateContext';
+import { DataFilterReOpen } from './FilterModalButton';
 
 interface CategoryFilterListProps {
   postCategoryList: ViewPostCategoryResponse;
-  postCategoryId: number | null;
+  dataFilterReOpen: DataFilterReOpen | null;
+  setDataFilterReOpen: React.Dispatch<
+    React.SetStateAction<DataFilterReOpen | null>
+  >;
+  postReOpenCategoryDes: string | null;
+  setPostReOpenCategoryDes: (des: string | null) => void;
 }
 const CategoryFilterList: FC<CategoryFilterListProps> = (props) => {
-  // const [id, setId] = useState<number | null>(null);
-  const context = useContext(MyContext);
-  if (context === null) {
-    // Handle the case when the context is null, e.g., provide a default value or throw an error.
-    return null;
-  }
-  const { postReOpenCategoryId, setPostReOpenCategoryId } = context;
-  const getPostCategoryId = async (Id: number | null) => {
-    setPostReOpenCategoryId(Id);
-    // await dispatch(getPostCategoryIdById({ Id })).then((res) => {
-    //   console.log(JSON.stringify(res, null, 2));
-    // });
+  const getPostCategoryId = async (Id: number | null, Des: string | null) => {
+    props.setDataFilterReOpen((prevFilter) => ({
+      postReOpenCategoryId: Id,
+      createAtStart: prevFilter?.createAtStart || null,
+      createAtEnd: prevFilter?.createAtEnd || null,
+      dateFromStart: prevFilter?.dateFromStart || null,
+      dateFromEnd: prevFilter?.dateFromEnd || null,
+      searchText: null,
+      sort: prevFilter?.sort || null,
+      order: prevFilter?.order || null,
+    }));
+    props.setPostReOpenCategoryDes(Des);
   };
+  console.log(props.dataFilterReOpen);
 
   return (
-    <View style={{ margin: 15 }}>
+    <View style={{ marginVertical: 15 }}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {props.postCategoryList?.data
@@ -41,13 +44,20 @@ const CategoryFilterList: FC<CategoryFilterListProps> = (props) => {
             .map((category, index) => (
               <TouchableOpacity
                 onPress={() => {
-                  getPostCategoryId(category?.id);
+                  getPostCategoryId(
+                    category?.id,
+                    category?.postCategoryDescription
+                  );
                 }}
                 key={index}
                 style={{
                   borderWidth: 3,
                   borderColor: '#FF930F',
-                  backgroundColor: postReOpenCategoryId === category?.id ? '#FF930F' : '#FFF',
+                  backgroundColor:
+                    props.dataFilterReOpen?.postReOpenCategoryId ===
+                    category?.id
+                      ? '#FF930F'
+                      : '#FFF',
                   marginRight: 10,
                   borderRadius: 20,
                 }}
@@ -56,7 +66,11 @@ const CategoryFilterList: FC<CategoryFilterListProps> = (props) => {
                   <Text
                     style={{
                       fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
-                      color: postReOpenCategoryId === category?.id ? '#FFF' : '#FF930F',
+                      color:
+                        props.dataFilterReOpen?.postReOpenCategoryId ===
+                        category?.id
+                          ? '#FFF'
+                          : '#FF930F',
                     }}
                   >
                     {category?.postCategoryDescription}

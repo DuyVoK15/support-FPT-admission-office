@@ -5,6 +5,8 @@ import { COLORS } from '../../../constants/Colors';
 import { SHADOWS } from '../../../constants/Shadows';
 import { cardWidth } from '../../../constants/Demesions';
 import { TouchableOpacityProps } from 'react-native';
+import { timeAgo } from '../../../utils/formats';
+import { POST_STATUS_ENUM } from '../../../enums/collaborator/PostStatus';
 
 interface EventCardWrapProps extends TouchableOpacityProps {
   imageUrl?: string;
@@ -13,16 +15,17 @@ interface EventCardWrapProps extends TouchableOpacityProps {
   schoolName?: string;
   totalRegisterAmount?: string;
   totalAmountPosition?: string;
-  status?: number;
+  status?: string;
+  timeAgo?: string;
 }
 
 const EventCardWrap: FC<EventCardWrapProps> = (props) => {
   const { ...otherProps } = props;
-  
+
   return (
     <TouchableOpacity
       style={{
-        height: cardWidth + 60,
+        height: cardWidth + 80,
         width: cardWidth,
         backgroundColor: '#FFF',
         borderRadius: 20,
@@ -87,7 +90,7 @@ const EventCardWrap: FC<EventCardWrapProps> = (props) => {
                 {props.dateTime}
               </Text>
             </View>
-            <View style={{ flex: 0, marginBottom: 7 }}>
+            <View style={{ flex: 1, marginBottom: 7 }}>
               <Text
                 style={{
                   fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
@@ -97,9 +100,26 @@ const EventCardWrap: FC<EventCardWrapProps> = (props) => {
                 {props.schoolName}
               </Text>
             </View>
+            <View style={{ flex: 0, marginBottom: 5 }}>
+              <Text
+                style={{
+                  fontFamily: FONTS_FAMILY?.Ubuntu_400Regular_Italic,
+                  fontSize: 11,
+                }}
+              >
+                {props?.timeAgo
+                  ? 'Posted ' +
+                    timeAgo({
+                      dateProp: props.timeAgo ? props.timeAgo : null,
+                    })
+                  : ''}
+              </Text>
+            </View>
           </View>
         </View>
-        { props.status === 2 &&
+        {(Number(props.status) === POST_STATUS_ENUM.OPENING ||
+          Number(props.status) === POST_STATUS_ENUM.RE_OPEN ||
+          Number(props.status) === POST_STATUS_ENUM.AVOID_REGIST) && (
           <View
             style={{
               position: 'absolute',
@@ -108,7 +128,12 @@ const EventCardWrap: FC<EventCardWrapProps> = (props) => {
               left: -60 + 25,
               width: 120,
               height: 26,
-              backgroundColor: 'red',
+              backgroundColor:
+                Number(props.status) === POST_STATUS_ENUM.OPENING
+                  ? 'green'
+                  : Number(props.status) === POST_STATUS_ENUM.RE_OPEN
+                  ? COLORS?.orange_icon
+                  : 'red',
               alignItems: 'center',
               justifyContent: 'center',
             }}
@@ -116,13 +141,22 @@ const EventCardWrap: FC<EventCardWrapProps> = (props) => {
             <Text
               style={{
                 fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
-                color: 'yellow',
+                color:
+                  Number(props.status) === POST_STATUS_ENUM.OPENING
+                    ? 'white'
+                    : Number(props.status) === POST_STATUS_ENUM.RE_OPEN
+                    ? "white"
+                    : 'yellow',
               }}
             >
-              Closed
+              {Number(props.status) === POST_STATUS_ENUM.OPENING
+                    ? 'Opening'
+                    : Number(props.status) === POST_STATUS_ENUM.RE_OPEN
+                    ? "Re-Open"
+                    : 'Closed'}
             </Text>
           </View>
-        }
+        )}
       </View>
     </TouchableOpacity>
   );
