@@ -4,35 +4,43 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  ViewStyle,
 } from 'react-native';
-import React, { useContext, useState } from 'react';
-import { FontAwesome } from '@expo/vector-icons';
+import React, { FC, useContext, useState } from 'react';
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../../../constants/Colors';
 import { FONTS_FAMILY } from '../../../../constants/Fonts';
 import { searchPostByPostCode } from '../../../../features/collaborator/collab.postSlice';
 import { useAppDispatch } from '../../../../app/store';
 import { MyContext } from '../../../../context/stateContext';
+import { DataFilterUpcomming } from './FilterModalButton';
 
-const Search = () => {
-  const dispatch = useAppDispatch();
-
-  const context = useContext(MyContext);
-  if (context === null) {
-    // Handle the case when the context is null, e.g., provide a default value or throw an error.
-    return null;
-  }
-
-  const {postUpcommingKeySearch, setPostUpcommingKeySearch} = context;
-
-//   const handleSearchPost = async () => {
-//     await dispatch(searchPostByPostCode(postCode)).then((res) => {
-//       // console.log(JSON.stringify(res, null, 2));
-//     });
-//   };
+interface SearchProps extends ViewStyle {
+  postUpcommingCategoryDes: string | null;
+  total: number | null;
+  dataFilterUpcomming: DataFilterUpcomming | null;
+  setDataFilterUpcomming: React.Dispatch<
+    React.SetStateAction<DataFilterUpcomming | null>
+  >;
+}
+const Search: FC<SearchProps> = (Props) => {
+  const [searchText, setSearchText] = useState<string | null>(null);
+    const handleSearchPost = () => {
+      Props.setDataFilterUpcomming((prevFilter) => ({
+        postUpcommingCategoryId: prevFilter?.postUpcommingCategoryId || null,
+        createAtStart: prevFilter?.createAtStart || null,
+        createAtEnd: prevFilter?.createAtEnd || null,
+        dateFromStart: prevFilter?.dateFromStart || null,
+        dateFromEnd: prevFilter?.dateFromEnd || null,
+        searchText: searchText,
+        sort: prevFilter?.sort || null,
+        order: prevFilter?.order || null,
+      }));
+    };
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <View style={{ backgroundColor: '#FFF' }}>
-        <View style={{ borderRadius: 10 }}>
+        <View style={{ borderRadius: 10, marginRight: 5 }}>
           <TextInput
             style={{
               fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
@@ -42,22 +50,29 @@ const Search = () => {
               borderRadius: 10,
             }}
             placeholder="Search by postcode, name, ..."
-            onChangeText={(value) => setPostUpcommingKeySearch(value)}
+            onChangeText={(value) => setSearchText(value)}
           />
+          <TouchableOpacity onPress={handleSearchPost} style={{ position: 'absolute', right: 10, top: 9 }}>
+            <FontAwesome
+              name="search"
+              size={30}
+              color={COLORS?.orange_button}
+            />
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity style={{ position: 'absolute', right: 20, top: 9 }}>
-          <FontAwesome name="search" size={30} color={COLORS?.orange_button} />
-        </TouchableOpacity>
+        {/* Collumn 2 */}
       </View>
-      <View style={{ flexDirection: 'row', marginTop: 5 }}>
+      <View style={{ flexDirection: 'row', marginTop: 5, marginRight: 5 }}>
         <View style={{ flex: 1 }}>
           <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular }}>
-            Key: Open Day
+            {Props.postUpcommingCategoryDes
+              ? 'Find in: ' + Props.postUpcommingCategoryDes
+              : ''}
           </Text>
         </View>
         <View>
           <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular }}>
-            Found (0) results
+            Found ({Props.total}) results
           </Text>
         </View>
       </View>

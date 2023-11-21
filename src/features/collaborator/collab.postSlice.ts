@@ -154,7 +154,7 @@ export const getAllPostUpcomming = createAsyncThunk(
   }
 );
 
-export const getPostReOpen = createAsyncThunk(
+export const getAllPostReOpen = createAsyncThunk(
   'post/reopen/getAll',
   async (params: FilterPostPayload, { rejectWithValue }) => {
     try {
@@ -262,7 +262,7 @@ export const postSlice = createSlice({
         state.error = '';
       })
       .addCase(getAllPostUpcomming.fulfilled, (state, action) => {
-        state.loading = false;
+        
         const newData = action.payload.response_data.data;
         const page = Number(action.payload.query.Page);
         page > 1
@@ -271,16 +271,17 @@ export const postSlice = createSlice({
         state.postUpcomming.metadata.page = page + 1;
         state.postUpcomming.metadata.total =
           action.payload.response_data.metadata.total;
+          state.loading = false;
       })
       .addCase(getAllPostUpcomming.rejected, (state, action) => {
         state.error = String(action.payload);
         state.loading = false;
       })
-      .addCase(getPostReOpen.pending, (state) => {
+      .addCase(getAllPostReOpen.pending, (state) => {
         state.loading = true;
         state.error = '';
       })
-      .addCase(getPostReOpen.fulfilled, (state, action) => {
+      .addCase(getAllPostReOpen.fulfilled, (state, action) => {
         state.loading = false;
         const newData = action.payload.response_data.data;
         const page = Number(action.payload.query.Page);
@@ -291,7 +292,7 @@ export const postSlice = createSlice({
         state.postReOpen.metadata.total =
           action.payload.response_data.metadata.total;
       })
-      .addCase(getPostReOpen.rejected, (state, action) => {
+      .addCase(getAllPostReOpen.rejected, (state, action) => {
         state.error = String(action.payload);
         state.loading = false;
       })

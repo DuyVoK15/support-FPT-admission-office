@@ -2,53 +2,40 @@ import {
   ActivityIndicator,
   FlatList,
   RefreshControl,
-  ScrollView,
   StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
-import React, { FC, useCallback, useContext, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
 import { useAppDispatch } from '../../../../app/store';
 import {
-  getAllPost,
   getAllPostCategory,
   getAllPostUpcomming,
-  getPostCategoryIdById,
-  searchPostByPostCode,
 } from '../../../../features/collaborator/collab.postSlice';
 import { useAppSelector } from '../../../../app/hooks';
-import { cardGap } from '../../../../constants/Demesions';
-import { format_ISODateString_To_DayOfWeekMonthDDYYYY } from '../../../../utils/formats';
+import { ScreenWidth, cardGap } from '../../../../constants/Demesions';
+import {
+  formatDateToDDMMYYYY,
+  format_ISODateString_To_DayOfWeekMonthDDYYYY,
+} from '../../../../utils/formats';
 import EventCardWrap from '../../../../components/collaborator/Home/EventCardWrap';
-import UpcommingPagination from '../../../../components/shared/Pagination/UpcommingPagination';
 import { imageNotFoundUri } from '../../../../utils/images';
 import CategoryFilterList from '../../../../components/collaborator/Event/UpcommingEvent/CategoryFilterList';
-import PostDto from '../../../../dtos/collaborator/post.dto';
-import { COLORS } from '../../../../constants/Colors';
-import { MyContext } from '../../../../context/stateContext';
 import { DataPost } from '../../../../models/collaborator/dataPost.model';
-import { FontAwesome } from '@expo/vector-icons';
-import { FONTS_FAMILY } from '../../../../constants/Fonts';
 import Search from '../../../../components/collaborator/Event/UpcommingEvent/Search';
+import FilterModalButton, {
+  DataFilterUpcomming,
+} from '../../../../components/collaborator/Event/UpcommingEvent/FilterModalButton';
 
-const PAGE_SIZE_DEFAULT = 30;
+// Variables
+const PAGE_SIZE_DEFAULT = 20;
+// Main Function
 const EventUpcomming: FC = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
 
-  const context = useContext(MyContext);
-  if (context === null) {
-    // Handle the case when the context is null, e.g., provide a default value or throw an error.
-    return null;
-  }
-
   const dispatch = useAppDispatch();
-  const postCategoryId = useAppSelector(
-    (state) => state.collab_post.postCategoryId
-  );
+
   const postCategoryList = useAppSelector(
     (state) => state.collab_post.postCategory
   );
@@ -67,114 +54,86 @@ const EventUpcomming: FC = () => {
     (state) => state.collab_post.postUpcomming.metadata.total
   );
   const postLoading = useAppSelector((state) => state.collab_post.loading);
-  // const SIZE_PAGING = 8;
-  // const [totalPost, setTotalPost] = useState<number | null>();
-  // const remainder = Number(postList?.metadata?.total) % SIZE_PAGING;
-  // const numberPage =
-  //   remainder === 0
-  //     ? Number(postList?.metadata?.total) / SIZE_PAGING
-  //     : Math.floor(Number(postList?.metadata?.total) / SIZE_PAGING) + 1;
-  // const pageList = Array.from(
-  //   { length: numberPage },
-  //   (_, index: number) => index + 1
-  // );
-
-  // const [isChecked, setIsChecked] = useState<boolean[]>(
-  //   Array(100).fill(false)
-  // );
-
-  // const fetchInitialPost = async () => {
-  //   await dispatch(getAllPostUpcomming({ Page: 1, PageSize: SIZE_PAGING })).then((res) => {
-  //     console.log(JSON.stringify(res, null, 2));
-  //   });
-  // };
-  // const handleInitialSelectedItem = () => {
-  //   const updatedStatus = Array(100).fill(false);
-  //   updatedStatus[1] = true;
-  //   setIsChecked(updatedStatus);
-  // };
-
-  // const handleSelectedItem = (index: number) => {
-  //   const updatedStatus = Array(100).fill(false);
-  //   updatedStatus[index] = true;
-  //   setIsChecked(updatedStatus);
-  //   fetchPostByPage(index);
-  // };
-
-  // const fetchPostByPage = async (page: number) => {
-  //   await dispatch(getAllPostUpcomming({ Page: page, PageSize: SIZE_PAGING, Sort: "CreateAt" })).then((res) => {
-  //     console.log(JSON.stringify(res, null, 2));
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   fetchInitialPost().then(()=> {
-  //     setTotalPost(postList?.metadata?.total)
-  //     handleInitialSelectedItem();
-  //   });
-  // },[]);
 
   const handleNavigate = (item: DataPost) => {
     navigation.navigate('HOME_EVENT_DETAIL', { item });
   };
 
   // Pagination scroll
-  const [postUpcommingCategoryId, setPostUpcommingCategoryId] = useState<
-    number | null
-  >(null);
+  const [postUpcommingCategoryDes, setPostUpcommingCategoryDes] = useState<
+    string | null
+  >('All');
+  // Handle submit filter data
+  const [dataFilterUpcomming, setDataFilterUpcomming] =
+    useState<DataFilterUpcomming | null>({
+      postUpcommingCategoryId: null,
+      createAtStart: null,
+      createAtEnd: null,
+      dateFromStart: null,
+      dateFromEnd: null,
+      searchText: null,
+      sort: 'CreateAt',
+      order: 'DESCENDING',
+    });
+  const [loading, setLoading] = useState<boolean>(false);
+
+  // Fetch post / Call disptach to redux Call API
   const fetchPost = async () => {
     try {
       await dispatch(
         getAllPostUpcomming({
           Page: 1,
           PageSize: PAGE_SIZE_DEFAULT,
-          PostCategoryId: postUpcommingCategoryId,
-          Sort: 'CreateAt',
+          PostCategoryId: dataFilterUpcomming?.postUpcommingCategoryId,
+          Sort: dataFilterUpcomming?.sort,
+          Order: dataFilterUpcomming?.order,
+          Search: dataFilterUpcomming?.searchText,
+          CreateAtStart: dataFilterUpcomming?.createAtStart,
+          CreateAtEnd: dataFilterUpcomming?.createAtEnd,
+          DateFromStart: dataFilterUpcomming?.dateFromStart,
+          DateFromEnd: dataFilterUpcomming?.dateFromEnd,
         })
-      );
+      ).then((res) => {
+        console.log('===============Data==============');
+        console.log(JSON.stringify(res, null, 2));
+      });
     } catch (error) {
-      console.log('Lỗi khi tải dữ liệu', error);
+      console.log('Error: ', error);
     }
   };
-  const [loading, setLoading] = useState<boolean>(false);
-  const [refreshing, setRefreshing] = useState<boolean>(false);
+
   // Sử dụng useEffect để gọi API khi postUpcommingCategoryId thay đổi
   useEffect(() => {
-    // Check
     fetchPost();
-  }, [refreshing, postUpcommingCategoryId]);
+  }, [dataFilterUpcomming]);
 
   useEffect(() => {
     fetchPostCategory();
   }, []);
 
-  // Refresh fetchPost()
+  // Refresh function fetchPost()
   const onRefresh = useCallback(async () => {
     setLoading(true);
     setTimeout(() => {
-      console.log('id: ', postUpcommingCategoryId);
-      setRefreshing(!refreshing);
-
-      setPostUpcommingCategoryId(null);
+      setDataFilterUpcomming({
+        postUpcommingCategoryId: null,
+        createAtStart: null,
+        createAtEnd: null,
+        dateFromStart: null,
+        dateFromEnd: null,
+        searchText: null,
+        sort: 'CreateAt',
+        order: 'DESCENDING',
+      });
+      setPostUpcommingCategoryDes('All');
       setLoading(false);
-    }, 1000);
+    }, 500);
   }, []);
-
-  const handleEndReached = async () => {
-    console.log('vô đây');
-
-    if ((Number(page) - 1) * PAGE_SIZE_DEFAULT < Number(total)) {
-      await dispatch(
-        getAllPostUpcomming({
-          Page: Number(page),
-          PageSize: PAGE_SIZE_DEFAULT,
-          PostCategoryId: postUpcommingCategoryId,
-          Sort: 'CreateAt',
-        })
-      );
-    }
+  // Render header JSX
+  const renderListHeader = () => {
+    return <View style={{ marginHorizontal: 15, marginTop: 10 }}></View>;
   };
-
+  // Render footer loader JSX
   const renderLoadingFooter = () => {
     return (Number(page) - 1) * PAGE_SIZE_DEFAULT < Number(total) ? (
       <View>
@@ -182,11 +141,26 @@ const EventUpcomming: FC = () => {
       </View>
     ) : null;
   };
-
-  type ItemProps = {
-    post: DataPost;
+  // Scroll to end to load more next page
+  const handleEndReached = async () => {
+    if ((Number(page) - 1) * PAGE_SIZE_DEFAULT < Number(total)) {
+      await dispatch(
+        getAllPostUpcomming({
+          Page: Number(page),
+          PageSize: PAGE_SIZE_DEFAULT,
+          PostCategoryId: dataFilterUpcomming?.postUpcommingCategoryId,
+          Sort: dataFilterUpcomming?.sort,
+          Search: dataFilterUpcomming?.searchText,
+          CreateAtStart: dataFilterUpcomming?.createAtStart,
+          CreateAtEnd: dataFilterUpcomming?.createAtEnd,
+          DateFromStart: dataFilterUpcomming?.dateFromStart,
+          DateFromEnd: dataFilterUpcomming?.dateFromEnd,
+        })
+      );
+    }
   };
-  const Item = ({ post }: ItemProps) => {
+  // Custom Item JSX
+  const Item = ({ post }: { post: DataPost }) => {
     return (
       <View>
         <EventCardWrap
@@ -207,23 +181,52 @@ const EventUpcomming: FC = () => {
           totalAmountPosition={
             post?.totalAmountPosition ? String(post?.totalAmountPosition) : '0'
           }
-          status={post?.status}
+          status={post?.status ? String(post?.status) : 'No Status'}
+          timeAgo={post?.createAt ? post?.createAt : ''}
         />
       </View>
     );
   };
+  // Use useMemo to prevent re-render Item when excecute some thing in Component
+  const memoizedRenderItem = useMemo(() => {
+    // console.log('Re-render nè 1');
 
-  const renderItem = ({ item }: { item: DataPost }) => {
-    return <Item post={item} />;
-  };
+    const renderItem = ({ item }: { item: DataPost }) => {
+      // console.log('Re-render nè 1');
+
+      return <Item post={item} />;
+    };
+    return renderItem;
+  }, [list]);
 
   return (
     <View style={styles.container}>
+      <View style={{ marginTop: 10, marginHorizontal: 15 }}>
+        <View style={{ flexDirection: 'row' }}>
+          <Search
+            postUpcommingCategoryDes={postUpcommingCategoryDes}
+            total={total ? Number(total) : 0}
+            dataFilterUpcomming={dataFilterUpcomming}
+            setDataFilterUpcomming={setDataFilterUpcomming}
+          />
+          <FilterModalButton
+            dataFilterUpcomming={dataFilterUpcomming}
+            setDataFilterUpcomming={setDataFilterUpcomming}
+          />
+        </View>
+        <CategoryFilterList
+          postCategoryList={postCategoryList}
+          dataFilterUpcomming={dataFilterUpcomming}
+          setDataFilterUpcomming={setDataFilterUpcomming}
+          postUpcommingCategoryDes={postUpcommingCategoryDes}
+          setPostUpcommingCategoryDes={setPostUpcommingCategoryDes}
+        />
+      </View>
       <FlatList
         scrollEventThrottle={16}
         data={list}
         // extraData={list}
-        renderItem={renderItem}
+        renderItem={memoizedRenderItem}
         numColumns={2}
         columnWrapperStyle={{
           flex: 1,
@@ -242,34 +245,11 @@ const EventUpcomming: FC = () => {
         ListEmptyComponent={
           <ActivityIndicator size={'large'} color={'purple'} />
         }
-        ListHeaderComponent={
-          <View style={{ marginHorizontal: 15, marginTop: 10 }}>
-            <Search />
-            <CategoryFilterList
-              postCategoryList={postCategoryList}
-              // postUpcommingCategoryId={postUpcommingCategoryId}
-              postUpcommingCategoryId={postUpcommingCategoryId}
-              setPostUpcommingCategoryId={setPostUpcommingCategoryId}
-            />
-          </View>
-        }
+        ListHeaderComponent={renderListHeader}
         ListFooterComponent={renderLoadingFooter}
         onEndReached={handleEndReached}
         // onEndReachedThreshold={0.5}
       />
-
-      {/* {postList?.metadata && (
-          <View>
-            <UpcommingPagination
-              isChecked={isChecked}
-              pageList={pageList}
-              handleSelectedItem={handleSelectedItem}
-              
-            />
-          </View>
-        )} */}
-      {/* {loading && <ActivityIndicator size="large" color="#0000ff" />}
-      </ScrollView> */}
     </View>
   );
 };

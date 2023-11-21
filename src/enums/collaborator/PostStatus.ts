@@ -1,0 +1,8 @@
+export enum POST_STATUS_ENUM {
+  OPENING = 1,
+  AVOID_REGIST = 2,
+  ENDED = 3,
+  CANCELLED = 4,
+  DELETED = 5,
+  RE_OPEN = 6,
+}

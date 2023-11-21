@@ -16,5 +16,5 @@ export interface DataPosition {
   isBusService: boolean;
   amount: number;
   salary: number;
-  registerAmount: number;
+  positionRegisterAmount: number;
 }

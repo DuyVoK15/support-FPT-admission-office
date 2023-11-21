@@ -36,7 +36,7 @@ export const formatToISO_8601 = (props: DateProps) => {
 
     return iso8601Format;
   } else {
-    return '';
+    return null;
   }
 };
 
@@ -78,7 +78,7 @@ export const timeAgo = (props: DateProps): string => {
 };
 
 export function format_ISODateString_To_DayOfWeekMonthDDYYYY(isoDateString:string) {
-  const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
   const date = new Date(isoDateString);

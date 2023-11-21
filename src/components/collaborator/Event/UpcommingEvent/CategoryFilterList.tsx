@@ -12,12 +12,17 @@ import ViewPostCategoryResponse from '../../../../dtos/collaborator/response/vie
 import { useAppDispatch } from '../../../../app/store';
 import { getPostCategoryIdById } from '../../../../features/collaborator/collab.postSlice';
 import { MyContext } from '../../../../context/stateContext';
+import { DataFilterUpcomming } from './FilterModalButton';
 
 interface CategoryFilterListProps {
   postCategoryList: ViewPostCategoryResponse;
   // postCategoryId: number | null;
-  postUpcommingCategoryId: number | null;
-  setPostUpcommingCategoryId: (id: number | null) => void;
+  dataFilterUpcomming: DataFilterUpcomming | null;
+  setDataFilterUpcomming: React.Dispatch<
+    React.SetStateAction<DataFilterUpcomming | null>
+  >;
+  postUpcommingCategoryDes: string | null;
+  setPostUpcommingCategoryDes: (des: string | null) => void;
 }
 const CategoryFilterList: FC<CategoryFilterListProps> = (props) => {
   // const [id, setId] = useState<number | null>(null);
@@ -27,13 +32,23 @@ const CategoryFilterList: FC<CategoryFilterListProps> = (props) => {
   //   return null;
   // }
   // const { postUpcommingCategoryId, setPostUpcommingCategoryId } = context;
-  const getPostCategoryId = async (Id: number | null) => {
-    props.setPostUpcommingCategoryId(Id);
+  const getPostCategoryId = async (Id: number | null, Des: string | null) => {
+    props.setDataFilterUpcomming((prevFilter) => ({
+      postUpcommingCategoryId: Id,
+      createAtStart: prevFilter?.createAtStart || null,
+      createAtEnd: prevFilter?.createAtEnd || null,
+      dateFromStart: prevFilter?.dateFromStart || null,
+      dateFromEnd: prevFilter?.dateFromEnd || null,
+      searchText: prevFilter?.searchText || null,
+      sort: prevFilter?.sort || null,
+      order: prevFilter?.order || null,
+    }));
+    props.setPostUpcommingCategoryDes(Des);
     // await dispatch(getPostCategoryIdById({ Id })).then((res) => {
     //   console.log(JSON.stringify(res, null, 2));
     // });
   };
-
+  console.log(props.dataFilterUpcomming);
   return (
     <View style={{ marginVertical: 15 }}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -43,14 +58,18 @@ const CategoryFilterList: FC<CategoryFilterListProps> = (props) => {
             .map((category, index) => (
               <TouchableOpacity
                 onPress={() => {
-                  getPostCategoryId(category?.id);
+                  getPostCategoryId(
+                    category?.id,
+                    category?.postCategoryDescription
+                  );
                 }}
                 key={index}
                 style={{
                   borderWidth: 3,
                   borderColor: '#FF930F',
                   backgroundColor:
-                    props.postUpcommingCategoryId === category?.id
+                    props.dataFilterUpcomming?.postUpcommingCategoryId ===
+                    category?.id
                       ? '#FF930F'
                       : '#FFF',
                   marginRight: 10,
@@ -62,7 +81,8 @@ const CategoryFilterList: FC<CategoryFilterListProps> = (props) => {
                     style={{
                       fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
                       color:
-                        props.postUpcommingCategoryId === category?.id
+                        props.dataFilterUpcomming?.postUpcommingCategoryId ===
+                        category?.id
                           ? '#FFF'
                           : '#FF930F',
                     }}
