@@ -361,8 +361,8 @@ const PositionRegistration = () => {
                                     fontSize: 14,
                                   }}
                                 >
-                                  {position?.registerAmount || position?.amount
-                                    ? position?.registerAmount +
+                                  {position?.positionRegisterAmount || position?.amount
+                                    ? position?.positionRegisterAmount +
                                       ' / ' +
                                       position?.amount +
                                       ' collaborators'

@@ -57,18 +57,15 @@ export const getAllPostRegistration = createAsyncThunk(
       };
     } catch (error: any) {
       const axiosError = error as AxiosError;
-      console.log(axiosError.status);
-      return rejectWithValue(axiosError.response?.status);
+
+      return rejectWithValue(axiosError.response?.data);
     }
   }
 );
 
 export const getAllPostRegistration_Pending = createAsyncThunk(
   'postRegistration/getAll/pending',
-  async (
-    params: FilterPostRegistration,
-    { rejectWithValue }
-  ) => {
+  async (params: FilterPostRegistration, { rejectWithValue }) => {
     try {
       const response =
         await postRegistrationService.getAllPostRegistration(params);
@@ -78,8 +75,8 @@ export const getAllPostRegistration_Pending = createAsyncThunk(
       };
     } catch (error: any) {
       const axiosError = error as AxiosError;
-      console.log(axiosError.status);
-      return rejectWithValue(axiosError.response?.status);
+
+      return rejectWithValue(axiosError.response?.data);
     }
   }
 );
@@ -96,8 +93,8 @@ export const getAllPostRegistration_Confirmed = createAsyncThunk(
       };
     } catch (error: any) {
       const axiosError = error as AxiosError;
-      console.log(axiosError.status);
-      return rejectWithValue(axiosError.response?.status);
+
+      return rejectWithValue(axiosError.response?.data);
     }
   }
 );
@@ -113,8 +110,8 @@ export const getAllPostRegistration_Completed = createAsyncThunk(
       };
     } catch (error: any) {
       const axiosError = error as AxiosError;
-      console.log(axiosError.status);
-      return rejectWithValue(axiosError.response?.status);
+
+      return rejectWithValue(axiosError.response?.data);
     }
   }
 );
@@ -130,8 +127,8 @@ export const getAllPostRegistration_Cancelled = createAsyncThunk(
       };
     } catch (error: any) {
       const axiosError = error as AxiosError;
-      console.log(axiosError.status);
-      return rejectWithValue(axiosError.response?.status);
+
+      return rejectWithValue(axiosError.response?.data);
     }
   }
 );
@@ -158,8 +155,8 @@ export const cancelPostRegistration = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       const axiosError = error as AxiosError;
-      console.log(axiosError.status);
-      return rejectWithValue(axiosError.response?.status);
+
+      return rejectWithValue(axiosError.response?.data);
     }
   }
 );
@@ -172,7 +169,7 @@ export const updatePostRegistration = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       const axiosError = error as AxiosError;
-      console.log(axiosError.status);
+
       return rejectWithValue(axiosError.response?.data);
     }
   }
@@ -187,8 +184,8 @@ export const getAllUpdateRequest = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       const axiosError = error as AxiosError;
-      console.log(axiosError.status);
-      return rejectWithValue(axiosError.response?.status);
+
+      return rejectWithValue(axiosError.response?.data);
     }
   }
 );
@@ -202,8 +199,8 @@ export const getAllCheckInPostRegistration = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       const axiosError = error as AxiosError;
-      console.log(axiosError.status);
-      return rejectWithValue(axiosError.response?.status);
+
+      return rejectWithValue(axiosError.response?.data);
     }
   }
 );
@@ -268,7 +265,7 @@ export const postRegistrationSlice = createSlice({
       .addCase(getAllPostRegistration_Confirmed.rejected, (state, action) => {
         state.error = String(action.payload);
         state.loading = false;
-      }) 
+      })
       // Completed
       .addCase(getAllPostRegistration_Completed.pending, (state) => {
         state.loading = true;
@@ -281,7 +278,7 @@ export const postRegistrationSlice = createSlice({
       .addCase(getAllPostRegistration_Completed.rejected, (state, action) => {
         state.error = String(action.payload);
         state.loading = false;
-      }) 
+      })
       // Canncelled
       .addCase(getAllPostRegistration_Cancelled.pending, (state) => {
         state.loading = true;
