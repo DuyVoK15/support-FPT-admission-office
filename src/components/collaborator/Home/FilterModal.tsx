@@ -131,7 +131,6 @@ const FilterModal = () => {
         onModalHide={() => console.log('Modal is hidden!')}
         swipeDirection={['down']} // Cho phép kéo từ trên xuống
         hideModalContentWhileAnimating={true}
-        swipeThreshold={200}
         onSwipeComplete={() => toggleModalVisible()}
         onSwipeCancel={() => console.log('Swipe Canceled')}
         onSwipeMove={() => console.log('Swipe Moved')}

@@ -226,7 +226,7 @@ const Account = () => {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => navigation.navigate('NOTIFICATION')}
+              onPress={() => navigation.navigate('ACCOUNT_NOTIFICATION')}
               style={styles.containerRow}
             >
               <View style={styles.column1}>
