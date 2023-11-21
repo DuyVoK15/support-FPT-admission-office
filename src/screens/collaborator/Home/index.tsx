@@ -175,6 +175,7 @@ const Home = () => {
                 </TouchableOpacity>
               )}
             </View>
+            {/* <FilterModal /> */}
           </View>
         </View>
       </View>

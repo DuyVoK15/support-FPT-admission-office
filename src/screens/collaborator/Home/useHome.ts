@@ -23,7 +23,7 @@ const useHome = () => {
       search: '',
     },
   });
-  
+
   const onSubmit = (data: { search: string }) => {
     setTextSearch(data?.search);
   };
@@ -40,10 +40,21 @@ const useHome = () => {
       console.log('Alo: ', JSON.stringify(res, null, 2));
     });
   };
-
+  // useEffect(() => {
+  //   const fetch = async () => {
+  //     console.log('Gọi 2');
+  //     await fetchHomePostReOpen();
+  //   };
+  //   fetch();
+  // }, []);
   useEffect(() => {
-    console.log('tao vô đây 1');
-    fetchHomePostUpcomming();
+    const fetch = async () => {
+      // console.log('Gọi 1');
+      await fetchHomePostUpcomming();
+      await fetchHomePostReOpen();
+      await fetchCheckInPostRegistration();
+    };
+    fetch();
   }, [textSearch]);
 
   const fetchHomePostReOpen = async () => {
@@ -54,26 +65,25 @@ const useHome = () => {
       search: textSearch,
     };
     await dispatch(getHomePostReOpen(params)).then((res) => {
-      // console.log('Alo: ', JSON.stringify(res, null, 2));
+      console.log('Alo: ', res?.payload);
     });
   };
-
-  useEffect(() => {
-    console.log('tao vô đây 1');
-    fetchHomePostReOpen();
-  }, []);
 
   const checkInPostRegistrationList = useAppSelector(
     (state) => state.collab_postRegistration.checkInPostRegistration
   );
   const fetchCheckInPostRegistration = async () => {
-    await dispatch(getAllCheckInPostRegistration({}));
+    await dispatch(getAllCheckInPostRegistration({})).then((res) => {
+      console.log('Alo: check ');
+    });
   };
-  useEffect(() => {
-    console.log('tao vô đây 2');
-
-    fetchCheckInPostRegistration();
-  }, []);
+  // useEffect(() => {
+  //   const fetch = async () => {
+  //     console.log('Gọi 3');
+  //     await fetchCheckInPostRegistration();
+  //   };
+  //   fetch();
+  // }, []);
 
   const postHomeUpcommingList = useAppSelector(
     (state) => state.collab_post.postHomeUpcomming
@@ -88,15 +98,15 @@ const useHome = () => {
   };
 
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const onRefresh = useCallback(() => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
     setTextSearch(null);
-    fetchHomePostUpcomming();
-    fetchHomePostReOpen();
-    fetchCheckInPostRegistration();
+    await fetchHomePostUpcomming();
+    await fetchHomePostReOpen();
+    await fetchCheckInPostRegistration();
     setTimeout(() => {
       setRefreshing(false);
-    }, 1000);
+    }, 0);
   }, []);
 
   const handlers = {
