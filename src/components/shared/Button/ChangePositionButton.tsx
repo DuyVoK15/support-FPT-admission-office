@@ -3,7 +3,9 @@ import React, { FC } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
 
-interface ChangePositionButtonProps extends TouchableOpacityProps {}
+interface ChangePositionButtonProps extends TouchableOpacityProps {
+  titleButton: string | null;
+}
 const ChangePositionButton: FC<ChangePositionButtonProps> = (Props) => {
   const { ...otherProps } = Props;
   return (
@@ -15,7 +17,7 @@ const ChangePositionButton: FC<ChangePositionButtonProps> = (Props) => {
           textDecorationLine: 'underline',
         }}
       >
-        Change position
+        {Props.titleButton}
       </Text>
     </TouchableOpacity>
   );

@@ -17,6 +17,7 @@ interface PostRegistrationState {
   postRegistrationPendingById: ViewPostRegistrationResponse | null;
   postRegistrationPending: ViewPostRegistrationResponse | null;
   postRegistrationConfirmed: ViewPostRegistrationResponse | null;
+  postRegistrationConfirmedById: ViewPostRegistrationResponse | null;
   postRegistrationCompleted: ViewPostRegistrationResponse | null;
   postRegistrationCancelled: ViewPostRegistrationResponse | null;
   postRegistrationRejected: ViewPostRegistrationResponse | null;
@@ -37,6 +38,7 @@ const initialState: PostRegistrationState = {
   postRegistrationPendingById: null,
   postRegistrationPending: null,
   postRegistrationConfirmed: null,
+  postRegistrationConfirmedById: null,
   postRegistrationCompleted: null,
   postRegistrationCancelled: null,
   postRegistrationRejected: null,
@@ -103,6 +105,23 @@ export const getPostRegistrationById_Pending = createAsyncThunk(
 );
 export const getAllPostRegistration_Confirmed = createAsyncThunk(
   'postRegistration/getAll/confirmed',
+  async (params: FilterPostRegistration, { rejectWithValue }) => {
+    try {
+      const response =
+        await postRegistrationService.getAllPostRegistration(params);
+      return {
+        response_data: response.data,
+        query_data: params,
+      };
+    } catch (error: any) {
+      const axiosError = error as AxiosError;
+
+      return rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+export const getPostRegistrationById_Confirmed = createAsyncThunk(
+  'postRegistration/getById/confirmed',
   async (params: FilterPostRegistration, { rejectWithValue }) => {
     try {
       const response =
@@ -313,6 +332,19 @@ export const postRegistrationSlice = createSlice({
         state.postRegistrationConfirmed = action.payload.response_data;
       })
       .addCase(getAllPostRegistration_Confirmed.rejected, (state, action) => {
+        state.error = String(action.payload);
+        state.loading = false;
+      })
+      // Confirmed by Id
+      .addCase(getPostRegistrationById_Confirmed.pending, (state) => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(getPostRegistrationById_Confirmed.fulfilled, (state, action) => {
+        state.loading = false;
+        state.postRegistrationConfirmedById = action.payload.response_data;
+      })
+      .addCase(getPostRegistrationById_Confirmed.rejected, (state, action) => {
         state.error = String(action.payload);
         state.loading = false;
       })

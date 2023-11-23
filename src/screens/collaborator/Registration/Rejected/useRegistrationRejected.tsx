@@ -4,20 +4,21 @@ import { useAppDispatch } from '../../../../app/store';
 import { useAppSelector } from '../../../../app/hooks';
 import {
   getAllPostRegistration,
+  getAllPostRegistration_Cancelled,
   getAllPostRegistration_Completed,
 } from '../../../../features/collaborator/collab.postRegistrationSlice';
 import { RegistrationStatus } from '../../../../enums/collaborator/RegistrationStatus';
 import { useFocusEffect } from '@react-navigation/native';
 
-const useIndex = () => {
+const useRegistrationRejected = () => {
   const dispatch = useAppDispatch();
   const postRegistrationList = useAppSelector(
-    (state) => state.collab_postRegistration.postRegistrationCompleted
+    (state) => state.collab_postRegistration.postRegistrationRejected
   );
   const fetchPostRegistration = async () => {
     await dispatch(
-      getAllPostRegistration_Completed({
-        RegistrationStatus: [RegistrationStatus.CHECKOUT],
+      getAllPostRegistration_Cancelled({
+        RegistrationStatus: [RegistrationStatus.REJECT],
       })
     ).then((res) => {
       console.log(JSON.stringify(res, null, 2));
@@ -54,4 +55,4 @@ const useIndex = () => {
   };
 };
 
-export default useIndex;
+export default useRegistrationRejected;

@@ -39,6 +39,9 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
 
   const { handlers, state, props } = useIndex();
+  const renderListEmptyComponent = () => {
+    return <RegistrationEmpty />
+  };
   const renderItem = ({ item }: { item: DataViewPostRegistration }) => {
     return (
       <View style={styles.containerItem}>
@@ -170,29 +173,30 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
               }
             />
           </View>
-
-          <View style={{ flexDirection: 'row', marginTop: 5 }}>
-            <View style={{ flex: 1 }}></View>
-            <View>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('REQUEST_CHANGE_POSITION_PENDING', {
-                    item,
-                  })
-                }
-              >
-                <Text
-                  style={{
-                    fontFamily: FONTS_FAMILY?.Ubuntu_400Regular_Italic,
-                    fontSize: 13,
-                    textDecorationLine: 'underline',
-                  }}
+          {item?.postPositionsUnregistereds?.length > 0 && (
+            <View style={{ flexDirection: 'row', marginTop: 5 }}>
+              <View style={{ flex: 1 }}></View>
+              <View>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('REQUEST_CHANGE_POSITION_PENDING', {
+                      id: item?.id
+                    })
+                  }
                 >
-                  Change position
-                </Text>
-              </TouchableOpacity>
+                  <Text
+                    style={{
+                      fontFamily: FONTS_FAMILY?.Ubuntu_400Regular_Italic,
+                      fontSize: 13,
+                      textDecorationLine: 'underline',
+                    }}
+                  >
+                    {item?.isUpdated ? "You've changed" : "Change position?"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
+          )}
         </View>
       </View>
     );
@@ -209,7 +213,7 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
             onRefresh={handlers.onRefresh}
           />
         }
-        ListEmptyComponent={<RegistrationEmpty />}
+        ListEmptyComponent={renderListEmptyComponent}
         ListHeaderComponentStyle={{ marginTop: 15 }}
       />
     </View>

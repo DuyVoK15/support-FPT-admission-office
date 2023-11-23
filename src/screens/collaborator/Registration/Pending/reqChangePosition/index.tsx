@@ -1,5 +1,5 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { FC, useState } from 'react';
+import { RefreshControl, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../../../type';
 import { FONTS_FAMILY } from '../../../../../constants/Fonts';
@@ -23,20 +23,25 @@ import useCustomToast from '../../../../../utils/toasts';
 import { useAppDispatch } from '../../../../../app/store';
 import {
   getAllPostRegistration_Pending,
+  getPostRegistrationById_Pending,
   updatePostRegistration,
 } from '../../../../../features/collaborator/collab.postRegistrationSlice';
 import ErrorStatus from '../../../../../dtos/collaborator/response/errorStatus.dto';
 import DataViewPostRegistration from '../../../../../models/collaborator/postRegistration.model';
 import { RegistrationStatus } from '../../../../../enums/collaborator/RegistrationStatus';
+import { async } from '@firebase/util';
+import { useAppSelector } from '../../../../../app/hooks';
 
-interface RequestChangePositionProps {}
+interface RequestChangePositionProps {
+  onRefresh: () => void;
+}
 const RequestChangePositionPending: FC<RequestChangePositionProps> = (
   Props
 ) => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const route = useRoute();
-  const { item } = route?.params as { item: DataViewPostRegistration };
-  console.log(JSON.stringify(item, null, 2));
+  const { id } = route?.params as { id: number };
+  console.log(JSON.stringify(id, null, 2));
 
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const showAlertHandler = () => {
@@ -47,8 +52,40 @@ const RequestChangePositionPending: FC<RequestChangePositionProps> = (
     setShowAlert(false);
   };
 
+  const list = useAppSelector(
+    (state) => state.collab_postRegistration.postRegistrationPendingById
+  );
+  const fetchPostRegistrationById = async () => {
+    try {
+      await dispatch(
+        getPostRegistrationById_Pending({
+          RegistrationStatus: [RegistrationStatus.PENDING],
+          Id: id,
+        })
+      ).then((res) => {
+        console.log(JSON.stringify(res, null, 2));
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchPostRegistrationById();
+  }, []);
+
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchPostRegistrationById().catch(() => {
+      setRefreshing(false);
+    });
+    setRefreshing(false);
+  }, []);
+
   const [isSelectedBusOption, setIsSelectedBusOption] = useState(
-    Array(item?.postPositionsUnregistereds?.length).fill(false)
+    Array(list?.data?.[0]?.postPositionsUnregistereds?.length || 100).fill(
+      false
+    )
   );
 
   const selectedBusOption = (index: number) => {
@@ -74,7 +111,6 @@ const RequestChangePositionPending: FC<RequestChangePositionProps> = (
   ) => {
     hideAlertHandler();
     await dispatch(updatePostRegistration({ id, positionId })).then(
-      
       async (res) => {
         console.log(JSON.stringify(res, null, 2));
         if (res?.meta?.requestStatus === 'fulfilled') {
@@ -86,7 +122,6 @@ const RequestChangePositionPending: FC<RequestChangePositionProps> = (
           navigation.goBack();
           showToastSuccess('Update thành công');
           console.log(JSON.stringify(res, null, 2));
-
         } else {
           const resRejectedData = res?.payload as ErrorStatus;
           showToastError(resRejectedData?.message);
@@ -120,242 +155,278 @@ const RequestChangePositionPending: FC<RequestChangePositionProps> = (
             Choose your position you want to change
           </Text>
         </View>
-        <ScrollView>
+        <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
           <View style={styles.positionContent}>
-            <Text style={styles.textPosition} numberOfLines={1}>
-              Positions
-            </Text>
-            {item?.postPositionsUnregistereds ? (
-              item?.postPositionsUnregistereds.map((position, index) => {
-                const INDEX = index + 1;
-                return (
-                  <View key={INDEX} style={styles.containerEveryPosition}>
-                    <View style={styles.everyPosition}>
-                      <TouchableOpacity
-                        onPress={() => handleSetPositionId(position?.id)}
-                        style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <View style={{ flex: 1 }}>
-                          <Text style={styles.textPositionNum}>
-                            Position: {''}
-                            <Text style={styles.textPositionNum_2}>
-                              {position?.positionName
-                                ? position?.positionName
-                                : 'No value'}
-                            </Text>
-                          </Text>
-                        </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text
+                style={[
+                  styles.textPosition,
+                  {
+                    fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
+                    color: COLORS?.orange_icon,
+                  },
+                ]}
+                numberOfLines={2}
+              >
+                {list?.data?.[0]?.postPosition ? 'Current position: ' : ''}
+              </Text>
+              <Text
+                style={[
+                  styles.textPosition,
+                  { fontFamily: FONTS_FAMILY?.Ubuntu_700Bold },
+                ]}
+                numberOfLines={2}
+              >
+                {list?.data?.[0]?.postPosition
+                  ? list?.data?.[0]?.postPosition?.positionName
+                  : ''}
+              </Text>
+            </View>
 
-                        <View
+            {list?.data?.[0].postPositionsUnregistereds ? (
+              list?.data?.[0].postPositionsUnregistereds.map(
+                (position, index) => {
+                  const INDEX = index + 1;
+                  return (
+                    <View key={INDEX} style={styles.containerEveryPosition}>
+                      <View style={styles.everyPosition}>
+                        <TouchableOpacity
+                          onPress={() => handleSetPositionId(position?.id)}
                           style={{
-                            paddingHorizontal: 5,
-                            paddingVertical: 2,
+                            flexDirection: 'row',
+                            alignItems: 'center',
                           }}
                         >
-                          {positionId === position?.id ? (
-                            <Entypo
-                              name="chevron-small-up"
-                              size={26}
-                              color="black"
-                            />
-                          ) : (
-                            <Entypo
-                              name="chevron-small-down"
-                              size={26}
-                              color="black"
-                            />
-                          )}
-                        </View>
-                      </TouchableOpacity>
-                      {positionId === position?.id && (
-                        <View style={{}}>
-                          <DashedLine
-                            style={{ marginVertical: 10 }}
-                            dashGap={0}
-                            dashThickness={1}
-                            dashLength={10}
-                            dashColor={COLORS.super_light_grey}
-                          />
-                          <View>
-                            <View style={styles.column}>
-                              <View style={styles.contentRow}>
-                                <Ionicons
-                                  name="md-calendar"
-                                  size={28}
-                                  color={COLORS.orange_icon}
-                                />
-                              </View>
-                              <View style={{ marginLeft: 15 }}>
-                                <View style={{ marginBottom: 4 }}>
-                                  <Text
-                                    style={{
-                                      fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
-                                      fontSize: 16,
-                                    }}
-                                  >
-                                    {position?.date
-                                      ? format_ISODateString_To_DayOfWeekMonthDDYYYY(
-                                          position?.date
-                                        )
-                                      : ''}
-                                  </Text>
-                                </View>
-                                <View style={{ marginBottom: 4 }}>
-                                  <Text
-                                    style={{
-                                      fontFamily:
-                                        FONTS_FAMILY.Ubuntu_400Regular,
-                                      fontSize: 14,
-                                    }}
-                                  >
-                                    {position?.timeFrom && position?.timeTo
-                                      ? format_Time_To_HHss(
-                                          position?.timeFrom
-                                        ) +
-                                        ' - ' +
-                                        format_Time_To_HHss(position?.timeTo) +
-                                        ' (GMT +7)'
-                                      : ''}
-                                  </Text>
-                                </View>
-                              </View>
-                            </View>
-                            {/* COLUMN 2 */}
-                            <View style={styles.column}>
-                              <View style={styles.contentRow}>
-                                <Ionicons
-                                  name="location-sharp"
-                                  size={28}
-                                  color={COLORS.orange_icon}
-                                />
-                              </View>
-                              <View style={{ marginLeft: 15 }}>
-                                <View style={{ marginBottom: 4 }}>
-                                  <Text
-                                    style={{
-                                      fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
-                                      fontSize: 16,
-                                    }}
-                                  >
-                                    {position?.schoolName
-                                      ? position?.schoolName
-                                      : ''}
-                                  </Text>
-                                </View>
-                                <View
-                                  style={{
-                                    marginBottom: 4,
-                                    maxWidth: ScreenWidth * 0.6,
-                                  }}
-                                >
-                                  <Text
-                                    style={{
-                                      fontFamily:
-                                        FONTS_FAMILY.Ubuntu_400Regular,
-                                      fontSize: 14,
-                                    }}
-                                  >
-                                    {position?.location
-                                      ? position?.location
-                                      : ''}
-                                  </Text>
-                                </View>
-                              </View>
-                            </View>
-                            {/* COLUMN 3 */}
-                            <View style={[styles.column, { marginBottom: 0 }]}>
-                              <View style={styles.contentRow}>
-                                <Ionicons
-                                  name="md-calendar"
-                                  size={28}
-                                  color={COLORS.orange_icon}
-                                />
-                              </View>
-                              <View style={{ marginLeft: 15 }}>
-                                <View style={{ marginBottom: 4 }}>
-                                  <Text
-                                    style={{
-                                      fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
-                                      fontSize: 16,
-                                    }}
-                                  >
-                                    Attendee Number
-                                  </Text>
-                                </View>
-                                <View style={{ marginBottom: 4 }}>
-                                  <Text
-                                    style={{
-                                      fontFamily:
-                                        FONTS_FAMILY.Ubuntu_400Regular,
-                                      fontSize: 14,
-                                    }}
-                                  >
-                                    {position?.registerAmount ||
-                                    position?.amount
-                                      ? position?.registerAmount +
-                                        ' / ' +
-                                        position?.amount +
-                                        ' collaborators'
-                                      : ''}
-                                  </Text>
-                                </View>
-                              </View>
-                            </View>
+                          <View style={{ flex: 1 }}>
+                            <Text style={styles.textPositionNum}>
+                              Position: {''}
+                              <Text style={styles.textPositionNum_2}>
+                                {position?.positionName
+                                  ? position?.positionName
+                                  : 'No value'}
+                              </Text>
+                            </Text>
                           </View>
 
-                          <DashedLine
-                            style={{ marginVertical: 10 }}
-                            dashGap={0}
-                            dashThickness={1}
-                            dashLength={10}
-                            dashColor={COLORS.super_light_grey}
-                          />
+                          <View
+                            style={{
+                              paddingHorizontal: 5,
+                              paddingVertical: 2,
+                            }}
+                          >
+                            {positionId === position?.id ? (
+                              <Entypo
+                                name="chevron-small-up"
+                                size={26}
+                                color="black"
+                              />
+                            ) : (
+                              <Entypo
+                                name="chevron-small-down"
+                                size={26}
+                                color="black"
+                              />
+                            )}
+                          </View>
+                        </TouchableOpacity>
+                        {positionId === position?.id && (
+                          <View style={{}}>
+                            <DashedLine
+                              style={{ marginVertical: 10 }}
+                              dashGap={0}
+                              dashThickness={1}
+                              dashLength={10}
+                              dashColor={COLORS.super_light_grey}
+                            />
+                            <View>
+                              <View style={styles.column}>
+                                <View style={styles.contentRow}>
+                                  <Ionicons
+                                    name="md-calendar"
+                                    size={28}
+                                    color={COLORS.orange_icon}
+                                  />
+                                </View>
+                                <View style={{ marginLeft: 15 }}>
+                                  <View style={{ marginBottom: 4 }}>
+                                    <Text
+                                      style={{
+                                        fontFamily:
+                                          FONTS_FAMILY.Ubuntu_500Medium,
+                                        fontSize: 16,
+                                      }}
+                                    >
+                                      {position?.date
+                                        ? format_ISODateString_To_DayOfWeekMonthDDYYYY(
+                                            position?.date
+                                          )
+                                        : ''}
+                                    </Text>
+                                  </View>
+                                  <View style={{ marginBottom: 4 }}>
+                                    <Text
+                                      style={{
+                                        fontFamily:
+                                          FONTS_FAMILY.Ubuntu_400Regular,
+                                        fontSize: 14,
+                                      }}
+                                    >
+                                      {position?.timeFrom && position?.timeTo
+                                        ? format_Time_To_HHss(
+                                            position?.timeFrom
+                                          ) +
+                                          ' - ' +
+                                          format_Time_To_HHss(
+                                            position?.timeTo
+                                          ) +
+                                          ' (GMT +7)'
+                                        : ''}
+                                    </Text>
+                                  </View>
+                                </View>
+                              </View>
+                              {/* COLUMN 2 */}
+                              <View style={styles.column}>
+                                <View style={styles.contentRow}>
+                                  <Ionicons
+                                    name="location-sharp"
+                                    size={28}
+                                    color={COLORS.orange_icon}
+                                  />
+                                </View>
+                                <View style={{ marginLeft: 15 }}>
+                                  <View style={{ marginBottom: 4 }}>
+                                    <Text
+                                      style={{
+                                        fontFamily:
+                                          FONTS_FAMILY.Ubuntu_500Medium,
+                                        fontSize: 16,
+                                      }}
+                                    >
+                                      {position?.schoolName
+                                        ? position?.schoolName
+                                        : ''}
+                                    </Text>
+                                  </View>
+                                  <View
+                                    style={{
+                                      marginBottom: 4,
+                                      maxWidth: ScreenWidth * 0.6,
+                                    }}
+                                  >
+                                    <Text
+                                      style={{
+                                        fontFamily:
+                                          FONTS_FAMILY.Ubuntu_400Regular,
+                                        fontSize: 14,
+                                      }}
+                                    >
+                                      {position?.location
+                                        ? position?.location
+                                        : ''}
+                                    </Text>
+                                  </View>
+                                </View>
+                              </View>
+                              {/* COLUMN 3 */}
+                              <View
+                                style={[styles.column, { marginBottom: 0 }]}
+                              >
+                                <View style={styles.contentRow}>
+                                  <Ionicons
+                                    name="md-calendar"
+                                    size={28}
+                                    color={COLORS.orange_icon}
+                                  />
+                                </View>
+                                <View style={{ marginLeft: 15 }}>
+                                  <View style={{ marginBottom: 4 }}>
+                                    <Text
+                                      style={{
+                                        fontFamily:
+                                          FONTS_FAMILY.Ubuntu_500Medium,
+                                        fontSize: 16,
+                                      }}
+                                    >
+                                      Attendee Number
+                                    </Text>
+                                  </View>
+                                  <View style={{ marginBottom: 4 }}>
+                                    <Text
+                                      style={{
+                                        fontFamily:
+                                          FONTS_FAMILY.Ubuntu_400Regular,
+                                        fontSize: 14,
+                                      }}
+                                    >
+                                      {position?.positionRegisterAmount ||
+                                      position?.amount
+                                        ? position?.positionRegisterAmount +
+                                          ' / ' +
+                                          position?.amount +
+                                          ' collaborators'
+                                        : ''}
+                                    </Text>
+                                  </View>
+                                </View>
+                              </View>
+                            </View>
 
-                          <View style={styles.section}>
-                            <Text style={styles.paragraph}>* Bus Service?</Text>
-                            <Switch
-                              disabled={position?.isBusService ? false : true}
-                              value={isSelectedBusOption[index]}
-                              onValueChange={(value) =>
-                                selectedBusOption(index)
-                              }
-                              color={'#fcc995'}
-                              thumbColor={
-                                isSelectedBusOption[index]
-                                  ? COLORS.orange_button
-                                  : '#fff'
-                              }
-                              // style={{marginLeft: 10}}
+                            <DashedLine
+                              style={{ marginVertical: 10 }}
+                              dashGap={0}
+                              dashThickness={1}
+                              dashLength={10}
+                              dashColor={COLORS.super_light_grey}
                             />
-                          </View>
-                          <View>
-                            <SubmitButton
-                              onPress={showAlertHandler}
-                              style={{
-                                marginHorizontal: 40,
-                                height: 40,
-                                borderRadius: 10,
-                              }}
-                              textStyle={{ fontSize: 16 }}
-                              titleButton="CHANGE NOW"
-                            />
-                            <ConfirmAlert
-                              show={showAlert}
-                              title="CONFIRM"
-                              message="Are you sure Are you sure you want to apply for this position?"
-                              confirmText="Yes"
-                              cancelText="No"
-                              confirmButtonColor={COLORS.orange_button}
-                              onConfirmPressed={() =>
-                                handleChangePosition(item?.id, position?.id)
-                              }
-                              onCancelPressed={hideAlertHandler}
-                            />
-                          </View>
-                          {/* <Button
+
+                            <View style={styles.section}>
+                              <Text style={styles.paragraph}>
+                                * Bus Service?
+                              </Text>
+                              <Switch
+                                disabled={position?.isBusService ? false : true}
+                                value={isSelectedBusOption[index]}
+                                onValueChange={(value) =>
+                                  selectedBusOption(index)
+                                }
+                                color={'#fcc995'}
+                                thumbColor={
+                                  isSelectedBusOption[index]
+                                    ? COLORS.orange_button
+                                    : '#fff'
+                                }
+                                // style={{marginLeft: 10}}
+                              />
+                            </View>
+                            <View>
+                              <SubmitButton
+                                onPress={showAlertHandler}
+                                style={{
+                                  marginHorizontal: 40,
+                                  height: 40,
+                                  borderRadius: 10,
+                                }}
+                                textStyle={{ fontSize: 16 }}
+                                titleButton="CHANGE NOW"
+                              />
+                              <ConfirmAlert
+                                show={showAlert}
+                                title="CONFIRM"
+                                message="Are you sure Are you sure you want to apply for this position?"
+                                confirmText="Yes"
+                                cancelText="No"
+                                confirmButtonColor={COLORS.orange_button}
+                                onConfirmPressed={() =>
+                                  handleChangePosition(
+                                    list?.data?.[0].id,
+                                    position?.id
+                                  )
+                                }
+                                onCancelPressed={hideAlertHandler}
+                              />
+                            </View>
+                            {/* <Button
                         title={'dialog box'}
                         onPress={() =>
                           Dialog.show({
@@ -367,12 +438,13 @@ const RequestChangePositionPending: FC<RequestChangePositionProps> = (
                           })
                         }
                       /> */}
-                        </View>
-                      )}
+                          </View>
+                        )}
+                      </View>
                     </View>
-                  </View>
-                );
-              })
+                  );
+                }
+              )
             ) : (
               <View />
             )}
@@ -433,8 +505,7 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   textPosition: {
-    fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
-    fontSize: 22,
+    fontSize: 18,
     overflow: 'scroll',
   },
   containerEveryPosition: {

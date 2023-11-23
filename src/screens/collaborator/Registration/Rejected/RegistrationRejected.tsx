@@ -12,7 +12,7 @@ import { FONTS_FAMILY } from '../../../../constants/Fonts';
 import { ScreenWidth } from '../../../../constants/Demesions';
 import { Entypo, FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import DashedLine from 'react-native-dashed-line';
-import useIndex from './useIndex';
+import useRegistrationRejected from './useRegistrationRejected';
 import { RefreshControl } from 'react-native';
 import {
   format_ISODateString_To_DayOfWeekMonthDD,
@@ -29,7 +29,7 @@ import { useNavigation } from '@react-navigation/native';
 const Registration_Cancelled = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
 
-  const { handlers, state, props } = useIndex();
+  const { handlers, state, props } = useRegistrationRejected();
   const renderListEmptyComponent = () => {
     return <RegistrationEmpty />;
   };
@@ -131,7 +131,7 @@ const Registration_Cancelled = () => {
             <View style={styles.statusRow}>
               <View>
                 <Text style={[styles.thirdText, { color: '#000' }]}>
-                  Cancelled
+                  Rejected
                 </Text>
               </View>
               <View style={[styles.statusDot, { backgroundColor: '#000' }]} />

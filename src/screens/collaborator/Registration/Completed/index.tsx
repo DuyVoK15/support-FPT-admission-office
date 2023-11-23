@@ -28,6 +28,10 @@ const Registration_Completed = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
 
   const { handlers, state, props } = useIndex();
+  const renderListEmptyComponent = () => {
+    return <RegistrationEmpty />
+  };
+
   const renderItem = ({ item }: { item: DataViewPostRegistration }) => {
     return (
       <View style={styles.containerItem}>
@@ -188,7 +192,7 @@ const Registration_Completed = () => {
             onRefresh={handlers.onRefresh}
           />
         }
-        ListEmptyComponent={<RegistrationEmpty />}
+        ListEmptyComponent={renderListEmptyComponent}
         ListHeaderComponentStyle={{ marginTop: 15 }}
       />
     </View>

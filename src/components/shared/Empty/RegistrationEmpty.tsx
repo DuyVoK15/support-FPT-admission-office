@@ -1,10 +1,33 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import { FONTS_FAMILY } from '../../../constants/Fonts';
+import { Zocial } from '@expo/vector-icons';
+import { COLORS } from '../../../constants/Colors';
+import { ScreenHeight } from '../../../constants/Demesions';
 
 const RegistrationEmpty = () => {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Éo có gì ở đây</Text>
+    <View style={{ flex: 1 }}>
+      <View
+        style={{
+          paddingVertical: ScreenHeight * 0.2,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Zocial name="dropbox" size={60} color={COLORS?.light_black} />
+        <View style={{marginTop: 10}}>
+          <Text
+            style={{
+              fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+              color: COLORS?.light_grey,
+              fontSize: 18,
+            }}
+          >
+            No Data
+          </Text>
+        </View>
+      </View>
     </View>
   );
 };

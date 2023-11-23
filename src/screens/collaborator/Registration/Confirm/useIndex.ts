@@ -17,6 +17,7 @@ import * as Location from 'expo-location';
 import { CheckAttendanceResponse } from '../../../../dtos/collaborator/response/checkAttendance.dto';
 import ErrorStatus from '../../../../dtos/collaborator/response/errorStatus.dto';
 import useCustomToast from '../../../../utils/toasts';
+import { useFocusEffect } from '@react-navigation/native';
 
 const useIndex = () => {
   const dispatch = useAppDispatch();
@@ -51,6 +52,14 @@ const useIndex = () => {
   useEffect(() => {
     fetchPostRegistration();
   }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      // Đây là nơi bạn muốn chạy lại các logic hoặc useEffect khi tab này được focus
+      fetchPostRegistration();
+      // Thực hiện các hành động cần thiết khi tab này được chọn
+      // Ví dụ: gọi các hàm, cập nhật state, hoặc fetch dữ liệu mới,...
+    }, [])
+  );
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const { showToastError, showToastSuccess } = useCustomToast();
 

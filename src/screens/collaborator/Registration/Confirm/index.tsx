@@ -46,6 +46,9 @@ const Registration_Confirm = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const { handlers, state, props } = useIndex();
 
+  const renderListEmptyComponent = () => {
+    return <RegistrationEmpty />;
+  };
   const renderItem = ({ item }: { item: DataViewPostRegistration }) => {
     return (
       <View key={item?.registrationCode} style={styles.containerItem}>
@@ -70,7 +73,7 @@ const Registration_Confirm = () => {
               </Text>
               <Text style={styles.textFirst_3}>
                 {item?.registrationCode
-                  ? 'Code: ' + item?.registrationCode
+                  ? 'PRCode: ' + item?.registrationCode
                   : 'No value'}
               </Text>
             </View>
@@ -234,6 +237,7 @@ const Registration_Confirm = () => {
             <View style={{ flex: 1 }}></View>
             <View>
               <ChangePositionButton
+                titleButton={'Change position?'}
                 onPress={() =>
                   navigation.navigate('REQUEST_CHANGE_POSITION_CONFIRM', {
                     item: item?.postPositionsUnregistereds,
@@ -275,6 +279,7 @@ const Registration_Confirm = () => {
             onRefresh={handlers.onRefresh}
           />
         }
+        ListEmptyComponent={renderListEmptyComponent}
       />
     </View>
   );

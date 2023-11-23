@@ -8,6 +8,7 @@ import PendingTab from './RegistrationTab/PendingTab';
 import ConfirmTab from './RegistrationTab/ConfirmTab';
 import CompletedTab from './RegistrationTab/CompletedTab';
 import CancelledTab from './RegistrationTab/CancelledTab';
+import RejectedTab from './RegistrationTab/RejectedTab';
 
 const Tab = createMaterialTopTabNavigator();
 interface RegistrationTopTabProps {
@@ -108,6 +109,16 @@ const RegistrationTopTabs: FC<RegistrationTopTabProps> = (props) => {
             // marginTop: 50,
           },
           tabBarLabel: 'Cancelled',
+        }}
+      />
+      <Tab.Screen
+        name={'REGISTRATION_REJECTED'}
+        component={RejectedTab}
+        options={{
+          tabBarStyle: {
+            // marginTop: 50,
+          },
+          tabBarLabel: 'Rejected',
         }}
       />
     </Tab.Navigator>

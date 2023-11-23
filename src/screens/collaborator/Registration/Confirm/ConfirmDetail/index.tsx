@@ -20,9 +20,7 @@ const Registration_Confirm_Detail = () => {
       <ImageBackground
         style={{ width: '100%', height: 250 }}
         source={{
-          uri: item?.post?.postImg
-            ? item?.post?.postImg
-            : imageNotFoundUri,
+          uri: item?.post?.postImg ? item?.post?.postImg : imageNotFoundUri,
         }}
       >
         <BackwardBlur
@@ -51,7 +49,9 @@ const Registration_Confirm_Detail = () => {
                     fontSize: 14,
                   }}
                 >
-                  OPEN DAY
+                  {item?.post?.postCategory?.postCategoryType
+                    ? item?.post?.postCategory?.postCategoryType
+                    : 'No value'}
                 </Text>
               </View>
             </View>
@@ -70,22 +70,35 @@ const Registration_Confirm_Detail = () => {
                   fontSize: 16,
                 }}
               >
-                + 37 Attendees
+                {item?.post?.totalAmountPosition
+                  ? '+' + item?.post?.totalAmountPosition + ' attendees'
+                  : '+0 attendees'}
               </Text>
             </View>
           </View>
 
-          <View style={{ marginTop: 20, flexDirection: "row", alignItems: "center" }}>
+          <View
+            style={{
+              marginTop: 20,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
             <Text
-              style={{ flex: 1, fontFamily: FONTS_FAMILY?.Ubuntu_700Bold, fontSize: 26 }}
+              style={{
+                flex: 1,
+                fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
+                fontSize: 26,
+              }}
             >
-              OPEN DAY
+              {item?.post?.postCategory?.postCategoryDescription
+                ? item?.post?.postCategory?.postCategoryDescription
+                : 'No value'}
             </Text>
-          
           </View>
 
-          <View style={{marginBottom: 15, marginTop: 20}}>
-            <View style={{marginBottom: 10}}>
+          <View style={{ marginBottom: 15, marginTop: 20 }}>
+            <View style={{ marginBottom: 10 }}>
               <Text
                 style={{
                   fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
@@ -97,11 +110,10 @@ const Registration_Confirm_Detail = () => {
             </View>
             <Text>Oct 13, 2023 - Oct 15, 2023</Text>
             <Text>5:00 - 9:00</Text>
-          
           </View>
 
-          <View style={{marginBottom: 15}}>
-            <View style={{marginBottom: 10}}>
+          <View style={{ marginBottom: 15 }}>
+            <View style={{ marginBottom: 10 }}>
               <Text
                 style={{
                   fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
@@ -119,7 +131,6 @@ const Registration_Confirm_Detail = () => {
               phố Hồ Chí Minh
             </Text>
           </View>
-
         </View>
       </View>
     </View>
