@@ -14,10 +14,12 @@ import { RegistrationStatus } from '../../enums/collaborator/RegistrationStatus'
 
 interface PostRegistrationState {
   postRegistration: ViewPostRegistrationResponse | null;
+  postRegistrationPendingById: ViewPostRegistrationResponse | null;
   postRegistrationPending: ViewPostRegistrationResponse | null;
   postRegistrationConfirmed: ViewPostRegistrationResponse | null;
   postRegistrationCompleted: ViewPostRegistrationResponse | null;
   postRegistrationCancelled: ViewPostRegistrationResponse | null;
+  postRegistrationRejected: ViewPostRegistrationResponse | null;
   createPostRegistration: CreatePostRegistrationResponse | null;
   deletePostRegistraion: DeletePostRegistraionResponse | null;
   updatePostRegistration: UpdatePostRegistrationResponse | null;
@@ -32,10 +34,12 @@ const initialState: PostRegistrationState = {
   postRegistration: {
     data: [],
   },
+  postRegistrationPendingById: null,
   postRegistrationPending: null,
   postRegistrationConfirmed: null,
   postRegistrationCompleted: null,
   postRegistrationCancelled: null,
+  postRegistrationRejected: null,
   createPostRegistration: null,
   deletePostRegistraion: null,
   updatePostRegistration: null,
@@ -80,7 +84,23 @@ export const getAllPostRegistration_Pending = createAsyncThunk(
     }
   }
 );
+export const getPostRegistrationById_Pending = createAsyncThunk(
+  'postRegistration/getById/pending',
+  async (params: FilterPostRegistration, { rejectWithValue }) => {
+    try {
+      const response =
+        await postRegistrationService.getAllPostRegistration(params);
+      return {
+        response_data: response.data,
+        query_data: params,
+      };
+    } catch (error: any) {
+      const axiosError = error as AxiosError;
 
+      return rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
 export const getAllPostRegistration_Confirmed = createAsyncThunk(
   'postRegistration/getAll/confirmed',
   async (params: FilterPostRegistration, { rejectWithValue }) => {
@@ -117,6 +137,23 @@ export const getAllPostRegistration_Completed = createAsyncThunk(
 );
 export const getAllPostRegistration_Cancelled = createAsyncThunk(
   'postRegistration/getAll/cancelled',
+  async (params: FilterPostRegistration, { rejectWithValue }) => {
+    try {
+      const response =
+        await postRegistrationService.getAllPostRegistration(params);
+      return {
+        response_data: response.data,
+        query_data: params,
+      };
+    } catch (error: any) {
+      const axiosError = error as AxiosError;
+
+      return rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+export const getAllPostRegistration_Rejected = createAsyncThunk(
+  'postRegistration/getAll/rejected',
   async (params: FilterPostRegistration, { rejectWithValue }) => {
     try {
       const response =
@@ -253,6 +290,19 @@ export const postRegistrationSlice = createSlice({
         state.error = String(action.payload);
         state.loading = false;
       })
+      // Pending By Id
+      .addCase(getPostRegistrationById_Pending.pending, (state) => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(getPostRegistrationById_Pending.fulfilled, (state, action) => {
+        state.loading = false;
+        state.postRegistrationPendingById = action.payload.response_data;
+      })
+      .addCase(getPostRegistrationById_Pending.rejected, (state, action) => {
+        state.error = String(action.payload);
+        state.loading = false;
+      })
       // Confirmed
       .addCase(getAllPostRegistration_Confirmed.pending, (state) => {
         state.loading = true;
@@ -289,6 +339,19 @@ export const postRegistrationSlice = createSlice({
         state.postRegistrationCancelled = action.payload.response_data;
       })
       .addCase(getAllPostRegistration_Cancelled.rejected, (state, action) => {
+        state.error = String(action.payload);
+        state.loading = false;
+      })
+      // Rejected
+      .addCase(getAllPostRegistration_Rejected.pending, (state) => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(getAllPostRegistration_Rejected.fulfilled, (state, action) => {
+        state.loading = false;
+        state.postRegistrationRejected = action.payload.response_data;
+      })
+      .addCase(getAllPostRegistration_Rejected.rejected, (state, action) => {
         state.error = String(action.payload);
         state.loading = false;
       })

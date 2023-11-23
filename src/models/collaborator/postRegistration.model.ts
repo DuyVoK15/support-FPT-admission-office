@@ -1,4 +1,4 @@
-import { DataPosition } from "./dataPosition.model";
+import { DataPosition } from './dataPosition.model';
 
 interface DataViewPostRegistration {
   id: number;
@@ -10,6 +10,7 @@ interface DataViewPostRegistration {
   positionId: number;
   note: string;
   postPositionsUnregistereds: DataPosition[] | [];
+  isUpdated: boolean;
   post: {
     id: number;
     accountId: number;

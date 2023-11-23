@@ -6,6 +6,7 @@ export default interface CreatePostRegistrationResponse {
   updateAt: string;
   positionId: number;
   note: string;
+  isUpdated: boolean,
   post: {
     id: number;
     accountId: number;
