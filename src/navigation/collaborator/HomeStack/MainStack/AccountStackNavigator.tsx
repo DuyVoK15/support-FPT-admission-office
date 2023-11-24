@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AccountTab from '../MainTabs/AccountTab';
-import UserProfile from '../../../../screens/collaborator/Profile/UserProfile';
+import UserProfile from '../../../../screens/collaborator/Profile/UserProfile/UserProfile';
 import CertificateHistory from '../../../../screens/collaborator/Certificate';
 import Wallet from '../../../../screens/collaborator/Wallet';
 import Verification from '../../../../screens/collaborator/Verification';
