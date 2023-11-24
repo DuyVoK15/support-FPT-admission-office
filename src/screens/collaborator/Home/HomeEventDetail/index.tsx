@@ -30,6 +30,7 @@ import RenderHtml from 'react-native-render-html';
 import { imageNotFoundUri } from '../../../../utils/images';
 import { DataPost } from '../../../../models/collaborator/dataPost.model';
 import { imageUndefinedUserUri } from '../../../../utils/images';
+import RegistrationEmpty from '../../../../components/shared/Empty/RegistrationEmpty';
 
 const HomeEventDetail: FC = () => {
   // Get Width of Windows
@@ -177,7 +178,7 @@ const HomeEventDetail: FC = () => {
                       marginVertical: 2,
                     }}
                   >
-                    {item.postPositions[0].schoolName}
+                    {item?.postPositions?.[0]?.schoolName ? item?.postPositions?.[0]?.schoolName : "No value"}
                   </Text>
                   <Text
                     style={{
@@ -188,7 +189,7 @@ const HomeEventDetail: FC = () => {
                       maxWidth: 300,
                     }}
                   >
-                    {item.postPositions[0].location}
+                    {item?.postPositions?.[0]?.location ? item?.postPositions?.[0]?.location : "No value"}
                   </Text>
                 </View>
               </View>
@@ -234,7 +235,7 @@ const HomeEventDetail: FC = () => {
                       marginVertical: 2,
                     }}
                   >
-                    {item?.account?.email}
+                    {item?.account?.email ? item?.account?.email : "No value"}
                   </Text>
                   <Text
                     style={{
@@ -287,7 +288,7 @@ const HomeEventDetail: FC = () => {
                     contentWidth={width}
                   />
                 ) : (
-                  <View />
+                  <RegistrationEmpty />
                 )}
               </View>
             </View>

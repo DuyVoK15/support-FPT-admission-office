@@ -276,8 +276,8 @@ const Home = () => {
                           : 'No value'
                       }
                       location={
-                        post?.postPositions[0]?.location
-                          ? post?.postPositions[0]?.location
+                        post?.postPositions?.[0]?.location
+                          ? post?.postPositions?.[0]?.location
                           : 'No value'
                       }
                       dateFrom={
@@ -369,12 +369,12 @@ const Home = () => {
                 rowGap: cardGap - 2,
               }}
             >
-              {props.postHomeReOpenList.data ? (
+              {props.postHomeReOpenList?.data ? (
                 props.postHomeReOpenList?.data.map((post, index) => (
                   <View key={index}>
                     <EventCardWrap
                       onPress={() =>
-                        navigation.navigate('HOME_EVENT_DETAIL', { post })
+                        navigation.navigate('HOME_EVENT_DETAIL', { item: post })
                       }
                       imageUrl={
                         post?.postImg ? post?.postImg : imageNotFoundUri
@@ -387,7 +387,7 @@ const Home = () => {
                       dateTime={format_ISODateString_To_DayOfWeekMonthDDYYYY(
                         post?.dateFrom ? post?.dateFrom : ''
                       )}
-                      schoolName={post?.postPositions[0]?.schoolName}
+                      schoolName={post?.postPositions?.[0]?.schoolName}
                       totalRegisterAmount={
                         post?.registerAmount
                           ? String(post?.registerAmount)
