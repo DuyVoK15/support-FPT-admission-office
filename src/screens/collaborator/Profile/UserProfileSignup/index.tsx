@@ -19,12 +19,15 @@ import useUserProfileSignup from './useIndex';
 import DatePickerField from '../../../../components/collaborator/Profile/UserProfileSignup/DatePickerModal';
 import { UserInfo } from '../../../../models/collaborator/userInfo.model';
 import { ScreenWidth } from '../../../../constants/Demesions';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import ErrorText from './ErrorText';
 
 interface UserProfileSignupProps {
   userInfo: UserInfo | null;
 }
 const UserProfileSignup: FC<UserProfileSignupProps> = (data) => {
   const { handlers, props } = useUserProfileSignup();
+  const ERRORS = props.errors;
   // IdentityIssueDate
   const [
     isIdentityIssueDatePickerVisible,
@@ -60,7 +63,6 @@ const UserProfileSignup: FC<UserProfileSignupProps> = (data) => {
           <View
             style={{
               flexDirection: 'row',
-
               alignItems: 'center',
             }}
           >
@@ -94,16 +96,16 @@ const UserProfileSignup: FC<UserProfileSignupProps> = (data) => {
           </View>
         </View>
 
-        <ScrollView
+        <KeyboardAwareScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          enableAutomaticScroll={true}
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={16}
         >
-          <View style={{ marginHorizontal: 20 }}>
+          <View style={{ flex: 1, marginHorizontal: 20 }}>
             <Controller
               control={props.control}
-              rules={{
-                required: true,
-              }}
+              rules={{ required: '*This field is required' }} // Định nghĩa quy tắc kiểm tra lỗi
               render={({ field: { onChange, onBlur, value } }) => (
                 <ProfileSignupTextInput
                   label="Citizen Identification Number"
@@ -114,10 +116,13 @@ const UserProfileSignup: FC<UserProfileSignupProps> = (data) => {
               )}
               name="identityNumber"
             />
+            {ERRORS?.identityNumber && (
+              <ErrorText message={String(ERRORS?.identityNumber?.message)} />
+            )}
             <Controller
               control={props.control}
               rules={{
-                required: true,
+                required: '*This field is required',
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <ProfileSignupTextInput
@@ -129,10 +134,13 @@ const UserProfileSignup: FC<UserProfileSignupProps> = (data) => {
               )}
               name="address"
             />
+            {ERRORS?.address && (
+              <ErrorText message={String(ERRORS?.address?.message)} />
+            )}
             <Controller
               control={props.control}
               rules={{
-                required: true,
+                required: '*This field is required',
               }}
               render={({ field: { value } }) => (
                 <DatePickerField
@@ -148,11 +156,13 @@ const UserProfileSignup: FC<UserProfileSignupProps> = (data) => {
               )}
               name="identityIssueDate"
             />
-
+            {ERRORS?.identityIssueDate && (
+              <ErrorText message={String(ERRORS?.identityIssueDate?.message)} />
+            )}
             <Controller
               control={props.control}
               rules={{
-                required: true,
+                required: '*This field is required',
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <ProfileSignupTextInput
@@ -164,11 +174,13 @@ const UserProfileSignup: FC<UserProfileSignupProps> = (data) => {
               )}
               name="placeOfIssue"
             />
-
+            {ERRORS?.placeOfIssue && (
+              <ErrorText message={String(ERRORS?.placeOfIssue?.message)} />
+            )}
             <Controller
               control={props.control}
               rules={{
-                required: true,
+                required: '*This field is required',
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <ProfileSignupTextInput
@@ -180,11 +192,13 @@ const UserProfileSignup: FC<UserProfileSignupProps> = (data) => {
               )}
               name="idStudent"
             />
-
+            {ERRORS?.idStudent && (
+              <ErrorText message={String(ERRORS?.idStudent?.message)} />
+            )}
             <Controller
               control={props.control}
               rules={{
-                required: true,
+                required: '*This field is required',
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <ProfileSignupTextInput
@@ -196,11 +210,13 @@ const UserProfileSignup: FC<UserProfileSignupProps> = (data) => {
               )}
               name="fbUrl"
             />
-
+            {ERRORS?.fbUrl && (
+              <ErrorText message={String(ERRORS?.fbUrl?.message)} />
+            )}
             <Controller
               control={props.control}
               rules={{
-                required: true,
+                required: '*This field is required',
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <ProfileSignupTextInput
@@ -212,7 +228,9 @@ const UserProfileSignup: FC<UserProfileSignupProps> = (data) => {
               )}
               name="taxNumber"
             />
-
+            {ERRORS?.taxNumber && (
+              <ErrorText message={String(ERRORS?.taxNumber?.message)} />
+            )}
             <View style={styles.containerCitizenICP}>
               <Text style={styles.citizenICP}>
                 Citizen Identification Card Picture
@@ -261,7 +279,7 @@ const UserProfileSignup: FC<UserProfileSignupProps> = (data) => {
               />
             </View>
           </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
       </View>
     </View>
   );

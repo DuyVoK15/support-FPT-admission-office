@@ -29,18 +29,18 @@ const ProfileSignupTextInput: React.FC<ProfileSignupTextInputProps> = (
 
   const boxShadow = isFocused
     ? {
-      shadowColor: COLORS.orange_icon,
-      shadowOffset: {
-        width: 0,
-        height: 0,
-      },
-      shadowOpacity: 0.29,
-      shadowRadius: 4.65,
-      
-      elevation: 7,
+        shadowColor: COLORS.orange_icon,
+        shadowOffset: {
+          width: 0,
+          height: 0,
+        },
+        shadowOpacity: 0.29,
+        shadowRadius: 4.65,
+
+        elevation: 7,
       }
     : {
-      ...SHADOWS.SHADOW_03
+        ...SHADOWS.SHADOW_03,
       };
   return (
     <View style={style}>
@@ -61,7 +61,7 @@ const ProfileSignupTextInput: React.FC<ProfileSignupTextInputProps> = (
             height: 50,
             // borderWidth: 1,
             // borderColor: borderColor,
-            backgroundColor: "white",
+            backgroundColor: 'white',
             borderRadius: 10,
             paddingLeft: 15,
             marginVertical: 10,

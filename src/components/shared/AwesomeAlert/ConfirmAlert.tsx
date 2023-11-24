@@ -33,7 +33,7 @@ const ConfirmAlert = (props: ConfrimAlert) => {
         title={props.title}
         message={props.message}
         closeOnTouchOutside={true}
-        closeOnHardwareBackPress={false}
+        closeOnHardwareBackPress={true}
         showCancelButton={true}
         showConfirmButton={true}
         cancelText={props.cancelText}

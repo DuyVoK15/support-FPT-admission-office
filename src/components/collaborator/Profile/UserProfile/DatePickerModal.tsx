@@ -52,6 +52,7 @@ const DatePickerField = (props: DatePickerFieldProps) => {
             editable={false}
             contentStyle={{ fontFamily: FONTS_FAMILY.Ubuntu_400Regular }}
             style={{ backgroundColor: '#fffefe' }}
+            
             // {...otherProps}
           />
         </View>

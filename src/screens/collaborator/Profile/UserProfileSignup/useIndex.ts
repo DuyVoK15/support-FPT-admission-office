@@ -26,44 +26,7 @@ const useUserProfileSignup = () => {
       taxNumber: '',
     },
   });
-  //   const array = [
-  //     {
-  //       name: "identityNumber",
-  //       placeholder: "identityNumber"
-  //     },
-  //     {
-  //       name: "idStudent",
-  //       placeholder: "idStudent"
-  //     },
-  //     {
-  //       name: "fbUrl",
-  //       placeholder: "fbUrl"
-  //     },
-  //     {
-  //       name: "address",
-  //       placeholder: "address"
-  //     },
-  //     {
-  //       name: "identityIssueDate",
-  //       placeholder: "identityIssueDate"
-  //     },
-  //     {
-  //       name: "placeOfIssue",
-  //       placeholder: "placeOfIssue"
-  //     },
-  //     {
-  //       name: "identityFrontImg",
-  //       placeholder: "identityFrontImg"
-  //     },
-  //     {
-  //       name: "identityBackImg",
-  //       placeholder: "identityBackImg"
-  //     },
-  //     {
-  //       name: "taxNumber",
-  //       placeholder: "taxNumber"
-  //     },
-  //   ]
+  
   const onSubmit = async (data: AccountInfoSignup) => {
     const AccountInfoSignup = {
       identityNumber: data.identityNumber,
@@ -85,7 +48,7 @@ const useUserProfileSignup = () => {
     );
   };
   const handlers = { onSubmit, handleSubmit, setValue };
-  const props = { control };
+  const props = { control,errors };
   return {
     handlers,
     props,
