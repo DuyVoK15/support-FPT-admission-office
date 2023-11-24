@@ -1,4 +1,10 @@
-import { RefreshControl, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../../../type';
@@ -31,17 +37,16 @@ import DataViewPostRegistration from '../../../../../models/collaborator/postReg
 import { RegistrationStatus } from '../../../../../enums/collaborator/RegistrationStatus';
 import { async } from '@firebase/util';
 import { useAppSelector } from '../../../../../app/hooks';
+import RegistrationEmpty from '../../../../../components/shared/Empty/RegistrationEmpty';
 
 interface RequestChangePositionProps {
   onRefresh: () => void;
 }
-const RequestChangePositionPending: FC<RequestChangePositionProps> = (
-  Props
-) => {
+const RequestChangePositionConfirm = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const route = useRoute();
   const { id } = route?.params as { id: number };
-  console.log(JSON.stringify(id, null, 2));
+  // console.log("d", id);
 
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const showAlertHandler = () => {
@@ -54,6 +59,9 @@ const RequestChangePositionPending: FC<RequestChangePositionProps> = (
 
   const list = useAppSelector(
     (state) => state.collab_postRegistration.postRegistrationConfirmedById
+  );
+  const loading = useAppSelector(
+    (state) => state.collab_postRegistration.loading
   );
   const fetchPostRegistrationById = async () => {
     try {
@@ -114,13 +122,13 @@ const RequestChangePositionPending: FC<RequestChangePositionProps> = (
       async (res) => {
         console.log(JSON.stringify(res, null, 2));
         if (res?.meta?.requestStatus === 'fulfilled') {
-          await dispatch(
-            getAllPostRegistration_Confirmed({
-              RegistrationStatus: [RegistrationStatus.CONFIRM],
-            })
-          );
-          navigation.goBack();
-          showToastSuccess('Update thành công');
+          // await dispatch(
+          //   getAllPostRegistration_Confirmed({
+          //     RegistrationStatus: [RegistrationStatus.CONFIRM],
+          //   })
+          // );
+          // navigation.goBack();
+          showToastSuccess('Send Request Success');
           console.log(JSON.stringify(res, null, 2));
         } else {
           const resRejectedData = res?.payload as ErrorStatus;
@@ -140,22 +148,69 @@ const RequestChangePositionPending: FC<RequestChangePositionProps> = (
           titleBackward="Change Position"
         />
       </Header>
-      <View style={{}}>
+
+      <View style={{ flex: 1 }}>
         <View
           style={{ alignItems: 'center', marginTop: 10, marginHorizontal: 20 }}
         >
           <Text
             style={{
               fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
-              fontSize: 26,
+              fontSize: 22,
               textAlign: 'center',
               color: '#000',
             }}
           >
-            Choose your position you want to change
+            List of available position you can change
           </Text>
+          <View style={{ marginTop: 5 }}>
+            <Text
+              style={{
+                fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
+                fontSize: 16,
+                textAlign: 'center',
+                color: 'green',
+              }}
+            >
+              Note: Your registration have been{' '}
+              <Text style={{ color: 'red' }}>CONFIRMED.</Text> When you change
+              position, must be send request to Admisstion Officer.
+            </Text>
+          </View>
+
+          <View style={{ marginTop: 5 }}>
+            <Text
+              style={{
+                fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
+                fontSize: 16,
+                textAlign: 'center',
+                color: 'green',
+              }}
+            >
+              Check your request update history below
+            </Text>
+          </View>
+          <View style={{marginTop: 10}}>
+            <TouchableOpacity
+              style={{
+                paddingVertical: 10,
+                paddingHorizontal: 10,
+                borderRadius: 20,
+                backgroundColor: 'yellow',
+              }}
+              onPress={() =>
+                navigation.navigate('REQUEST_UPDATE_HISTORY', { id })
+              }
+            >
+              <Text>View Request Update History</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
           <View style={styles.positionContent}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Text
@@ -183,8 +238,8 @@ const RequestChangePositionPending: FC<RequestChangePositionProps> = (
               </Text>
             </View>
 
-            {list?.data?.[0].postPositionsUnregistereds ? (
-              list?.data?.[0].postPositionsUnregistereds.map(
+            {list?.data?.[0]?.postPositionsUnregistereds ? (
+              list?.data?.[0]?.postPositionsUnregistereds.map(
                 (position, index) => {
                   const INDEX = index + 1;
                   return (
@@ -408,12 +463,12 @@ const RequestChangePositionPending: FC<RequestChangePositionProps> = (
                                   borderRadius: 10,
                                 }}
                                 textStyle={{ fontSize: 16 }}
-                                titleButton="CHANGE NOW"
+                                titleButton="SEND REQUEST"
                               />
                               <ConfirmAlert
                                 show={showAlert}
                                 title="CONFIRM"
-                                message="Are you sure Are you sure you want to apply for this position?"
+                                message={`Are you sure want to apply for ${position?.positionName} position?`}
                                 confirmText="Yes"
                                 cancelText="No"
                                 confirmButtonColor={COLORS.orange_button}
@@ -425,19 +480,7 @@ const RequestChangePositionPending: FC<RequestChangePositionProps> = (
                                 }
                                 onCancelPressed={hideAlertHandler}
                               />
-                            </View>
-                            {/* <Button
-                        title={'dialog box'}
-                        onPress={() =>
-                          Dialog.show({
-                            type: ALERT_TYPE.DANGER,
-                            title: 'Danger',
-                            textBody: 'Congrats! this is dialog box success',
-                            button: 'Close',
-                            // autoClose: 100,
-                          })
-                        }
-                      /> */}
+                            </View>                          
                           </View>
                         )}
                       </View>
@@ -446,7 +489,7 @@ const RequestChangePositionPending: FC<RequestChangePositionProps> = (
                 }
               )
             ) : (
-              <View />
+              <RegistrationEmpty />
             )}
           </View>
 
@@ -482,7 +525,7 @@ const RequestChangePositionPending: FC<RequestChangePositionProps> = (
   );
 };
 
-export default RequestChangePositionPending;
+export default RequestChangePositionConfirm;
 
 const styles = StyleSheet.create({
   container: {

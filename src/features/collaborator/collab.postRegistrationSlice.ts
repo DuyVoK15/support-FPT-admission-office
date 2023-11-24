@@ -9,8 +9,8 @@ import CreatePostRegistrationParam from '../../dtos/collaborator/parameter/creat
 import UpdatePostRegistrationPayload from '../../dtos/collaborator/parameter/updatePostRegistration.dto';
 import { FilterPostRegistration } from '../../dtos/collaborator/parameter/filterPostRegistration.dto';
 import { CancelPostRegistrationParam } from '../../dtos/collaborator/parameter/cancelPostRegistration.dto';
-import { ViewUpdateRequest } from '../../dtos/collaborator/response/viewUpdateRequest.dto';
 import { RegistrationStatus } from '../../enums/collaborator/RegistrationStatus';
+import { ViewRequestUpdateHistory } from '../../dtos/collaborator/response/viewUpdateRequest.dto';
 
 interface PostRegistrationState {
   postRegistration: ViewPostRegistrationResponse | null;
@@ -24,7 +24,7 @@ interface PostRegistrationState {
   createPostRegistration: CreatePostRegistrationResponse | null;
   deletePostRegistraion: DeletePostRegistraionResponse | null;
   updatePostRegistration: UpdatePostRegistrationResponse | null;
-  updateRequest: ViewUpdateRequest | null;
+  requestUpdateHistory: ViewRequestUpdateHistory | null;
   checkInPostRegistration: ViewPostRegistrationResponse | null;
   loading: boolean;
   error: string;
@@ -45,7 +45,7 @@ const initialState: PostRegistrationState = {
   createPostRegistration: null,
   deletePostRegistraion: null,
   updatePostRegistration: null,
-  updateRequest: null,
+  requestUpdateHistory: null,
   checkInPostRegistration: null,
   loading: false,
   error: '',
@@ -231,12 +231,12 @@ export const updatePostRegistration = createAsyncThunk(
   }
 );
 
-export const getAllUpdateRequest = createAsyncThunk(
+export const getAllRequestUpdateHistory = createAsyncThunk(
   'postRegistration/updateRequest/getAll',
   async (params: FilterPostRegistration, { rejectWithValue }) => {
     try {
       const response =
-        await postRegistrationService.getAllUpdateRequest(params);
+        await postRegistrationService.getAllRequestUpdateHistory(params);
       return response.data;
     } catch (error: any) {
       const axiosError = error as AxiosError;
@@ -426,15 +426,15 @@ export const postRegistrationSlice = createSlice({
         state.error = String(action.payload);
         state.loading = false;
       })
-      .addCase(getAllUpdateRequest.pending, (state) => {
+      .addCase(getAllRequestUpdateHistory.pending, (state) => {
         state.loading = true;
         state.error = '';
       })
-      .addCase(getAllUpdateRequest.fulfilled, (state, action) => {
+      .addCase(getAllRequestUpdateHistory.fulfilled, (state, action) => {
         state.loading = false;
-        state.updateRequest = action.payload;
+        state.requestUpdateHistory = action.payload;
       })
-      .addCase(getAllUpdateRequest.rejected, (state, action) => {
+      .addCase(getAllRequestUpdateHistory.rejected, (state, action) => {
         state.error = String(action.payload);
         state.loading = false;
       })

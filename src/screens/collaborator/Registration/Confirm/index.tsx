@@ -240,7 +240,7 @@ const Registration_Confirm = () => {
                 titleButton={'Change position?'}
                 onPress={() =>
                   navigation.navigate('REQUEST_CHANGE_POSITION_CONFIRM', {
-                    item: item?.postPositionsUnregistereds,
+                    id: item?.id,
                   })
                 }
               />

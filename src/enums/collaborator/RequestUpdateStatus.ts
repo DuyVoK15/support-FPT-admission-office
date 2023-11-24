@@ -1,0 +1,5 @@
+export enum REQUEST_UPDATE_STATUS_ENUM {
+  PENDING = 1,
+  APPROVEED = 2,
+  REJECTED = 3,
+}

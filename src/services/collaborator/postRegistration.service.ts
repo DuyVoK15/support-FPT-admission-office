@@ -9,7 +9,7 @@ import UpdatePostRegistrationPayload from '../../dtos/collaborator/parameter/upd
 import ViewPostRegistrationDto from '../../dtos/collaborator/response/viewPostRegistration.dto';
 import { FilterPostRegistration } from '../../dtos/collaborator/parameter/filterPostRegistration.dto';
 import { CancelPostRegistrationParam } from '../../dtos/collaborator/parameter/cancelPostRegistration.dto';
-import { ViewUpdateRequest } from '../../dtos/collaborator/response/viewUpdateRequest.dto';
+import { ViewRequestUpdateHistory } from '../../dtos/collaborator/response/viewUpdateRequest.dto';
 
 export const postRegistrationService = {
   getAllPostRegistration: (
@@ -41,9 +41,9 @@ export const postRegistrationService = {
     const url = '/api/post-registration/update';
     return axiosClient.post(url, { ...params });
   },
-  getAllUpdateRequest: (
+  getAllRequestUpdateHistory: (
     params: FilterPostRegistration
-  ): Promise<AxiosResponse<ViewUpdateRequest>> => {
+  ): Promise<AxiosResponse<ViewRequestUpdateHistory>> => {
     const url = '/api/post-registration/get-update-request';
     return axiosClient.get(url, { params });
   },

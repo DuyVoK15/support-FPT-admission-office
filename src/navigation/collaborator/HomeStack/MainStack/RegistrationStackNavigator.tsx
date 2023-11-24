@@ -7,6 +7,7 @@ import Registration_Confirm_Detail from '../../../../screens/collaborator/Regist
 import Registration_Pending_Detail from '../../../../screens/collaborator/Registration/Pending/pendingDetail';
 import RequestChangePosition from '../../../../screens/collaborator/Registration/Confirm/reqChangePosition';
 import RequestChangePositionPending from '../../../../screens/collaborator/Registration/Pending/reqChangePosition';
+import RequestUpdateHistory from '../../../../screens/collaborator/Registration/Confirm/reqUpdateHistory/RequestUpdateHistory';
 
 const Stack = createNativeStackNavigator();
 const RegistrationStackNavigator = () => {
@@ -36,6 +37,13 @@ const RegistrationStackNavigator = () => {
       <Stack.Screen
         name={'REQUEST_CHANGE_POSITION_CONFIRM'}
         component={RequestChangePosition}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name={'REQUEST_UPDATE_HISTORY'}
+        component={RequestUpdateHistory}
         options={{
           headerShown: false,
         }}
