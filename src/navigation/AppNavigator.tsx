@@ -40,8 +40,8 @@ const AppNavigator: FC = () => {
   //   state.collab_isUserLoading
   // ) {
   //   return <LoadingScreen />;
-  // } 
- 
+  // }
+
   // Check if user is not active and role is COLLAB will navigate to Verification Screen
   if (
     state.collab_userInfo?.isActive === false &&
@@ -61,9 +61,7 @@ const AppNavigator: FC = () => {
     );
 
   // Return stack navigator
-  return state.collab_isAuthLoading || state.collab_isLoadAuthStateLoading
-    
-    ? (
+  return state.collab_isAuthLoading || state.collab_isLoadAuthStateLoading ? (
     <LoadingScreen />
   ) : state.collab_isAuthenticated && state.roleId === RoleId.COLLAB_ROLE ? (
     <HomeCollaboratorStackScreen />
