@@ -1,4 +1,10 @@
-import { RefreshControl, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../../../type';
@@ -32,12 +38,7 @@ import { RegistrationStatus } from '../../../../../enums/collaborator/Registrati
 import { async } from '@firebase/util';
 import { useAppSelector } from '../../../../../app/hooks';
 
-interface RequestChangePositionProps {
-  onRefresh: () => void;
-}
-const RequestChangePositionPending: FC<RequestChangePositionProps> = (
-  Props
-) => {
+const RequestChangePositionPending = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const route = useRoute();
   const { id } = route?.params as { id: number };
@@ -155,7 +156,11 @@ const RequestChangePositionPending: FC<RequestChangePositionProps> = (
             Choose your position you want to change
           </Text>
         </View>
-        <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
           <View style={styles.positionContent}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Text
