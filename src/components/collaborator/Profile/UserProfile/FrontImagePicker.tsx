@@ -14,7 +14,7 @@ import { FONTS_FAMILY } from '../../../../constants/Fonts';
 import { COLORS } from '../../../../constants/Colors';
 import { AntDesign } from '@expo/vector-icons';
 import { SHADOWS } from '../../../../constants/Shadows';
-import useUserProfile from '../../../../screens/collaborator/Profile/UserProfile/useIndex';
+import useUserProfile from '../../../../screens/collaborator/Profile/UserProfile/useUserProfile';
 
 interface FrontImagePickerProps {
   setValue?: any;

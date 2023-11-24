@@ -17,7 +17,7 @@ import { useNavigation } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
 import DashedLine from 'react-native-dashed-line';
 import ErrorPopup from '../../../../components/shared/PopupNotification/ErrorPopup';
-import useUserProfile from './useIndex';
+import useUserProfile from './useUserProfile';
 import { Controller } from 'react-hook-form';
 import FrontImagePicker from '../../../../components/collaborator/Profile/UserProfile/FrontImagePicker';
 import BackImagePicker from '../../../../components/collaborator/Profile/UserProfile/BackImagePicker';
