@@ -1,16 +1,25 @@
 import { View, Text } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../../../app/store';
-import { getAllCertificate } from '../../../../features/collaborator/collab.certificateSlice';
+import { getAllCertificate, getAllCertificate_Completed } from '../../../../features/collaborator/collab.certificateSlice';
 import { useAppSelector } from '../../../../app/hooks';
+import CERTIFICATE_STATUS_ENUM from '../../../../enums/collaborator/CertificateStatus';
 
-const useRejectedCertificate = () => {
+const useCompletedCertificate = () => {
   const dispatch = useAppDispatch();
   const certificateList = useAppSelector(
-    (state) => state.collab_certificate.certificate
+    (state) => state.collab_certificate.certificateCompleted
   );
   const fetchCertificateData = async () => {
-    await dispatch(getAllCertificate()).then((res) => {
+    await dispatch(
+      getAllCertificate_Completed({
+        Page: 1,
+        PageSize: 100,
+        Sort: 'CreateAt',
+        Order: 'Descending',
+        Status: CERTIFICATE_STATUS_ENUM.COMPLETED,
+      })
+    ).then((res) => {
       console.log(JSON.stringify(res, null, 2));
     });
   };
@@ -24,7 +33,7 @@ const useRejectedCertificate = () => {
     fetchCertificateData();
     setTimeout(() => {
       setRefreshing(false);
-    }, 2000);
+    }, 500);
   }, []);
 
   const state = { refreshing };
@@ -37,4 +46,4 @@ const useRejectedCertificate = () => {
   };
 };
 
-export default useRejectedCertificate;
+export default useCompletedCertificate;

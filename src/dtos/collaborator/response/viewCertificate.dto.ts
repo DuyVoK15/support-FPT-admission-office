@@ -6,7 +6,7 @@ export default interface ViewCertificateResponse {
     size: number;
     total: number;
   };
-  data: CertificateData | [];
+  data: CertificateData[] | [];
   isError: boolean;
   message: string;
 }

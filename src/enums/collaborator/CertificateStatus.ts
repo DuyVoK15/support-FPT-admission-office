@@ -1,5 +1,5 @@
-enum CertificateStatus {
-    REJECTED='Reject',
-    COMPLETED='Complete'
+enum CERTIFICATE_STATUS_ENUM {
+  COMPLETED = 1,
+  REJECTED = 2,
 }
-export default CertificateStatus;
+export default CERTIFICATE_STATUS_ENUM;

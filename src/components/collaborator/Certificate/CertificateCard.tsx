@@ -20,7 +20,32 @@ export default class CertificateCard extends Component<CertificateCardProps> {
       <View style={styles.containerItem}>
         <View style={styles.containerRow}>
           <View style={styles.firstRow}>
-            <Text style={styles.textFirst}>{this.props?.dateReceive}</Text>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.textFirst}>{this.props?.dateReceive}</Text>
+            </View>
+            <View style={{ borderWidth: 1, borderRadius: 30 }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  margin: 6,
+                }}
+              >
+                <View>
+                  <Text style={styles.thirdText}>{this.props?.status}</Text>
+                </View>
+                <View
+                  style={{
+                    width: 12,
+                    height: 12,
+                    marginLeft: 5,
+                    borderRadius: 100,
+                    backgroundColor:
+                      this.props?.status === 'Rejected' ? 'red' : 'green',
+                  }}
+                />
+              </View>
+            </View>
           </View>
 
           <DashedLine
@@ -53,28 +78,6 @@ export default class CertificateCard extends Component<CertificateCardProps> {
                   : ''}
               </Text>
             </View>
-            <View style={{ borderWidth: 1, borderRadius: 30 }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  margin: 6,
-                }}
-              >
-                <View>
-                  <Text style={styles.thirdText}>{this.props?.status}</Text>
-                </View>
-                <View
-                  style={{
-                    width: 12,
-                    height: 12,
-                    marginLeft: 5,
-                    borderRadius: 100,
-                    backgroundColor: this.props?.status === "Rejected" ? "red" : "green"
-                  }}
-                />
-              </View>
-            </View>
           </View>
         </View>
       </View>
@@ -104,9 +107,9 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   containerRow: {
-    margin: 20,
+    margin: 15,
   },
-  firstRow: { flexDirection: 'row' },
+  firstRow: { flexDirection: 'row', alignItems: 'center' },
   textFirst: {
     fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
     fontSize: 16,
