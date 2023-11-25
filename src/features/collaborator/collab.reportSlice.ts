@@ -1,10 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import PostDto from '../../dtos/collaborator/post.dto';
-import { postService } from '../../services/collaborator/post.service';
-import DataPost from '../../models/collaborator/dataPost.model';
 import { AxiosError } from 'axios';
-import ViewPostCategoryResponse from '../../dtos/collaborator/response/viewPostCategory.dto';
-import FilterPostPayload from '../../dtos/collaborator/parameter/filterPost.dto';
 import {
   ViewRegistrationReportResponse,
   ViewReportResponse,
@@ -42,7 +37,7 @@ export const getAllReport = createAsyncThunk(
 );
 
 export const getRegistrationByReport = createAsyncThunk(
-  'report/registrationByReportId/',
+  'report/registrationByReportId',
   async (
     params: {
       accountReportId: number;

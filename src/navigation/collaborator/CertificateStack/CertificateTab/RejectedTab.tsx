@@ -14,4 +14,3 @@ const RejectedTab = () => {
 };
 
 export default RejectedTab;
-
