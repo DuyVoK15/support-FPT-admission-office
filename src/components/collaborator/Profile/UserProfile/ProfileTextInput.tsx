@@ -41,14 +41,14 @@ const ProfileTextInput = (props: ProfileTextInputProps) => {
       </Text> */}
       <TextInput
         mode="outlined"
-        outlineColor={COLORS.super_light_orange}
+        outlineColor={COLORS.orange_button}
         activeOutlineColor={COLORS.orange_button}
         // selectionColor={COLORS.orange_grey_icon}
         theme={theme}
         contentStyle={{fontFamily: FONTS_FAMILY.Ubuntu_400Regular}}
         style={[
           {
-            // height: 50,
+            height: 55,
             fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
             backgroundColor: "#fffefe"
             // borderWidth: 1,
