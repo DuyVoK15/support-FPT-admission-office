@@ -61,7 +61,10 @@ const AppNavigator: FC = () => {
     );
 
   // Return stack navigator
-  return state.collab_isAuthLoading || state.collab_isLoadAuthStateLoading ? (
+  return state.collab_isAuthLoading ||
+    state.collab_isLoadAuthStateLoading ||
+    state.collab_isUserLoading ||
+    state.collab_isSignupAccountInfo ? (
     <LoadingScreen />
   ) : state.collab_isAuthenticated && state.roleId === RoleId.COLLAB_ROLE ? (
     <HomeCollaboratorStackScreen />

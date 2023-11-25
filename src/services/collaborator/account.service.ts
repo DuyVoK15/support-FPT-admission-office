@@ -6,8 +6,14 @@ import { UserInfoUpdate } from '../../models/collaborator/userInfo.model';
 import UpdateAvatarDto from '../../dtos/collaborator/parameter/updateAvatar.dto';
 import UpdateEnableAccountResponse from '../../dtos/collaborator/response/updateEnableAccount.dto';
 import ViewVerifyAccountResponse from '../../dtos/collaborator/response/viewVerifyAccount.dto';
+import { ViewUserInfoResponse } from '../../dtos/collaborator/response/viewUserInfo.dto';
 
 export const accountService = {
+  collab_getUserInfo: (): Promise<AxiosResponse<ViewUserInfoResponse>> => {
+    const url = '/api/account/getAccountByToken/authorization';
+
+    return axiosClient.get(url);
+  },
   collab_signupAccountInfo: (
     payload: AccountInfoSignup
   ): Promise<AxiosResponse<GetUserInfoDto>> => {
@@ -18,7 +24,6 @@ export const accountService = {
   collab_updateProfile: (
     payload: UserInfoUpdate
   ): Promise<AxiosResponse<GetUserInfoDto>> => {
-    console.log('HIHI ', payload);
     const url = '/api/account/update';
 
     return axiosClient.put(url, { ...payload });
@@ -26,7 +31,6 @@ export const accountService = {
   collab_updateAvatar: (
     payload: UpdateAvatarDto
   ): Promise<AxiosResponse<GetUserInfoDto>> => {
-    console.log('HIHI ', payload);
     const url = '/api/account/updateAvatar';
 
     return axiosClient.patch(url, { ...payload });
@@ -34,7 +38,6 @@ export const accountService = {
   collab_enableAccount: (): Promise<
     AxiosResponse<UpdateEnableAccountResponse>
   > => {
-    console.log('HIHI');
     const url = '/api/account/enable-account';
 
     return axiosClient.put(url);
@@ -42,7 +45,6 @@ export const accountService = {
   collab_verifyAccount: (params: {
     code: number;
   }): Promise<AxiosResponse<ViewVerifyAccountResponse>> => {
-    console.log('HIHI ', params);
     const url = '/api/account/input-verify';
 
     return axiosClient.get(url, { params });
@@ -50,7 +52,6 @@ export const accountService = {
   admission_signupAccountInfo: (
     payload: AccountInfoSignup
   ): Promise<AxiosResponse<GetUserInfoDto>> => {
-    console.log('HIHI ', payload);
     const url = '/api/admission/admission-account/createAccountInformation';
 
     return axiosClient.post(url, { ...payload });
@@ -58,7 +59,6 @@ export const accountService = {
   admission_updateProfile: (
     payload: UserInfoUpdate
   ): Promise<AxiosResponse<GetUserInfoDto>> => {
-    console.log('HIHI ', payload);
     const url = '/api/admission/admission-account/update';
 
     return axiosClient.put(url, { ...payload });
@@ -66,7 +66,6 @@ export const accountService = {
   admission_updateAvatar: (
     payload: UpdateAvatarDto
   ): Promise<AxiosResponse<GetUserInfoDto>> => {
-    console.log('HIHI ', payload);
     const url = '/api/admission/admission-account/updateAvatar';
 
     return axiosClient.patch(url, { ...payload });

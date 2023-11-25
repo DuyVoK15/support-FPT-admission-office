@@ -14,15 +14,14 @@ import LoadAuthStateResponse from '../dtos/collaborator/response/loadAuthState.d
 import RoleIdEnum from '../enums/shared/RoleIdEnum';
 
 const useAppNavigator = () => {
-
   const dispatch = useAppDispatch();
   const collab_isAuthenticated = useAppSelector(
     (state) => state.collab_auth.isAuthenticated
   );
   const collab_userInfo = useAppSelector((state) => state.collab_auth.userInfo);
 
-  const collab_loadingAccount = useAppSelector(
-    (state) => state.collab_account.loading
+  const collab_userInfoSignup = useAppSelector(
+    (state) => state.collab_account.userInfoSignup
   );
 
   const collab_isUserLoading = useAppSelector(
@@ -35,6 +34,10 @@ const useAppNavigator = () => {
 
   const collab_isLoadAuthStateLoading = useAppSelector(
     (state) => state.collab_auth.load_auth_state_loading
+  );
+
+  const collab_isSignupAccountInfo = useAppSelector(
+    (state) => state.collab_account.loading_signup_accinfo
   );
 
   const roleId = useAppSelector((state) => state.collab_auth.role);
@@ -80,15 +83,16 @@ const useAppNavigator = () => {
     if (collab_isAuthenticated && roleId === RoleIdEnum.COLLAB_ROLE) {
       getUserInfoWhenAccountInfomationChange();
     }
-  }, [collab_loadingAccount]);
+  }, [collab_userInfoSignup]);
 
   const handlers = {};
   const state = {
     collab_isAuthenticated,
     collab_userInfo,
-    collab_loadingAccount,
+    collab_userInfoSignup,
     collab_isUserLoading,
     collab_isAuthLoading,
+    collab_isSignupAccountInfo,
     collab_isLoadAuthStateLoading,
     roleId,
   };

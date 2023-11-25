@@ -15,23 +15,41 @@ import ViewVerifyAccountResponse from '../../dtos/collaborator/response/viewVeri
 
 interface AccountState {
   userInfo: GetUserInfoDto | null;
+  userInfoSignup: GetUserInfoDto | null;
   enableResponse: UpdateEnableAccountResponse | null;
   verifyResponse: ViewVerifyAccountResponse | null;
   loading: boolean;
+  loading_signup_accinfo: boolean;
   error: GetUserInfoDto | null;
   statusCode: number | null;
 }
 
 const initialState: AccountState = {
   userInfo: null,
+  userInfoSignup: null,
   enableResponse: null,
   verifyResponse: null,
   loading: false,
+  loading_signup_accinfo: false,
   error: null,
   statusCode: null,
 };
 
 // const [axiosErrorStatus, setAxiosErrorStatus] = useState<string>("");
+export const collab_getUserInfo = createAsyncThunk(
+  'account/getUserInfo',
+  async (_, { rejectWithValue }) => {
+    try {
+      console.log("tôi vô đây")
+      const response = await accountService.collab_getUserInfo();
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      console.log(error);
+      return rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
 export const collab_signupAccountInformation = createAsyncThunk(
   'account/createAccountInfo',
   async (params: AccountInfoSignup, { rejectWithValue }) => {
@@ -55,7 +73,7 @@ export const collab_updateProfile = createAsyncThunk(
     } catch (error) {
       const axiosError = error as AxiosError;
       console.log('Axios: ', axiosError.response?.data);
-      // console.log(JSON.stringify(axiosError, null, 2));
+      
       return rejectWithValue(axiosError.response?.data);
     }
   }
@@ -71,7 +89,6 @@ export const collab_updateAvatar = createAsyncThunk(
     } catch (error) {
       const axiosError = error as AxiosError;
       console.log(error);
-      console.log(axiosError.message);
       return rejectWithValue(axiosError.response?.status);
     }
   }
@@ -96,7 +113,7 @@ export const collab_enableAccount = createAsyncThunk(
 
 export const collab_verifyAccount = createAsyncThunk(
   'account/verify-account',
-  async (params: {code: number}, { rejectWithValue }) => {
+  async (params: { code: number }, { rejectWithValue }) => {
     try {
       const response = await accountService.collab_verifyAccount(params);
       console.log(JSON.stringify(response.data.data, null, 2));
@@ -174,13 +191,25 @@ export const accountSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(collab_signupAccountInformation.pending, (state) => {
+      .addCase(collab_getUserInfo.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(collab_signupAccountInformation.fulfilled, (state, action) => {
+      .addCase(collab_getUserInfo.fulfilled, (state, action) => {
         state.userInfo = action.payload;
         state.loading = false;
+      })
+      .addCase(collab_getUserInfo.rejected, (state, action) => {
+        state.error = action.payload as GetUserInfoDto;
+        state.loading_signup_accinfo = false;
+      })
+      .addCase(collab_signupAccountInformation.pending, (state) => {
+        state.loading_signup_accinfo = true;
+        state.error = null;
+      })
+      .addCase(collab_signupAccountInformation.fulfilled, (state, action) => {
+        state.userInfoSignup = action.payload;
+        state.loading_signup_accinfo = false;
       })
       .addCase(collab_signupAccountInformation.rejected, (state, action) => {
         state.error = action.payload as GetUserInfoDto;
@@ -189,7 +218,6 @@ export const accountSlice = createSlice({
       .addCase(collab_updateProfile.pending, (state) => {
         state.loading = true;
         state.error = null;
-        state.statusCode = null;
       })
       .addCase(collab_updateProfile.fulfilled, (state, action) => {
         state.userInfo = action.payload;
@@ -198,7 +226,6 @@ export const accountSlice = createSlice({
       .addCase(collab_updateProfile.rejected, (state, action) => {
         state.error = action.payload as GetUserInfoDto;
         state.loading = false;
-        state.statusCode = Number(action.payload);
       })
       .addCase(collab_updateAvatar.pending, (state) => {
         state.loading = true;

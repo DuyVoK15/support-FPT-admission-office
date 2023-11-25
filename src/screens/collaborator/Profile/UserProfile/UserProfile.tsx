@@ -28,9 +28,6 @@ const UserProfile: React.FC = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
 
   const { handlers, props, state, setState, datePickerHandlers } = useUserProfile();
-  useEffect(()=> {
-    console.log(props.statusCode)
-  },[])
   return (
     <View style={styles.container}>
       <Header>
@@ -286,10 +283,7 @@ const UserProfile: React.FC = () => {
           />
         </View>
       </View>
-      {/* Popup */}
-      {props.statusCode === 500 && (
-        <ErrorPopup message="Error! Please try again!" />
-      )}
+      
     </View>
   );
 };

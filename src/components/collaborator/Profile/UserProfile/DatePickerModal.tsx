@@ -40,7 +40,7 @@ const DatePickerField = (props: DatePickerFieldProps) => {
 
   const theme = DefaultTheme;
   return (
-    <View style={[{ elevation: 2 }]} {...otherProps}>
+    <View style={[{ marginVertical: 10, elevation: 2 }]} {...otherProps}>
       <TouchableOpacity onPress={onPress}>
         <View pointerEvents="none">
           <TextInput
@@ -48,10 +48,10 @@ const DatePickerField = (props: DatePickerFieldProps) => {
             label={label}
             value={value ? formatToDate({dateProp: value}) : ''}
             theme={theme}
-            outlineColor={COLORS.super_light_orange} // Màu outline
+            outlineColor={COLORS.orange_button} // Màu outline
             editable={false}
             contentStyle={{ fontFamily: FONTS_FAMILY.Ubuntu_400Regular }}
-            style={{ backgroundColor: '#fffefe' }}
+            style={{ height: 55, backgroundColor: '#fffefe' }}
             
             // {...otherProps}
           />

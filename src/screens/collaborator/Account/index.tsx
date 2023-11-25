@@ -27,21 +27,22 @@ import Header from '../../../components/shared/Header/Header';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SHADOWS } from '../../../constants/Shadows';
 import {
-  collab_getUserInfo,
   collab_logout,
-  collab_reloadGetUserInfo,
 } from '../../../features/collaborator/collab.authSlice';
 import { imageUndefinedUserUri } from '../../../utils/images';
 import Animated from 'react-native-reanimated';
+import { collab_getUserInfo } from '../../../features/collaborator/collab.accountSlice';
 
 const Account = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
 
   const dispatch = useAppDispatch();
-  const userInfo = useAppSelector((state) => state.collab_auth.userInfo);
+  const userInfo = useAppSelector(
+    (state) => state.collab_account.userInfo?.data
+  );
   const fetchUserInfo = async () => {
     try {
-      await dispatch(collab_reloadGetUserInfo()).then((res) => {
+      await dispatch(collab_getUserInfo()).then((res) => {
         console.log(JSON.stringify(res, null, 2));
       });
     } catch (error) {
@@ -79,14 +80,18 @@ const Account = () => {
             <View style={styles.avatarStyle}>
               <Image
                 source={{
-                  uri: userInfo?.imgUrl ? userInfo?.imgUrl : imageUndefinedUserUri,
+                  uri: userInfo?.imgUrl
+                    ? userInfo?.imgUrl
+                    : imageUndefinedUserUri,
                 }}
                 style={{ width: 57, height: 57, borderRadius: 100 }}
               />
             </View>
             <View style={styles.column}>
               <TouchableOpacity>
-                <Text style={styles.textName}>{userInfo?.name}</Text>
+                <Text style={styles.textName}>
+                  {userInfo?.name ? userInfo?.name : 'No value'}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => console.log('alo')}>
                 <Text style={styles.textName2}>Upgrade to Premium {'>'}</Text>

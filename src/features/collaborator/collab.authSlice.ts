@@ -91,6 +91,7 @@ export const collab_reloadGetUserInfo = createAsyncThunk(
   'auth/reloadGetUserInfo',
   async (_, { rejectWithValue }) => {
     try {
+      console.log("Có vô reload Get User Info")
       const response = await authService.collab_getUserInfo();
       return response.data.data;
     } catch (error: any) {
