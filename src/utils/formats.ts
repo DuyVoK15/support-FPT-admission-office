@@ -139,6 +139,21 @@ export function format_ISODateString_To_DayOfWeekMonthDD(isoDateString: string) 
   return customDateString;
 }
 
+export function format_ISODateString_To_MMssDayOfWeekMonthDD(isoDateString: string) {
+  const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  const date: Date = new Date(isoDateString);
+  const dayOfWeek = daysOfWeek[date.getDay()];
+  const monthIndex = date.getMonth();
+  const day = date.getDate();
+
+  const customDateString = `${dayOfWeek}, ${months[monthIndex]} ${day}`;
+
+
+  return customDateString;
+}
+
 export function formatDateTimeForNotification(isoDateString: string) {
   const date = new Date(isoDateString);
   // Hàm lấy tên ngày trong tuần

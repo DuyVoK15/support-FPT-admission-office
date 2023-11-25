@@ -40,7 +40,7 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
 
   const { handlers, state, props } = useIndex();
   const renderListEmptyComponent = () => {
-    return <RegistrationEmpty />
+    return <RegistrationEmpty />;
   };
   const renderItem = ({ item }: { item: DataViewPostRegistration }) => {
     return (
@@ -175,12 +175,19 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
           </View>
           {item?.postPositionsUnregistereds?.length > 0 && (
             <View style={{ flexDirection: 'row', marginTop: 5 }}>
-              <View style={{ flex: 1 }}></View>
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={{
+                    fontFamily: FONTS_FAMILY?.Ubuntu_300Light_Italic,
+                    fontSize: 13,
+                  }}
+                >Register at{' '}<Text>{item?.createAt ? format_ISODateString_To_DayOfWeekMonthDD(item?.createAt) : "No value"}</Text></Text>
+              </View>
               <View>
                 <TouchableOpacity
                   onPress={() =>
                     navigation.navigate('REQUEST_CHANGE_POSITION_PENDING', {
-                      id: item?.id
+                      id: item?.id,
                     })
                   }
                 >
@@ -191,7 +198,7 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
                       textDecorationLine: 'underline',
                     }}
                   >
-                    {item?.isUpdated ? "You've changed" : "Change position?"}
+                    {item?.isUpdated ? "You've changed" : 'Change position?'}
                   </Text>
                 </TouchableOpacity>
               </View>

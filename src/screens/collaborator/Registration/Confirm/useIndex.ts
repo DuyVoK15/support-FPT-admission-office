@@ -32,6 +32,7 @@ const useIndex = () => {
           RegistrationStatus.CONFIRM,
           RegistrationStatus.CHECKIN,
         ],
+        Sort: 'CreateAt',
       })
     );
   };
@@ -40,6 +41,7 @@ const useIndex = () => {
     return await dispatch(
       getAllPostRegistration_Completed({
         RegistrationStatus: [RegistrationStatus.CHECKOUT],
+        Sort: 'CreateAt',
       })
     );
   };
