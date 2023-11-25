@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppConstants from '../enums/collaborator/app';
 import LoginScreen from './collaborator/AuthStack/Login';
 import { useAppDispatch } from '../app/store';
-import UserProfileSignup from '../screens/collaborator/Profile/UserProfileSignup';
+import UserProfileSignup from '../screens/collaborator/Profile/UserProfileSignup/UserProfileSignup';
 import { getRefreshIdToken } from '../config/rnfirebase';
 import Loading from '../components/shared/Loading/Loading';
 import { HomeCollaboratorStackNavigatorParamList } from '../../type';

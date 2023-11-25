@@ -15,18 +15,15 @@ import { FONTS_FAMILY } from '../../../../constants/Fonts';
 import SubmitButton from '../../../../components/shared/Button/SubmitButton';
 import DashedLine from 'react-native-dashed-line';
 import { Controller, useForm } from 'react-hook-form';
-import useUserProfileSignup from './useIndex';
+import useUserProfileSignup from './useUserProfileSignup';
 import DatePickerField from '../../../../components/collaborator/Profile/UserProfileSignup/DatePickerModal';
 import { UserInfo } from '../../../../models/collaborator/userInfo.model';
 import { ScreenWidth } from '../../../../constants/Demesions';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ErrorText from './ErrorText';
 
-interface UserProfileSignupProps {
-  userInfo: UserInfo | null;
-}
-const UserProfileSignup: FC<UserProfileSignupProps> = (data) => {
-  const { handlers, props } = useUserProfileSignup();
+const UserProfileSignup = () => {
+  const { state, handlers, props } = useUserProfileSignup();
   const ERRORS = props.errors;
   // IdentityIssueDate
   const [
@@ -72,7 +69,7 @@ const UserProfileSignup: FC<UserProfileSignupProps> = (data) => {
                 fontSize: 20,
               }}
             >
-              {data?.userInfo?.name && 'Hello, '}
+              {state.userInfo?.name && 'Hello, '}
             </Text>
             <Text
               style={{
@@ -80,7 +77,7 @@ const UserProfileSignup: FC<UserProfileSignupProps> = (data) => {
                 fontSize: 20,
               }}
             >
-              {data?.userInfo?.name ? data?.userInfo?.name + '!' : 'No name!'}
+              {state.userInfo?.name ? state.userInfo?.name + '!' : 'No name!'}
             </Text>
           </View>
           <View style={{ marginTop: 5, maxWidth: ScreenWidth * 0.8 }}>

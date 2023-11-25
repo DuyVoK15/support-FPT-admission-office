@@ -8,9 +8,9 @@ import Wallet from '../../../../screens/collaborator/Wallet';
 import Verification from '../../../../screens/collaborator/Verification';
 import Notification from '../../../../screens/collaborator/Notification/AccountNotification';
 import Security from '../../../../screens/collaborator/Security';
-import UserProfileSignup from '../../../../screens/collaborator/Profile/UserProfileSignup';
+import UserProfileSignup from '../../../../screens/collaborator/Profile/UserProfileSignup/UserProfileSignup';
 import UserProfileDisable from '../../../../screens/collaborator/Profile/UserProfileDisable';
-import Contract from '../../../../screens/collaborator/Contract';
+import Contract from '../../../../screens/collaborator/Contract/Contract';
 import { HomeCollaboratorStackNavigatorParamList } from '../../../../../type';
 import AccountNotification from '../../../../screens/collaborator/Notification/AccountNotification';
 

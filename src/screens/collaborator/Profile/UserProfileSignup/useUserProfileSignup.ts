@@ -1,10 +1,14 @@
 import { View, Text } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAppDispatch } from '../../../../app/store';
 import { AccountInfoSignup } from '../../../../models/collaborator/account.model';
 import { formatToISO_8601 } from '../../../../utils/formats';
 import { useForm } from 'react-hook-form';
-import { collab_signupAccountInformation } from '../../../../features/collaborator/collab.accountSlice';
+import {
+  collab_getUserInfo,
+  collab_signupAccountInformation,
+} from '../../../../features/collaborator/collab.accountSlice';
+import { useAppSelector } from '../../../../app/hooks';
 
 const useUserProfileSignup = () => {
   const dispatch = useAppDispatch();
@@ -26,7 +30,7 @@ const useUserProfileSignup = () => {
       taxNumber: '',
     },
   });
-  
+
   const onSubmit = async (data: AccountInfoSignup) => {
     const AccountInfoSignup = {
       identityNumber: data.identityNumber,
@@ -47,9 +51,25 @@ const useUserProfileSignup = () => {
       }
     );
   };
+
+  const userInfo = useAppSelector((state) => state.collab_account.userInfo?.data);
+  const fetchUserInfo = async () => {
+    try {
+      await dispatch(collab_getUserInfo());
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
+
+  const state = { userInfo };
   const handlers = { onSubmit, handleSubmit, setValue };
-  const props = { control,errors };
+  const props = { control, errors };
   return {
+    state,
     handlers,
     props,
   };
