@@ -1,15 +1,13 @@
 import {
-  ActivityIndicator,
   Platform,
   RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React from 'react';
 import {
   ScreenHeight,
   ScreenWidth,
@@ -25,14 +23,6 @@ import {
   Octicons,
 } from '@expo/vector-icons';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
-import { useAppDispatch } from '../../../app/store';
-import {
-  getAllPost,
-  getHomePostReOpen,
-  getHomePostUpcomming,
-  searchPostByPostCode,
-} from '../../../features/collaborator/collab.postSlice';
-import { useAppSelector } from '../../../app/hooks';
 import {
   format_ISODateString_To_DayOfWeekMonthDDYYYY,
   format_ISODateString_To_MonthDD,
@@ -42,7 +32,6 @@ import {
 import { COLORS } from '../../../constants/Colors';
 import { useNavigation } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
-import FilterModal from '../../../components/collaborator/Home/FilterModal';
 import { SHADOWS } from '../../../constants/Shadows';
 import EventCardWrap from '../../../components/collaborator/Home/EventCardWrap';
 import { imageNotFoundUri } from '../../../utils/images';
@@ -95,8 +84,17 @@ const Home = () => {
                   />
                 </View>
               </View>
-              <View>
-                <MovingText />
+              <View style={{ marginTop: 2 }}>
+                <Text
+                  style={{
+                    fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+                    fontSize: 17,
+                    textAlign: 'center',
+                    color: '#FFF',
+                  }}
+                >
+                  FPT University HCM
+                </Text>
               </View>
             </View>
             <View style={{ flex: 1, alignItems: 'flex-end' }}>
@@ -390,6 +388,7 @@ const Home = () => {
                           ? String(post?.totalAmountPosition)
                           : '0'
                       }
+                      timeAgo={post?.createAt ? post?.createAt : ''}
                     />
                   </View>
                 ))
