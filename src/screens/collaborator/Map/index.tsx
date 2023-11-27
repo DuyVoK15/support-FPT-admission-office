@@ -36,21 +36,36 @@ export default function Map() {
   } else if (location) {
     text = JSON.stringify(location);
   }
+  const homePlace = {
+    description: 'Home',
+    geometry: { location: { lat: 48.8152937, lng: 2.4597668 } },
+  };
+  const workPlace = {
+    description: 'Work',
+    geometry: { location: { lat: 48.8496818, lng: 2.2940881 } },
+  };
 
+  const locations = {
+    latitude: '10.2131',
+    longitude: '106.123123',
+  };
   return (
     <View style={styles.container}>
       <MapView
         provider={PROVIDER_GOOGLE}
         initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
+          latitude: 10.826561,
+          longitude: 106.760897,
           latitudeDelta: 0.01,
           longitudeDelta: 0.01,
         }}
         style={styles.map}
+        showsUserLocation={true}
+        showsMyLocationButton={true}
       ></MapView>
       <View style={styles.searchContainer}>
         <GooglePlacesAutocomplete
+          GoogleReverseGeocodingQuery={{ language: 'vi' }}
           GooglePlacesDetailsQuery={{ fields: 'geometry' }}
           fetchDetails={true}
           styles={{ textInput: styles.input }}
@@ -68,6 +83,9 @@ export default function Map() {
           }}
           onFail={(e) => console.log(e)}
           onNotFound={() => console.log('không thấy')}
+          // currentLocation={true}
+          // // currentLocationLabel="Đây "
+          predefinedPlaces={[homePlace, workPlace]}
         />
       </View>
     </View>

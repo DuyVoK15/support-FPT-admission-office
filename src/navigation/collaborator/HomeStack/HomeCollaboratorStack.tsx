@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HomeCollaboratorStackNavigatorParamList } from '../../../../type';
 import BottomTabs from './BottomTabs';
@@ -20,4 +20,4 @@ const HomeCollaboratorStackScreen = () => {
   );
 };
 export default HomeCollaboratorStackScreen;
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

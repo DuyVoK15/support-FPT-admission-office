@@ -52,6 +52,7 @@ import { DataPost } from '../../../models/collaborator/dataPost.model';
 import useHome from './useHome';
 import { Controller } from 'react-hook-form';
 import SearchTextInput from '../../../components/collaborator/Home/SearchTextInput';
+import MovingText from '../../../components/shared/TextAnimated/MovingText';
 
 const Home = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -95,16 +96,7 @@ const Home = () => {
                 </View>
               </View>
               <View>
-                <Text
-                  style={{
-                    fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
-                    fontSize: 18,
-                    color: 'white',
-                    marginTop: 2,
-                  }}
-                >
-                  FPT University HCM
-                </Text>
+                <MovingText />
               </View>
             </View>
             <View style={{ flex: 1, alignItems: 'flex-end' }}>

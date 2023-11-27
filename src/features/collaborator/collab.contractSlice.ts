@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { ViewContractResponse } from '../../dtos/collaborator/response/viewContract.dto';
 import { contractService } from '../../services/collaborator/contract.service';
 import { AxiosError } from 'axios';
+import { FilterContract } from '../../dtos/collaborator/parameter/filterContract.dto';
 
 interface ContractState {
   contract: ViewContractResponse | null;
@@ -17,9 +18,9 @@ const initialState: ContractState = {
 
 export const getAllContract = createAsyncThunk(
   'contract/getAll',
-  async (_, { rejectWithValue }) => {
+  async (params: FilterContract, { rejectWithValue }) => {
     try {
-      const response = await contractService.getAllContract();
+      const response = await contractService.getAllContract(params);
       // console.log("<PostSlice> Post: ", JSON.stringify(response.data.data))
       return response.data;
     } catch (error: any) {

@@ -11,7 +11,7 @@ const useIndex = () => {
 
   const fetchContract = async () => {
     try {
-      await dispatch(getAllContract()).then((res) => {
+      await dispatch(getAllContract({})).then((res) => {
         console.log(JSON.stringify(res, null, 2));
       });
     } catch (error) {
