@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AccountTab from '../MainTabs/AccountTab';
 import UserProfile from '../../../../screens/collaborator/Profile/UserProfile/UserProfile';
 import CertificateHistory from '../../../../screens/collaborator/Certificate';
-import Wallet from '../../../../screens/collaborator/Wallet';
+import Wallet from '../../../../screens/collaborator/Income/Income';
 import Verification from '../../../../screens/collaborator/Verification';
 import Notification from '../../../../screens/collaborator/Notification/AccountNotification';
 import Security from '../../../../screens/collaborator/Security';

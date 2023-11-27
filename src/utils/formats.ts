@@ -5,14 +5,13 @@ type DateProps = {
   dateProp: string | null;
 };
 
- export function formatDateToDDMMYYYY(date: Date) {
+export function formatDateToDDMMYYYY(date: Date) {
   const day = date.getDate().toString().padStart(2, '0'); // Lấy ngày và thêm '0' phía trước nếu cần
   const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Lấy tháng và thêm '0' phía trước nếu cần (lưu ý rằng tháng trong JavaScript bắt đầu từ 0)
   const year = date.getFullYear();
 
   return `${day}/${month}/${year}`;
 }
-
 
 export const formatToDate = (props: DateProps) => {
   const { dateProp } = props;
@@ -39,7 +38,6 @@ export const formatToISO_8601 = (props: DateProps) => {
     return null;
   }
 };
-
 
 export const formatToDay = (props: DateProps) => {
   const { dateProp } = props;
@@ -68,18 +66,32 @@ export const formatToMonthString = (props: DateProps): string => {
 
 export const timeAgo = (props: DateProps): string => {
   const { dateProp } = props;
-  if(dateProp) {
+  if (dateProp) {
     const parsedDate = new Date(dateProp);
     return formatDistanceToNow(parsedDate) + ' ago';
   } else {
     return '';
   }
-  
 };
 
-export function format_ISODateString_To_DayOfWeekMonthDDYYYY(isoDateString:string) {
-  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+export function format_ISODateString_To_DayOfWeekMonthDDYYYY(
+  isoDateString: string
+) {
+  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
 
   const date = new Date(isoDateString);
   const dayOfWeek = daysOfWeek[date.getDay()];
@@ -91,8 +103,16 @@ export function format_ISODateString_To_DayOfWeekMonthDDYYYY(isoDateString:strin
   return customDateString;
 }
 
-export function format_ISODateString_To_DayOfWeek(isoDateString:string) {
-  const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+export function format_ISODateString_To_DayOfWeek(isoDateString: string) {
+  const daysOfWeek = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ];
 
   const date = new Date(isoDateString);
   const dayOfWeek = daysOfWeek[date.getDay()];
@@ -102,7 +122,20 @@ export function format_ISODateString_To_DayOfWeek(isoDateString:string) {
 }
 
 export function format_ISODateString_To_DDMonthYYYY(isoDateString: string) {
-  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
 
   const date = new Date(isoDateString);
   const day = date.getDate();
@@ -114,7 +147,20 @@ export function format_ISODateString_To_DDMonthYYYY(isoDateString: string) {
 }
 
 export function format_ISODateString_To_MonthDD(isoDateString: string) {
-  const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+  const months = [
+    'JAN',
+    'FEB',
+    'MAR',
+    'APR',
+    'MAY',
+    'JUN',
+    'JUL',
+    'AUG',
+    'SEP',
+    'OCT',
+    'NOV',
+    'DEC',
+  ];
 
   const date = new Date(isoDateString);
   const day = date.getDate();
@@ -124,9 +170,24 @@ export function format_ISODateString_To_MonthDD(isoDateString: string) {
   return customDateString;
 }
 
-export function format_ISODateString_To_DayOfWeekMonthDD(isoDateString: string) {
-  const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+export function format_ISODateString_To_DayOfWeekMonthDD(
+  isoDateString: string
+) {
+  const months = [
+    'JAN',
+    'FEB',
+    'MAR',
+    'APR',
+    'MAY',
+    'JUN',
+    'JUL',
+    'AUG',
+    'SEP',
+    'OCT',
+    'NOV',
+    'DEC',
+  ];
+  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   const date: Date = new Date(isoDateString);
   const dayOfWeek = daysOfWeek[date.getDay()];
@@ -134,14 +195,28 @@ export function format_ISODateString_To_DayOfWeekMonthDD(isoDateString: string) 
   const day = date.getDate();
 
   const customDateString = `${dayOfWeek}, ${months[monthIndex]} ${day}`;
-
 
   return customDateString;
 }
 
-export function format_ISODateString_To_MMssDayOfWeekMonthDD(isoDateString: string) {
-  const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+export function format_ISODateString_To_MMssDayOfWeekMonthDD(
+  isoDateString: string
+) {
+  const months = [
+    'JAN',
+    'FEB',
+    'MAR',
+    'APR',
+    'MAY',
+    'JUN',
+    'JUL',
+    'AUG',
+    'SEP',
+    'OCT',
+    'NOV',
+    'DEC',
+  ];
+  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   const date: Date = new Date(isoDateString);
   const dayOfWeek = daysOfWeek[date.getDay()];
@@ -149,7 +224,6 @@ export function format_ISODateString_To_MMssDayOfWeekMonthDD(isoDateString: stri
   const day = date.getDate();
 
   const customDateString = `${dayOfWeek}, ${months[monthIndex]} ${day}`;
-
 
   return customDateString;
 }
@@ -158,34 +232,67 @@ export function formatDateTimeForNotification(isoDateString: string) {
   const date = new Date(isoDateString);
   // Hàm lấy tên ngày trong tuần
   const getDayOfWeek = (date: Date) => {
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const days = [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+    ];
     return days[date.getDay()];
-  }; 
-  
+  };
+
   // Hàm lấy tên tháng
   const getMonth = (date: Date) => {
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
     return months[date.getMonth()];
   };
 
-  const formattedDate = `${date.getHours()}:${date.getMinutes()}:${(String(date.getSeconds())).padStart(2, '0')} ${getDayOfWeek(date)}, ${getMonth(date)} ${date.getDate()}, ${date.getFullYear()}`;
-  
-return formattedDate;  
+  const formattedDate = `${date.getHours()}:${date.getMinutes()}:${String(
+    date.getSeconds()
+  ).padStart(2, '0')} ${getDayOfWeek(date)}, ${getMonth(
+    date
+  )} ${date.getDate()}, ${date.getFullYear()}`;
+
+  return formattedDate;
 }
 
 // Format time string HH:mm:ss to HH:mm
 export function format_Time_To_HHss(inputTime: string) {
   const timeParts = inputTime.split(':'); // Tách chuỗi theo dấu ':'
-  
+
   if (timeParts.length === 3) {
     // Đảm bảo rằng chuỗi có 3 phần tử (giờ, phút, giây)
     const formattedTime = `${timeParts[0]}:${timeParts[1]}`;
     return formattedTime;
   } else {
-    return "Invalid time format";
+    return 'Invalid time format';
   }
 }
+// Format time string HH:mm:ss to HH:mm
+export function format_ISODateString_To_HHss(dateIOSString: string) {
+  const dateFromISO: Date = new Date(dateIOSString);
+  const hours: number = dateFromISO.getUTCHours();
+  const minutes: number = dateFromISO.getUTCMinutes();
 
+  const formattedTime: string = `${hours.toString().padStart(2, '0')}:${minutes
+    .toString()
+    .padStart(2, '0')}`;
 
-
-
+  return formattedTime;
+}

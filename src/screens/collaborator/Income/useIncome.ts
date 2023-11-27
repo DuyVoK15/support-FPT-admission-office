@@ -5,11 +5,12 @@ import {
   getAllReport,
   getRegistrationByReport,
 } from '../../../features/collaborator/collab.reportSlice';
+import { useAppSelector } from '../../../app/hooks';
 
 const useIndex = () => {
   const dispatch = useAppDispatch();
 
-
+  const reportList = useAppSelector((state) => state.collab_report.report);
   const fetchReport = async () => {
     await dispatch(getAllReport()).then((res) => {
       console.log(JSON.stringify(res, null, 2));
@@ -28,13 +29,13 @@ const useIndex = () => {
     });
   };
 
-  const handlers = {getRegistrationByReportId};
+  const handlers = { getRegistrationByReportId };
   const props = {};
-  const state = {};
+  const stateRedux = { reportList };
   return {
     handlers,
     props,
-    state,
+    stateRedux,
   };
 };
 
