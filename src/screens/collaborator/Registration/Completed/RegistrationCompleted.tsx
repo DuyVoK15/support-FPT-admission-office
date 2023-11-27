@@ -12,9 +12,12 @@ import { FONTS_FAMILY } from '../../../../constants/Fonts';
 import { ScreenWidth } from '../../../../constants/Demesions';
 import { Entypo, FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import DashedLine from 'react-native-dashed-line';
-import useIndex from './useIndex';
+import useIndex from './useRegistrationCompleted';
 import { RefreshControl } from 'react-native';
-import { format_ISODateString_To_DayOfWeekMonthDD, format_Time_To_HHss } from '../../../../utils/formats';
+import {
+  format_ISODateString_To_DayOfWeekMonthDD,
+  format_Time_To_HHss,
+} from '../../../../utils/formats';
 import { imageNotFoundUri } from '../../../../utils/images';
 import RegistrationEmpty from '../../../../components/shared/Empty/RegistrationEmpty';
 import { FlashList } from '@shopify/flash-list';
@@ -22,14 +25,15 @@ import DetailButton from '../../../../components/shared/Button/DetailButton';
 import DataViewPostRegistration from '../../../../models/collaborator/postRegistration.model';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
 import { useNavigation } from '@react-navigation/native';
+import FilterRegistationButton from '../../../../components/shared/Button/FilterRegistationButton';
+import SortRegistrationButton from '../../../../components/shared/Button/SortRegistrationButton';
 
 const Registration_Completed = () => {
-
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
 
   const { handlers, state, props } = useIndex();
   const renderListEmptyComponent = () => {
-    return <RegistrationEmpty />
+    return <RegistrationEmpty />;
   };
 
   const renderItem = ({ item }: { item: DataViewPostRegistration }) => {
@@ -125,12 +129,14 @@ const Registration_Completed = () => {
             </View>
           </View>
 
-          <View style={[styles.containerStatus, {borderColor: "#000"}]}>
+          <View style={[styles.containerStatus, { borderColor: '#000' }]}>
             <View style={styles.statusRow}>
               <View>
-                <Text style={[styles.thirdText, {color: "#000"}]}>Completed</Text>
+                <Text style={[styles.thirdText, { color: '#000' }]}>
+                  Completed
+                </Text>
               </View>
-              <View style={[styles.statusDot, {backgroundColor: "#000"}]} />
+              <View style={[styles.statusDot, { backgroundColor: '#000' }]} />
             </View>
           </View>
 
@@ -182,6 +188,21 @@ const Registration_Completed = () => {
 
   return (
     <View style={styles.container}>
+      <View
+        style={{
+          flexDirection: 'row',
+          marginTop: 10,
+          marginHorizontal: 10,
+          zIndex: 1,
+        }}
+      >
+        <View style={{ flex: 1, alignItems: 'flex-start' }}>
+          <FilterRegistationButton />
+        </View>
+        <View style={{ flex: 1, alignItems: 'flex-end' }}>
+          <SortRegistrationButton />
+        </View>
+      </View>
       <FlashList
         data={props.postRegistrationList?.data}
         renderItem={renderItem}
@@ -197,7 +218,7 @@ const Registration_Completed = () => {
       />
     </View>
   );
-}
+};
 
 export default Registration_Completed;
 
@@ -279,7 +300,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: 'black',
     marginVertical: 5,
-    textAlign: "center"
+    textAlign: 'center',
   },
   containerStatus: {
     position: 'absolute',
