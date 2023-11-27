@@ -296,3 +296,15 @@ export function format_ISODateString_To_HHss(dateIOSString: string) {
 
   return formattedTime;
 }
+export function format_DDMMYYYYYString_To_YYYYMMDate(
+  dateString: string | null
+) {
+  if (dateString !== null) {
+    const parts = dateString.split('/');
+    const formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+    const date = new Date(formattedDate);
+
+    return date;
+  } 
+  return new Date();
+}

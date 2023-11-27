@@ -18,5 +18,5 @@ export interface ViewReportResponse {
 
 export interface ViewRegistrationReportResponse {
   status: StatusInfo;
-  data: DataRegistrationByReport[] | [];
+  data: DataRegistrationByReport;
 }

@@ -1,11 +1,12 @@
 import {
   FlatList,
+  RefreshControl,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Header from '../../../components/shared/Header/Back';
 import Backward from '../../../components/shared/Direction/Backward/Backward';
 import { ScreenHeight } from '../../../constants/Demesions';
@@ -20,10 +21,14 @@ import {
   format_ISODateString_To_DDMonthYYYY,
   format_ISODateString_To_HHss,
 } from '../../../utils/formats';
+import { SHADOWS } from '../../../constants/Shadows';
+import { COLORS } from '../../../constants/Colors';
+import Animated from 'react-native-reanimated';
+import IncomeRegistration from './incomeRegistration/IncomeRegistration';
 
 const Wallet = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
-  const { handlers, props, stateRedux } = useIncome();
+  const { handlers, props, state, setState, stateRedux } = useIncome();
 
   const renderItem = ({ item }: { item: DataReport }) => {
     return (
@@ -64,25 +69,67 @@ const Wallet = () => {
       </TouchableOpacity>
     );
   };
+  // const animatedValue = useRef(new Animated.Value(0)).current;
+
+  // useEffect(() => {
+  //   Animated.timing(animatedValue, {
+  //     toValue: 1000000,
+  //     duration: 5000, // Animation duration in milliseconds
+  //     useNativeDriver: false, // Might need to be set to true depending on the animation properties used
+  //   }).start();
+  // }, []);
 
   return (
     <View style={styles.container}>
       <Header>
         <Backward
           onPress={() => navigation.goBack()}
-          titleBackward="My Wallet"
+          titleBackward="My Income"
         />
       </Header>
 
       <View style={styles.containerWallet}>
-        <View>
-          <Text style={styles.textTitle}>History</Text>
+        <View style={{ marginHorizontal: 15 }}>
+          <Text
+            style={{ fontFamily: FONTS_FAMILY?.Ubuntu_500Medium, fontSize: 22 }}
+          >
+            Income total:{' '}
+            <Text
+              style={{
+                fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                fontSize: 20,
+                color: COLORS?.orange_button,
+              }}
+            >
+              {stateRedux?.totalSalary
+                ? stateRedux?.totalSalary + ' VNĐ'
+                : '0 VNĐ'}
+            </Text>
+          </Text>
         </View>
         <View>
+          <FilterReportMonthYear
+            dataFilterReport={state.dataFilterReport}
+            setDataFilterReport={setState.setDataFilterReport}
+            refreshing={state.refreshing}
+          />
+        </View>
+        <View style={{ flex: 1, marginTop: 15 }}>
           <FlatList
             data={stateRedux?.reportList?.data}
             renderItem={renderItem}
-            contentContainerStyle={{marginHorizontal: 15}}
+            contentContainerStyle={{ marginHorizontal: 15, marginTop: 10 }}
+            refreshControl={
+              <RefreshControl
+                refreshing={state.refreshing}
+                onRefresh={handlers.onRefresh}
+              />
+            }
+          />
+          <IncomeRegistration
+            isVisible={state.isVisible}
+            incomeRegistration={stateRedux.incomeRegistration}
+            onCloseButton={handlers.hideRegistration}
           />
         </View>
       </View>
@@ -96,8 +143,7 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   containerWallet: {
     flex: 1,
-    // marginHorizontal: 15,
-    marginTop: 20,
+    marginTop: 10,
   },
   textTitle: {
     fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
@@ -105,16 +151,9 @@ const styles = StyleSheet.create({
   },
   walletBox: {
     backgroundColor: 'white',
-    borderRadius: 20,
-    marginVertical: 15,
-    shadowColor: '#000000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.19,
-    shadowRadius: 5.62,
-    elevation: 6,
+    borderRadius: 15,
+    marginBottom: 15,
+    ...SHADOWS?.SHADOW_03,
   },
   walletContent: {
     flexDirection: 'row',

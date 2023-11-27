@@ -5,9 +5,12 @@ import {
   ViewReportResponse,
 } from '../../dtos/collaborator/response/viewReport.dto';
 import { reportService } from '../../services/collaborator/report.service';
+import { FilterReportParam } from '../../dtos/collaborator/parameter/filterReport.dto';
+import { DataReport } from '../../models/collaborator/report.mode';
 
 interface ReportState {
   report: ViewReportResponse | null;
+  totalSalary: number | null;
   reportRegistration: ViewRegistrationReportResponse | null;
   loading: boolean;
   error: string;
@@ -16,6 +19,7 @@ interface ReportState {
 
 const initialState: ReportState = {
   report: null,
+  totalSalary: 0,
   reportRegistration: null,
   loading: false,
   error: '',
@@ -23,10 +27,10 @@ const initialState: ReportState = {
 
 export const getAllReport = createAsyncThunk(
   'report/getAll',
-  async (_, { rejectWithValue }) => {
+  async (params: FilterReportParam, { rejectWithValue }) => {
     try {
       console.log('Có vô post');
-      const response = await reportService.getAllReport();
+      const response = await reportService.getAllReport(params);
 
       return response.data;
     } catch (error: any) {
@@ -67,6 +71,12 @@ export const reportSlice = createSlice({
       .addCase(getAllReport.fulfilled, (state, action) => {
         state.loading = false;
         state.report = action.payload;
+        const data = action.payload.data as DataReport[];
+        state.totalSalary = data.reduce(
+          (accumulator: number, currentValue: DataReport) =>
+            accumulator + currentValue.salary,
+          0
+        );
       })
       .addCase(getAllReport.rejected, (state, action) => {
         state.error = String(action.payload);
