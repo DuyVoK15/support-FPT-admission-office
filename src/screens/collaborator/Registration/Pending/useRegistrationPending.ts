@@ -52,17 +52,17 @@ const useIndex = () => {
     fetchPostRegistration();
     setTimeout(() => {
       setRefreshing(false);
-    }, 1000);
+    }, 500);
   }, []);
 
   const handlers = { onRefresh };
   const state = { refreshing };
-  const props = { postRegistrationList };
+  const stateRedux = { postRegistrationList };
 
   return {
     handlers,
     state,
-    props,
+    stateRedux,
   };
 };
 

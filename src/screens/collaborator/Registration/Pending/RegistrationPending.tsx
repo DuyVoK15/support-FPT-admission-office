@@ -1,4 +1,5 @@
 import {
+  FlatList,
   Image,
   RefreshControl,
   ScrollView,
@@ -19,7 +20,7 @@ import { SHADOWS } from '../../../../constants/Shadows';
 import { useAppDispatch } from '../../../../app/store';
 import { useAppSelector } from '../../../../app/hooks';
 import { getAllPostRegistration } from '../../../../features/collaborator/collab.postRegistrationSlice';
-import useIndex from './useIndex';
+import useRPennding from './useRegistrationPending';
 import {
   format_ISODateString_To_DayOfWeekMonthDD,
   format_Time_To_HHss,
@@ -31,14 +32,17 @@ import { FlashList } from '@shopify/flash-list';
 import DetailButton from '../../../../components/shared/Button/DetailButton';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
 import { useNavigation } from '@react-navigation/native';
+import SortRegistrationButton from '../../../../components/shared/Button/SortRegistrationButton';
+import FilterRegistationButton from '../../../../components/shared/Button/FilterRegistationButton';
 
 interface Registration_PendingProps {
-  item: string | null;
+  // item: string | null;
 }
 const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
 
-  const { handlers, state, props } = useIndex();
+  const { handlers, state, stateRedux } = useRPennding();
+  
   const renderListEmptyComponent = () => {
     return <RegistrationEmpty />;
   };
@@ -68,8 +72,8 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
               </Text>
               <Text style={styles.textFirst_3}>
                 {item?.registrationCode
-                  ? 'Code: ' + item?.registrationCode
-                  : 'No value'}
+                  ? 'PRCode: ' + item?.registrationCode
+                  : 'PRCode: No value'}
               </Text>
             </View>
           </View>
@@ -173,16 +177,24 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
               }
             />
           </View>
-          {item?.postPositionsUnregistereds?.length > 0 && (
-            <View style={{ flexDirection: 'row', marginTop: 5 }}>
-              <View style={{ flex: 1 }}>
-                <Text
-                  style={{
-                    fontFamily: FONTS_FAMILY?.Ubuntu_300Light_Italic,
-                    fontSize: 13,
-                  }}
-                >Register at{' '}<Text>{item?.createAt ? format_ISODateString_To_DayOfWeekMonthDD(item?.createAt) : "No value"}</Text></Text>
-              </View>
+
+          <View style={{ flexDirection: 'row', marginTop: 15 }}>
+            <View style={{ flex: 1 }}>
+              <Text
+                style={{
+                  fontFamily: FONTS_FAMILY?.Ubuntu_300Light_Italic,
+                  fontSize: 13,
+                }}
+              >
+                Register at:{' '}
+                <Text>
+                  {item?.createAt
+                    ? format_ISODateString_To_DayOfWeekMonthDD(item?.createAt)
+                    : 'No value'}
+                </Text>
+              </Text>
+            </View>
+            {item?.postPositionsUnregistereds?.length > 0 && (
               <View>
                 <TouchableOpacity
                   onPress={() =>
@@ -202,18 +214,35 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
                   </Text>
                 </TouchableOpacity>
               </View>
-            </View>
-          )}
+            )}
+          </View>
         </View>
       </View>
     );
   };
+
+  // Render Main Component JSX
   return (
     <View style={styles.container}>
-      <FlashList
-        data={props.postRegistrationList?.data}
+      <View
+        style={{
+          flexDirection: 'row',
+          marginTop: 10,
+          marginHorizontal: 10,
+          zIndex: 1,
+        }}
+      >
+        <View style={{ flex: 1, alignItems: 'flex-start' }}>
+          <FilterRegistationButton />
+        </View>
+        <View style={{ flex: 1, alignItems: 'flex-end' }}>
+          <SortRegistrationButton />
+        </View>
+      </View>
+      <FlatList
+        data={stateRedux.postRegistrationList?.data}
         renderItem={renderItem}
-        estimatedItemSize={100}
+        contentContainerStyle={{ marginVertical: 10, marginHorizontal: 10 }}
         refreshControl={
           <RefreshControl
             refreshing={state.refreshing}
@@ -221,7 +250,6 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
           />
         }
         ListEmptyComponent={renderListEmptyComponent}
-        ListHeaderComponentStyle={{ marginTop: 15 }}
       />
     </View>
   );
@@ -235,8 +263,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
   },
   containerItem: {
-    marginBottom: 20,
-    marginHorizontal: 10,
+    marginBottom: 15,
     backgroundColor: '#FFF',
     borderRadius: 15,
     shadowColor: '#000000',
