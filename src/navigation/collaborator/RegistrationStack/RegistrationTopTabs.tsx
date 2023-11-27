@@ -12,7 +12,7 @@ import RejectedTab from './RegistrationTab/RejectedTab';
 
 const Tab = createMaterialTopTabNavigator();
 interface RegistrationTopTabProps {
-  item: string | null;
+  // item: string | null;
 }
 const RegistrationTopTabs: FC<RegistrationTopTabProps> = (props) => {
  
@@ -73,7 +73,7 @@ const RegistrationTopTabs: FC<RegistrationTopTabProps> = (props) => {
       <Tab.Screen
         name={'REGISTRATION_PENDING'}
         // component={PendingTab}
-        children={() => <PendingTab item={props.item} />}
+        children={() => <PendingTab />}
         options={{
           tabBarStyle: {
             // marginTop: 50,
