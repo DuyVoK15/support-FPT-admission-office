@@ -6,7 +6,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import React, { FC, useContext, useState } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../../../constants/Colors';
 import { FONTS_FAMILY } from '../../../../constants/Fonts';
@@ -22,21 +22,32 @@ interface SearchProps extends ViewStyle {
   setDataFilterUpcomming: React.Dispatch<
     React.SetStateAction<DataFilterUpcomming | null>
   >;
+  isRefresh?: boolean;
 }
 const Search: FC<SearchProps> = (Props) => {
   const [searchText, setSearchText] = useState<string | null>(null);
-    const handleSearchPost = () => {
-      Props.setDataFilterUpcomming((prevFilter) => ({
-        postUpcommingCategoryId: prevFilter?.postUpcommingCategoryId || null,
-        createAtStart: prevFilter?.createAtStart || null,
-        createAtEnd: prevFilter?.createAtEnd || null,
-        dateFromStart: prevFilter?.dateFromStart || null,
-        dateFromEnd: prevFilter?.dateFromEnd || null,
-        searchText: searchText,
-        sort: prevFilter?.sort || null,
-        order: prevFilter?.order || null,
-      }));
-    };
+  const handleSearchPost = () => {
+    Props.setDataFilterUpcomming((prevFilter) => ({
+      postUpcommingCategoryId: prevFilter?.postUpcommingCategoryId || null,
+      createAtStart: prevFilter?.createAtStart || null,
+      createAtEnd: prevFilter?.createAtEnd || null,
+      dateFromStart: prevFilter?.dateFromStart || null,
+      dateFromEnd: prevFilter?.dateFromEnd || null,
+      searchText: searchText,
+      sort: prevFilter?.sort || null,
+      order: prevFilter?.order || null,
+    }));
+  };
+  // Handle reset state
+  const handleResetState = () => {
+    setSearchText(null);
+  };
+  
+  useEffect(() => {
+    handleResetState();
+  }, [Props.isRefresh]);
+
+  // Return main Component JSX
   return (
     <View style={{ flex: 1 }}>
       <View style={{ backgroundColor: '#FFF' }}>
@@ -50,9 +61,13 @@ const Search: FC<SearchProps> = (Props) => {
               borderRadius: 10,
             }}
             placeholder="Search by postcode, name, ..."
+            value={searchText ?? ""}
             onChangeText={(value) => setSearchText(value)}
           />
-          <TouchableOpacity onPress={handleSearchPost} style={{ position: 'absolute', right: 10, top: 9 }}>
+          <TouchableOpacity
+            onPress={handleSearchPost}
+            style={{ position: 'absolute', right: 10, top: 9 }}
+          >
             <FontAwesome
               name="search"
               size={30}

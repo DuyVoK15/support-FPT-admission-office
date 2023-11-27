@@ -27,6 +27,7 @@ import Search from '../../../../components/collaborator/Event/UpcommingEvent/Sea
 import FilterModalButton, {
   DataFilterUpcomming,
 } from '../../../../components/collaborator/Event/UpcommingEvent/FilterModalButton';
+import RegistrationEmpty from '../../../../components/shared/Empty/RegistrationEmpty';
 
 // Variables
 const PAGE_SIZE_DEFAULT = 20;
@@ -95,7 +96,7 @@ const EventUpcomming: FC = () => {
         })
       ).then((res) => {
         console.log('===============Data==============');
-        console.log(JSON.stringify(res, null, 2));
+        // console.log(JSON.stringify(res, null, 2));
       });
     } catch (error) {
       console.log('Error: ', error);
@@ -110,10 +111,11 @@ const EventUpcomming: FC = () => {
   useEffect(() => {
     fetchPostCategory();
   }, []);
-
+  const [isRefresh, setIsRefresh] = useState(false);
   // Refresh function fetchPost()
   const onRefresh = useCallback(async () => {
     setLoading(true);
+    setIsRefresh(true);
     setTimeout(() => {
       setDataFilterUpcomming({
         postUpcommingCategoryId: null,
@@ -126,9 +128,15 @@ const EventUpcomming: FC = () => {
         order: 'DESCENDING',
       });
       setPostUpcommingCategoryDes('All');
+      setIsRefresh(false);
       setLoading(false);
     }, 500);
   }, []);
+
+  // Render Empty JSX
+  const renderListEmptyComponent = () => {
+    return <RegistrationEmpty />;
+  };
   // Render header JSX
   const renderListHeader = () => {
     return <View style={{ marginHorizontal: 15, marginTop: 10 }}></View>;
@@ -208,19 +216,24 @@ const EventUpcomming: FC = () => {
             total={total ? Number(total) : 0}
             dataFilterUpcomming={dataFilterUpcomming}
             setDataFilterUpcomming={setDataFilterUpcomming}
+            isRefresh={isRefresh}
           />
           <FilterModalButton
             dataFilterUpcomming={dataFilterUpcomming}
             setDataFilterUpcomming={setDataFilterUpcomming}
+            isRefresh={isRefresh}
           />
         </View>
-        <CategoryFilterList
-          postCategoryList={postCategoryList}
-          dataFilterUpcomming={dataFilterUpcomming}
-          setDataFilterUpcomming={setDataFilterUpcomming}
-          postUpcommingCategoryDes={postUpcommingCategoryDes}
-          setPostUpcommingCategoryDes={setPostUpcommingCategoryDes}
-        />
+        <View style={{ flexDirection: 'row' }}>
+          <CategoryFilterList
+            postCategoryList={postCategoryList}
+            dataFilterUpcomming={dataFilterUpcomming}
+            setDataFilterUpcomming={setDataFilterUpcomming}
+            postUpcommingCategoryDes={postUpcommingCategoryDes}
+            setPostUpcommingCategoryDes={setPostUpcommingCategoryDes}
+            isRefresh={isRefresh}
+          />
+        </View>
       </View>
       <FlatList
         scrollEventThrottle={16}
@@ -242,9 +255,7 @@ const EventUpcomming: FC = () => {
         refreshControl={
           <RefreshControl refreshing={loading} onRefresh={onRefresh} />
         }
-        ListEmptyComponent={
-          <ActivityIndicator size={'large'} color={'purple'} />
-        }
+        ListEmptyComponent={renderListEmptyComponent}
         ListHeaderComponent={renderListHeader}
         ListFooterComponent={renderLoadingFooter}
         onEndReached={handleEndReached}

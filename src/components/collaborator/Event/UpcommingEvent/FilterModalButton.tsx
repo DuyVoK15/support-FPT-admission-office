@@ -19,6 +19,7 @@ import {
 } from '../../../../utils/formats';
 import SubmitButton from '../../../shared/Button/SubmitButton';
 import { useForm } from 'react-hook-form';
+import ResetFilterButton from '../../../shared/Button/ResetFilterButton';
 
 export type DataFilterUpcomming = {
   postUpcommingCategoryId: number | null;
@@ -35,6 +36,7 @@ interface FilterModalButtonProps extends TouchableOpacityProps {
   setDataFilterUpcomming: React.Dispatch<
     React.SetStateAction<DataFilterUpcomming | null>
   >;
+  isRefresh?: boolean;
 }
 const FilterModalButton = (Props: FilterModalButtonProps) => {
   // Show Modal Filter
@@ -124,6 +126,18 @@ const FilterModalButton = (Props: FilterModalButtonProps) => {
     }));
     hideModalFilterButton();
   };
+  // Handle reset State
+  const handleResetState = () => {
+    setCreateAtEnd(null);
+    setCreateAtStart(null);
+    setDateFromEnd(null);
+    setDateFromStart(null);
+  };
+
+  useEffect(() => {
+    handleResetState();
+  }, [Props.isRefresh]);
+
   // Return component
   return (
     <View>
@@ -161,7 +175,7 @@ const FilterModalButton = (Props: FilterModalButtonProps) => {
       >
         <View
           style={{
-            height: 300,
+            height: ScreenHeight * 0.5,
             width: '100%',
             backgroundColor: '#FFF',
             borderTopRightRadius: 35,
@@ -199,7 +213,7 @@ const FilterModalButton = (Props: FilterModalButtonProps) => {
                     <Text
                       style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular }}
                     >
-                      {dateFromStart}
+                      {dateFromStart ?? 'DD/MM/YYYY'}
                     </Text>
                   </TouchableOpacity>
                   <View style={{ marginHorizontal: 5 }}>
@@ -219,7 +233,7 @@ const FilterModalButton = (Props: FilterModalButtonProps) => {
                     <Text
                       style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular }}
                     >
-                      {dateFromEnd}
+                      {dateFromEnd ?? 'DD/MM/YYYY'}
                     </Text>
                   </TouchableOpacity>
                   <DateTimePicker
@@ -258,7 +272,7 @@ const FilterModalButton = (Props: FilterModalButtonProps) => {
                     <Text
                       style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular }}
                     >
-                      {createAtStart}
+                      {createAtStart ?? 'DD/MM/YYYY'}
                     </Text>
                   </TouchableOpacity>
                   <View style={{ marginHorizontal: 5 }}>
@@ -278,7 +292,7 @@ const FilterModalButton = (Props: FilterModalButtonProps) => {
                     <Text
                       style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular }}
                     >
-                      {createAtEnd}
+                      {createAtEnd ?? 'DD/MM/YYYY'}
                     </Text>
                   </TouchableOpacity>
                   <DateTimePicker
@@ -298,6 +312,9 @@ const FilterModalButton = (Props: FilterModalButtonProps) => {
             </View>
             <View style={{ marginTop: 20 }}>
               <SubmitButton titleButton="Apply" onPress={handleDataUpdate} />
+            </View>
+            <View style={{ marginTop: 15, alignItems: 'center' }}>
+              <ResetFilterButton onPress={handleResetState} />
             </View>
           </View>
         </View>

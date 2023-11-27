@@ -6,3 +6,4 @@ export enum POST_STATUS_ENUM {
   DELETED = 5,
   RE_OPEN = 6,
 }
+

@@ -18,7 +18,7 @@ import { Data } from '../../../../models/collaborator/dataPost.model';
 import { cardGap } from '../../../../constants/Demesions';
 import { format_ISODateString_To_DayOfWeekMonthDDYYYY } from '../../../../utils/formats';
 import EventCardWrap from '../../../../components/collaborator/Home/EventCardWrap';
-import EventUpcomming from '../../../../screens/collaborator/Event/EventUpcomming';
+import EventUpcomming from '../../../../screens/collaborator/Event/EventUpcomming/EventUpcomming';
 
 const EventUpcommingTab: FC = () => {
   return (

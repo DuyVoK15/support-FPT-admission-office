@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import PositionRegistration from '../../../../screens/collaborator/PositionRegistration';
 import HomeTab from '../MainTabs/HomeTab';
 import Event from '../../../../screens/collaborator/Event';
-import EventUpcomming from '../../../../screens/collaborator/Event/EventUpcomming';
+import EventUpcomming from '../../../../screens/collaborator/Event/EventUpcomming/EventUpcomming';
 import EventTopTabs from '../../EventStack/EventTopTabs';
 import { HomeCollaboratorStackNavigatorParamList } from '../../../../../type';
 import HomeNotification from '../../../../screens/collaborator/Notification/HomeNotitìication';

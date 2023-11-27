@@ -23,8 +23,9 @@ interface CategoryFilterListProps {
   >;
   postUpcommingCategoryDes: string | null;
   setPostUpcommingCategoryDes: (des: string | null) => void;
+  isRefresh?: boolean;
 }
-const CategoryFilterList: FC<CategoryFilterListProps> = (props) => {
+const CategoryFilterList: FC<CategoryFilterListProps> = (Props) => {
   // const [id, setId] = useState<number | null>(null);
   // const context = useContext(MyContext);
   // if (context === null) {
@@ -33,7 +34,7 @@ const CategoryFilterList: FC<CategoryFilterListProps> = (props) => {
   // }
   // const { postUpcommingCategoryId, setPostUpcommingCategoryId } = context;
   const getPostCategoryId = async (Id: number | null, Des: string | null) => {
-    props.setDataFilterUpcomming((prevFilter) => ({
+    Props.setDataFilterUpcomming((prevFilter) => ({
       postUpcommingCategoryId: Id,
       createAtStart: prevFilter?.createAtStart || null,
       createAtEnd: prevFilter?.createAtEnd || null,
@@ -43,17 +44,25 @@ const CategoryFilterList: FC<CategoryFilterListProps> = (props) => {
       sort: prevFilter?.sort || null,
       order: prevFilter?.order || null,
     }));
-    props.setPostUpcommingCategoryDes(Des);
+    Props.setPostUpcommingCategoryDes(Des);
     // await dispatch(getPostCategoryIdById({ Id })).then((res) => {
     //   console.log(JSON.stringify(res, null, 2));
     // });
   };
-  console.log(props.dataFilterUpcomming);
+  // console.log(props.dataFilterUpcomming);
+  // Handle reset State
+  const handleResetState = () => {
+  };
+
+  useEffect(() => {
+    handleResetState();
+  }, [Props.isRefresh]);
+  // Return main component JSX
   return (
     <View style={{ marginVertical: 15 }}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {props.postCategoryList?.data
+          {Props.postCategoryList?.data
             .filter((category) => category?.isActive === true)
             .map((category, index) => (
               <TouchableOpacity
@@ -68,7 +77,7 @@ const CategoryFilterList: FC<CategoryFilterListProps> = (props) => {
                   borderWidth: 3,
                   borderColor: '#FF930F',
                   backgroundColor:
-                    props.dataFilterUpcomming?.postUpcommingCategoryId ===
+                  Props.dataFilterUpcomming?.postUpcommingCategoryId ===
                     category?.id
                       ? '#FF930F'
                       : '#FFF',
@@ -81,7 +90,7 @@ const CategoryFilterList: FC<CategoryFilterListProps> = (props) => {
                     style={{
                       fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
                       color:
-                        props.dataFilterUpcomming?.postUpcommingCategoryId ===
+                      Props.dataFilterUpcomming?.postUpcommingCategoryId ===
                         category?.id
                           ? '#FFF'
                           : '#FF930F',
