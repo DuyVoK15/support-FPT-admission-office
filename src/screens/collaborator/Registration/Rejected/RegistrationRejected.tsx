@@ -25,6 +25,8 @@ import DetailButton from '../../../../components/shared/Button/DetailButton';
 import DataViewPostRegistration from '../../../../models/collaborator/postRegistration.model';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
 import { useNavigation } from '@react-navigation/native';
+import FilterRegistationButton from '../../../../components/shared/Button/FilterRegistationButton';
+import SortRegistrationButton from '../../../../components/shared/Button/SortRegistrationButton';
 
 const Registration_Cancelled = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -186,6 +188,21 @@ const Registration_Cancelled = () => {
 
   return (
     <View style={styles.container}>
+      <View
+        style={{
+          flexDirection: 'row',
+          marginTop: 10,
+          marginHorizontal: 10,
+          zIndex: 1,
+        }}
+      >
+        <View style={{ flex: 1, alignItems: 'flex-start' }}>
+          <FilterRegistationButton />
+        </View>
+        <View style={{ flex: 1, alignItems: 'flex-end' }}>
+          <SortRegistrationButton />
+        </View>
+      </View>
       <FlashList
         data={props.postRegistrationList?.data}
         renderItem={renderItem}

@@ -24,9 +24,9 @@ const useRegistrationRejected = () => {
       console.log(JSON.stringify(res, null, 2));
     });
   };
-  useEffect(() => {
-    fetchPostRegistration();
-  }, []);
+  // useEffect(() => {
+  //   fetchPostRegistration();
+  // }, []);
   useFocusEffect(
     React.useCallback(() => {
       // Đây là nơi bạn muốn chạy lại các logic hoặc useEffect khi tab này được focus
