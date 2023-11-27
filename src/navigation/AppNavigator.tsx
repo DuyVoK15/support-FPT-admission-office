@@ -54,11 +54,7 @@ const AppNavigator: FC = () => {
     state.collab_userInfo?.accountInformation === null &&
     state.roleId === RoleId.COLLAB_ROLE
   )
-    return (
-      <UserProfileSignup
-        userInfo={state.collab_userInfo ? state.collab_userInfo : null}
-      />
-    );
+    return <UserProfileSignup />;
 
   // Return stack navigator
   return state.collab_isAuthLoading ||

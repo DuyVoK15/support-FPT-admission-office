@@ -17,7 +17,6 @@ import DashedLine from 'react-native-dashed-line';
 import { Controller, useForm } from 'react-hook-form';
 import useUserProfileSignup from './useUserProfileSignup';
 import DatePickerField from '../../../../components/collaborator/Profile/UserProfileSignup/DatePickerModal';
-import { UserInfo } from '../../../../models/collaborator/userInfo.model';
 import { ScreenWidth } from '../../../../constants/Demesions';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ErrorText from './ErrorText';
