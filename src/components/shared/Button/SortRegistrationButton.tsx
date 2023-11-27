@@ -80,8 +80,6 @@ const SortRegistrationButton: FC<SortRegistrationButtonProps> = (props) => {
     if (showDropdown) {
       setShowDropdown(false);
     }
-  };const closeDropdownnnn = () => {
-    console.log("object")
   };
 
   return (

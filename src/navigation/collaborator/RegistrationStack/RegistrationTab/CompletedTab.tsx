@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import Booking_Completed from '../../../../screens/collaborator/Registration/Completed'
+import Booking_Completed from '../../../../screens/collaborator/Registration/Completed/RegistrationCompleted'
 
 const CompletedTab = () => {
   return (

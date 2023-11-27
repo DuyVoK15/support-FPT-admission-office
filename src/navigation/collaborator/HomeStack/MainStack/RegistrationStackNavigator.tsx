@@ -3,10 +3,10 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BookingTab from '../MainTabs/RegistrationTab';
 import RegistrationTab from '../MainTabs/RegistrationTab';
-import Registration_Confirm_Detail from '../../../../screens/collaborator/Registration/Confirm/confirmDetail';
-import Registration_Pending_Detail from '../../../../screens/collaborator/Registration/Pending/pendingDetail';
-import RequestChangePosition from '../../../../screens/collaborator/Registration/Confirm/reqChangePosition';
-import RequestChangePositionPending from '../../../../screens/collaborator/Registration/Pending/reqChangePosition';
+import Registration_Confirm_Detail from '../../../../screens/collaborator/Registration/Confirm/confirmDetail/RegistrationConfirmDetail';
+import Registration_Pending_Detail from '../../../../screens/collaborator/Registration/Pending/pendingDetail/RegistrationPendingDetail';
+import RequestChangePosition from '../../../../screens/collaborator/Registration/Confirm/reqChangePosition/RequestChangePosition';
+import RequestChangePositionPending from '../../../../screens/collaborator/Registration/Pending/reqChangePosition/RequestChangePosition';
 import RequestUpdateHistory from '../../../../screens/collaborator/Registration/Confirm/reqUpdateHistory/RequestUpdateHistory';
 
 const Stack = createNativeStackNavigator();
