@@ -6,7 +6,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import React, { FC, useContext, useState } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../../../constants/Colors';
 import { FONTS_FAMILY } from '../../../../constants/Fonts';
@@ -22,6 +22,7 @@ interface SearchProps extends ViewStyle {
   setDataFilterReOpen: React.Dispatch<
     React.SetStateAction<DataFilterReOpen | null>
   >;
+  isRefresh?: boolean;
 }
 const Search: FC<SearchProps> = (Props) => {
   const [searchText, setSearchText] = useState<string | null>(null);
@@ -37,6 +38,16 @@ const Search: FC<SearchProps> = (Props) => {
       order: prevFilter?.order || null,
     }));
   };
+  // Handle reset state
+  const handleResetState = () => {
+    setSearchText(null);
+  };
+  
+  useEffect(() => {
+    handleResetState();
+  }, [Props.isRefresh]);
+
+  // Return main Component JSX
   return (
     <View style={{ flex: 1 }}>
       <View style={{ backgroundColor: '#FFF' }}>
@@ -51,6 +62,7 @@ const Search: FC<SearchProps> = (Props) => {
             }}
             placeholder="Search by postcode, name, ..."
             onChangeText={(value) => setSearchText(value)}
+            value={searchText ?? ""}
           />
           <TouchableOpacity onPress={handleSearchPost} style={{ position: 'absolute', right: 10, top: 9 }}>
             <FontAwesome

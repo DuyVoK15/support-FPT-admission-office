@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 import { TouchableOpacityProps } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
+import { COLORS } from '../../../constants/Colors';
 
 interface CheckOutButtonProps extends TouchableOpacityProps {}
 
@@ -18,7 +19,7 @@ const CheckOutButton: FC<CheckOutButtonProps> = (props) => {
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 15,
-        backgroundColor: '#00FF87',
+        backgroundColor: COLORS?.blue_date,
       }}
     >
       <View style={{ flex: 1, marginLeft: 10 }}>
