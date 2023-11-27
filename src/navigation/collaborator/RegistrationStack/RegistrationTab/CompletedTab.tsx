@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import Booking_Completed from '../../../../screens/collaborator/Registration/Completed/RegistrationCompleted'
+import Registration_Completed from '../../../../screens/collaborator/Registration/Completed/RegistrationCompleted'
 
 const CompletedTab = () => {
   return (
-    <Booking_Completed />
+    <Registration_Completed />
   )
 }
 
