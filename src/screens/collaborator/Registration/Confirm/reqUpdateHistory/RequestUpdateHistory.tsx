@@ -14,7 +14,6 @@ import { HomeCollaboratorScreenNavigationProp } from '../../../../../../type';
 import { useAppSelector } from '../../../../../app/hooks';
 import { useAppDispatch } from '../../../../../app/store';
 import { getAllRequestUpdateHistory } from '../../../../../features/collaborator/collab.postRegistrationSlice';
-import { ViewRequestUpdateHistory } from '../../../../../dtos/collaborator/response/viewUpdateRequest.dto';
 import { DataRequestUpdateHistory } from '../../../../../models/collaborator/dataUpdateRequest.model';
 import LoadingScreen from '../../../../../components/shared/Loading/Loading';
 import { SHADOWS } from '../../../../../constants/Shadows';

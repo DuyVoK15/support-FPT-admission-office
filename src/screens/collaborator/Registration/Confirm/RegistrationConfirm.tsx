@@ -1,26 +1,9 @@
-import {
-  FlatList,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import React from 'react';
 import { COLORS } from '../../../../constants/Colors';
 import { FONTS_FAMILY } from '../../../../constants/Fonts';
 import { ScreenWidth } from '../../../../constants/Demesions';
-import {
-  Entypo,
-  Feather,
-  FontAwesome,
-  FontAwesome5,
-  MaterialCommunityIcons,
-} from '@expo/vector-icons';
 import DashedLine from 'react-native-dashed-line';
-import useIndex from './useIndex';
 import { RefreshControl } from 'react-native';
 import {
   format_ISODateString_To_DayOfWeekMonthDD,
@@ -29,7 +12,6 @@ import {
 import { imageNotFoundUri } from '../../../../utils/images';
 import { useNavigation } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
-import * as Location from 'expo-location';
 import { RegistrationStatus } from '../../../../enums/collaborator/RegistrationStatus';
 import CheckInButton from '../../../../components/shared/Button/CheckInButton';
 import CheckOutButton from '../../../../components/shared/Button/CheckOutButton';
@@ -39,12 +21,12 @@ import DataViewPostRegistration from '../../../../models/collaborator/postRegist
 import FilterRegistationButton from '../../../../components/shared/Button/FilterRegistationButton';
 import SortRegistrationButton from '../../../../components/shared/Button/SortRegistrationButton';
 import { FlashList } from '@shopify/flash-list';
-import ReactNativeModal from 'react-native-modal';
 import ChangePositionButton from '../../../../components/shared/Button/ChangePositionButton';
+import useRegistrationConfirm from './useRegistrationConfirm';
 
 const Registration_Confirm = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
-  const { handlers, state, props } = useIndex();
+  const { handlers, state, props } = useRegistrationConfirm();
 
   const renderListEmptyComponent = () => {
     return <RegistrationEmpty />;

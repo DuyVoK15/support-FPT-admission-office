@@ -1,4 +1,4 @@
-import { RegistrationStatus } from './../../../../enums/collaborator/RegistrationStatus';
+import { RegistrationStatus } from '../../../../enums/collaborator/RegistrationStatus';
 import { View, Text, Platform } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../../../app/store';
@@ -51,9 +51,9 @@ const useIndex = () => {
       console.log('data', JSON.stringify(res, null, 2));
     });
   };
-  useEffect(() => {
-    fetchPostRegistration();
-  }, []);
+  // useEffect(() => {
+  //   fetchPostRegistration();
+  // }, []);
   useFocusEffect(
     React.useCallback(() => {
       // Đây là nơi bạn muốn chạy lại các logic hoặc useEffect khi tab này được focus
