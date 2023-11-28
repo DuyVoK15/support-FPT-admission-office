@@ -1,3 +1,3 @@
 export interface CancelPostRegistrationParam {
-  postRegistrationId: number;
+  postRegistrationId: number | null;
 }

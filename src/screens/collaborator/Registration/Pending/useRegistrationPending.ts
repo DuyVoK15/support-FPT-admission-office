@@ -3,10 +3,14 @@ import { useAppSelector } from '../../../../app/hooks';
 import { useAppDispatch } from '../../../../app/store';
 import { RegistrationStatus } from '../../../../enums/collaborator/RegistrationStatus';
 import {
+  cancelPostRegistration,
   getAllPostRegistration,
   getAllPostRegistration_Pending,
 } from '../../../../features/collaborator/collab.postRegistrationSlice';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import useCustomToast from '../../../../utils/toasts';
+import ErrorStatus from '../../../../dtos/collaborator/response/errorStatus.dto';
+import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
 
 export type dataFilterRegistration = {
   Sort: string | null;
@@ -15,6 +19,9 @@ export type dataFilterRegistration = {
 };
 const useIndex = () => {
   const dispatch = useAppDispatch();
+  const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
+
+  const { showToastSuccess, showToastError } = useCustomToast();
   const postRegistrationList = useAppSelector(
     (state) => state.collab_postRegistration.postRegistrationPending
   );
@@ -35,17 +42,30 @@ const useIndex = () => {
       console.log(JSON.stringify(res, null, 2));
     });
   };
-  // useEffect(() => {
 
-  // }, []);
   useFocusEffect(
     React.useCallback(() => {
-      // Đây là nơi bạn muốn chạy lại các logic hoặc useEffect khi tab này được focus
       fetchPostRegistration();
-      // Thực hiện các hành động cần thiết khi tab này được chọn
-      // Ví dụ: gọi các hàm, cập nhật state, hoặc fetch dữ liệu mới,...
     }, [])
   );
+
+  const cancelRegistrationById = async (id: number | null) => {
+    await dispatch(
+      cancelPostRegistration({
+        postRegistrationId: id,
+      })
+    ).then((res) => {
+      console.log(JSON.stringify(res, null, 2));
+      if (res?.meta?.requestStatus === 'fulfilled') {
+        showToastSuccess('Cancel successful!');
+        navigation.navigate('REGISTRATION_CANCELLED');
+      } else {
+        const resRejected = res?.payload as ErrorStatus;
+        showToastError(resRejected?.message);
+      }
+    });
+  };
+
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -55,7 +75,7 @@ const useIndex = () => {
     }, 500);
   }, []);
 
-  const handlers = { onRefresh };
+  const handlers = { onRefresh, cancelRegistrationById };
   const state = { refreshing };
   const stateRedux = { postRegistrationList };
 

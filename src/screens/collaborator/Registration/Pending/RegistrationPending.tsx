@@ -8,18 +8,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { FC, useCallback, useEffect, useState } from 'react';
-import Header from '../../../../components/shared/Header/Back';
-import Backward from '../../../../components/shared/Direction/Backward/Backward';
+import React, { FC } from 'react';
 import { FONTS_FAMILY } from '../../../../constants/Fonts';
 import { COLORS } from '../../../../constants/Colors';
 import { ScreenWidth } from '../../../../constants/Demesions';
 import DashedLine from 'react-native-dashed-line';
-import { Entypo, Feather, FontAwesome, FontAwesome5 } from '@expo/vector-icons';
-import { SHADOWS } from '../../../../constants/Shadows';
-import { useAppDispatch } from '../../../../app/store';
-import { useAppSelector } from '../../../../app/hooks';
-import { getAllPostRegistration } from '../../../../features/collaborator/collab.postRegistrationSlice';
 import useRPennding from './useRegistrationPending';
 import {
   format_ISODateString_To_DayOfWeekMonthDD,
@@ -28,12 +21,11 @@ import {
 import { imageNotFoundUri } from '../../../../utils/images';
 import RegistrationEmpty from '../../../../components/shared/Empty/RegistrationEmpty';
 import DataViewPostRegistration from '../../../../models/collaborator/postRegistration.model';
-import { FlashList } from '@shopify/flash-list';
-import DetailButton from '../../../../components/shared/Button/DetailButton';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
 import { useNavigation } from '@react-navigation/native';
 import SortRegistrationButton from '../../../../components/shared/Button/SortRegistrationButton';
 import FilterRegistationButton from '../../../../components/shared/Button/FilterRegistationButton';
+import CancelButton from '../../../../components/shared/Button/CancelButton';
 
 interface Registration_PendingProps {
   // item: string | null;
@@ -42,7 +34,7 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
 
   const { handlers, state, stateRedux } = useRPennding();
-  
+
   const renderListEmptyComponent = () => {
     return <RegistrationEmpty />;
   };
@@ -169,13 +161,7 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
               justifyContent: 'space-evenly',
             }}
           >
-            <DetailButton
-              onPress={() =>
-                navigation.navigate('REGISTRATION_PENDING_DETAIL', {
-                  item,
-                })
-              }
-            />
+            <CancelButton onPress={() => handlers.cancelRegistrationById(item?.id)} />
           </View>
 
           <View style={{ flexDirection: 'row', marginTop: 15 }}>
