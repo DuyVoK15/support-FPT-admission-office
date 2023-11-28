@@ -3,7 +3,7 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import EventTab from '../MainTabs/EventTab';
 import EventDetail from '../../../../screens/collaborator/Event/EventDetail';
-import HomeEventDetail from '../../../../screens/collaborator/Home/homeEventDetail';
+import HomeEventDetail from '../../../../screens/collaborator/Home/homeEventDetail/HomeEventDetail';
 import PositionRegistration from '../../../../screens/collaborator/PositionRegistration';
 import { HomeCollaboratorStackNavigatorParamList } from '../../../../../type';
 import EventNotification from '../../../../screens/collaborator/Notification/EventNotification';

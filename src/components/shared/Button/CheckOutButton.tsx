@@ -19,7 +19,7 @@ const CheckOutButton: FC<CheckOutButtonProps> = (props) => {
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 15,
-        backgroundColor: COLORS?.blue_date,
+        backgroundColor: '#8D786E',
       }}
     >
       <View style={{ flex: 1, marginLeft: 10 }}>
@@ -27,6 +27,7 @@ const CheckOutButton: FC<CheckOutButtonProps> = (props) => {
           style={{
             fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
             fontSize: 15,
+            color: 'white',
           }}
         >
           Check Out
@@ -34,7 +35,7 @@ const CheckOutButton: FC<CheckOutButtonProps> = (props) => {
       </View>
 
       <View style={{ flex: 0, marginRight: 10 }}>
-        <Feather name="log-out" size={20} color="black" />
+        <Feather name="log-out" size={20} color="white" />
       </View>
     </TouchableOpacity>
   );

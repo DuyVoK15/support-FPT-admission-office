@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import { FONTS_FAMILY } from '../../../constants/Fonts';
+import { COLORS } from '../../../constants/Colors';
 
 interface ConfrimAlert {
   show?: boolean;
@@ -13,36 +15,32 @@ interface ConfrimAlert {
   onConfirmPressed?: () => void;
 }
 const ConfirmAlert = (props: ConfrimAlert) => {
-  // const [showAlert, setShowAlert] = useState<boolean>(false);
-
-  // const showAlertHandler = () => {
-  //   setShowAlert(true);
-  // };
-
-  // const hideAlertHandler = () => {
-  //   setShowAlert(false);
-  // };
-
   return (
-    <View style={styles.container}>
-
-      <AwesomeAlert
-      
-        show={props.show}
-        showProgress={false}
-        title={props.title}
-        message={props.message}
-        closeOnTouchOutside={true}
-        closeOnHardwareBackPress={true}
-        showCancelButton={true}
-        showConfirmButton={true}
-        cancelText={props.cancelText}
-        confirmText={props.confirmText}
-        confirmButtonColor={props.confirmButtonColor}
-        onCancelPressed={props.onCancelPressed}
-        onConfirmPressed={props.onConfirmPressed}
-      />
-    </View>
+    <AwesomeAlert
+      useNativeDriver={true}
+      show={props.show}
+      showProgress={false}
+      title={props.title}
+      titleStyle={{
+        fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+        color: COLORS?.orange_icon,
+      }}
+      message={props.message}
+      messageStyle={{
+        fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
+        color: 'black',
+        textAlign: 'center',
+      }}
+      closeOnTouchOutside={false}
+      closeOnHardwareBackPress={false}
+      showCancelButton={true}
+      showConfirmButton={true}
+      cancelText={props.cancelText}
+      confirmText={props.confirmText}
+      confirmButtonColor={props.confirmButtonColor}
+      onCancelPressed={props.onCancelPressed}
+      onConfirmPressed={props.onConfirmPressed}
+    />
   );
 };
 

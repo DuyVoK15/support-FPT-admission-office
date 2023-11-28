@@ -9,6 +9,7 @@ import { UserInfo } from '../../models/collaborator/userInfo.model';
 import UserInfoLogin from '../../models/collaborator/userInfoLogin.model';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import LoadAuthStateResponse from '../../dtos/collaborator/response/loadAuthState.dto';
+import LoginGoogleParams from '../../dtos/collaborator/loginGoogle.dto';
 
 GoogleSignin.configure({});
 
@@ -37,19 +38,21 @@ const initialState: AuthState = {
 
 export const collab_loginGoogle = createAsyncThunk(
   'auth/login-google',
-  async (JWT: string, { rejectWithValue }) => {
+  async (params: LoginGoogleParams, { rejectWithValue }) => {
     try {
-      console.log('<AuthSlice> JWT: ', JWT);
-      const result = await authService.collab_loginGoogle({
-        idToken: JWT,
-        expoPushToken: '',
-      });
+      console.log('<AuthSlice> JWT: ', params?.idToken);
+      console.log('<AuthSlice> ExpoPushToken: ', params?.expoPushToken);
+      const result = await authService.collab_loginGoogle(params);
       // console.log('<AuthSlice> ResData: ', JSON.stringify(result.data.data));
       await AsyncStorage.setItem(
         AppConstants.ACCESS_TOKEN,
         result.data.data.access_token
       );
-      await AsyncStorage.setItem(AppConstants.ID_TOKEN, JWT);
+      await AsyncStorage.setItem(AppConstants.ID_TOKEN, params?.idToken);
+      await AsyncStorage.setItem(
+        "expoPushToken",
+        params?.expoPushToken
+      );
       return result.data;
     } catch (error) {
       const axiosError = error as AxiosError;

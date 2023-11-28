@@ -15,13 +15,13 @@ const RegistrationEmpty = () => {
           justifyContent: 'center',
         }}
       >
-        <Zocial name="dropbox" size={60} color={COLORS?.light_black} />
+        <Zocial name="dropbox" size={66} color={COLORS?.light_black} />
         <View style={{marginTop: 10}}>
           <Text
             style={{
               fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
               color: COLORS?.light_grey,
-              fontSize: 18,
+              fontSize: 24,
             }}
           >
             No Data

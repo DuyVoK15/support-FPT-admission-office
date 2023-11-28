@@ -8,7 +8,7 @@ import EventUpcomming from '../../../../screens/collaborator/Event/EventUpcommin
 import EventTopTabs from '../../EventStack/EventTopTabs';
 import { HomeCollaboratorStackNavigatorParamList } from '../../../../../type';
 import HomeNotification from '../../../../screens/collaborator/Notification/HomeNotitìication';
-import HomeEventDetail from '../../../../screens/collaborator/Home/homeEventDetail';
+import HomeEventDetail from '../../../../screens/collaborator/Home/homeEventDetail/HomeEventDetail';
 
 const Stack =
   createNativeStackNavigator<HomeCollaboratorStackNavigatorParamList>();
