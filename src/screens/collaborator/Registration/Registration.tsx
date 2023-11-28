@@ -1,11 +1,16 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from '../../../components/shared/Header/Back';
 import { ScreenHeight } from '../../../constants/Demesions';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
 import RegistrationTopTabs from '../../../navigation/collaborator/RegistrationStack/RegistrationTopTabs';
+import { Button } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
 
 const Registration = () => {
+  const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
+  
   return (
     <View style={{ flex: 1 }}>
       <Header style={{ height: ScreenHeight / 9, flexDirection: "column", alignItems: "center", justifyContent: "flex-end" }}>

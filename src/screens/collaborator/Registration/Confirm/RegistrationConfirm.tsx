@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { COLORS } from '../../../../constants/Colors';
 import { FONTS_FAMILY } from '../../../../constants/Fonts';
@@ -231,11 +231,11 @@ const Registration_Confirm = () => {
                 </Text>
               </Text>
             </View>
-            {/* {item?.postPositionsUnregistereds?.length > 0 && (
+            {item?.postPositionsUnregistereds?.length > 0 && (
               <View>
                 <TouchableOpacity
                   onPress={() =>
-                    navigation.navigate('REQUEST_CHANGE_POSITION_PENDING', {
+                    navigation.navigate('REQUEST_CHANGE_POSITION_CONFIRM', {
                       id: item?.id,
                     })
                   }
@@ -251,7 +251,7 @@ const Registration_Confirm = () => {
                   </Text>
                 </TouchableOpacity>
               </View>
-            )} */}
+            )}
           </View>
         </View>
       </View>
@@ -276,10 +276,10 @@ const Registration_Confirm = () => {
         </View>
       </View>
 
-      <FlashList
+      <FlatList
         data={props.postRegistrationList?.data}
         renderItem={renderItem}
-        estimatedItemSize={258}
+        contentContainerStyle={{margin: 10}}
         refreshControl={
           <RefreshControl
             refreshing={state.refreshing}

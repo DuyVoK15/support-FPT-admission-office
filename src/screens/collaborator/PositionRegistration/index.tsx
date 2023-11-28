@@ -48,15 +48,41 @@ const PositionRegistration = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const route = useRoute();
   const { item } = route?.params as { item: DataPost };
-  const [showAlert, setShowAlert] = useState<boolean>(false);
 
-  const showAlertHandler = () => {
+  enum TypeButtonEnum {
+    REGISTER = 1,
+    CANCEL = 2,
+    CHECKIN = 3,
+  }
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [message, setMessage] = useState('');
+  const [typeButton, setTypeButton] = useState(0);
+
+  const showAlertHandler = (action?: number | null) => {
+    switch (action) {
+      case TypeButtonEnum.REGISTER:
+        setTypeButton(TypeButtonEnum.REGISTER);
+        setMessage('Are you sure you want to apply for this position?');
+        break;
+      case TypeButtonEnum.CANCEL:
+        setTypeButton(TypeButtonEnum.CANCEL);
+        setMessage('Are you sure you want to Cancel?');
+        break;
+      case TypeButtonEnum.CHECKIN:
+        setTypeButton(TypeButtonEnum.CHECKIN);
+        setMessage('Are you sure you want to Check in?');
+        break;
+      default:
+        setMessage('');
+    }
     setShowAlert(true);
   };
 
   const hideAlertHandler = () => {
     setShowAlert(false);
   };
+
+  const onHandleConfirmPress = () => {};
 
   const [isSelectedBusOption, setIsSelectedBusOption] = useState(
     Array(item?.postPositions.length).fill(false)
@@ -80,7 +106,6 @@ const PositionRegistration = () => {
     schoolBusOption?: boolean,
     positionId?: number
   ) => {
-    hideAlertHandler();
     try {
       const params = {
         schoolBusOption,
@@ -131,9 +156,9 @@ const PositionRegistration = () => {
                   case 4011:
                     showToastError(resRejectedData?.message);
                     break;
-                  case 4012:
-                    showToastError(resRejectedData?.message);
-                    break;
+                  // case 4012:
+                  //   showToastError(resRejectedData?.message);
+                  //   break;
                   case 4013:
                     showToastError(resRejectedData?.message);
                     break;
@@ -146,6 +171,11 @@ const PositionRegistration = () => {
                   case 4016:
                     showToastError(resRejectedData?.message);
                     break;
+                  case 4024:
+                    showToastError(
+                      'You have applied for a position that overlaps with this position'
+                    );
+                    break;
                   default:
                     showToastError('Undefined error!');
                 }
@@ -155,7 +185,7 @@ const PositionRegistration = () => {
                 break;
               case 404:
                 showToastError(resRejectedData?.message);
-                showToastError('404 NOT FOUND');
+                // showToastError('404 NOT FOUND');
                 break;
               default:
                 showToastError('Undefined error!');
@@ -193,7 +223,10 @@ const PositionRegistration = () => {
         onPressFirstButton={() => setShowModal(false)}
         showSecondButton={true}
         secondButtonLabel={"Let's go"}
-        onPressSecondButton={() => navigation.navigate('REGISTRATION_PENDING')}
+        onPressSecondButton={() => {
+          setShowModal(false);
+          navigation.navigate('REGISTRATION_STACK_NAVIGATOR');
+        }}
         onBackdropPress={() => setShowModal(false)}
       />
 
@@ -417,7 +450,9 @@ const PositionRegistration = () => {
                         </View>
                         <View>
                           <SubmitButton
-                            onPress={showAlertHandler}
+                            onPress={() =>
+                              showAlertHandler(TypeButtonEnum.REGISTER)
+                            }
                             style={{
                               marginHorizontal: 40,
                               height: 40,
@@ -426,20 +461,29 @@ const PositionRegistration = () => {
                             textStyle={{ fontSize: 16 }}
                             titleButton="REGISTER NOW"
                           />
+
                           <ConfirmAlert
                             show={showAlert}
-                            title="CONFIRM"
-                            message="Are you sure Are you sure you want to apply for this position?"
+                            title="CONFIRMATION"
+                            message={message}
                             confirmText="Yes"
                             cancelText="No"
                             confirmButtonColor={COLORS.orange_button}
-                            onConfirmPressed={() =>
-                              handleSubmit(
-                                INDEX,
-                                isSelectedBusOption[index],
-                                position.id
-                              )
-                            }
+                            onConfirmPressed={() => {
+                              switch (typeButton) {
+                                case TypeButtonEnum.REGISTER:
+                                  handleSubmit(
+                                    INDEX,
+                                    isSelectedBusOption[index],
+                                    position.id
+                                  );
+                                  break;
+
+                                default:
+                                  console.log('Type Button Null');
+                              }
+                              hideAlertHandler();
+                            }}
                             onCancelPressed={hideAlertHandler}
                           />
                         </View>

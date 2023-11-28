@@ -316,9 +316,51 @@ const HomeEventDetail: FC = () => {
                   Certificate Required
                 </Text>
               </View>
-              <View>
-                <Text>X</Text>
-              </View>
+              <ScrollView horizontal style={{}}>
+                {item?.postPositions &&
+                item?.postPositions?.some(
+                  (position) => position.certificateName !== null
+                ) === true ? (
+                  item?.postPositions
+                    ?.filter((position) => position.certificateName !== null)
+                    ?.map((position, index) => (
+                      <View
+                        style={{
+                          paddingVertical: 6,
+                          paddingHorizontal: 10,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          borderWidth: 2,
+                          borderColor: COLORS?.orange_icon,
+                          borderRadius: 20,
+                          marginRight: 5,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
+                            color: COLORS?.orange_icon,
+                          }}
+                          key={index}
+                        >
+                          {position?.certificateName &&
+                            position?.certificateName}
+                        </Text>
+                      </View>
+                    ))
+                ) : (
+                  <View style={{}}>
+                    <Text
+                      style={{
+                        fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
+                        color: COLORS?.orange_icon,
+                      }}
+                    >
+                      No need Certificate
+                    </Text>
+                  </View>
+                )}
+              </ScrollView>
             </View>
             {/* Button */}
             <View style={{ marginVertical: 20, marginHorizontal: 20 }}>

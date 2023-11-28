@@ -101,9 +101,9 @@ const useHome = () => {
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     setTextSearch(null);
-    await fetchHomePostUpcomming();
-    await fetchHomePostReOpen();
-    await fetchCheckInPostRegistration();
+    // await fetchHomePostUpcomming();
+    // await fetchHomePostReOpen();
+    // await fetchCheckInPostRegistration();
     setTimeout(() => {
       setRefreshing(false);
     }, 0);

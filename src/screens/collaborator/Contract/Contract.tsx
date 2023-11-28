@@ -13,9 +13,6 @@ import Backward from '../../../components/shared/Direction/Backward/Backward';
 import { useNavigation } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
 import useIndex from './useContract';
-import * as FileSystem from 'expo-file-system';
-import FileViewer from 'react-native-file-viewer';
-import useCustomToast from '../../../utils/toasts';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { COLORS } from '../../../constants/Colors';
 import { SHADOWS } from '../../../constants/Shadows';
@@ -26,49 +23,7 @@ import DashedLine from 'react-native-dashed-line';
 const Contract = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const { handlers, state, props } = useIndex();
-  const { showToastSuccess, showToastError } = useCustomToast();
-
-  const [downloadProgress, setDownloadProgress] = useState<number>();
-  const callback = (downloadProgress: any) => {
-    const progress =
-      downloadProgress.totalBytesWritten /
-      downloadProgress.totalBytesExpectedToWrite;
-    setDownloadProgress(progress);
-  };
-
-  const downloadResumable = FileSystem.createDownloadResumable(
-    'https://firebasestorage.googleapis.com/v0/b/supfamof-c8c84.appspot.com/o/images%2Fadmission%2Fevent148ef32d-deea-4626-b872-cf3a8ac81e7d?alt=media&token=29978a67-a006-4b1c-9bd4-e934f7f8c1e1',
-    FileSystem.documentDirectory + 'HAHA.doc',
-    {},
-    callback
-  );
-  const downloadAndOpenFile = async () => {
-    console.log('downloading...');
-    try {
-      await downloadResumable
-        .downloadAsync()
-        .then(async (res) => {
-          const resData = res?.status;
-          if (resData === 200) {
-            showToastSuccess('Download file success!');
-            await FileViewer.open(res?.uri ?? '', { showOpenWithDialog: true }) // absolute-path-to-my-local-file.
-              .then(() => {
-                // success
-                showToastSuccess('View file success!');
-              })
-              .catch((error) => {
-                // error
-                showToastError('View file failed!');
-              });
-          } else {
-            showToastError('Download file failed!');
-          }
-        })
-        .catch((e) => console.log(e));
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  
 
   return (
     <View style={styles.container}>
@@ -118,7 +73,7 @@ const Contract = () => {
                 </View>
                 {/* <View></View> */}
                 <TouchableOpacity
-                  onPress={downloadAndOpenFile}
+                  onPress={handlers.downloadAndOpenFile}
                   style={{
                     borderWidth: 2,
                     alignItems: 'center',
@@ -164,7 +119,7 @@ const Contract = () => {
               <View
                 style={{
                   flexDirection: 'row',
-                  marginTop: 5,
+                  marginTop: 20,
                   justifyContent: 'space-around',
                 }}
               >
@@ -176,7 +131,23 @@ const Contract = () => {
                 </Text>
               </View>
 
-              <View style={{ alignItems: 'flex-start', marginTop: 10 }}>
+              
+            </View>
+          </View>
+        </ScrollView>
+      </View>
+    </View>
+  );
+};
+
+export default Contract;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
+{/* <View style={{ alignItems: 'flex-start', marginTop: 20 }}>
                 <View
                   style={{
                     backgroundColor: '#99F2D1',
@@ -218,7 +189,7 @@ const Contract = () => {
                     <Text
                       style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular }}
                     >
-                      Hieu Nguyen
+                      LE BINH TRUNG
                     </Text>
                     <Text
                       style={{
@@ -226,14 +197,14 @@ const Contract = () => {
                         fontSize: 13,
                       }}
                     >
-                      Admission Officer
+                      Host Admission Officer
                     </Text>
                     <Text
                       style={{
                         fontFamily: FONTS_FAMILY?.Ubuntu_300Light_Italic,
                       }}
                     >
-                      nguyenminhtrunghieu10@gmail.com
+                     trunglb@fe.edu.vn
                     </Text>
                   </View>
                 </View>
@@ -298,19 +269,4 @@ const Contract = () => {
                     />
                   </View>
                 </View>
-              </View>
-            </View>
-          </View>
-        </ScrollView>
-      </View>
-    </View>
-  );
-};
-
-export default Contract;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
+              </View> */}

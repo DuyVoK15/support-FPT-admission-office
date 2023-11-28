@@ -188,8 +188,8 @@ const RequestChangePositionPending = () => {
               </Text>
             </View>
 
-            {list?.data?.[0].postPositionsUnregistereds ? (
-              list?.data?.[0].postPositionsUnregistereds.map(
+            {list?.data?.[0]?.postPositionsUnregistereds ? (
+              list?.data?.[0]?.postPositionsUnregistereds?.map(
                 (position, index) => {
                   const INDEX = index + 1;
                   return (

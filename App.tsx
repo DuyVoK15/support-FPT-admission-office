@@ -1,17 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import {
-  Image,
-  Platform,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
 import AppNavigator from './src/navigation/AppNavigator';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
 import { store } from './src/app/store';
-import { useCallback, useEffect } from 'react';
 import {
   useFonts,
   Ubuntu_300Light,
@@ -25,18 +16,10 @@ import {
 } from '@expo-google-fonts/ubuntu';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ToastProvider } from 'react-native-toast-notifications';
-import {
-  AntDesign,
-  FontAwesome,
-  Ionicons,
-  MaterialIcons,
-} from '@expo/vector-icons';
 import usePushNotifications from './usePushNotifications';
 import { AlertNotificationRoot } from 'react-native-alert-notification';
 import { MyContextProvider } from './src/context/stateContext';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import ErrorPopup from './src/components/shared/PopupNotification/ErrorPopup';
-import SuccessPopup from './src/components/shared/PopupNotification/SuccessPopup';
 import { LogBox } from 'react-native';
 LogBox.ignoreLogs([
   'Sending `onAnimatedValueUpdate` with no listeners registered.',

@@ -17,4 +17,5 @@ export interface DataPosition {
   amount: number;
   salary: number;
   positionRegisterAmount: number;
+  certificateName: string,
 }

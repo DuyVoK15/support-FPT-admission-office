@@ -1,13 +1,13 @@
 import { View, Text } from 'react-native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAppDispatch } from '../../../app/store';
 import { getAllContract } from '../../../features/collaborator/collab.contractSlice';
+import * as FileSystem from 'expo-file-system';
+import FileViewer from 'react-native-file-viewer';
+import useCustomToast from '../../../utils/toasts';
 
 const useIndex = () => {
   const dispatch = useAppDispatch();
-  const handlers = {};
-  const props = {};
-  const state = {};
 
   const fetchContract = async () => {
     try {
@@ -22,6 +22,54 @@ const useIndex = () => {
   useEffect(() => {
     fetchContract();
   }, []);
+
+  const { showToastSuccess, showToastError } = useCustomToast();
+
+  const [downloadProgress, setDownloadProgress] = useState<number>();
+  const callback = (downloadProgress: any) => {
+    const progress =
+      downloadProgress.totalBytesWritten /
+      downloadProgress.totalBytesExpectedToWrite;
+    setDownloadProgress(progress);
+  };
+
+  const downloadResumable = FileSystem.createDownloadResumable(
+    'https://firebasestorage.googleapis.com/v0/b/supfamof-c8c84.appspot.com/o/images%2Fadmission%2Fevent148ef32d-deea-4626-b872-cf3a8ac81e7d?alt=media&token=29978a67-a006-4b1c-9bd4-e934f7f8c1e1',
+    FileSystem.documentDirectory + 'HAHA.doc',
+    {},
+    callback
+  );
+  const downloadAndOpenFile = async () => {
+    console.log('downloading...');
+    try {
+      await downloadResumable
+        .downloadAsync()
+        .then(async (res) => {
+          const resData = res?.status;
+          if (resData === 200) {
+            showToastSuccess('Download file success!');
+            await FileViewer.open(res?.uri ?? '', { showOpenWithDialog: true }) // absolute-path-to-my-local-file.
+              .then(() => {
+                // success
+                showToastSuccess('View file success!');
+              })
+              .catch((error) => {
+                // error
+                showToastError('View file failed!');
+              });
+          } else {
+            showToastError('Download file failed!');
+          }
+        })
+        .catch((e) => console.log(e));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  
+  const handlers = { downloadAndOpenFile };
+  const props = {};
+  const state = {};
 
   return {
     handlers,

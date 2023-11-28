@@ -29,7 +29,7 @@ const Certificate_All_Status = () => {
                 key={index}
                 dateReceive="25-9-2023"
                 certificateID={
-                  certificate?.id ? String(certificate?.id) : 'No value'
+                  certificate?.id ? String(certificate?.trainingCertificate?.id) : 'No value'
                 }
                 certificateName={
                   certificate?.trainingCertificate?.certificateName
