@@ -1,4 +1,5 @@
 import {
+  FlatList,
   Image,
   ScrollView,
   StyleSheet,
@@ -27,6 +28,7 @@ import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
 import { useNavigation } from '@react-navigation/native';
 import FilterRegistationButton from '../../../../components/shared/Button/FilterRegistationButton';
 import SortRegistrationButton from '../../../../components/shared/Button/SortRegistrationButton';
+import { SHADOWS } from '../../../../constants/Shadows';
 
 const Registration_Cancelled = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -62,7 +64,7 @@ const Registration_Cancelled = () => {
               </Text>
               <Text style={styles.textFirst_3}>
                 {item?.registrationCode
-                  ? 'Code: ' + item?.registrationCode
+                  ? 'PRCode: ' + item?.registrationCode
                   : 'No value'}
               </Text>
             </View>
@@ -165,22 +167,44 @@ const Registration_Cancelled = () => {
             />
           </View>
 
-          {/* <View style={{ flexDirection: 'row', marginTop: 5 }}>
-            <View style={{ flex: 1 }}></View>
-            <View>
-              <TouchableOpacity>
-                <Text
-                  style={{
-                    fontFamily: FONTS_FAMILY?.Ubuntu_400Regular_Italic,
-                    fontSize: 13,
-                    textDecorationLine: 'underline',
-                  }}
-                >
-                  Change position
+          <View style={{ flexDirection: 'row', marginTop: 15 }}>
+            <View style={{ flex: 1 }}>
+              <Text
+                style={{
+                  fontFamily: FONTS_FAMILY?.Ubuntu_300Light_Italic,
+                  fontSize: 13,
+                }}
+              >
+                Register at:{' '}
+                <Text>
+                  {item?.createAt
+                    ? format_ISODateString_To_DayOfWeekMonthDD(item?.createAt)
+                    : 'No value'}
                 </Text>
-              </TouchableOpacity>
+              </Text>
             </View>
-          </View> */}
+            {/* {item?.postPositionsUnregistereds?.length > 0 && (
+              <View>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('REQUEST_CHANGE_POSITION_PENDING', {
+                      id: item?.id,
+                    })
+                  }
+                >
+                  <Text
+                    style={{
+                      fontFamily: FONTS_FAMILY?.Ubuntu_400Regular_Italic,
+                      fontSize: 13,
+                      textDecorationLine: 'underline',
+                    }}
+                  >
+                    {item?.isUpdated ? "You've changed" : 'Change position?'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )} */}
+          </View>
         </View>
       </View>
     );
@@ -203,10 +227,10 @@ const Registration_Cancelled = () => {
           <SortRegistrationButton />
         </View>
       </View>
-      <FlashList
+      <FlatList
         data={props.postRegistrationList?.data}
         renderItem={renderItem}
-        estimatedItemSize={100}
+        contentContainerStyle={{margin: 10}}
         refreshControl={
           <RefreshControl
             refreshing={state.refreshing}
@@ -228,17 +252,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   containerItem: {
-    marginHorizontal: 20,
-    backgroundColor: 'white',
+    marginBottom: 15,
+    backgroundColor: '#FFF',
     borderRadius: 15,
-    shadowColor: '#000000',
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 5.62,
-    elevation: 8,
+    ...SHADOWS.SHADOW_06
   },
   containerRow: {
     margin: 15,

@@ -26,6 +26,7 @@ import { useNavigation } from '@react-navigation/native';
 import SortRegistrationButton from '../../../../components/shared/Button/SortRegistrationButton';
 import FilterRegistationButton from '../../../../components/shared/Button/FilterRegistationButton';
 import CancelButton from '../../../../components/shared/Button/CancelButton';
+import { SHADOWS } from '../../../../constants/Shadows';
 
 interface Registration_PendingProps {
   // item: string | null;
@@ -252,14 +253,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     backgroundColor: '#FFF',
     borderRadius: 15,
-    shadowColor: '#000000',
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 5.62,
-    elevation: 6,
+    ...SHADOWS.SHADOW_06
   },
   containerRow: {
     margin: 15,

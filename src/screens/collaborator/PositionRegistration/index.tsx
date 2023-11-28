@@ -42,6 +42,7 @@ import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
 import CreatePostRegistrationParam from '../../../dtos/collaborator/parameter/createPostRegistration.dto';
 import { DataPost } from '../../../models/collaborator/dataPost.model';
 import useCustomToast from '../../../utils/toasts';
+import ConfirmAlertModal from '../../../components/shared/ConfirmAlert/ConfirmAlert';
 
 const PositionRegistration = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -71,6 +72,9 @@ const PositionRegistration = () => {
   const { showToastError, showToastSuccess } = useCustomToast();
 
   const dispatch = useAppDispatch();
+
+  const [showModal, setShowModal] = useState(false);
+
   const handleSubmit = async (
     index?: number,
     schoolBusOption?: boolean,
@@ -86,7 +90,10 @@ const PositionRegistration = () => {
         .then((res) => {
           const requestStatus = res?.meta?.requestStatus;
           console.log(JSON.stringify(res, null, 2));
-          if (requestStatus === 'rejected') {
+          if (requestStatus === 'fulfilled') {
+            showToastSuccess('Register successfully!');
+            setShowModal(true);
+          } else {
             const resRejectedData = res.payload as ErrorStatus;
             switch (resRejectedData?.statusCode) {
               case 400:
@@ -147,16 +154,12 @@ const PositionRegistration = () => {
                 showToastError('You are NOT PERMISSION!');
                 break;
               case 404:
-                showToastError(resRejectedData?.message)
+                showToastError(resRejectedData?.message);
                 showToastError('404 NOT FOUND');
                 break;
               default:
                 showToastError('Undefined error!');
             }
-          }
-
-          if (requestStatus === 'fulfilled') {
-            showToastSuccess('Registered successfully!');
           }
         })
         .catch((error) => {
@@ -179,6 +182,21 @@ const PositionRegistration = () => {
   };
   return (
     <View style={styles.container}>
+      <ConfirmAlertModal
+        isVisible={showModal}
+        title={'SUCCESS'}
+        message={
+          "You've registered successful! Do you want to navigate to Registration Management?"
+        }
+        showFirstButton={true}
+        firstButtonLabel={'Cancel'}
+        onPressFirstButton={() => setShowModal(false)}
+        showSecondButton={true}
+        secondButtonLabel={"Let's go"}
+        onPressSecondButton={() => navigation.navigate('REGISTRATION_PENDING')}
+        onBackdropPress={() => setShowModal(false)}
+      />
+
       <Header>
         <Backward
           onPress={() => navigation.goBack()}
@@ -361,7 +379,8 @@ const PositionRegistration = () => {
                                     fontSize: 14,
                                   }}
                                 >
-                                  {position?.positionRegisterAmount || position?.amount
+                                  {position?.positionRegisterAmount ||
+                                  position?.amount
                                     ? position?.positionRegisterAmount +
                                       ' / ' +
                                       position?.amount +

@@ -106,7 +106,7 @@ const HomeEventDetail: FC = () => {
                       fontFamily: FONTS_FAMILY.Ubuntu_400Regular_Italic,
                     }}
                   >
-                    {item?.postCode ? 'Postcode: ' + '#' + item?.postCode : ''}
+                    {item?.postCode ? 'PCode: ' + item?.postCode : ''}
                   </Text>
                 </View>
               </View>
@@ -178,7 +178,9 @@ const HomeEventDetail: FC = () => {
                       marginVertical: 2,
                     }}
                   >
-                    {item?.postPositions?.[0]?.schoolName ? item?.postPositions?.[0]?.schoolName : "No value"}
+                    {item?.postPositions?.[0]?.schoolName
+                      ? item?.postPositions?.[0]?.schoolName
+                      : 'No value'}
                   </Text>
                   <Text
                     style={{
@@ -189,7 +191,9 @@ const HomeEventDetail: FC = () => {
                       maxWidth: 300,
                     }}
                   >
-                    {item?.postPositions?.[0]?.location ? item?.postPositions?.[0]?.location : "No value"}
+                    {item?.postPositions?.[0]?.location
+                      ? item?.postPositions?.[0]?.location
+                      : 'No value'}
                   </Text>
                 </View>
               </View>
@@ -223,7 +227,9 @@ const HomeEventDetail: FC = () => {
                       borderRadius: 10,
                     }}
                     source={{
-                      uri: item?.account?.imgUrl ? item?.account?.imgUrl : imageUndefinedUserUri,
+                      uri: item?.account?.imgUrl
+                        ? item?.account?.imgUrl
+                        : imageUndefinedUserUri,
                     }}
                   />
                 </View>
@@ -235,7 +241,7 @@ const HomeEventDetail: FC = () => {
                       marginVertical: 2,
                     }}
                   >
-                    {item?.account?.email ? item?.account?.email : "No value"}
+                    {item?.account?.email ? item?.account?.email : 'No value'}
                   </Text>
                   <Text
                     style={{

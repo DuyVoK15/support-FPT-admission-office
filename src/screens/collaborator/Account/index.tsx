@@ -164,7 +164,7 @@ const Account = () => {
               </View>
               <View style={styles.column2}>
                 <View>
-                  <Text style={styles.text}>My Wallet</Text>
+                  <Text style={styles.text}>My Income</Text>
                 </View>
               </View>
               <View style={styles.column3}>

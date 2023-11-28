@@ -24,6 +24,7 @@ import { FlashList } from '@shopify/flash-list';
 import ChangePositionButton from '../../../../components/shared/Button/ChangePositionButton';
 import useRegistrationConfirm from './useRegistrationConfirm';
 import CancelButton from '../../../../components/shared/Button/CancelButton';
+import { SHADOWS } from '../../../../constants/Shadows';
 
 const Registration_Confirm = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -215,17 +216,42 @@ const Registration_Confirm = () => {
             )}
           </View>
           <View style={{ flexDirection: 'row', marginTop: 15 }}>
-            <View style={{ flex: 1 }}></View>
-            <View>
-              <ChangePositionButton
-                titleButton={'Change position?'}
-                onPress={() =>
-                  navigation.navigate('REQUEST_CHANGE_POSITION_CONFIRM', {
-                    id: item?.id,
-                  })
-                }
-              />
+            <View style={{ flex: 1 }}>
+              <Text
+                style={{
+                  fontFamily: FONTS_FAMILY?.Ubuntu_300Light_Italic,
+                  fontSize: 13,
+                }}
+              >
+                Register at:{' '}
+                <Text>
+                  {item?.createAt
+                    ? format_ISODateString_To_DayOfWeekMonthDD(item?.createAt)
+                    : 'No value'}
+                </Text>
+              </Text>
             </View>
+            {/* {item?.postPositionsUnregistereds?.length > 0 && (
+              <View>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('REQUEST_CHANGE_POSITION_PENDING', {
+                      id: item?.id,
+                    })
+                  }
+                >
+                  <Text
+                    style={{
+                      fontFamily: FONTS_FAMILY?.Ubuntu_400Regular_Italic,
+                      fontSize: 13,
+                      textDecorationLine: 'underline',
+                    }}
+                  >
+                    {item?.isUpdated ? "You've changed" : 'Change position?'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )} */}
           </View>
         </View>
       </View>
@@ -275,18 +301,10 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   containerItem: {
-    marginVertical: 15,
-    marginHorizontal: 10,
-    backgroundColor: 'white',
+    marginBottom: 15,
+    backgroundColor: '#FFF',
     borderRadius: 15,
-    shadowColor: '#000000',
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 5.62,
-    elevation: 8,
+    ...SHADOWS.SHADOW_06
   },
   containerRow: {
     margin: 15,

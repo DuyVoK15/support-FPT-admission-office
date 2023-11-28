@@ -42,6 +42,7 @@ import useHome from './useHome';
 import { Controller } from 'react-hook-form';
 import SearchTextInput from '../../../components/collaborator/Home/SearchTextInput';
 import MovingText from '../../../components/shared/TextAnimated/MovingText';
+import ConfirmAlert from '../../../components/shared/ConfirmAlert/ConfirmAlert';
 
 const Home = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -202,11 +203,7 @@ const Home = () => {
 
             <TouchableOpacity
               style={{ flexDirection: 'row', alignItems: 'center' }}
-              onPress={() =>
-                navigation.navigate('EVENT_STACK_NAVIGATOR', {
-                  screen: 'EVENT',
-                })
-              }
+              onPress={() => navigation.navigate('EVENT_UPCOMMING')}
             >
               <View>
                 <Text
@@ -314,14 +311,10 @@ const Home = () => {
                 Post Re-Open
               </Text>
             </View>
-
             <TouchableOpacity
               style={{ flexDirection: 'row', alignItems: 'center' }}
               onPress={
-                () =>
-                  navigation.navigate('EVENT_STACK_NAVIGATOR', {
-                    screen: 'EVENT',
-                  })
+                () => navigation.navigate('EVENT_REOPEN')
                 // () => console.log('navigation')
               }
             >
