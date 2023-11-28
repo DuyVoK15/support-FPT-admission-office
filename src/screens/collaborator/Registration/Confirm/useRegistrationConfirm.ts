@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../../../app/store';
 import { useAppSelector } from '../../../../app/hooks';
 import {
+  cancelPostRegistration,
   getAllPostRegistration,
   getAllPostRegistration_Completed,
   getAllPostRegistration_Confirmed,
@@ -17,10 +18,13 @@ import * as Location from 'expo-location';
 import { CheckAttendanceResponse } from '../../../../dtos/collaborator/response/checkAttendance.dto';
 import ErrorStatus from '../../../../dtos/collaborator/response/errorStatus.dto';
 import useCustomToast from '../../../../utils/toasts';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
 
 const useIndex = () => {
   const dispatch = useAppDispatch();
+  const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
+
   const postRegistrationList = useAppSelector(
     (state) => state.collab_postRegistration.postRegistrationConfirmed
   );
@@ -149,8 +153,9 @@ const useIndex = () => {
         if (res?.meta?.requestStatus === 'fulfilled') {
           const resFulfilledData = res.payload as CheckAttendanceResponse;
           showToastSuccess('Check Out Successful!');
-          dispatch_getAllPostRegistration_Confirmed();
-          dispatch_getAllPostRegistration_Completed();
+          // dispatch_getAllPostRegistration_Confirmed();
+          // dispatch_getAllPostRegistration_Completed();
+          navigation.navigate('REGISTRATION_COMPLETED');
         } else {
           const resRejectedData = res.payload as ErrorStatus;
           switch (resRejectedData?.statusCode) {
@@ -200,6 +205,21 @@ const useIndex = () => {
     );
   };
 
+  const cancelRegistrationById = async (id: number | null) => {
+    await dispatch(
+      cancelPostRegistration({
+        postRegistrationId: id,
+      })
+    ).then((res) => {
+      console.log(JSON.stringify(res, null, 2));
+      if (res?.meta?.requestStatus === 'fulfilled') {
+        showToastSuccess('Cancel successful!');
+      } else {
+        const resRejected = res?.payload as ErrorStatus;
+        showToastError(resRejected?.message);
+      }
+    });
+  };
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -213,6 +233,7 @@ const useIndex = () => {
     onRefresh,
     checkInPostRegistation,
     checkOutPostRegistation,
+    cancelRegistrationById
   };
   const state = { refreshing };
   const props = { postRegistrationList };

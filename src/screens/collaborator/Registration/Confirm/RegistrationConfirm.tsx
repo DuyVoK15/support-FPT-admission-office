@@ -23,6 +23,7 @@ import SortRegistrationButton from '../../../../components/shared/Button/SortReg
 import { FlashList } from '@shopify/flash-list';
 import ChangePositionButton from '../../../../components/shared/Button/ChangePositionButton';
 import useRegistrationConfirm from './useRegistrationConfirm';
+import CancelButton from '../../../../components/shared/Button/CancelButton';
 
 const Registration_Confirm = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -115,7 +116,7 @@ const Registration_Confirm = () => {
               <Text style={styles.textSecond_2}>
                 {item?.postPosition?.timeFrom
                   ? format_Time_To_HHss(item?.postPosition?.timeFrom)
-                    ? format_Time_To_HHss(item?.postPosition?.timeFrom) + ' AM'
+                    ? format_Time_To_HHss(item?.postPosition?.timeFrom) + ''
                     : 'No value'
                   : 'No value'}
               </Text>
@@ -207,13 +208,11 @@ const Registration_Confirm = () => {
               <View />
             )}
             {/* View Detail Button */}
-            <DetailButton
-              onPress={() =>
-                navigation.navigate('REGISTRATION_CONFIRM_DETAIL', {
-                  item,
-                })
-              }
-            />
+            {item?.status === RegistrationStatus.CONFIRM && (
+              <CancelButton
+                onPress={() => handlers.cancelRegistrationById(item?.id)}
+              />
+            )}
           </View>
           <View style={{ flexDirection: 'row', marginTop: 15 }}>
             <View style={{ flex: 1 }}></View>
