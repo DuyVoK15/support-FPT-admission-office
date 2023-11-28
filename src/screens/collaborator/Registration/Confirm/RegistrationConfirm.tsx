@@ -1,5 +1,12 @@
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React from 'react';
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, { useState } from 'react';
 import { COLORS } from '../../../../constants/Colors';
 import { FONTS_FAMILY } from '../../../../constants/Fonts';
 import { ScreenWidth } from '../../../../constants/Demesions';
@@ -25,10 +32,62 @@ import ChangePositionButton from '../../../../components/shared/Button/ChangePos
 import useRegistrationConfirm from './useRegistrationConfirm';
 import CancelButton from '../../../../components/shared/Button/CancelButton';
 import { SHADOWS } from '../../../../constants/Shadows';
+import ConfirmAlert from '../../../../components/shared/AwesomeAlert/ConfirmAlert';
 
 const Registration_Confirm = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const { handlers, state, props } = useRegistrationConfirm();
+  enum TypeButtonEnum {
+    REGISTER = 1,
+    CANCEL = 2,
+    CHECKIN = 3,
+    CHECKOUT = 4,
+  }
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [message, setMessage] = useState('');
+  const [typeButton, setTypeButton] = useState(0);
+  const [Item, setItem] = useState<DataViewPostRegistration | null>(null);
+  const showAlertHandler = (
+    action: number | null,
+    item: DataViewPostRegistration | null
+  ) => {
+    switch (action) {
+      case TypeButtonEnum.REGISTER:
+        setTypeButton(TypeButtonEnum.REGISTER);
+        setMessage(
+          `Are you sure you want to apply for "${(
+            <Text>{item?.postPosition?.positionName}</Text>
+          )}" position?`
+        );
+        break;
+      case TypeButtonEnum.CANCEL:
+        setTypeButton(TypeButtonEnum.CANCEL);
+        setMessage(
+          `Are you sure you want to Cancel "${item?.postPosition?.positionName}" position?`
+        );
+        break;
+      case TypeButtonEnum.CHECKIN:
+        setTypeButton(TypeButtonEnum.CHECKIN);
+        setMessage(
+          `Are you sure you want to Check In "${item?.postPosition?.positionName}" position?`
+        );
+        break;
+      case TypeButtonEnum.CHECKOUT:
+        setTypeButton(TypeButtonEnum.CHECKOUT);
+        setMessage(
+          `Are you sure you want to Check Out "${item?.postPosition?.positionName}" position?`
+        );
+        break;
+      default:
+        setMessage('');
+    }
+    setItem(item);
+    setShowAlert(true);
+  };
+
+  const hideAlertHandler = () => {
+    setShowAlert(false);
+  };
 
   const renderListEmptyComponent = () => {
     return <RegistrationEmpty />;
@@ -199,35 +258,132 @@ const Registration_Confirm = () => {
           >
             {item?.status === RegistrationStatus.CONFIRM ? (
               <CheckInButton
-                onPress={() => handlers.checkInPostRegistation(item?.id)}
+                onPress={() => showAlertHandler(TypeButtonEnum.CHECKIN, item)}
               />
             ) : item?.status === RegistrationStatus.CHECKIN ? (
               <CheckOutButton
-                onPress={() => handlers.checkOutPostRegistation(item?.id)}
+                onPress={() => showAlertHandler(TypeButtonEnum.CHECKOUT, item)}
               />
             ) : (
               <View />
             )}
             {/* View Detail Button */}
-            {item?.status === RegistrationStatus.CONFIRM && (
+            {/* {item?.status === RegistrationStatus.CONFIRM && (
               <CancelButton
-                onPress={() => handlers.cancelRegistrationById(item?.id)}
+                onPress={() => showAlertHandler(TypeButtonEnum.CANCEL, item)}
               />
-            )}
+            )} */}
           </View>
-          <View style={{ flexDirection: 'row', marginTop: 15 }}>
+
+          <DashedLine
+            style={{ marginTop: 20, marginBottom: 15 }}
+            dashGap={0}
+            dashThickness={1}
+            dashLength={8}
+            dashColor={COLORS.super_light_grey}
+          />
+
+          <ConfirmAlert
+            show={showAlert}
+            title="CONFIRMATION"
+            message={message}
+            confirmText="Yes"
+            cancelText="No"
+            confirmButtonColor={COLORS.orange_button}
+            onConfirmPressed={() => {
+              switch (typeButton) {
+                case TypeButtonEnum.REGISTER:
+                  setTypeButton(TypeButtonEnum.REGISTER);
+                  setMessage(
+                    'Are you sure you want to apply for this position?'
+                  );
+                  break;
+                case TypeButtonEnum.CANCEL:
+                  handlers.cancelRegistrationById(Item?.id ?? null);
+                  console.log(Item?.id);
+                  break;
+                case TypeButtonEnum.CHECKIN:
+                  handlers.checkInPostRegistation(Item?.id ?? null);
+                  console.log(Item?.id);
+                  break;
+                case TypeButtonEnum.CHECKOUT:
+                  handlers.checkOutPostRegistation(Item?.id ?? null);
+                  console.log(Item?.id);
+                  break;
+                default:
+                  setMessage('');
+              }
+              hideAlertHandler();
+            }}
+            onCancelPressed={hideAlertHandler}
+          />
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <View style={{ flex: 1 }}>
               <Text
                 style={{
-                  fontFamily: FONTS_FAMILY?.Ubuntu_300Light_Italic,
+                  fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
                   fontSize: 13,
                 }}
               >
-                Register at:{' '}
-                <Text>
+                Registered at:{' '}
+                <Text
+                  style={{
+                    fontFamily: FONTS_FAMILY?.Ubuntu_300Light_Italic,
+                    fontSize: 13,
+                  }}
+                >
                   {item?.createAt
-                    ? format_ISODateString_To_DayOfWeekMonthDD(item?.createAt)
+                    ? format_ISODateString_To_DayOfWeekMonthDD(
+                        item?.createAt,
+                        true
+                      )
                     : 'No value'}
+                </Text>
+              </Text>
+              <Text
+                style={{
+                  marginTop: 3,
+                  fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                  fontSize: 13,
+                }}
+              >
+                Confirmed at:{' '}
+                <Text
+                  style={{
+                    marginTop: 3,
+                    fontFamily: FONTS_FAMILY?.Ubuntu_300Light_Italic,
+                    fontSize: 13,
+                  }}
+                >
+                  {item?.createAt
+                    ? format_ISODateString_To_DayOfWeekMonthDD(
+                        item?.updateAt,
+                        true
+                      )
+                    : 'No value'}
+                </Text>
+              </Text>
+              <Text
+                style={{
+                  marginTop: 3,
+                  fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                  fontSize: 13,
+                }}
+              >
+                CheckedIn at:{' '}
+                <Text
+                  style={{
+                    marginTop: 3,
+                    fontFamily: FONTS_FAMILY?.Ubuntu_300Light_Italic,
+                    fontSize: 13,
+                  }}
+                >
+                  {item?.checkAttendances?.[0]?.checkInTime
+                    ? format_ISODateString_To_DayOfWeekMonthDD(
+                        item?.checkAttendances?.[0]?.checkInTime,
+                        true
+                      )
+                    : "You've not CheckIn"}
                 </Text>
               </Text>
             </View>
@@ -279,7 +435,7 @@ const Registration_Confirm = () => {
       <FlatList
         data={props.postRegistrationList?.data}
         renderItem={renderItem}
-        contentContainerStyle={{margin: 10}}
+        contentContainerStyle={{ margin: 10 }}
         refreshControl={
           <RefreshControl
             refreshing={state.refreshing}
@@ -304,7 +460,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     backgroundColor: '#FFF',
     borderRadius: 15,
-    ...SHADOWS.SHADOW_06
+    ...SHADOWS.SHADOW_06,
   },
   containerRow: {
     margin: 15,

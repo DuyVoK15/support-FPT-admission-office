@@ -120,76 +120,83 @@ const PositionRegistration = () => {
             setShowModal(true);
           } else {
             const resRejectedData = res.payload as ErrorStatus;
-            switch (resRejectedData?.statusCode) {
-              case 400:
-                switch (resRejectedData?.errorCode) {
-                  case 4001:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4002:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4003:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4004:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4005:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4006:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4007:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4008:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4009:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4010:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4011:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  // case 4012:
-                  //   showToastError(resRejectedData?.message);
-                  //   break;
-                  case 4013:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4014:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4015:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4016:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4024:
-                    showToastError(
-                      'You have applied for a position that overlaps with this position'
-                    );
-                    break;
-                  default:
-                    showToastError('Undefined error!');
-                }
-                break;
-              case 401:
-                showToastError('You are NOT PERMISSION!');
-                break;
-              case 404:
-                showToastError(resRejectedData?.message);
-                // showToastError('404 NOT FOUND');
-                break;
-              default:
-                showToastError('Undefined error!');
-            }
+            // switch (resRejectedData?.statusCode) {
+            //   case 400:
+            //     switch (resRejectedData?.errorCode) {
+            //       case 4001:
+            //         showToastError(resRejectedData?.message);
+            //         break;
+            //       case 4002:
+            //         showToastError(resRejectedData?.message);
+            //         break;
+            //       case 4003:
+            //         showToastError(resRejectedData?.message);
+            //         break;
+            //       case 4004:
+            //         showToastError(resRejectedData?.message);
+            //         break;
+            //       case 4005:
+            //         showToastError(resRejectedData?.message);
+            //         break;
+            //       case 4006:
+            //         showToastError(resRejectedData?.message);
+            //         break;
+            //       case 4007:
+            //         showToastError(resRejectedData?.message);
+            //         break;
+            //       case 4008:
+            //         showToastError(resRejectedData?.message);
+            //         break;
+            //       case 4009:
+            //         showToastError(resRejectedData?.message);
+            //         break;
+            //       case 4010:
+            //         showToastError(resRejectedData?.message);
+            //         break;
+            //       case 4011:
+            //         showToastError(resRejectedData?.message);
+            //         break;
+            //       // case 4012:
+            //       //   showToastError(resRejectedData?.message);
+            //       //   break;
+            //       case 4013:
+            //         showToastError(resRejectedData?.message);
+            //         break;
+            //       case 4014:
+            //         showToastError(resRejectedData?.message);
+            //         break;
+            //       case 4015:
+            //         showToastError(resRejectedData?.message);
+            //         break;
+            //       case 4016:
+            //         showToastError(resRejectedData?.message);
+            //         break;
+            //         case 4016:
+            //         showToastError(resRejectedData?.message);
+            //         break;
+            //         case 4016:
+            //         showToastError(resRejectedData?.message);
+            //         break;
+            //       case 4024:
+            //         showToastError(
+            //           'You have applied for a position that overlaps with this position'
+            //         );
+            //         break;
+            //       default:
+            //         showToastError('Undefined error!');
+            //     }
+            //     break;
+            //   case 401:
+            //     showToastError('You are NOT PERMISSION!');
+            //     break;
+            //   case 404:
+            //     showToastError(resRejectedData?.message);
+            //     // showToastError('404 NOT FOUND');
+            //     break;
+            //   default:
+            //     showToastError('Undefined error!');
+            // }
+            showToastError(resRejectedData?.message);
           }
         })
         .catch((error) => {
@@ -475,8 +482,9 @@ const PositionRegistration = () => {
                                   handleSubmit(
                                     INDEX,
                                     isSelectedBusOption[index],
-                                    position.id
+                                    position?.id
                                   );
+                                  console.log(position?.positionName)
                                   break;
 
                                 default:

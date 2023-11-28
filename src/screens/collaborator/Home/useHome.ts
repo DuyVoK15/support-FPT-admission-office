@@ -37,7 +37,7 @@ const useHome = () => {
       search: textSearch,
     };
     await dispatch(getHomePostUpcomming(params)).then((res) => {
-      console.log('Alo: ', JSON.stringify(res, null, 2));
+      // console.log('Alo: ', JSON.stringify(res, null, 2));
     });
   };
   // useEffect(() => {
@@ -65,7 +65,7 @@ const useHome = () => {
       search: textSearch,
     };
     await dispatch(getHomePostReOpen(params)).then((res) => {
-      console.log('Alo: ', res?.payload);
+      // console.log('Alo: ', res?.payload);
     });
   };
 

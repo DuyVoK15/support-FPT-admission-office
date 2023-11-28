@@ -18,6 +18,8 @@ const useIndex = () => {
   const fetchPostRegistration = async () => {
     await dispatch(
       getAllPostRegistration_Cancelled({
+        Sort: 'CreateAt',
+        Order: 'DESCENDING',
         RegistrationStatus: [RegistrationStatus.CANCEL],
       })
     ).then((res) => {

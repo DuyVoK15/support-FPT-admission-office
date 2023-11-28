@@ -168,18 +168,95 @@ const Registration_Completed = () => {
           </View>
 
           <View style={{ flexDirection: 'row', marginTop: 15 }}>
-            <View style={{ flex: 1 }}>
+          <View style={{ flex: 1 }}>
               <Text
                 style={{
-                  fontFamily: FONTS_FAMILY?.Ubuntu_300Light_Italic,
+                  fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
                   fontSize: 13,
                 }}
               >
-                Register at:{' '}
-                <Text>
+                Registered at:{' '}
+                <Text
+                  style={{
+                    fontFamily: FONTS_FAMILY?.Ubuntu_300Light_Italic,
+                    fontSize: 13,
+                  }}
+                >
                   {item?.createAt
-                    ? format_ISODateString_To_DayOfWeekMonthDD(item?.createAt)
+                    ? format_ISODateString_To_DayOfWeekMonthDD(
+                        item?.createAt,
+                        true
+                      )
                     : 'No value'}
+                </Text>
+              </Text>
+              <Text
+                style={{
+                  marginTop: 3,
+                  fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                  fontSize: 13,
+                }}
+              >
+                Confirmed at:{' '}
+                <Text
+                  style={{
+                    marginTop: 3,
+                    fontFamily: FONTS_FAMILY?.Ubuntu_300Light_Italic,
+                    fontSize: 13,
+                  }}
+                >
+                  {item?.createAt
+                    ? format_ISODateString_To_DayOfWeekMonthDD(
+                        item?.updateAt,
+                        true
+                      )
+                    : 'No value'}
+                </Text>
+              </Text>
+              <Text
+                style={{
+                  marginTop: 3,
+                  fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                  fontSize: 13,
+                }}
+              >
+                CheckedIn at:{' '}
+                <Text
+                  style={{
+                    marginTop: 3,
+                    fontFamily: FONTS_FAMILY?.Ubuntu_300Light_Italic,
+                    fontSize: 13,
+                  }}
+                >
+                  {item?.checkAttendances?.[0]?.checkInTime
+                    ? format_ISODateString_To_DayOfWeekMonthDD(
+                        item?.checkAttendances?.[0]?.checkInTime,
+                        true
+                      )
+                    : "You've not CheckIn"}
+                </Text>
+              </Text>
+              <Text
+                style={{
+                  marginTop: 3,
+                  fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                  fontSize: 13,
+                }}
+              >
+                CheckedOut at:{' '}
+                <Text
+                  style={{
+                    marginTop: 3,
+                    fontFamily: FONTS_FAMILY?.Ubuntu_300Light_Italic,
+                    fontSize: 13,
+                  }}
+                >
+                  {item?.checkAttendances?.[0]?.checkOutTime
+                    ? format_ISODateString_To_DayOfWeekMonthDD(
+                        item?.checkAttendances?.[0]?.checkOutTime,
+                        true
+                      )
+                    : "No value"}
                 </Text>
               </Text>
             </View>

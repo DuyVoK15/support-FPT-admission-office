@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { FONTS_FAMILY } from '../../../../constants/Fonts';
 import { COLORS } from '../../../../constants/Colors';
 import { ScreenWidth } from '../../../../constants/Demesions';
@@ -27,6 +27,8 @@ import SortRegistrationButton from '../../../../components/shared/Button/SortReg
 import FilterRegistationButton from '../../../../components/shared/Button/FilterRegistationButton';
 import CancelButton from '../../../../components/shared/Button/CancelButton';
 import { SHADOWS } from '../../../../constants/Shadows';
+import WarningAlert from '../../../../components/shared/AwesomeAlert/WarningAlert';
+import ConfirmAlert from '../../../../components/shared/AwesomeAlert/ConfirmAlert';
 
 interface Registration_PendingProps {
   // item: string | null;
@@ -35,7 +37,43 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
 
   const { handlers, state, stateRedux } = useRPennding();
+  enum TypeButtonEnum {
+    REGISTER = 1,
+    CANCEL = 2,
+    CHECKIN = 3,
+  }
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [message, setMessage] = useState('');
+  const [typeButton, setTypeButton] = useState(0);
+  const [Item, setItem] = useState<DataViewPostRegistration | null>(null);
+  const showAlertHandler = (
+    action: number | null,
+    item: DataViewPostRegistration | null
+  ) => {
+    switch (action) {
+      case TypeButtonEnum.REGISTER:
+        setTypeButton(TypeButtonEnum.REGISTER);
+        setMessage('Are you sure you want to apply for this position?');
+        break;
+      case TypeButtonEnum.CANCEL:
+        setTypeButton(TypeButtonEnum.CANCEL);
+        setMessage('Are you sure you want to Cancel?');
+        break;
+      case TypeButtonEnum.CHECKIN:
+        setTypeButton(TypeButtonEnum.CHECKIN);
+        setMessage('Are you sure you want to Check in?');
+        break;
+      default:
+        setMessage('');
+    }
+    setItem(item);
+    setShowAlert(true);
+  };
 
+  const hideAlertHandler = () => {
+    setShowAlert(false);
+  };
+  // JSX
   const renderListEmptyComponent = () => {
     return <RegistrationEmpty />;
   };
@@ -125,7 +163,7 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
               <Text style={styles.textSecond_2}>
                 {item?.postPosition?.timeFrom
                   ? format_Time_To_HHss(item?.postPosition?.timeFrom)
-                    ? format_Time_To_HHss(item?.postPosition?.timeFrom) + ' AM'
+                    ? format_Time_To_HHss(item?.postPosition?.timeFrom)
                     : 'No value'
                   : 'No value'}
               </Text>
@@ -162,21 +200,51 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
               justifyContent: 'space-evenly',
             }}
           >
-            <CancelButton onPress={() => handlers.cancelRegistrationById(item?.id)} />
+            <CancelButton
+              onPress={() => showAlertHandler(TypeButtonEnum.CANCEL, item)}
+            />
           </View>
+          <ConfirmAlert
+            show={showAlert}
+            title="CONFIRMATION"
+            message={message}
+            confirmText="Yes"
+            cancelText="No"
+            confirmButtonColor={COLORS.orange_button}
+            onConfirmPressed={() => {
+              switch (typeButton) {
+                case TypeButtonEnum.CANCEL:
+                  handlers.cancelRegistrationById(Item?.id ?? null);
+                  console.log(Item?.id);
+                  break;
 
+                default:
+                  console.log('Type Button Null');
+              }
+              hideAlertHandler();
+            }}
+            onCancelPressed={hideAlertHandler}
+          />
           <View style={{ flexDirection: 'row', marginTop: 15 }}>
             <View style={{ flex: 1 }}>
-              <Text
+            <Text
                 style={{
-                  fontFamily: FONTS_FAMILY?.Ubuntu_300Light_Italic,
+                  fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
                   fontSize: 13,
                 }}
               >
-                Register at:{' '}
-                <Text>
+                Registered at:{' '}
+                <Text
+                  style={{
+                    fontFamily: FONTS_FAMILY?.Ubuntu_300Light_Italic,
+                    fontSize: 13,
+                  }}
+                >
                   {item?.createAt
-                    ? format_ISODateString_To_DayOfWeekMonthDD(item?.createAt)
+                    ? format_ISODateString_To_DayOfWeekMonthDD(
+                        item?.createAt,
+                        true
+                      )
                     : 'No value'}
                 </Text>
               </Text>
@@ -253,7 +321,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     backgroundColor: '#FFF',
     borderRadius: 15,
-    ...SHADOWS.SHADOW_06
+    ...SHADOWS.SHADOW_06,
   },
   containerRow: {
     margin: 15,
@@ -321,8 +389,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     right: 0,
-    borderWidth: 1,
+    borderWidth: 2,
     borderRadius: 30,
+    borderColor: COLORS.orange_button,
   },
   statusRow: {
     flexDirection: 'row',
@@ -332,9 +401,9 @@ const styles = StyleSheet.create({
   },
   thirdRow: { flexDirection: 'row', alignItems: 'center' },
   thirdText: {
-    fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+    fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
     fontSize: 14,
-    color: COLORS.light_grey,
+    color: COLORS.orange_button,
   },
   statusDot: {
     width: 12,

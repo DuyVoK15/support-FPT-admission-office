@@ -38,6 +38,7 @@ import { RegistrationStatus } from '../../../../../enums/collaborator/Registrati
 import { async } from '@firebase/util';
 import { useAppSelector } from '../../../../../app/hooks';
 import RegistrationEmpty from '../../../../../components/shared/Empty/RegistrationEmpty';
+import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
 
 interface RequestChangePositionProps {
   onRefresh: () => void;
@@ -79,6 +80,17 @@ const RequestChangePositionConfirm = () => {
   };
   useEffect(() => {
     fetchPostRegistrationById();
+  }, []);
+
+  useEffect(() => {
+    Dialog.show({
+      type: ALERT_TYPE.WARNING,
+      title: 'WARNING',
+      textBody:
+        'NOTE: Your registration have been CONFIRM. When you change position, must be send request to Admisstion Officer.',
+      button: 'Close',
+      // autoClose: 100,
+    });
   }, []);
 
   const [refreshing, setRefreshing] = useState<boolean>(false);
@@ -129,6 +141,7 @@ const RequestChangePositionConfirm = () => {
           // );
           // navigation.goBack();
           showToastSuccess('Send Request Success');
+          navigation.navigate('REQUEST_UPDATE_HISTORY', { id });
           console.log(JSON.stringify(res, null, 2));
         } else {
           const resRejectedData = res?.payload as ErrorStatus;
@@ -163,7 +176,7 @@ const RequestChangePositionConfirm = () => {
           >
             List of available position you can change
           </Text>
-          <View style={{ marginTop: 5 }}>
+          {/* <View style={{ marginTop: 5 }}>
             <Text
               style={{
                 fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
@@ -176,9 +189,9 @@ const RequestChangePositionConfirm = () => {
               <Text style={{ color: 'red' }}>CONFIRMED.</Text> When you change
               position, must be send request to Admisstion Officer.
             </Text>
-          </View>
+          </View> */}
 
-          <View style={{ marginTop: 5 }}>
+          {/* <View style={{ marginTop: 5 }}>
             <Text
               style={{
                 fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
@@ -189,20 +202,27 @@ const RequestChangePositionConfirm = () => {
             >
               Check your request update history below
             </Text>
-          </View>
-          <View style={{marginTop: 10}}>
+          </View> */}
+          <View style={{ marginTop: 10 }}>
             <TouchableOpacity
               style={{
                 paddingVertical: 10,
-                paddingHorizontal: 10,
+                paddingHorizontal: 14,
                 borderRadius: 20,
-                backgroundColor: 'yellow',
+                backgroundColor: 'green',
               }}
               onPress={() =>
                 navigation.navigate('REQUEST_UPDATE_HISTORY', { id })
               }
             >
-              <Text>View Request Update History</Text>
+              <Text
+                style={{
+                  fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
+                  color: 'white',
+                }}
+              >
+                View Request Update History
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -467,8 +487,8 @@ const RequestChangePositionConfirm = () => {
                               />
                               <ConfirmAlert
                                 show={showAlert}
-                                title="CONFIRM"
-                                message={`Are you sure want to apply for ${position?.positionName} position?`}
+                                title="CONFIRMATION"
+                                message={`Are you sure want to Change To "${position?.positionName}" position?`}
                                 confirmText="Yes"
                                 cancelText="No"
                                 confirmButtonColor={COLORS.orange_button}
@@ -480,7 +500,7 @@ const RequestChangePositionConfirm = () => {
                                 }
                                 onCancelPressed={hideAlertHandler}
                               />
-                            </View>                          
+                            </View>
                           </View>
                         )}
                       </View>

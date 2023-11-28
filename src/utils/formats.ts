@@ -170,22 +170,10 @@ export function format_ISODateString_To_MonthDD(isoDateString: string) {
   return customDateString;
 }
 
-export function format_ISODateString_To_DayOfWeekMonthDD(
-  isoDateString: string
-) {
+export function format_ISODateString_To_DayOfWeekMonthDD(isoDateString: string, includeTime: boolean = false) {
   const months = [
-    'JAN',
-    'FEB',
-    'MAR',
-    'APR',
-    'MAY',
-    'JUN',
-    'JUL',
-    'AUG',
-    'SEP',
-    'OCT',
-    'NOV',
-    'DEC',
+    'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
+    'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC',
   ];
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -193,11 +181,18 @@ export function format_ISODateString_To_DayOfWeekMonthDD(
   const dayOfWeek = daysOfWeek[date.getDay()];
   const monthIndex = date.getMonth();
   const day = date.getDate();
+  const month = months[monthIndex];
+  const hours = (`0${date.getHours()}`).slice(-2);
+  const minutes = (`0${date.getMinutes()}`).slice(-2);
 
-  const customDateString = `${dayOfWeek}, ${months[monthIndex]} ${day}`;
+  let customDateString = `${dayOfWeek}, ${month} ${day}`;
+  if (includeTime) {
+    customDateString += ` - ${hours}:${minutes}`;
+  }
 
   return customDateString;
 }
+
 
 export function format_ISODateString_To_MMssDayOfWeekMonthDD(
   isoDateString: string

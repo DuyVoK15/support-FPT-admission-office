@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import Map from '../../../../screens/collaborator/Map';
+import Map from '../../../../screens/collaborator/Map/Map';
 
 const MapTab = () => {
   return (

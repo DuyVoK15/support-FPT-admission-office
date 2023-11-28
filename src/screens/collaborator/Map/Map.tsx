@@ -62,7 +62,17 @@ export default function Map() {
         style={styles.map}
         showsUserLocation={true}
         showsMyLocationButton={true}
-      ></MapView>
+      >
+        <Marker
+          onPress={() => console.log('hello')}
+          coordinate={{ latitude: 10.826561, longitude: 106.760897 }}
+        />
+        {/* <View style={{ position: 'absolute' }}>
+          <View style={{ width: 300, height: 300, backgroundColor: 'white' }}>
+            <Text>ALOALOA</Text>
+          </View>
+        </View> */}
+      </MapView>
       <View style={styles.searchContainer}>
         <GooglePlacesAutocomplete
           GoogleReverseGeocodingQuery={{ language: 'vi' }}

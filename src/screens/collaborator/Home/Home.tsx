@@ -203,7 +203,7 @@ const Home = () => {
 
             <TouchableOpacity
               style={{ flexDirection: 'row', alignItems: 'center' }}
-              onPress={() => navigation.navigate('EVENT_UPCOMMING')}
+              onPress={() => navigation.navigate('EVENT_STACK_NAVIGATOR')}
             >
               <View>
                 <Text
@@ -314,7 +314,7 @@ const Home = () => {
             <TouchableOpacity
               style={{ flexDirection: 'row', alignItems: 'center' }}
               onPress={
-                () => navigation.navigate('EVENT_REOPEN')
+                () => navigation.navigate('EVENT_STACK_NAVIGATOR')
                 // () => console.log('navigation')
               }
             >

@@ -153,8 +153,6 @@ const useIndex = () => {
         if (res?.meta?.requestStatus === 'fulfilled') {
           const resFulfilledData = res.payload as CheckAttendanceResponse;
           showToastSuccess('Check Out Successful!');
-          // dispatch_getAllPostRegistration_Confirmed();
-          // dispatch_getAllPostRegistration_Completed();
           navigation.navigate('REGISTRATION_COMPLETED');
         } else {
           const resRejectedData = res.payload as ErrorStatus;

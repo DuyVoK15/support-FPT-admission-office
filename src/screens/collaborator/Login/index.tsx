@@ -78,15 +78,25 @@ const Login = () => {
     if (initializing) setInitializing(false);
   }
 
+  const [expoPushToken, setExpoPushToken] = useState<string>('');
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
   }, []);
 
-  if (Platform.OS !== 'ios') {
-    const { expoPushToken } = usePushNotifications();
-    console.log('expoPushToken: ', expoPushToken);
-  }
+  useEffect(() => {
+    if (Platform.OS !== 'ios') {
+      const { expoPushToken } = usePushNotifications();
+      if (expoPushToken) {
+        const extractedToken = expoPushToken?.data?.slice(
+          expoPushToken?.data?.indexOf('[') + 1,
+          expoPushToken?.data?.indexOf(']')
+        );
+        setExpoPushToken(extractedToken);
+      }
+    }
+  },[])
+  
 
   return (
     <ImageBackground
@@ -163,40 +173,40 @@ const Login = () => {
                       .getIdToken()
                       .then(async (token) => {
                         console.log('<Login> Có token');
-                        await dispatch(collab_loginGoogle(token)).then(
-                          async (res) => {
-                            const requestStatus = res?.meta?.requestStatus;
-                            switch (requestStatus) {
-                              case 'rejected':
-                                const resRejectedData =
-                                  res?.payload as ErrorStatus;
-                                if (resRejectedData?.statusCode === 400) {
-                                  if (resRejectedData?.errorCode === 4006) {
-                                    toast.show(
-                                      'You must login with gmail @fpt.!ádasdasdasdasdasdasdasdasd',
-                                      { type: 'danger' }
-                                    );
-                                  }
+                        await dispatch(
+                          collab_loginGoogle({ idToken: token, expoPushToken })
+                        ).then(async (res) => {
+                          const requestStatus = res?.meta?.requestStatus;
+                          switch (requestStatus) {
+                            case 'rejected':
+                              const resRejectedData =
+                                res?.payload as ErrorStatus;
+                              if (resRejectedData?.statusCode === 400) {
+                                if (resRejectedData?.errorCode === 4006) {
+                                  toast.show(
+                                    'You must login with gmail @fpt.',
+                                    { type: 'danger' }
+                                  );
                                 }
-                                break;
-                              case 'fulfilled':
-                                const data = res.payload as LoginUserDto;
-                                await AsyncStorage.setItem(
-                                  AppConstants.ROLE_ID,
-                                  JSON.stringify(data?.data?.account?.roleId)
-                                );
+                              }
+                              break;
+                            case 'fulfilled':
+                              const data = res.payload as LoginUserDto;
+                              await AsyncStorage.setItem(
+                                AppConstants.ROLE_ID,
+                                JSON.stringify(data?.data?.account?.roleId)
+                              );
 
-                                await AsyncStorage.setItem(
-                                  AppConstants.USER_INFO,
-                                  JSON.stringify(data?.data?.account)
-                                );
-                                await dispatch(collab_getUserInfo());
-                                break;
-                              default:
-                                console.log('default');
-                            }
+                              await AsyncStorage.setItem(
+                                AppConstants.USER_INFO,
+                                JSON.stringify(data?.data?.account)
+                              );
+                              await dispatch(collab_getUserInfo());
+                              break;
+                            default:
+                              console.log('default');
                           }
-                        );
+                        });
                         console.log('<LoginScreen> JWT: ', token);
                       })
                       .catch((error) => {

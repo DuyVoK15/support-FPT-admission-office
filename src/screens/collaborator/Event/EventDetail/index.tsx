@@ -10,7 +10,6 @@ import { FONTS_FAMILY } from '../../../../constants/Fonts';
 import { COLORS } from '../../../../constants/Colors';
 import SubmitButton from '../../../../components/shared/Button/SubmitButton';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Data } from '../../../../models/collaborator/dataPost.model';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
 import { SHADOWS } from '../../../../constants/Shadows';
 import { ScreenHeight } from '../../../../constants/Demesions';
@@ -21,14 +20,15 @@ import {
 } from '../../../../utils/formats';
 import { useWindowDimensions } from 'react-native';
 import RenderHtml from 'react-native-render-html';
+import { DataPost } from '../../../../models/collaborator/dataPost.model';
 
 const EventDetail:FC = () => {
   const { width } = useWindowDimensions();
 
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const route = useRoute();
-  const { item } = route?.params as { item: Data };
-  const handleNavigate = (item: Data) => {
+  const { item } = route?.params as { item: DataPost };
+  const handleNavigate = (item: DataPost) => {
     navigation.navigate('POSITION_REGISTRATION', { item });
   };
   useEffect(() => {

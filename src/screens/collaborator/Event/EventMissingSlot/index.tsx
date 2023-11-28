@@ -15,12 +15,12 @@ import {
   searchPostByPostCode,
 } from '../../../../features/collaborator/collab.postSlice';
 import { useAppSelector } from '../../../../app/hooks';
-import { Data } from '../../../../models/collaborator/dataPost.model';
 import { cardGap } from '../../../../constants/Demesions';
 import { format_ISODateString_To_DayOfWeekMonthDDYYYY } from '../../../../utils/formats';
 import EventCardWrap from '../../../../components/collaborator/Home/EventCardWrap';
 import MissingSlotPagination from '../../../../components/shared/Pagination/MissingSlotPagination';
 import { imageNotFoundUri } from '../../../../utils/images';
+import { DataPost } from '../../../../models/collaborator/dataPost.model';
 
 const EventMissingSlot = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -48,7 +48,7 @@ const EventMissingSlot = () => {
       // console.log(JSON.stringify(res, null, 2));
     });
   };
-  const handleNavigate = (item: Data) => {
+  const handleNavigate = (item: DataPost) => {
     navigation.navigate('HOME_EVENT_DETAIL', { item });
   };
 
