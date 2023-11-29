@@ -228,7 +228,7 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
           />
           <View style={{ flexDirection: 'row', marginTop: 15 }}>
             <View style={{ flex: 1 }}>
-            <Text
+              <Text
                 style={{
                   fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
                   fontSize: 13,
@@ -295,18 +295,23 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
           <SortRegistrationButton />
         </View>
       </View>
-      <FlatList
-        data={stateRedux.postRegistrationList?.data}
-        renderItem={renderItem}
-        contentContainerStyle={{ marginVertical: 10, marginHorizontal: Platform.OS === 'ios' ? 10 : 0 }}
-        refreshControl={
-          <RefreshControl
-            refreshing={state.refreshing}
-            onRefresh={handlers.onRefresh}
-          />
-        }
-        ListEmptyComponent={renderListEmptyComponent}
-      />
+      <View style={{ flex: 1 }}>
+        <FlatList
+          data={stateRedux.postRegistrationList?.data}
+          renderItem={renderItem}
+          contentContainerStyle={{
+            marginVertical: 10,
+            marginHorizontal: Platform.OS === 'ios' ? 10 : 0,
+          }}
+          refreshControl={
+            <RefreshControl
+              refreshing={state.refreshing}
+              onRefresh={handlers.onRefresh}
+            />
+          }
+          ListEmptyComponent={renderListEmptyComponent}
+        />
+      </View>
     </View>
   );
 };

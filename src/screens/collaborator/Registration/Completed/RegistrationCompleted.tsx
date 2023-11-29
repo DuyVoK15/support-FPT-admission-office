@@ -169,7 +169,7 @@ const Registration_Completed = () => {
           </View>
 
           <View style={{ flexDirection: 'row', marginTop: 15 }}>
-          <View style={{ flex: 1 }}>
+            <View style={{ flex: 1 }}>
               <Text
                 style={{
                   fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
@@ -257,7 +257,7 @@ const Registration_Completed = () => {
                         item?.checkAttendances?.[0]?.checkOutTime,
                         true
                       )
-                    : "No value"}
+                    : 'No value'}
                 </Text>
               </Text>
             </View>
@@ -305,19 +305,24 @@ const Registration_Completed = () => {
           <SortRegistrationButton />
         </View>
       </View>
-      <FlatList
-        data={props.postRegistrationList?.data}
-        renderItem={renderItem}
-        refreshControl={
-          <RefreshControl
-            refreshing={state.refreshing}
-            onRefresh={handlers.onRefresh}
-          />
-        }
-        contentContainerStyle={{marginVertical: 10, marginHorizontal: Platform.OS === 'ios' ? 10 : 0}}
-        ListEmptyComponent={renderListEmptyComponent}
-        ListHeaderComponentStyle={{ marginTop: 15 }}
-      />
+      <View style={{ flex: 1 }}>
+        <FlatList
+          data={props.postRegistrationList?.data}
+          renderItem={renderItem}
+          refreshControl={
+            <RefreshControl
+              refreshing={state.refreshing}
+              onRefresh={handlers.onRefresh}
+            />
+          }
+          contentContainerStyle={{
+            marginVertical: 10,
+            marginHorizontal: Platform.OS === 'ios' ? 10 : 0,
+          }}
+          ListEmptyComponent={renderListEmptyComponent}
+          ListHeaderComponentStyle={{ marginTop: 15 }}
+        />
+      </View>
     </View>
   );
 };
@@ -334,7 +339,7 @@ const styles = StyleSheet.create({
     marginHorizontal: Platform.OS === 'ios' ? 0 : 10,
     backgroundColor: '#FFF',
     borderRadius: 15,
-    ...SHADOWS.SHADOW_06
+    ...SHADOWS.SHADOW_06,
   },
   containerRow: {
     margin: 15,

@@ -228,22 +228,24 @@ const Registration_Cancelled = () => {
           <SortRegistrationButton />
         </View>
       </View>
-      <FlatList
-        data={props.postRegistrationList?.data}
-        renderItem={renderItem}
-        contentContainerStyle={{
-          marginVertical: 10,
-          marginHorizontal: Platform.OS === 'ios' ? 10 : 0,
-        }}
-        refreshControl={
-          <RefreshControl
-            refreshing={state.refreshing}
-            onRefresh={handlers.onRefresh}
-          />
-        }
-        ListEmptyComponent={renderListEmptyComponent}
-        ListHeaderComponentStyle={{ marginTop: 15 }}
-      />
+      <View style={{ flex: 1 }}>
+        <FlatList
+          data={props.postRegistrationList?.data}
+          renderItem={renderItem}
+          contentContainerStyle={{
+            marginVertical: 10,
+            marginHorizontal: Platform.OS === 'ios' ? 10 : 0,
+          }}
+          refreshControl={
+            <RefreshControl
+              refreshing={state.refreshing}
+              onRefresh={handlers.onRefresh}
+            />
+          }
+          ListEmptyComponent={renderListEmptyComponent}
+          ListHeaderComponentStyle={{ marginTop: 15 }}
+        />
+      </View>
     </View>
   );
 };

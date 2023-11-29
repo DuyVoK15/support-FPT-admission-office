@@ -260,7 +260,7 @@ const Registration_Cancelled = () => {
           <SortRegistrationButton />
         </View>
       </View>
-      <View>
+      <View style={{flex: 1}}>
         <FlatList
           data={props.postRegistrationList?.data}
           renderItem={renderItem}
