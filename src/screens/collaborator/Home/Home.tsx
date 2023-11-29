@@ -115,7 +115,7 @@ const Home = () => {
             </View>
           </View>
 
-          <View style={{ marginTop: 25 }}>
+          <View style={{ marginTop:  Platform.OS === 'ios' ? 25 : 35 }}>
             <View
               style={{
                 flexDirection: 'row',

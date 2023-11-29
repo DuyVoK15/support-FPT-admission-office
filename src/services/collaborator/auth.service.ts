@@ -18,11 +18,11 @@ export const authService = {
     return axiosClient.get(url);
   },
   collab_logout: (params: {
-    expoToken: string;
+    expoPushToken: string | null;
   }): Promise<AxiosResponse<null>> => {
     const url = '/api/account/logout';
 
-    return axiosClient.put(url, { params });
+    return axiosClient.put(url, { ...params });
   },
   admission_loginGoogle: (
     payload: LoginGoogleParams

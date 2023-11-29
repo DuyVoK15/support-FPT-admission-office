@@ -57,7 +57,7 @@ const Account = () => {
   }, []);
 
   const handleLogout = async () => {
-    await dispatch(collab_logout({ expoToken: '' })).then((res) => {
+    await dispatch(collab_logout()).then((res) => {
       console.log(JSON.stringify(res, null, 2));
     });
   };

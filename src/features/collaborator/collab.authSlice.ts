@@ -38,21 +38,26 @@ const initialState: AuthState = {
 
 export const collab_loginGoogle = createAsyncThunk(
   'auth/login-google',
-  async (params: LoginGoogleParams, { rejectWithValue }) => {
+  async (idToken: string, { rejectWithValue }) => {
     try {
-      console.log('<AuthSlice> JWT: ', params?.idToken);
-      console.log('<AuthSlice> ExpoPushToken: ', params?.expoPushToken);
-      const result = await authService.collab_loginGoogle(params);
-      // console.log('<AuthSlice> ResData: ', JSON.stringify(result.data.data));
+      console.log('<AuthSlice> JWT: ', idToken);
+      const expoPushToken = await AsyncStorage.getItem(
+        AppConstants.EXPO_PUSH_TOKEN
+      );
+      console.log('<AuthSlice> ExpoPushToken: ', expoPushToken);
+      let expoPushTokenCheck = '';
+      if (expoPushToken) {
+        expoPushTokenCheck = expoPushToken;
+      }
+      const result = await authService.collab_loginGoogle({
+        idToken,
+        expoPushToken: expoPushTokenCheck,
+      });
       await AsyncStorage.setItem(
         AppConstants.ACCESS_TOKEN,
         result.data.data.access_token
       );
-      await AsyncStorage.setItem(AppConstants.ID_TOKEN, params?.idToken);
-      await AsyncStorage.setItem(
-        "expoPushToken",
-        params?.expoPushToken
-      );
+      await AsyncStorage.setItem(AppConstants.ID_TOKEN, idToken);
       return result.data;
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -94,7 +99,7 @@ export const collab_reloadGetUserInfo = createAsyncThunk(
   'auth/reloadGetUserInfo',
   async (_, { rejectWithValue }) => {
     try {
-      console.log("Có vô reload Get User Info")
+      console.log('Có vô reload Get User Info');
       const response = await authService.collab_getUserInfo();
       return response.data.data;
     } catch (error: any) {
@@ -107,20 +112,31 @@ export const collab_reloadGetUserInfo = createAsyncThunk(
 
 export const collab_logout = createAsyncThunk(
   'auth/logout',
-  async (params: { expoToken: string }, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      console.log('Có vô logout');
+      const expoPushToken = await AsyncStorage.getItem(
+        AppConstants.EXPO_PUSH_TOKEN
+      );
+      console.log('<AuthSlice> ExpoPushToken: ', expoPushToken);
+      let expoPushTokenCheck = '';
+      if (expoPushToken) {
+        expoPushTokenCheck = expoPushToken;
+      }
+      await authService.collab_logout({
+        expoPushToken: expoPushTokenCheck,
+      });
+      // Remove AsyncStorage
       await auth()
         .signOut()
         .then(() => console.log('Current user signed out!'));
       await AsyncStorage.removeItem(AppConstants.ACCESS_TOKEN);
       await AsyncStorage.removeItem(AppConstants.ID_TOKEN);
       await AsyncStorage.removeItem(AppConstants.USER_INFO);
+      await AsyncStorage.removeItem(AppConstants.EXPO_PUSH_TOKEN);
       // await GoogleSignin.revokeAccess();
       await GoogleSignin.signOut().then(() => {
         console.log('Google sign out!');
       });
-      // const response = await authService.collab_logout(params);
 
       return true;
     } catch (error: any) {

@@ -1,5 +1,5 @@
 export default interface LoginGoogleParams {
-    idToken: string;
-    expoPushToken: string;
+    idToken: string | null;
+    expoPushToken: string | null;
 }
 

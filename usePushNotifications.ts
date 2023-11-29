@@ -5,6 +5,8 @@ import * as Notifications from 'expo-notifications';
 import Contants from 'expo-constants';
 
 import { Platform } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppConstants from './src/enums/collaborator/app';
 
 export interface PushNotificationState {
   expoPushToken?: Notifications.ExpoPushToken;
@@ -14,9 +16,9 @@ export interface PushNotificationState {
 const usePushNotifications = (): PushNotificationState => {
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
-      shouldPlaySound: false,
+      shouldPlaySound: true,
       shouldShowAlert: true,
-      shouldSetBadge: false,
+      shouldSetBadge: true,
     }),
   });
 
@@ -32,7 +34,7 @@ const usePushNotifications = (): PushNotificationState => {
 
   async function registerForPushNotificationsAsync() {
     let token;
-    if (Device.isDevice) {
+    if (true) {
       const { status: existingStatus } =
         await Notifications.getPermissionsAsync();
       let finalStatus = existingStatus;
@@ -42,7 +44,7 @@ const usePushNotifications = (): PushNotificationState => {
         finalStatus = status;
       }
       if (finalStatus !== 'granted') {
-        alert('Failed to get puush token for push notification');
+        alert('Failed to get push token for push notification');
         return;
       }
 
@@ -61,7 +63,15 @@ const usePushNotifications = (): PushNotificationState => {
         lightColor: '#FF231F7C',
       });
     }
-    console.log(token);
+
+    if (token) {
+      const getTokenString = token?.data?.slice(
+        token?.data?.indexOf('[') + 1,
+        token?.data?.indexOf(']')
+      );
+      AsyncStorage.setItem(AppConstants.EXPO_PUSH_TOKEN, getTokenString);
+    }
+    console.log('EXPOTOKEN: ', token);
     return token;
   }
 
