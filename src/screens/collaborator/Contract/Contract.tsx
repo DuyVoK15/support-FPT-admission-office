@@ -1,4 +1,5 @@
 import {
+  FlatList,
   Image,
   ScrollView,
   StyleSheet,
@@ -19,12 +20,136 @@ import { SHADOWS } from '../../../constants/Shadows';
 import { ScreenWidth } from '../../../constants/Demesions';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
 import DashedLine from 'react-native-dashed-line';
+import { DataContract } from '../../../models/collaborator/contract.model';
+import { formatToDate } from '../../../utils/formats';
 
 const Contract = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
-  const { handlers, state, props } = useIndex();
-  
+  const { handlers, state, props, stateRedux } = useIndex();
 
+  const renderItem = ({ item }: { item: DataContract }) => {
+    return (
+      <View
+        style={{
+          backgroundColor: '#FFF',
+          borderRadius: 10,
+          ...SHADOWS?.SHADOW_06,
+          marginHorizontal: 15,
+          marginVertical: 15,
+        }}
+      >
+        <View style={{ marginVertical: 15 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginHorizontal: 15,
+            }}
+          >
+            <View style={{ flex: 1 }}>
+              <Text
+                style={{
+                  fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
+                  fontSize: 17,
+                  color: COLORS?.orange_button,
+                }}
+              >
+                Contract ID:{' '}
+                <Text
+                  style={{
+                    fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                    fontSize: 18,
+                  }}
+                >
+                  {item?.contractId ? item?.contractId : 'No value'}
+                </Text>
+              </Text>
+            </View>
+            {/* <View></View> */}
+            <TouchableOpacity
+              onPress={() =>
+                handlers.downloadAndOpenFile(
+                  item?.submittedFile !== ''
+                    ? item?.submittedFile
+                    : item?.contract?.sampleFile
+                )
+              }
+              style={{
+                borderWidth: 2,
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: 4,
+                borderRadius: 50,
+                borderColor: COLORS?.orange_button,
+              }}
+            >
+              <MaterialCommunityIcons
+                name="file-download"
+                size={24}
+                color={COLORS?.orange_button}
+              />
+            </TouchableOpacity>
+          </View>
+
+          <DashedLine
+            dashGap={2}
+            dashLength={6}
+            dashThickness={0.8}
+            dashColor={COLORS?.orange_button}
+            style={{
+              marginVertical: 5,
+              marginHorizontal: ScreenWidth * 0.15,
+            }}
+          />
+
+          <View style={{ alignItems: 'center', marginTop: 5 }}>
+            <View>
+              <Text
+                style={{
+                  fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
+                  fontSize: 22,
+                  textAlign: 'center',
+                }}
+              >
+                {item?.contract?.contractName
+                  ? item?.contract?.contractName
+                  : 'No value'}
+              </Text>
+            </View>
+          </View>
+
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 20,
+              justifyContent: 'space-around',
+            }}
+          >
+            <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_500Medium_Italic }}>
+              Start:{' '}
+              <Text
+                style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular_Italic }}
+              >
+                {item?.contract?.startDate
+                  ? formatToDate({ dateProp: item?.contract?.startDate })
+                  : 'No value'}
+              </Text>
+            </Text>
+            <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_500Medium_Italic }}>
+              End:{' '}
+              <Text
+                style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular_Italic }}
+              >
+                {item?.contract?.endDate
+                  ? formatToDate({ dateProp: item?.contract?.endDate })
+                  : 'No value'}
+              </Text>
+            </Text>
+          </View>
+        </View>
+      </View>
+    );
+  };
   return (
     <View style={styles.container}>
       <Header>
@@ -34,107 +159,10 @@ const Contract = () => {
         />
       </Header>
       <View style={{ marginTop: 15 }}>
-        <ScrollView>
-          <View
-            style={{
-              backgroundColor: '#FFF',
-              borderRadius: 10,
-              ...SHADOWS?.SHADOW_06,
-              marginHorizontal: 15,
-              marginVertical: 15,
-            }}
-          >
-            <View style={{ marginVertical: 15 }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginHorizontal: 15,
-                }}
-              >
-                <View style={{ flex: 1 }}>
-                  <Text
-                    style={{
-                      fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
-                      fontSize: 17,
-                      color: COLORS?.orange_button,
-                    }}
-                  >
-                    Contract ID:{' '}
-                    <Text
-                      style={{
-                        fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
-                        fontSize: 18,
-                      }}
-                    >
-                      {2}
-                    </Text>
-                  </Text>
-                </View>
-                {/* <View></View> */}
-                <TouchableOpacity
-                  onPress={handlers.downloadAndOpenFile}
-                  style={{
-                    borderWidth: 2,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: 4,
-                    borderRadius: 50,
-                    borderColor: COLORS?.orange_button,
-                  }}
-                >
-                  <MaterialCommunityIcons
-                    name="file-download"
-                    size={24}
-                    color={COLORS?.orange_button}
-                  />
-                </TouchableOpacity>
-              </View>
-
-              <DashedLine
-                dashGap={2}
-                dashLength={6}
-                dashThickness={0.8}
-                dashColor={COLORS?.orange_button}
-                style={{
-                  marginVertical: 5,
-                  marginHorizontal: ScreenWidth * 0.15,
-                }}
-              />
-
-              <View style={{ alignItems: 'center', marginTop: 5 }}>
-                <View>
-                  <Text
-                    style={{
-                      fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
-                      fontSize: 22,
-                      textAlign: 'center',
-                    }}
-                  >
-                    Hợp đồng khoán gọn
-                  </Text>
-                </View>
-              </View>
-
-              <View
-                style={{
-                  flexDirection: 'row',
-                  marginTop: 20,
-                  justifyContent: 'space-around',
-                }}
-              >
-                <Text style={{fontFamily: FONTS_FAMILY?.Ubuntu_500Medium_Italic}}>
-                  Start: <Text style={{fontFamily: FONTS_FAMILY?.Ubuntu_400Regular_Italic}}>27/11/2023</Text>
-                </Text>
-                <Text style={{fontFamily: FONTS_FAMILY?.Ubuntu_500Medium_Italic}}>
-                  End: <Text style={{fontFamily: FONTS_FAMILY?.Ubuntu_400Regular_Italic}}>27/12/2023</Text>
-                </Text>
-              </View>
-
-              
-            </View>
-          </View>
-        </ScrollView>
+        <FlatList
+          data={stateRedux?.contractList?.data}
+          renderItem={renderItem}
+        />
       </View>
     </View>
   );
@@ -147,7 +175,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-{/* <View style={{ alignItems: 'flex-start', marginTop: 20 }}>
+{
+  /* <View style={{ alignItems: 'flex-start', marginTop: 20 }}>
                 <View
                   style={{
                     backgroundColor: '#99F2D1',
@@ -269,4 +298,5 @@ const styles = StyleSheet.create({
                     />
                   </View>
                 </View>
-              </View> */}
+              </View> */
+}

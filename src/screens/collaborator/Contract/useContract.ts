@@ -1,14 +1,18 @@
 import { View, Text } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../../app/store';
 import { getAllContract } from '../../../features/collaborator/collab.contractSlice';
 import * as FileSystem from 'expo-file-system';
 import FileViewer from 'react-native-file-viewer';
 import useCustomToast from '../../../utils/toasts';
+import { useAppSelector } from '../../../app/hooks';
 
 const useIndex = () => {
   const dispatch = useAppDispatch();
 
+  const contractList = useAppSelector(
+    (state) => state.collab_contract.contract
+  );
   const fetchContract = async () => {
     try {
       await dispatch(getAllContract({})).then((res) => {
@@ -21,6 +25,13 @@ const useIndex = () => {
 
   useEffect(() => {
     fetchContract();
+  }, []);
+
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchContract();
+    setRefreshing(false);
   }, []);
 
   const { showToastSuccess, showToastError } = useCustomToast();
@@ -39,10 +50,15 @@ const useIndex = () => {
     {},
     callback
   );
-  const downloadAndOpenFile = async () => {
+  const downloadAndOpenFile = async (stringFile: string | null) => {
     console.log('downloading...');
     try {
-      await downloadResumable
+      await FileSystem.createDownloadResumable(
+        stringFile ?? '',
+        FileSystem.documentDirectory + 'Contract.doc',
+        {},
+        callback
+      )
         .downloadAsync()
         .then(async (res) => {
           const resData = res?.status;
@@ -66,15 +82,17 @@ const useIndex = () => {
       console.log(e);
     }
   };
-  
-  const handlers = { downloadAndOpenFile };
+
+  const handlers = { downloadAndOpenFile, onRefresh };
   const props = {};
-  const state = {};
+  const state = { refreshing };
+  const stateRedux = { contractList };
 
   return {
     handlers,
     props,
     state,
+    stateRedux,
   };
 };
 
