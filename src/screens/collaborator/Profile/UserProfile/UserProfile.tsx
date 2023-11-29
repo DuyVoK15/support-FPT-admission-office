@@ -22,12 +22,14 @@ import { Controller } from 'react-hook-form';
 import FrontImagePicker from '../../../../components/collaborator/Profile/UserProfile/FrontImagePicker';
 import BackImagePicker from '../../../../components/collaborator/Profile/UserProfile/BackImagePicker';
 import AvatarImagePicker from '../../../../components/collaborator/Profile/UserProfile/AvatarImagePicker';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import SubmitButtonDisable from '../../../../components/shared/Button/SubmitButtonDisable';
 
 const UserProfile: React.FC = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
 
-  const { handlers, props, state, setState, datePickerHandlers } = useUserProfile();
+  const { handlers, props, state, setState, datePickerHandlers } =
+    useUserProfile();
   return (
     <View style={styles.container}>
       <Header>
@@ -49,7 +51,7 @@ const UserProfile: React.FC = () => {
             name="imgUrl"
           />
         </View>
-              
+
         <KeyboardAwareScrollView
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={16}
@@ -157,7 +159,9 @@ const UserProfile: React.FC = () => {
                 label="Citizen Identification Issue Date"
                 value={value}
                 isVisible={state.isIdentityIssueDatePickerVisible}
-                onConfirm={datePickerHandlers.handleConfirmIdentityIssueDatePicker}
+                onConfirm={
+                  datePickerHandlers.handleConfirmIdentityIssueDatePicker
+                }
                 onCancel={datePickerHandlers.hideIdentityIssueDatePicker}
               />
             )}
@@ -277,13 +281,16 @@ const UserProfile: React.FC = () => {
             marginHorizontal: 10,
           }}
         >
-          <SubmitButton
-            titleButton="SAVE CHANGE"
-            onPress={handlers.handleSubmit(handlers.onSubmit)}
-          />
+          {!props.isDirty || !props.isValid ? (
+            <SubmitButtonDisable titleButton="SAVE CHANGE" />
+          ) : (
+            <SubmitButton
+              titleButton="SAVE CHANGE"
+              onPress={handlers.handleSubmit(handlers.onSubmit)}
+            />
+          )}
         </View>
       </View>
-      
     </View>
   );
 };

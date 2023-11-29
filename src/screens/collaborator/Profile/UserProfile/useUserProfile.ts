@@ -47,7 +47,7 @@ const useUserProfile = () => {
     control,
     handleSubmit,
     setValue,
-    formState: { errors },
+    formState: { errors, isDirty, isValid },
   } = useForm({
     defaultValues: {
       name: userInfo?.name ? userInfo?.name : '',
@@ -156,7 +156,7 @@ const useUserProfile = () => {
   };
 
   const handlers = { onSubmit, handleSubmit, setValue, onRefresh };
-  const props = { control, refreshing };
+  const props = { control, refreshing, isDirty, isValid };
   const datePickerHandlers = {
     showDateOfBirthPicker,
     hideDateOfBirthPicker,
