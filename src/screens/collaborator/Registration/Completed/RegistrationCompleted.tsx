@@ -1,6 +1,7 @@
 import {
   FlatList,
   Image,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -313,7 +314,7 @@ const Registration_Completed = () => {
             onRefresh={handlers.onRefresh}
           />
         }
-        contentContainerStyle={{margin: 10}}
+        contentContainerStyle={{marginVertical: 10, marginHorizontal: Platform.OS === 'ios' ? 10 : 0}}
         ListEmptyComponent={renderListEmptyComponent}
         ListHeaderComponentStyle={{ marginTop: 15 }}
       />
@@ -330,6 +331,7 @@ const styles = StyleSheet.create({
   },
   containerItem: {
     marginBottom: 15,
+    marginHorizontal: Platform.OS === 'ios' ? 0 : 10,
     backgroundColor: '#FFF',
     borderRadius: 15,
     ...SHADOWS.SHADOW_06

@@ -1,6 +1,7 @@
 import {
   FlatList,
   Image,
+  Platform,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -297,7 +298,7 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
       <FlatList
         data={stateRedux.postRegistrationList?.data}
         renderItem={renderItem}
-        contentContainerStyle={{ marginVertical: 10, marginHorizontal: 10 }}
+        contentContainerStyle={{ marginVertical: 10, marginHorizontal: Platform.OS === 'ios' ? 10 : 0 }}
         refreshControl={
           <RefreshControl
             refreshing={state.refreshing}
@@ -319,6 +320,7 @@ const styles = StyleSheet.create({
   },
   containerItem: {
     marginBottom: 15,
+    marginHorizontal: Platform.OS === 'ios' ? 0 : 10,
     backgroundColor: '#FFF',
     borderRadius: 15,
     ...SHADOWS.SHADOW_06,
