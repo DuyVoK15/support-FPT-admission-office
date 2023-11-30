@@ -49,6 +49,7 @@ const useAppNavigator = () => {
         const data = res.payload as LoadAuthStateResponse;
         const combinedCondition: string =
           data.isAuthenticated + '-' + data.roleId;
+          console.log(combinedCondition)
         switch (combinedCondition) {
           case 'true-1':
             {

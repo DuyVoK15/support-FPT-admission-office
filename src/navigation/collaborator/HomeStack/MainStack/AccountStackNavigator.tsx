@@ -13,6 +13,7 @@ import UserProfileDisable from '../../../../screens/collaborator/Profile/UserPro
 import Contract from '../../../../screens/collaborator/Contract/Contract';
 import { HomeCollaboratorStackNavigatorParamList } from '../../../../../type';
 import AccountNotification from '../../../../screens/collaborator/Notification/AccountNotification';
+import { ROUTES } from '../../../../constants/Routes';
 
 const Stack =
   createNativeStackNavigator<HomeCollaboratorStackNavigatorParamList>();
@@ -20,56 +21,56 @@ const AccountStackNavigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name={'ACCOUNT'}
+        name={ROUTES.ACCOUNT}
         component={AccountTab}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
-        name={'PROFILE'}
+        name={ROUTES.USER_PROFILE}
         component={UserProfile}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
-        name={'CERTIFICATE_HISTORY'}
+        name={ROUTES.CERTIFICATE_HISTORY}
         component={CertificateHistory}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
-        name={'WALLET'}
+        name={ROUTES.WALLET}
         component={Wallet}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
-        name={'VERIFICATION'}
+        name={ROUTES.VERIFICATION}
         component={Verification}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
-        name={'SECURITY'}
+        name={ROUTES.SECURITY}
         component={Security}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
-        name={'ACCOUNT_NOTIFICATION'}
+        name={ROUTES.ACCOUNT_NOTIFICATION}
         component={AccountNotification}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
-        name={'USER_PROFILE_DISABLE'}
+        name={ROUTES.USER_PROFILE_DISABLE}
         component={UserProfileDisable}
         options={{
           headerShown: false,
@@ -77,7 +78,7 @@ const AccountStackNavigator = () => {
       />
 
       <Stack.Screen
-        name={'PROFILE_SIGNUP'}
+        name={ROUTES.USER_PROFILE_SIGNUP}
         component={UserProfileSignup}
         options={{
           headerShown: false,
@@ -85,9 +86,10 @@ const AccountStackNavigator = () => {
       />
 
       <Stack.Screen
-        name={'CONTRACT'}
+        name={ROUTES.CONTRACT}
         component={Contract}
         options={{
+          animation: 'none',
           headerShown: false,
         }}
       />

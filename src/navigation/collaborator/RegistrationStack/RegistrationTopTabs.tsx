@@ -9,43 +9,44 @@ import ConfirmTab from './RegistrationTab/ConfirmTab';
 import CompletedTab from './RegistrationTab/CompletedTab';
 import CancelledTab from './RegistrationTab/CancelledTab';
 import RejectedTab from './RegistrationTab/RejectedTab';
+import { ROUTES } from '../../../constants/Routes';
 
 const Tab = createMaterialTopTabNavigator();
 interface RegistrationTopTabProps {
   // item: string | null;
 }
 const RegistrationTopTabs: FC<RegistrationTopTabProps> = (props) => {
- 
   return (
     <Tab.Navigator
-      initialRouteName="REGISTRATION_PENDING"
+      initialRouteName={ROUTES.REGISTRATION}
       screenListeners={({ navigation, route }) => ({
-        
         tabPress: (e) => {
           switch (route.name) {
-            case 'REGISTRATION_PENDING':
+            case ROUTES.REGISTRATION_PENDING:
               e.preventDefault();
-              navigation.navigate('REGISTRATION_PENDING');
+              navigation.navigate(ROUTES.REGISTRATION_PENDING);
               break;
-            case 'REGISTRATION_CONFIRM':
+            case ROUTES.REGISTRATION_CONFIRM:
               e.preventDefault();
-              navigation.navigate('REGISTRATION_CONFIRM');
+              navigation.navigate(ROUTES.REGISTRATION_CONFIRM);
               break;
-            case 'REGISTRATION_COMPLETED':
+            case ROUTES.REGISTRATION_COMPLETED:
               e.preventDefault();
-              navigation.navigate('REGISTRATION_COMPLETED');
+              navigation.navigate(ROUTES.REGISTRATION_COMPLETED);
               break;
-            case 'REGISTRATION_CANCELLED':
+            case ROUTES.REGISTRATION_CANCELLED:
               e.preventDefault();
-              navigation.navigate('REGISTRATION_CANCELLED');
+              navigation.navigate(ROUTES.REGISTRATION_CANCELLED);
               break;
-
+            case ROUTES.REGISTRATION_REJECTED:
+              e.preventDefault();
+              navigation.navigate(ROUTES.REGISTRATION_REJECTED);
+              break;
             default:
               break;
           }
         },
       })}
-      
       screenOptions={{
         tabBarScrollEnabled: true,
         tabBarActiveTintColor: COLORS.orange_icon,
@@ -71,7 +72,7 @@ const RegistrationTopTabs: FC<RegistrationTopTabProps> = (props) => {
       }}
     >
       <Tab.Screen
-        name={'REGISTRATION_PENDING'}
+        name={ROUTES.REGISTRATION_PENDING}
         // component={PendingTab}
         children={() => <PendingTab />}
         options={{
@@ -82,7 +83,7 @@ const RegistrationTopTabs: FC<RegistrationTopTabProps> = (props) => {
         }}
       />
       <Tab.Screen
-        name={'REGISTRATION_CONFIRM'}
+        name={ROUTES.REGISTRATION_CONFIRM}
         component={ConfirmTab}
         options={{
           tabBarStyle: {
@@ -92,7 +93,7 @@ const RegistrationTopTabs: FC<RegistrationTopTabProps> = (props) => {
         }}
       />
       <Tab.Screen
-        name={'REGISTRATION_COMPLETED'}
+        name={ROUTES.REGISTRATION_COMPLETED}
         component={CompletedTab}
         options={{
           tabBarStyle: {
@@ -102,7 +103,7 @@ const RegistrationTopTabs: FC<RegistrationTopTabProps> = (props) => {
         }}
       />
       <Tab.Screen
-        name={'REGISTRATION_CANCELLED'}
+        name={ROUTES.REGISTRATION_CANCELLED}
         component={CancelledTab}
         options={{
           tabBarStyle: {
@@ -112,7 +113,7 @@ const RegistrationTopTabs: FC<RegistrationTopTabProps> = (props) => {
         }}
       />
       <Tab.Screen
-        name={'REGISTRATION_REJECTED'}
+        name={ROUTES.REGISTRATION_REJECTED}
         component={RejectedTab}
         options={{
           tabBarStyle: {

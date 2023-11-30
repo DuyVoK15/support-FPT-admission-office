@@ -7,35 +7,36 @@ import HomeEventDetail from '../../../../screens/collaborator/Home/homeEventDeta
 import PositionRegistration from '../../../../screens/collaborator/PositionRegistration';
 import { HomeCollaboratorStackNavigatorParamList } from '../../../../../type';
 import EventNotification from '../../../../screens/collaborator/Notification/EventNotification';
+import { ROUTES } from '../../../../constants/Routes';
 
 const Stack =
   createNativeStackNavigator<HomeCollaboratorStackNavigatorParamList>();
 const EventStackNavigator = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName={ROUTES.EVENT}>
       <Stack.Screen
-        name={'EVENT'}
+        name={ROUTES.EVENT}
         component={EventTab}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
-        name={'HOME_EVENT_DETAIL'}
+        name={ROUTES.HOME_EVENT_DETAIL}
         component={HomeEventDetail}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
-        name={'POSITION_REGISTRATION'}
+        name={ROUTES.POSITION_REGISTRATION}
         component={PositionRegistration}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
-        name={'EVENT_NOTIFICATION'}
+        name={ROUTES.EVENT_NOTIFICATION}
         component={EventNotification}
         options={{
           headerShown: false,

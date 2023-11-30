@@ -8,13 +8,14 @@ import EventUpcommingTab from './EventTab/EventUpcommingTab';
 import EventMissingSlotTab from './EventTab/EventMissingSlotTab';
 import { HomeCollaboratorStackNavigatorParamList } from '../../../../type';
 import EventReOpenTab from './EventTab/EventReOpenTab';
+import { ROUTES } from '../../../constants/Routes';
 
 const EventTab =
   createMaterialTopTabNavigator<HomeCollaboratorStackNavigatorParamList>();
 const EventTopTabs = () => {
   return (
     <EventTab.Navigator
-      initialRouteName="EVENT_UPCOMMING"
+      initialRouteName={ROUTES.EVENT_UPCOMMING}
       screenOptions={{
         tabBarItemStyle: {
           // borderRadius: 100,
@@ -42,7 +43,7 @@ const EventTopTabs = () => {
       }}
     >
       <EventTab.Screen
-        name={'EVENT_UPCOMMING'}
+        name={ROUTES.EVENT_UPCOMMING}
         component={EventUpcommingTab}
         options={{
           tabBarStyle: {
@@ -52,7 +53,7 @@ const EventTopTabs = () => {
         }}
       />
       <EventTab.Screen
-        name={'EVENT_REOPEN'}
+        name={ROUTES.EVENT_REOPEN}
         component={EventReOpenTab}
         options={{
           tabBarStyle: {

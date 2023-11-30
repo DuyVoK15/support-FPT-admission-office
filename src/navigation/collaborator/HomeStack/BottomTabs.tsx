@@ -3,20 +3,24 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Entypo, FontAwesome, Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../../constants/Colors';
-import { HomeCollaboratorScreenNavigationProp, HomeCollaboratorStackNavigatorParamList } from '../../../../type';
+import {
+  HomeCollaboratorScreenNavigationProp,
+  HomeCollaboratorStackNavigatorParamList,
+} from '../../../../type';
 import MapTab from './MainTabs/MapTab';
 import AccountStackNavigator from './MainStack/AccountStackNavigator';
 import HomeStackNavigator from './MainStack/HomeStackNavigator';
 import EventStackNavigator from './MainStack/EventStackNavigator';
 import RegistrationStackNavigator from './MainStack/RegistrationStackNavigator';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { ROUTES } from '../../../constants/Routes';
 
 const Tab = createBottomTabNavigator<HomeCollaboratorStackNavigatorParamList>();
 const BottomTabs: React.FC = () => {
   return (
     // <View style={{height: Platform.OS === 'android' ? ScreenHeight + 40 : ScreenHeight, width: ScreenWidth}}>
     <Tab.Navigator
-      initialRouteName={'HOME'}
+      initialRouteName={ROUTES.HOME}
       // tabBarPosition='bottom'
       screenOptions={{
         tabBarHideOnKeyboard: true,
@@ -36,10 +40,10 @@ const BottomTabs: React.FC = () => {
       screenListeners={({ navigation, route }) => ({
         tabPress: (e) => {
           switch (route.name) {
-            case 'REGISTRATION_STACK_NAVIGATOR':
+            case ROUTES.REGISTRATION_STACK_NAVIGATOR:
               e.preventDefault();
               console.log('object');
-              navigation.navigate('REGISTRATION_STACK_NAVIGATOR');
+              navigation.navigate(ROUTES.REGISTRATION_STACK_NAVIGATOR);
               break;
             // case 'REGISTRATION_CONFIRM':
             //   e.preventDefault();
@@ -61,7 +65,7 @@ const BottomTabs: React.FC = () => {
       })}
     >
       <Tab.Screen
-        name={'HOME_STACK_NAVIGATOR'}
+        name={ROUTES.HOME_STACK_NAVIGATOR}
         component={HomeStackNavigator}
         options={{
           headerShown: false,
@@ -72,7 +76,7 @@ const BottomTabs: React.FC = () => {
         }}
       />
       <Tab.Screen
-        name={'EVENT_STACK_NAVIGATOR'}
+        name={ROUTES.EVENT_STACK_NAVIGATOR}
         component={EventStackNavigator}
         options={{
           headerShown: false,
@@ -83,7 +87,7 @@ const BottomTabs: React.FC = () => {
         }}
       />
       <Tab.Screen
-        name={'MAP_STACK_NAVIGATOR'}
+        name={ROUTES.MAP_STACK_NAVIGATOR}
         component={MapTab}
         options={{
           headerShown: false,
@@ -94,7 +98,7 @@ const BottomTabs: React.FC = () => {
         }}
       />
       <Tab.Screen
-        name={'REGISTRATION_STACK_NAVIGATOR'}
+        name={ROUTES.REGISTRATION_STACK_NAVIGATOR}
         component={RegistrationStackNavigator}
         options={{
           headerShown: false,
@@ -105,7 +109,7 @@ const BottomTabs: React.FC = () => {
         }}
       />
       <Tab.Screen
-        name={'ACCOUNT_STACK_NAVIGATOR'}
+        name={ROUTES.ACCOUNT_STACK_NAVIGATOR}
         component={AccountStackNavigator}
         options={{
           headerShown: false,

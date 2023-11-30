@@ -22,6 +22,7 @@ import { FONTS_FAMILY } from '../../../constants/Fonts';
 import DashedLine from 'react-native-dashed-line';
 import { DataContract } from '../../../models/collaborator/contract.model';
 import { formatToDate } from '../../../utils/formats';
+import { WebView } from 'react-native-webview';
 
 const Contract = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -68,7 +69,7 @@ const Contract = () => {
             {/* <View></View> */}
             <TouchableOpacity
               onPress={() =>
-                handlers.downloadAndOpenFileAndroid(
+                handlers.downloadAndOpenFile(
                   item?.submittedFile !== ''
                     ? item?.submittedFile
                     : item?.contract?.sampleFile
@@ -158,12 +159,21 @@ const Contract = () => {
           onPress={() => navigation.goBack()}
         />
       </Header>
-      <View style={{ marginTop: 15 }}>
+      <WebView
+       style={{ flex: 1, minHeight: 200, height: 300, opacity: 0.99 }}
+        source={{
+          uri: `https://docs.google.com/viewerng/viewer?url=${encodeURIComponent('https://firebasestorage.googleapis.com/v0/b/supfamof-c8c84.appspot.com/o/images%2Fadmission%2FeventeventH%E1%BB%A3p-%C4%91%E1%BB%93ng-kho%C3%A1n-g%E1%BB%8Dn-Modify%20(8).docx?alt=media&token=a35c84b6-853e-4a7b-ad85-407170c62461')}`,
+        }}
+        androidHardwareAccelerationDisabled={true}
+        startInLoadingState={true}
+      
+      ></WebView>
+      {/* <View style={{ marginTop: 15 }}>
         <FlatList
           data={stateRedux?.contractList?.data}
           renderItem={renderItem}
         />
-      </View>
+      </View> */}
     </View>
   );
 };

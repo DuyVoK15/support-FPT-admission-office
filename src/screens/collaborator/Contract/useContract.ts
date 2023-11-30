@@ -8,7 +8,6 @@ import useCustomToast from '../../../utils/toasts';
 import { useAppSelector } from '../../../app/hooks';
 import * as Sharing from 'expo-sharing';
 import * as DocumentPicker from 'expo-document-picker';
-import * as IntentLauncher from 'expo-intent-launcher';
 const useIndex = () => {
   const dispatch = useAppDispatch();
 
@@ -33,83 +32,41 @@ const useIndex = () => {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     fetchContract();
-    setRefreshing(false);
+    setRefreshing(false); 
   }, []);
 
   const { showToastSuccess, showToastError } = useCustomToast();
 
-  // const [downloadProgress, setDownloadProgress] = useState<number>();
-  // const callback = (downloadProgress: any) => {
-  //   const progress =
-  //     downloadProgress.totalBytesWritten /
-  //     downloadProgress.totalBytesExpectedToWrite;
-  //   setDownloadProgress(progress);
-  // };
-
-  // const downloadResumable = FileSystem.createDownloadResumable(
-  //   'https://firebasestorage.googleapis.com/v0/b/supfamof-c8c84.appspot.com/o/images%2Fadmission%2Fevent148ef32d-deea-4626-b872-cf3a8ac81e7d?alt=media&token=29978a67-a006-4b1c-9bd4-e934f7f8c1e1',
-  //   FileSystem.documentDirectory + 'HAHA.doc',
-  //   {},
-  //   callback
-  // );
-  const downloadAndOpenFile = async (stringFile: string | null) => {
+  const downloadAndOpenFile = async (stringFile: string) => {
     console.log('downloading...');
     try {
-      await FileSystem.createDownloadResumable(
-        stringFile ?? '',
+      await FileSystem.downloadAsync(
+        stringFile,
         FileSystem.documentDirectory + 'Contract.doc',
         {}
       )
-        .downloadAsync()
-        .then(async (res) => {
+        .then((res) => {
           const resData = res?.status;
           if (resData === 200) {
+            console.log(res?.uri)
             showToastSuccess('Download file success!');
-            Sharing.shareAsync(res?.uri ?? '').then((res) => {
+            Sharing.shareAsync(res?.uri).then((res) => {
               console.log(res);
             });
           } else {
             showToastError('Download file failed!');
           }
         })
-        .catch((e) => console.log(e));
+        .catch((e) => console.log('e :',e));
     } catch (e) {
       console.log(e);
     }
   };
 
-  const downloadAndOpenFileAndroid = async (stringFile: string) => {
-    console.log('downloading...');
-    try {
-      FileSystem.downloadAsync(
-        stringFile,
-        FileSystem.documentDirectory + 'small.doc'
-      )
-        .then(({ uri }) => {
-          console.log('Finished downloading to ', uri);
-          FileSystem.getContentUriAsync(uri).then((cUri) => {
-            console.log(cUri);
-            IntentLauncher.startActivityAsync('android.intent.action.VIEW', {
-              data: cUri,
-              flags: 1,
-            });
-          });
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const handlers = {
-    downloadAndOpenFile,
-    downloadAndOpenFileAndroid,
-    onRefresh,
-  };
+  const handlers = { downloadAndOpenFile, onRefresh };
   const props = {};
   const state = { refreshing };
+  const setState = {};
   const stateRedux = { contractList };
 
   return {

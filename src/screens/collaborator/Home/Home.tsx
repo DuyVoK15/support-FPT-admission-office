@@ -43,6 +43,7 @@ import { Controller } from 'react-hook-form';
 import SearchTextInput from '../../../components/collaborator/Home/SearchTextInput';
 import MovingText from '../../../components/shared/TextAnimated/MovingText';
 import ConfirmAlert from '../../../components/shared/ConfirmAlert/ConfirmAlert';
+import { ROUTES } from '../../../constants/Routes';
 
 const Home = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -236,7 +237,7 @@ const Home = () => {
                   >
                     <EventCard
                       onPress={() =>
-                        navigation.navigate('HOME_EVENT_DETAIL', { item: post })
+                        navigation.navigate(ROUTES.HOME_EVENT_DETAIL, { item: post })
                       }
                       imageUrl={
                         post?.postImg ? post?.postImg : imageNotFoundUri

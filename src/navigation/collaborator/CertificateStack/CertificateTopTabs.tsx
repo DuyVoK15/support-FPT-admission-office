@@ -7,6 +7,7 @@ import RejectedTab from './CertificateTab/RejectedTab';
 import { COLORS } from '../../../constants/Colors';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
 import { ScreenWidth } from '../../../constants/Demesions';
+import { ROUTES } from '../../../constants/Routes';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -37,7 +38,7 @@ const CertificateTopTabs = () => {
       }}
     >
       <Tab.Screen
-        name={'CERTIFICATE_ALL'}
+        name={ROUTES.CERTIFICATE_ALL}
         component={AllTab}
         options={{
           tabBarStyle: {
@@ -47,7 +48,7 @@ const CertificateTopTabs = () => {
         }}
       />
       <Tab.Screen
-        name={'CERTIFICATE_COMPLETED'}
+        name={ROUTES.CERTIFICATE_COMPLETED}
         component={CompletedTab}
         options={{
           tabBarStyle: {
@@ -57,7 +58,7 @@ const CertificateTopTabs = () => {
         }}
       />
       <Tab.Screen
-        name={'CERTIFICATE_REJECTED'}
+        name={ROUTES.CERTIFICATE_REJECTED}
         component={RejectedTab}
         options={{
           tabBarStyle: {

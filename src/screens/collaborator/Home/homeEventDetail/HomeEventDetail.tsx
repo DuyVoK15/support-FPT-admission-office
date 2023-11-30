@@ -316,15 +316,28 @@ const HomeEventDetail: FC = () => {
                   Certificate Required
                 </Text>
               </View>
-              <ScrollView horizontal style={{}}>
+              <ScrollView
+                horizontal
+                style={{}}
+                showsHorizontalScrollIndicator={false}
+              >
                 {item?.postPositions &&
                 item?.postPositions?.some(
                   (position) => position.certificateName !== null
                 ) === true ? (
                   item?.postPositions
-                    ?.filter((position) => position.certificateName !== null)
+                    ?.filter(
+                      (position, index, self) =>
+                        position.certificateName !== null &&
+                        index ===
+                          self.findIndex(
+                            (c) =>
+                              c.certificateName === position.certificateName
+                          )
+                    )
                     ?.map((position, index) => (
                       <View
+                        key={index}
                         style={{
                           paddingVertical: 6,
                           paddingHorizontal: 10,
@@ -341,7 +354,6 @@ const HomeEventDetail: FC = () => {
                             fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
                             color: COLORS?.orange_icon,
                           }}
-                          key={index}
                         >
                           {position?.certificateName &&
                             position?.certificateName}

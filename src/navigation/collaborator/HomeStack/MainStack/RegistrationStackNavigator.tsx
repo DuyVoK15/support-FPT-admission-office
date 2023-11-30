@@ -13,6 +13,7 @@ import {
   HomeCollaboratorStackNavigatorParamList,
 } from '../../../../../type';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { ROUTES } from '../../../../constants/Routes';
 
 const Stack =
   createNativeStackNavigator<HomeCollaboratorStackNavigatorParamList>();
@@ -21,7 +22,7 @@ const RegistrationStackNavigator = () => {
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('tabPress', (e: any) => {
       // Do something
-      navigation.navigate('REGISTRATION_PENDING');
+      navigation.navigate(ROUTES.REGISTRATION_PENDING);
     });
 
     return unsubscribe;
@@ -31,7 +32,7 @@ const RegistrationStackNavigator = () => {
     React.useCallback(() => {
       // Thực hiện công việc khi Navigator 2 được focus (khi được navigate tới từ Navigator 1)
       console.log('Navigator 2 focused!');
-      navigation.navigate('REGISTRATION_PENDING');
+      navigation.navigate(ROUTES.REGISTRATION_PENDING);
       // Các hành động khác có thể được thực hiện ở đây khi Navigator 2 được focus
 
       return () => {
@@ -40,30 +41,30 @@ const RegistrationStackNavigator = () => {
     }, [])
   );
   return (
-    <Stack.Navigator initialRouteName="REGISTRATION">
+    <Stack.Navigator initialRouteName={ROUTES.REGISTRATION}>
       <Stack.Screen
-        name={'REGISTRATION'}
+        name={ROUTES.REGISTRATION}
         component={RegistrationTab}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
-        name={'REGISTRATION_PENDING_DETAIL'}
+        name={ROUTES.REGISTRATION_PENDING_DETAIL}
         component={Registration_Pending_Detail}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
-        name={'REQUEST_CHANGE_POSITION_PENDING'}
+        name={ROUTES.REQUEST_CHANGE_POSITION_PENDING}
         component={RequestChangePositionPending}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
-        name={'REGISTRATION_CONFIRM_DETAIL'}
+        name={ROUTES.REGISTRATION_CONFIRM_DETAIL}
         component={Registration_Confirm_Detail}
         options={{
           headerShown: false,
@@ -71,14 +72,14 @@ const RegistrationStackNavigator = () => {
       />
 
       <Stack.Screen
-        name={'REQUEST_CHANGE_POSITION_CONFIRM'}
+        name={ROUTES.REQUEST_CHANGE_POSITION_CONFIRM}
         component={RequestChangePosition}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
-        name={'REQUEST_UPDATE_HISTORY'}
+        name={ROUTES.REQUEST_UPDATE_HISTORY}
         component={RequestUpdateHistory}
         options={{
           headerShown: false,

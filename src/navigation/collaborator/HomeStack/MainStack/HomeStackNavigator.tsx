@@ -9,21 +9,22 @@ import EventTopTabs from '../../EventStack/EventTopTabs';
 import { HomeCollaboratorStackNavigatorParamList } from '../../../../../type';
 import HomeNotification from '../../../../screens/collaborator/Notification/HomeNotitìication';
 import HomeEventDetail from '../../../../screens/collaborator/Home/homeEventDetail/HomeEventDetail';
+import { ROUTES } from '../../../../constants/Routes';
 
 const Stack =
   createNativeStackNavigator<HomeCollaboratorStackNavigatorParamList>();
 const HomeStackNavigator = () => {
   return (
-    <Stack.Navigator initialRouteName="HOME">
+    <Stack.Navigator initialRouteName={ROUTES.HOME}>
       <Stack.Screen
-        name={'HOME'}
+        name={ROUTES.HOME}
         component={HomeTab}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
-        name={'HOME_EVENT_DETAIL'}
+        name={ROUTES.HOME_EVENT_DETAIL}
         component={HomeEventDetail}
         options={{
           headerShown: false,
@@ -31,7 +32,7 @@ const HomeStackNavigator = () => {
       />
 
       <Stack.Screen
-        name={'POSITION_REGISTRATION'}
+        name={ROUTES.POSITION_REGISTRATION}
         component={PositionRegistration}
         options={{
           headerShown: false,
@@ -39,7 +40,7 @@ const HomeStackNavigator = () => {
       />
 
       <Stack.Screen
-        name={'HOME_NOTIFICATION'}
+        name={ROUTES.HOME_NOTIFICATION}
         component={HomeNotification}
         options={{
           headerShown: false,
