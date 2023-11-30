@@ -24,6 +24,7 @@ import BackImagePicker from '../../../../components/collaborator/Profile/UserPro
 import AvatarImagePicker from '../../../../components/collaborator/Profile/UserProfile/AvatarImagePicker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import SubmitButtonDisable from '../../../../components/shared/Button/SubmitButtonDisable';
+import { ROUTES } from '../../../../constants/Routes';
 
 const UserProfile: React.FC = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -34,7 +35,7 @@ const UserProfile: React.FC = () => {
     <View style={styles.container}>
       <Header>
         <Backward
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.navigate(ROUTES.ACCOUNT)}
           titleBackward="My Profile"
         />
       </Header>

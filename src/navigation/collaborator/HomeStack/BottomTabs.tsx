@@ -45,6 +45,11 @@ const BottomTabs: React.FC = () => {
               console.log('object');
               navigation.navigate(ROUTES.REGISTRATION_STACK_NAVIGATOR);
               break;
+              // case ROUTES.ACCOUNT_STACK_NAVIGATOR:
+              // e.preventDefault();
+              // console.log('object');
+              // navigation.navigate(ROUTES.ACCOUNT_STACK_NAVIGATOR, {screen: ROUTES.ACCOUNT});
+              // break;
             // case 'REGISTRATION_CONFIRM':
             //   e.preventDefault();
             //   navigation.navigate('REGISTRATION_CONFIRM');

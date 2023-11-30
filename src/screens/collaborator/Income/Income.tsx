@@ -25,6 +25,7 @@ import { SHADOWS } from '../../../constants/Shadows';
 import { COLORS } from '../../../constants/Colors';
 import Animated from 'react-native-reanimated';
 import IncomeRegistration from './incomeRegistration/IncomeRegistration';
+import { ROUTES } from '../../../constants/Routes';
 
 const Wallet = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -83,7 +84,7 @@ const Wallet = () => {
     <View style={styles.container}>
       <Header>
         <Backward
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.navigate(ROUTES.ACCOUNT)}
           titleBackward="My Income"
         />
       </Header>

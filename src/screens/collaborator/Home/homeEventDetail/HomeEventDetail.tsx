@@ -31,6 +31,7 @@ import { imageNotFoundUri } from '../../../../utils/images';
 import { DataPost } from '../../../../models/collaborator/dataPost.model';
 import { imageUndefinedUserUri } from '../../../../utils/images';
 import RegistrationEmpty from '../../../../components/shared/Empty/RegistrationEmpty';
+import { ROUTES } from '../../../../constants/Routes';
 
 const HomeEventDetail: FC = () => {
   // Get Width of Windows
@@ -41,7 +42,7 @@ const HomeEventDetail: FC = () => {
   const route = useRoute();
   const { item } = route?.params as { item: DataPost };
   const handleNavigate = (item: DataPost) => {
-    navigation.navigate('POSITION_REGISTRATION', { item });
+    navigation.navigate(ROUTES.POSITION_REGISTRATION, { item });
   };
   useEffect(() => {
     console.log(JSON.stringify(item, null, 2));

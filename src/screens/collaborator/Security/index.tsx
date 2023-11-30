@@ -8,20 +8,22 @@ import { Entypo } from '@expo/vector-icons';
 import { COLORS } from '../../../constants/Colors';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
 import FeatureField from '../../../components/collaborator/Security/FeatureField';
+import { ROUTES } from '../../../constants/Routes';
 
 const Security = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
+  console.log(navigation)
   return (
     <View>
       <Header>
         <Backward
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.navigate(ROUTES.ACCOUNT)}
           titleBackward="Security"
         />
       </Header>
       <View style={styles.container}>
         <FeatureField featureName="Change Password" />
-        <FeatureField onPress={() => navigation.navigate("USER_PROFILE_DISABLE")} featureName="Disable Account" />
+        <FeatureField onPress={() => navigation.navigate(ROUTES.USER_PROFILE_DISABLE)} featureName="Disable Account" />
         <FeatureField featureName="2FA (2-factor authentication)" />
       </View>
     </View>

@@ -43,37 +43,62 @@ import CreatePostRegistrationParam from '../../../dtos/collaborator/parameter/cr
 import { DataPost } from '../../../models/collaborator/dataPost.model';
 import useCustomToast from '../../../utils/toasts';
 import ConfirmAlertModal from '../../../components/shared/ConfirmAlert/ConfirmAlert';
+import { DataPosition } from '../../../models/collaborator/dataPosition.model';
+import { ROUTES } from '../../../constants/Routes';
+import { CommonActions } from '@react-navigation/native';
 
 const PositionRegistration = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const route = useRoute();
   const { item } = route?.params as { item: DataPost };
 
-  enum TypeButtonEnum {
+  enum TYPE_BUTTON_ENUM {
     REGISTER = 1,
-    CANCEL = 2,
-    CHECKIN = 3,
+    NAVIGATE_TO_CERTIFICATE = 2,
+    NAVIGATE_TO_REGISTRATION = 3,
   }
-  const [showAlert, setShowAlert] = useState<boolean>(false);
-  const [message, setMessage] = useState('');
-  const [typeButton, setTypeButton] = useState(0);
 
-  const showAlertHandler = (action?: number | null) => {
+  type ConfirmInfo = {
+    title: string | null;
+    message: string | null;
+    typeButton: number | null;
+  };
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [confirmInfo, setConfirmInfo] = useState<ConfirmInfo | null>(null);
+
+  const showAlertHandler = (
+    action?: number | null,
+    item?: DataPost | null,
+    position?: DataPosition | null
+  ) => {
     switch (action) {
-      case TypeButtonEnum.REGISTER:
-        setTypeButton(TypeButtonEnum.REGISTER);
-        setMessage('Are you sure you want to apply for this position?');
+      case TYPE_BUTTON_ENUM.REGISTER:
+        setConfirmInfo({
+          title: 'CONFIRMATION',
+          message: `Are you sure you want to apply for "${position?.positionName}" position?`,
+          typeButton: TYPE_BUTTON_ENUM.REGISTER,
+        });
         break;
-      case TypeButtonEnum.CANCEL:
-        setTypeButton(TypeButtonEnum.CANCEL);
-        setMessage('Are you sure you want to Cancel?');
+      case TYPE_BUTTON_ENUM.NAVIGATE_TO_CERTIFICATE:
+        setConfirmInfo({
+          title: 'CONFIRMATION',
+          message: 'You need Certificate for this position?',
+          typeButton: TYPE_BUTTON_ENUM.NAVIGATE_TO_CERTIFICATE,
+        });
         break;
-      case TypeButtonEnum.CHECKIN:
-        setTypeButton(TypeButtonEnum.CHECKIN);
-        setMessage('Are you sure you want to Check in?');
+      case TYPE_BUTTON_ENUM.NAVIGATE_TO_REGISTRATION:
+        setConfirmInfo({
+          title: 'CONFIRMATION',
+          message: 'You need Certificate for this position?',
+          typeButton: TYPE_BUTTON_ENUM.NAVIGATE_TO_REGISTRATION,
+        });
         break;
       default:
-        setMessage('');
+        setConfirmInfo({
+          title: '',
+          message: '',
+          typeButton: 0,
+        });
     }
     setShowAlert(true);
   };
@@ -81,8 +106,6 @@ const PositionRegistration = () => {
   const hideAlertHandler = () => {
     setShowAlert(false);
   };
-
-  const onHandleConfirmPress = () => {};
 
   const [isSelectedBusOption, setIsSelectedBusOption] = useState(
     Array(item?.postPositions.length).fill(false)
@@ -102,14 +125,13 @@ const PositionRegistration = () => {
   const [showModal, setShowModal] = useState(false);
 
   const handleSubmit = async (
-    index?: number,
-    schoolBusOption?: boolean,
-    positionId?: number
+    position?: DataPosition | null,
+    schoolBusOption?: boolean
   ) => {
     try {
       const params = {
         schoolBusOption,
-        positionId,
+        positionId: position?.id,
       } as CreatePostRegistrationParam;
       await dispatch(createPostRegistration(params))
         .then((res) => {
@@ -117,86 +139,93 @@ const PositionRegistration = () => {
           console.log(JSON.stringify(res, null, 2));
           if (requestStatus === 'fulfilled') {
             showToastSuccess('Register successfully!');
-            setShowModal(true);
+            showAlertHandler(
+              TYPE_BUTTON_ENUM.NAVIGATE_TO_REGISTRATION,
+              null,
+              position
+            );
           } else {
             const resRejectedData = res.payload as ErrorStatus;
-            // switch (resRejectedData?.statusCode) {
-            //   case 400:
-            //     switch (resRejectedData?.errorCode) {
-            //       case 4001:
-            //         showToastError(resRejectedData?.message);
-            //         break;
-            //       case 4002:
-            //         showToastError(resRejectedData?.message);
-            //         break;
-            //       case 4003:
-            //         showToastError(resRejectedData?.message);
-            //         break;
-            //       case 4004:
-            //         showToastError(resRejectedData?.message);
-            //         break;
-            //       case 4005:
-            //         showToastError(resRejectedData?.message);
-            //         break;
-            //       case 4006:
-            //         showToastError(resRejectedData?.message);
-            //         break;
-            //       case 4007:
-            //         showToastError(resRejectedData?.message);
-            //         break;
-            //       case 4008:
-            //         showToastError(resRejectedData?.message);
-            //         break;
-            //       case 4009:
-            //         showToastError(resRejectedData?.message);
-            //         break;
-            //       case 4010:
-            //         showToastError(resRejectedData?.message);
-            //         break;
-            //       case 4011:
-            //         showToastError(resRejectedData?.message);
-            //         break;
-            //       // case 4012:
-            //       //   showToastError(resRejectedData?.message);
-            //       //   break;
-            //       case 4013:
-            //         showToastError(resRejectedData?.message);
-            //         break;
-            //       case 4014:
-            //         showToastError(resRejectedData?.message);
-            //         break;
-            //       case 4015:
-            //         showToastError(resRejectedData?.message);
-            //         break;
-            //       case 4016:
-            //         showToastError(resRejectedData?.message);
-            //         break;
-            //         case 4016:
-            //         showToastError(resRejectedData?.message);
-            //         break;
-            //         case 4016:
-            //         showToastError(resRejectedData?.message);
-            //         break;
-            //       case 4024:
-            //         showToastError(
-            //           'You have applied for a position that overlaps with this position'
-            //         );
-            //         break;
-            //       default:
-            //         showToastError('Undefined error!');
-            //     }
-            //     break;
-            //   case 401:
-            //     showToastError('You are NOT PERMISSION!');
-            //     break;
-            //   case 404:
-            //     showToastError(resRejectedData?.message);
-            //     // showToastError('404 NOT FOUND');
-            //     break;
-            //   default:
-            //     showToastError('Undefined error!');
-            // }
-            showToastError(resRejectedData?.message);
+            switch (resRejectedData?.statusCode) {
+              case 400:
+                switch (resRejectedData?.errorCode) {
+                  case 4001:
+                    showToastError(resRejectedData?.message);
+                    break;
+                  case 4002:
+                    showToastError(resRejectedData?.message);
+                    break;
+                  case 4003:
+                    showToastError(resRejectedData?.message);
+                    break;
+                  case 4004:
+                    showToastError(resRejectedData?.message);
+                    break;
+                  case 4005:
+                    showToastError(resRejectedData?.message);
+                    break;
+                  case 4006:
+                    showToastError(resRejectedData?.message);
+                    break;
+                  case 4007:
+                    showToastError(resRejectedData?.message);
+                    break;
+                  case 4008:
+                    showToastError(resRejectedData?.message);
+                    break;
+                  case 4009:
+                    showToastError(resRejectedData?.message);
+                    break;
+                  case 4010:
+                    showToastError(resRejectedData?.message);
+                    break;
+                  case 4011:
+                    showToastError(resRejectedData?.message);
+                    break;
+                  case 4012:
+                    showAlertHandler(
+                      TYPE_BUTTON_ENUM.NAVIGATE_TO_CERTIFICATE,
+                      null,
+                      null
+                    );
+                    break;
+                  case 4013:
+                    showToastError(resRejectedData?.message);
+                    break;
+                  case 4014:
+                    showToastError(resRejectedData?.message);
+                    break;
+                  case 4015:
+                    showToastError(resRejectedData?.message);
+                    break;
+                  case 4016:
+                    showToastError(resRejectedData?.message);
+                    break;
+                  case 4016:
+                    showToastError(resRejectedData?.message);
+                    break;
+                  case 4016:
+                    showToastError(resRejectedData?.message);
+                    break;
+                  case 4024:
+                    showToastError(
+                      'You have applied for a position that overlaps with this position'
+                    );
+                    break;
+                  default:
+                    showToastError('Undefined error!');
+                }
+                break;
+              case 401:
+                showToastError('You are NOT PERMISSION!');
+                break;
+              case 404:
+                showToastError(resRejectedData?.message);
+                // showToastError('404 NOT FOUND');
+                break;
+              default:
+                showToastError('Undefined error!');
+            }
           }
         })
         .catch((error) => {
@@ -258,11 +287,10 @@ const PositionRegistration = () => {
           <Text style={styles.textPosition} numberOfLines={1}>
             Positions
           </Text>
-          {item?.postPositions ? (
+          {item?.postPositions && item?.postPositions?.length > 0 ? (
             item?.postPositions.map((position, index) => {
-              const INDEX = index + 1;
               return (
-                <View key={INDEX} style={styles.containerEveryPosition}>
+                <View key={index} style={styles.containerEveryPosition}>
                   <View style={styles.everyPosition}>
                     <TouchableOpacity
                       onPress={() => handleSetPositionId(position?.id)}
@@ -273,7 +301,7 @@ const PositionRegistration = () => {
                     >
                       <View style={{ flex: 1 }}>
                         <Text style={styles.textPositionNum}>
-                          Position {INDEX}: {''}
+                          Position: {''}
                           <Text style={styles.textPositionNum_2}>
                             {position?.positionName
                               ? position?.positionName
@@ -430,6 +458,24 @@ const PositionRegistration = () => {
                               </View>
                             </View>
                           </View>
+
+                          <View style={{ marginTop: 15 }}>
+                            <Text
+                              style={[
+                                styles.paragraph,
+                                {
+                                  fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
+                                },
+                              ]}
+                            >
+                              Certificate Need?: {''}
+                              <Text style={{ color: COLORS?.orange_icon }}>
+                                {position?.certificateName
+                                  ? position?.certificateName
+                                  : 'None'}
+                              </Text>
+                            </Text>
+                          </View>
                         </View>
 
                         <DashedLine
@@ -441,7 +487,9 @@ const PositionRegistration = () => {
                         />
 
                         <View style={styles.section}>
-                          <Text style={styles.paragraph}>* Bus Service?</Text>
+                          <Text style={styles.paragraph}>
+                            * Use Bus Service?
+                          </Text>
                           <Switch
                             disabled={position?.isBusService ? false : true}
                             value={isSelectedBusOption[index]}
@@ -455,10 +503,14 @@ const PositionRegistration = () => {
                             // style={{marginLeft: 10}}
                           />
                         </View>
-                        <View>
+                        <View style={{ marginTop: 15 }}>
                           <SubmitButton
                             onPress={() =>
-                              showAlertHandler(TypeButtonEnum.REGISTER)
+                              showAlertHandler(
+                                TYPE_BUTTON_ENUM.REGISTER,
+                                item,
+                                position
+                              )
                             }
                             style={{
                               marginHorizontal: 40,
@@ -472,21 +524,38 @@ const PositionRegistration = () => {
                           <ConfirmAlert
                             show={showAlert}
                             title="CONFIRMATION"
-                            message={message}
+                            message={confirmInfo?.message}
                             confirmText="Yes"
                             cancelText="No"
                             confirmButtonColor={COLORS.orange_button}
                             onConfirmPressed={() => {
-                              switch (typeButton) {
-                                case TypeButtonEnum.REGISTER:
+                              switch (confirmInfo?.typeButton) {
+                                case TYPE_BUTTON_ENUM.REGISTER:
                                   handleSubmit(
-                                    INDEX,
-                                    isSelectedBusOption[index],
-                                    position?.id
+                                    position,
+                                    isSelectedBusOption[index]
                                   );
-                                  console.log(position?.positionName)
                                   break;
-
+                                case TYPE_BUTTON_ENUM.NAVIGATE_TO_CERTIFICATE:
+                                  navigation.dispatch(
+                                    CommonActions.reset({
+                                      index: 0,
+                                      routes: [
+                                        {
+                                          name: ROUTES.ACCOUNT_STACK_NAVIGATOR,
+                                          state: {
+                                            routes: [{ name: ROUTES.ACCOUNT }, { name: ROUTES.CERTIFICATE_HISTORY }],
+                                          },
+                                        },
+                                      ],
+                                    })
+                                  );
+                                  break;
+                                case TYPE_BUTTON_ENUM.NAVIGATE_TO_REGISTRATION:
+                                  navigation.navigate(
+                                    ROUTES.REGISTRATION_STACK_NAVIGATOR
+                                  );
+                                  break;
                                 default:
                                   console.log('Type Button Null');
                               }
@@ -632,7 +701,6 @@ const styles = StyleSheet.create({
   section: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
   },
   paragraph: {
     flex: 1,

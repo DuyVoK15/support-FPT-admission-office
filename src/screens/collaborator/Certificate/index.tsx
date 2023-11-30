@@ -3,9 +3,10 @@ import React from 'react';
 import CertificateTopTabs from '../../../navigation/collaborator/CertificateStack/CertificateTopTabs';
 import Header from '../../../components/shared/Header/Back';
 import Backward from '../../../components/shared/Direction/Backward/Backward';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
 import { ScreenHeight } from '../../../constants/Demesions';
+import { ROUTES } from '../../../constants/Routes';
 
 const CertificateHistory = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -13,7 +14,15 @@ const CertificateHistory = () => {
     <View style={{ flex: 1 }}>
       <Header>
         <Backward
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.dispatch(
+            CommonActions.navigate({
+              name: ROUTES.ACCOUNT_STACK_NAVIGATOR,
+              params: {
+                screen: ROUTES.ACCOUNT,
+                
+              },
+            })
+          )}
           titleBackward="Cerificate History"
         />
       </Header>

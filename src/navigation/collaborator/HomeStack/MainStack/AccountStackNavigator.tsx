@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AccountTab from '../MainTabs/AccountTab';
 import UserProfile from '../../../../screens/collaborator/Profile/UserProfile/UserProfile';
@@ -11,15 +11,45 @@ import Security from '../../../../screens/collaborator/Security';
 import UserProfileSignup from '../../../../screens/collaborator/Profile/UserProfileSignup/UserProfileSignup';
 import UserProfileDisable from '../../../../screens/collaborator/Profile/UserProfileDisable';
 import Contract from '../../../../screens/collaborator/Contract/Contract';
-import { HomeCollaboratorStackNavigatorParamList } from '../../../../../type';
+import {
+  HomeCollaboratorScreenNavigationProp,
+  HomeCollaboratorStackNavigatorParamList,
+} from '../../../../../type';
 import AccountNotification from '../../../../screens/collaborator/Notification/AccountNotification';
 import { ROUTES } from '../../../../constants/Routes';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 
 const Stack =
   createNativeStackNavigator<HomeCollaboratorStackNavigatorParamList>();
 const AccountStackNavigator = () => {
+  const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
+  // const route = useRoute();
+  // let params = '';
+  // if (route?.params !== undefined) {
+  //   const { param } = route?.params as { param: ROUTES };
+  //   params = param;
+  // }
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('tabPress', (e: any) => {
+  //     // Do something
+  //     navigation.navigate(ROUTES.ACCOUNT);
+  //   });
+
+  //   return unsubscribe;
+  // }, [navigation]);
+  
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     navigation.navigate(ROUTES.ACCOUNT_STACK_NAVIGATOR);
+  //   }, [])
+  // );
+
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName={ROUTES.ACCOUNT}>
       <Stack.Screen
         name={ROUTES.ACCOUNT}
         component={AccountTab}

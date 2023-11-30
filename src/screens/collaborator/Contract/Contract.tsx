@@ -23,6 +23,7 @@ import DashedLine from 'react-native-dashed-line';
 import { DataContract } from '../../../models/collaborator/contract.model';
 import { formatToDate } from '../../../utils/formats';
 import { WebView } from 'react-native-webview';
+import { ROUTES } from '../../../constants/Routes';
 
 const Contract = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -156,7 +157,7 @@ const Contract = () => {
       <Header>
         <Backward
           titleBackward="Contract"
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.navigate(ROUTES.ACCOUNT)}
         />
       </Header>
       <WebView

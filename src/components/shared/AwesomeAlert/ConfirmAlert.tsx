@@ -6,8 +6,8 @@ import { COLORS } from '../../../constants/Colors';
 
 interface ConfrimAlert {
   show?: boolean;
-  title?: string;
-  message?: string;
+  title?: string | null;
+  message?: string | null;
   cancelText?: string;
   confirmText?: string;
   confirmButtonColor?: string;
@@ -20,12 +20,12 @@ const ConfirmAlert = (props: ConfrimAlert) => {
       useNativeDriver={true}
       show={props.show}
       showProgress={false}
-      title={props.title}
+      title={props.title ?? ''}
       titleStyle={{
         fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
         color: COLORS?.orange_icon,
       }}
-      message={props.message}
+      message={props.message ?? ''}
       messageStyle={{
         fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
         color: 'black',
