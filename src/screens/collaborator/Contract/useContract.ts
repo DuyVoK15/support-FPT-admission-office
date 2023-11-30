@@ -7,7 +7,8 @@ import FileViewer from 'react-native-file-viewer';
 import useCustomToast from '../../../utils/toasts';
 import { useAppSelector } from '../../../app/hooks';
 import * as Sharing from 'expo-sharing';
-
+import * as DocumentPicker from 'expo-document-picker';
+import * as IntentLauncher from 'expo-intent-launcher';
 const useIndex = () => {
   const dispatch = useAppDispatch();
 
@@ -65,9 +66,8 @@ const useIndex = () => {
           if (resData === 200) {
             showToastSuccess('Download file success!');
             Sharing.shareAsync(res?.uri ?? '').then((res) => {
-              console.log(res)
+              console.log(res);
             });
-            
           } else {
             showToastError('Download file failed!');
           }
@@ -78,7 +78,36 @@ const useIndex = () => {
     }
   };
 
-  const handlers = { downloadAndOpenFile, onRefresh };
+  const downloadAndOpenFileAndroid = async (stringFile: string) => {
+    console.log('downloading...');
+    try {
+      FileSystem.downloadAsync(
+        stringFile,
+        FileSystem.documentDirectory + 'small.doc'
+      )
+        .then(({ uri }) => {
+          console.log('Finished downloading to ', uri);
+          FileSystem.getContentUriAsync(uri).then((cUri) => {
+            console.log(cUri);
+            IntentLauncher.startActivityAsync('android.intent.action.VIEW', {
+              data: cUri,
+              flags: 1,
+            });
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handlers = {
+    downloadAndOpenFile,
+    downloadAndOpenFileAndroid,
+    onRefresh,
+  };
   const props = {};
   const state = { refreshing };
   const stateRedux = { contractList };

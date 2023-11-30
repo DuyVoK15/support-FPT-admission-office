@@ -68,7 +68,7 @@ const Contract = () => {
             {/* <View></View> */}
             <TouchableOpacity
               onPress={() =>
-                handlers.downloadAndOpenFile(
+                handlers.downloadAndOpenFileAndroid(
                   item?.submittedFile !== ''
                     ? item?.submittedFile
                     : item?.contract?.sampleFile
