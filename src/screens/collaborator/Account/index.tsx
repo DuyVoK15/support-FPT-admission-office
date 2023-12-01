@@ -26,12 +26,11 @@ import SubmitButton from '../../../components/shared/Button/SubmitButton';
 import Header from '../../../components/shared/Header/Header';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SHADOWS } from '../../../constants/Shadows';
-import {
-  collab_logout,
-} from '../../../features/collaborator/collab.authSlice';
+import { collab_logout } from '../../../features/collaborator/collab.authSlice';
 import { imageUndefinedUserUri } from '../../../utils/images';
 import Animated from 'react-native-reanimated';
 import { collab_getUserInfo } from '../../../features/collaborator/collab.accountSlice';
+import { ROUTES } from '../../../constants/Routes';
 
 const Account = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -114,7 +113,7 @@ const Account = () => {
 
           <View style={styles.containerColumn}>
             <TouchableOpacity
-              onPress={() => navigation.navigate('PROFILE')}
+              onPress={() => navigation.navigate(ROUTES.USER_PROFILE)}
               style={styles.containerRow}
             >
               <View style={styles.column1}>
@@ -135,7 +134,7 @@ const Account = () => {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => navigation.navigate('CERTIFICATE_HISTORY')}
+              onPress={() => navigation.navigate(ROUTES.CERTIFICATE_HISTORY)}
               style={styles.containerRow}
             >
               <View style={styles.column1}>
@@ -156,7 +155,7 @@ const Account = () => {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => navigation.navigate('WALLET')}
+              onPress={() => navigation.navigate(ROUTES.WALLET)}
               style={styles.containerRow}
             >
               <View style={styles.column1}>
@@ -174,7 +173,7 @@ const Account = () => {
 
             <TouchableOpacity
               style={styles.containerRow}
-              onPress={() => navigation.navigate('CONTRACT')}
+              onPress={() => navigation.navigate(ROUTES.CONTRACT)}
             >
               <View style={styles.column1}>
                 <MaterialIcons
@@ -186,6 +185,27 @@ const Account = () => {
               <View style={styles.column2}>
                 <View>
                   <Text style={styles.text}>My Contract</Text>
+                </View>
+              </View>
+              <View style={styles.column3}>
+                <Entypo name="chevron-small-right" size={24} color="black" />
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.containerRow}
+              onPress={() => navigation.navigate(ROUTES.APPLICATION)}
+            >
+              <View style={styles.column1}>
+                <MaterialCommunityIcons
+                  name="application-settings"
+                  size={24}
+                  color={COLORS.orange_icon}
+                />
+              </View>
+              <View style={styles.column2}>
+                <View>
+                  <Text style={styles.text}>My Application</Text>
                 </View>
               </View>
               <View style={styles.column3}>
@@ -216,7 +236,7 @@ const Account = () => {
             </TouchableOpacity> */}
 
             <TouchableOpacity
-              onPress={() => navigation.navigate('SECURITY')}
+              onPress={() => navigation.navigate(ROUTES.SECURITY)}
               style={styles.containerRow}
             >
               <View style={styles.column1}>
@@ -231,7 +251,7 @@ const Account = () => {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => navigation.navigate('ACCOUNT_NOTIFICATION')}
+              onPress={() => navigation.navigate(ROUTES.ACCOUNT_NOTIFICATION)}
               style={styles.containerRow}
             >
               <View style={styles.column1}>
@@ -256,7 +276,7 @@ const Account = () => {
 
           <View style={styles.containerColumn}>
             <TouchableOpacity
-              onPress={() => navigation.navigate('PROFILE_SIGNUP')}
+              onPress={() => navigation.navigate(ROUTES.USER_PROFILE_SIGNUP)}
               style={styles.containerRow}
             >
               <View style={styles.column1}>
