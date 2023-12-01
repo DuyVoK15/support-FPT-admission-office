@@ -25,6 +25,9 @@ import usePushNotifications from '../../usePushNotifications';
 import LoadingScreen from '../components/shared/Loading/Loading';
 import LoadAuthStateResponse from '../dtos/collaborator/response/loadAuthState.dto';
 import useAppNavigator from './useAppNavigator';
+import AccountInfoCreation from '../screens/collaborator/AccountInformationSignup/accountInfoCreation/AccountInfoCreation';
+import ScanIDRecognitionBack from '../screens/collaborator/AccountInformationSignup/scanIDRecognitionBack/scanIDRecognitionBack';
+import SignUpInformationNavigator from './collaborator/SignUpInformation/SignUpInformationNavigator';
 
 const AuthStackScreen: React.FC = () => {
   return <LoginScreen />;
@@ -63,7 +66,7 @@ const AppNavigator: FC = () => {
     state.collab_isSignupAccountInfo ? (
     <LoadingScreen />
   ) : state.collab_isAuthenticated && state.roleId === RoleId.COLLAB_ROLE ? (
-    <HomeCollaboratorStackScreen />
+    <SignUpInformationNavigator />
   ) : state.collab_isAuthenticated && state.roleId === RoleId.ADMISSION_ROLE ? (
     <HomeAdmissionStackScreen />
   ) : (

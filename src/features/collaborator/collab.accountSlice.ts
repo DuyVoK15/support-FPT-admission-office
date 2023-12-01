@@ -40,7 +40,7 @@ export const collab_getUserInfo = createAsyncThunk(
   'account/getUserInfo',
   async (_, { rejectWithValue }) => {
     try {
-      console.log("tôi vô đây")
+      console.log('tôi vô đây');
       const response = await accountService.collab_getUserInfo();
       return response.data;
     } catch (error) {
@@ -73,7 +73,7 @@ export const collab_updateProfile = createAsyncThunk(
     } catch (error) {
       const axiosError = error as AxiosError;
       console.log('Axios: ', axiosError.response?.data);
-      
+
       return rejectWithValue(axiosError.response?.data);
     }
   }
@@ -93,7 +93,36 @@ export const collab_updateAvatar = createAsyncThunk(
     }
   }
 );
+export const collab_updateFrontImage = createAsyncThunk(
+  'account/updateFrontImage',
+  async (params: { identityFrontImg: string }, { rejectWithValue }) => {
+    try {
+      const response = await accountService.collab_updateFrontImage(params);
+      console.log(JSON.stringify(response.data.data, null, 2));
 
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      console.log(error);
+      return rejectWithValue(axiosError.response?.status);
+    }
+  }
+);
+export const collab_updateBackImage = createAsyncThunk(
+  'account/updateBackImage',
+  async (params: { identityBackImg: string }, { rejectWithValue }) => {
+    try {
+      const response = await accountService.collab_updateBackImage(params);
+      console.log(JSON.stringify(response.data.data, null, 2));
+
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      console.log(error);
+      return rejectWithValue(axiosError.response?.status);
+    }
+  }
+);
 export const collab_enableAccount = createAsyncThunk(
   'account/enable-account',
   async (_, { rejectWithValue }) => {
@@ -236,6 +265,32 @@ export const accountSlice = createSlice({
         state.loading = false;
       })
       .addCase(collab_updateAvatar.rejected, (state, action) => {
+        state.error = action.payload as GetUserInfoDto;
+        state.loading = false;
+      })
+
+      .addCase(collab_updateFrontImage.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(collab_updateFrontImage.fulfilled, (state, action) => {
+        state.userInfo = action.payload;
+        state.loading = false;
+      })
+      .addCase(collab_updateFrontImage.rejected, (state, action) => {
+        state.error = action.payload as GetUserInfoDto;
+        state.loading = false;
+      })
+
+      .addCase(collab_updateBackImage.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(collab_updateBackImage.fulfilled, (state, action) => {
+        state.userInfo = action.payload;
+        state.loading = false;
+      })
+      .addCase(collab_updateBackImage.rejected, (state, action) => {
         state.error = action.payload as GetUserInfoDto;
         state.loading = false;
       })

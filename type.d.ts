@@ -31,9 +31,9 @@ export type HomeCollaboratorStackNavigatorParamList = {
   USER_PROFILE: undefined;
   USER_PROFILE_SIGNUP: undefined;
   CERTIFICATE_HISTORY: undefined;
-  CERTIFICATE_ALL: undefined
-  CERTIFICATE_COMPLETED: undefined
-  CERTIFICATE_REJECTED: undefined
+  CERTIFICATE_ALL: undefined;
+  CERTIFICATE_COMPLETED: undefined;
+  CERTIFICATE_REJECTED: undefined;
   WALLET: undefined;
   CONTRACT: undefined;
   ACCOUNT_NOTIFICATION: undefined;
@@ -43,6 +43,10 @@ export type HomeCollaboratorStackNavigatorParamList = {
   POSITION_REGISTRATION: undefined;
   SECURITY: undefined;
   USER_PROFILE_DISABLE: undefined;
+  APPLICATION: undefined;
+  SCAN_FRONT_IMAGE: undefined;
+  SCAN_BACK_IMAGE: undefined;
+  ACCOUNT_INFORMATION_CREATION: undefined;
 };
 
 export type HomeCollaboratorScreenNavigationProp = NativeStackScreenProps<
@@ -87,7 +91,11 @@ export type HomeCollaboratorScreenNavigationProp = NativeStackScreenProps<
   'HOME_NOTIFICATION',
   'VERIFICATION',
   'SECURITY',
-  'USER_PROFILE_DISABLE'
+  'USER_PROFILE_DISABLE',
+  'APPLICATION',
+  'SCAN_FRONT_IMAGE',
+  'SCAN_BACK_IMAGE',
+  'ACCOUNT_INFORMATION_CREATION',
 >;
 
 export type HomeAdmissionStackNavigatorParamList = {

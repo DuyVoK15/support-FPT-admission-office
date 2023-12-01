@@ -22,6 +22,7 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
+import ViewApplication from '../../../../screens/collaborator/Application/ViewApplication/ViewApplication';
 
 const Stack =
   createNativeStackNavigator<HomeCollaboratorStackNavigatorParamList>();
@@ -120,6 +121,13 @@ const AccountStackNavigator = () => {
         component={Contract}
         options={{
           animation: 'none',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name={ROUTES.APPLICATION}
+        component={ViewApplication}
+        options={{
           headerShown: false,
         }}
       />

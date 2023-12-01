@@ -35,6 +35,36 @@ export const accountService = {
 
     return axiosClient.patch(url, { ...payload });
   },
+  collab_updateFrontImage: (payload: {
+    identityFrontImg: string;
+  }): Promise<AxiosResponse<GetUserInfoDto>> => {
+    const url =
+      '/api/account-information-test-scan/updateAccountInformationCitizenFrontImg';
+
+    return axiosClient.patch(url, { ...payload });
+  },
+  collab_updateBackImage: (payload: {
+    identityBackImg: string;
+  }): Promise<AxiosResponse<GetUserInfoDto>> => {
+    const url =
+      '/api/account-information-test-scan/updateAccountInformationCitizenBacImg';
+
+    return axiosClient.patch(url, { ...payload });
+  },
+  collab_updateInformationFront: (
+    payload: UpdateAvatarDto
+  ): Promise<AxiosResponse<GetUserInfoDto>> => {
+    const url = '/api/account/updateAvatar';
+
+    return axiosClient.patch(url, { ...payload });
+  },
+  collab_updateInformationBack: (
+    payload: UpdateAvatarDto
+  ): Promise<AxiosResponse<GetUserInfoDto>> => {
+    const url = '/api/account/updateAvatar';
+
+    return axiosClient.patch(url, { ...payload });
+  },
   collab_enableAccount: (): Promise<
     AxiosResponse<UpdateEnableAccountResponse>
   > => {
