@@ -1,4 +1,4 @@
-export interface ViewComplaintResponse {
+export interface ViewApplicationResponse {
   metadata: {
     page: number;
     size: number;

@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import PostDto from '../../dtos/collaborator/post.dto';
 import { postService } from '../../services/collaborator/post.service';
-import DataPost from '../../models/collaborator/dataPost.model';
 import { AxiosError } from 'axios';
 import ViewPostCategoryResponse from '../../dtos/collaborator/response/viewPostCategory.dto';
 import FilterPostPayload from '../../dtos/collaborator/parameter/filterPost.dto';
@@ -10,27 +9,27 @@ import {
   ViewReportResponse,
 } from '../../dtos/collaborator/response/viewReport.dto';
 import { reportService } from '../../services/collaborator/report.service';
-import { ViewComplaintResponse } from '../../dtos/collaborator/response/viewComplaint.dto';
-import { complaintService } from '../../services/collaborator/complaint.service';
+import { ViewApplicationResponse } from '../../dtos/collaborator/response/viewApplication.dto';
+import { applicationService } from '../../services/collaborator/application.service';
 
-interface ComplaintState {
-  complaint: ViewComplaintResponse | null;
+interface ApplicationState {
+  application: ViewApplicationResponse | null;
   loading: boolean;
   error: string;
   // Thêm các trường khác liên quan đến người dùng nếu cần thiết
 }
 
-const initialState: ComplaintState = {
-  complaint: null,
+const initialState: ApplicationState = {
+  application: null,
   loading: false,
   error: '',
 };
 
-export const getAllComplaint = createAsyncThunk(
-  'complaint/getAll',
+export const getAllApplication = createAsyncThunk(
+  'application/getAll',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await complaintService.getAllComplaint();
+      const response = await applicationService.getAllApplication();
 
       return response.data;
     } catch (error: any) {
@@ -40,16 +39,16 @@ export const getAllComplaint = createAsyncThunk(
   }
 );
 
-export const createComplaint = createAsyncThunk(
-  'complaint/create',
+export const createApplication = createAsyncThunk(
+  'application/create',
   async (
     params: {
-      problemNote: string
+      problemNote: string;
     },
     { rejectWithValue }
   ) => {
     try {
-      const response = await complaintService.createComplaint(params);
+      const response = await applicationService.createAppication(params);
       return response.data;
     } catch (error: any) {
       const axiosError = error as AxiosError;
@@ -58,25 +57,37 @@ export const createComplaint = createAsyncThunk(
   }
 );
 
-export const complaintSlice = createSlice({
-  name: 'complaint',
+export const applicationSlice = createSlice({
+  name: 'application',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getAllComplaint.pending, (state) => {
+      .addCase(getAllApplication.pending, (state) => {
         state.loading = true;
         state.error = '';
       })
-      .addCase(getAllComplaint.fulfilled, (state, action) => {
+      .addCase(getAllApplication.fulfilled, (state, action) => {
         state.loading = false;
-        state.complaint = action.payload;
+        state.application = action.payload;
       })
-      .addCase(getAllComplaint.rejected, (state, action) => {
+      .addCase(getAllApplication.rejected, (state, action) => {
         state.error = String(action.payload);
         state.loading = false;
       })
+      .addCase(createApplication.pending, (state) => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(createApplication.fulfilled, (state, action) => {
+        state.loading = false;
+        state.application = action.payload;
+      })
+      .addCase(createApplication.rejected, (state, action) => {
+        state.error = String(action.payload);
+        state.loading = false;
+      });
   },
 });
 
-export default complaintSlice.reducer;
+export default applicationSlice.reducer;

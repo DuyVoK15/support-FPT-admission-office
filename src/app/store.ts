@@ -9,7 +9,7 @@ import collab_accountReducer from '../features/collaborator/collab.accountSlice'
 import collab_certificateReducer from '../features/collaborator/collab.certificateSlice';
 import collab_contractReducer from '../features/collaborator/collab.contractSlice';
 import collab_reportReducer from '../features/collaborator/collab.reportSlice';
-import collab_complaintReducer from '../features/collaborator/collab.complaintSlice';
+import collab_applicationReducer from '../features/collaborator/collab.applicationSlice';
 import collab_checkAttendanceReducer from '../features/collaborator/collab.checkAttendanceSlice';
 import collab_notificationReducer from '../features/collaborator/collab.notificationSlice';
 
@@ -25,7 +25,7 @@ export const store = configureStore({
     collab_certificate: collab_certificateReducer,
     collab_contract: collab_contractReducer,
     collab_report: collab_reportReducer,
-    collab_complaint: collab_complaintReducer,
+    collab_application: collab_applicationReducer,
     collab_checkAttendance: collab_checkAttendanceReducer,
     collab_notification: collab_notificationReducer,
     // Thêm reducers khác nếu cần thiết
