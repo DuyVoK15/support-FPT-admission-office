@@ -12,6 +12,20 @@ import { useAppSelector } from '../../../../app/hooks';
 
 const useUserProfileSignup = () => {
   const dispatch = useAppDispatch();
+  const userInfo = useAppSelector(
+    (state) => state.collab_account.userInfo?.data
+  );
+  const fetchUserInfo = async () => {
+    try {
+      await dispatch(collab_getUserInfo());
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
   const {
     control,
     handleSubmit,
@@ -19,15 +33,33 @@ const useUserProfileSignup = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      identityNumber: '',
-      idStudent: '',
-      fbUrl: '',
-      address: '',
-      identityIssueDate: '',
-      placeOfIssue: '',
-      identityFrontImg: '',
-      identityBackImg: '',
-      taxNumber: '',
+      identityNumber: userInfo?.accountInformation?.identityNumber
+        ? userInfo?.accountInformation?.identityNumber
+        : '',
+      idStudent: userInfo?.accountInformation?.idStudent
+        ? userInfo?.accountInformation?.idStudent
+        : '',
+      fbUrl: userInfo?.accountInformation?.fbUrl
+        ? userInfo?.accountInformation?.fbUrl
+        : '',
+      address: userInfo?.accountInformation?.address
+        ? userInfo?.accountInformation?.address
+        : '',
+      identityIssueDate: userInfo?.accountInformation?.identityIssueDate
+        ? userInfo?.accountInformation?.identityIssueDate
+        : '',
+      placeOfIssue: userInfo?.accountInformation?.placeOfIssue
+        ? userInfo?.accountInformation?.placeOfIssue
+        : '',
+      identityFrontImg: userInfo?.accountInformation?.identityFrontImg
+        ? userInfo?.accountInformation?.identityFrontImg
+        : '',
+      identityBackImg: userInfo?.accountInformation?.identityBackImg
+        ? userInfo?.accountInformation?.identityBackImg
+        : '',
+      taxNumber: userInfo?.accountInformation?.taxNumber
+        ? userInfo?.accountInformation?.taxNumber
+        : '',
     },
   });
 
@@ -51,19 +83,6 @@ const useUserProfileSignup = () => {
       }
     );
   };
-
-  const userInfo = useAppSelector((state) => state.collab_account.userInfo?.data);
-  const fetchUserInfo = async () => {
-    try {
-      await dispatch(collab_getUserInfo());
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchUserInfo();
-  }, []);
 
   const state = { userInfo };
   const handlers = { onSubmit, handleSubmit, setValue };

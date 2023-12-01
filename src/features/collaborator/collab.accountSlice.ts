@@ -89,7 +89,7 @@ export const collab_updateAvatar = createAsyncThunk(
     } catch (error) {
       const axiosError = error as AxiosError;
       console.log(error);
-      return rejectWithValue(axiosError.response?.status);
+      return rejectWithValue(axiosError.response?.data);
     }
   }
 );
@@ -104,7 +104,7 @@ export const collab_updateFrontImage = createAsyncThunk(
     } catch (error) {
       const axiosError = error as AxiosError;
       console.log(error);
-      return rejectWithValue(axiosError.response?.status);
+      return rejectWithValue(axiosError.response?.data);
     }
   }
 );
@@ -119,7 +119,51 @@ export const collab_updateBackImage = createAsyncThunk(
     } catch (error) {
       const axiosError = error as AxiosError;
       console.log(error);
-      return rejectWithValue(axiosError.response?.status);
+      return rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+export const collab_updateInformationFront = createAsyncThunk(
+  'account/updateInformationFront',
+  async (
+    params: {
+      identityNumber: string;
+      address: string;
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response =
+        await accountService.collab_updateInformationFront(params);
+      console.log(JSON.stringify(response.data.data, null, 2));
+
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      console.log(error);
+      return rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+export const collab_updateInformationBack = createAsyncThunk(
+  'account/updateInformationBack',
+  async (
+    params: {
+      identityIssueDate: string;
+      placeOfIssue: string;
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response =
+        await accountService.collab_updateInformationBack(params);
+      console.log(JSON.stringify(response.data.data, null, 2));
+
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      console.log(error);
+      return rejectWithValue(axiosError.response?.data);
     }
   }
 );
@@ -135,7 +179,7 @@ export const collab_enableAccount = createAsyncThunk(
       const axiosError = error as AxiosError;
       console.log(error);
       console.log(axiosError.message);
-      return rejectWithValue(axiosError.response);
+      return rejectWithValue(axiosError.response?.data);
     }
   }
 );
@@ -152,7 +196,7 @@ export const collab_verifyAccount = createAsyncThunk(
       const axiosError = error as AxiosError;
       console.log(error);
       console.log(axiosError.message);
-      return rejectWithValue(axiosError.response?.status);
+      return rejectWithValue(axiosError.response?.data);
     }
   }
 );
@@ -166,7 +210,7 @@ export const admission_signupAccountInformation = createAsyncThunk(
     } catch (error) {
       const axiosError = error as AxiosError;
       console.log(error);
-      return rejectWithValue(axiosError.response?.status);
+      return rejectWithValue(axiosError.response?.data);
     }
   }
 );
@@ -179,9 +223,9 @@ export const admission_updateProfile = createAsyncThunk(
       return response.data;
     } catch (error) {
       const axiosError = error as AxiosError;
-      console.log('Axios: ', axiosError.response?.status);
+      console.log('Axios: ', axiosError.response?.data);
       // console.log(JSON.stringify(axiosError, null, 2));
-      return rejectWithValue(axiosError.response?.status);
+      return rejectWithValue(axiosError.response?.data);
     }
   }
 );
@@ -197,7 +241,7 @@ export const admission_updateAvatar = createAsyncThunk(
       const axiosError = error as AxiosError;
       console.log(error);
       console.log(axiosError.message);
-      return rejectWithValue(axiosError.response?.status);
+      return rejectWithValue(axiosError.response?.data);
     }
   }
 );
@@ -210,7 +254,7 @@ export const collab_loadStatusCode = createAsyncThunk(
       const axiosError = error as AxiosError;
       console.log(error);
       console.log(axiosError.message);
-      return rejectWithValue(axiosError.response?.status);
+      return rejectWithValue(axiosError.response?.data);
     }
   }
 );
@@ -294,6 +338,33 @@ export const accountSlice = createSlice({
         state.error = action.payload as GetUserInfoDto;
         state.loading = false;
       })
+
+      .addCase(collab_updateInformationFront.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(collab_updateInformationFront.fulfilled, (state, action) => {
+        state.userInfo = action.payload;
+        state.loading = false;
+      })
+      .addCase(collab_updateInformationFront.rejected, (state, action) => {
+        state.error = action.payload as GetUserInfoDto;
+        state.loading = false;
+      })
+
+      .addCase(collab_updateInformationBack.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(collab_updateInformationBack.fulfilled, (state, action) => {
+        state.userInfo = action.payload;
+        state.loading = false;
+      })
+      .addCase(collab_updateInformationBack.rejected, (state, action) => {
+        state.error = action.payload as GetUserInfoDto;
+        state.loading = false;
+      })
+
       .addCase(collab_loadStatusCode.pending, (state) => {
         state.loading = true;
         state.statusCode = null;

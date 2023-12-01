@@ -21,6 +21,8 @@ import { useAppSelector } from '../../../../app/hooks';
 import { useAppDispatch } from '../../../../app/store';
 import { collab_getUserInfo } from '../../../../features/collaborator/collab.accountSlice';
 import { imageNotFoundUri } from '../../../../utils/images';
+import SubmitButton from '../../../../components/shared/Button/SubmitButton';
+import SubmitButtonDisable from '../../../../components/shared/Button/SubmitButtonDisable';
 
 const AccountInfoCreation = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -54,7 +56,7 @@ const AccountInfoCreation = () => {
 
   return (
     <View style={styles.container}>
-      <View style={{ flex: 1, margin: 20, justifyContent: 'space-evenly' }}>
+      <View style={{ flex: 5, margin: 20, justifyContent: 'space-evenly' }}>
         {userInfo?.data?.accountInformation?.identityFrontImg !== null &&
         userInfo?.data?.accountInformation?.identityFrontImg !== '' ? (
           <Image
@@ -96,6 +98,16 @@ const AccountInfoCreation = () => {
           <PickBackImageTouchable
             onPress={() => navigation.navigate(ROUTES.SCAN_BACK_IMAGE)}
           />
+        )}
+      </View>
+      <View style={{ flex: 1, marginHorizontal: 20 }}>
+        {true? (
+          <SubmitButton
+            titleButton="NEXT STEP"
+            onPress={() => navigation.navigate(ROUTES.USER_PROFILE_SIGNUP)}
+          />
+        ) : (
+          <SubmitButtonDisable titleButton="NEXT STEP" />
         )}
       </View>
     </View>

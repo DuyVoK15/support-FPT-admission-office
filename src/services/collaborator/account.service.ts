@@ -51,17 +51,21 @@ export const accountService = {
 
     return axiosClient.patch(url, { ...payload });
   },
-  collab_updateInformationFront: (
-    payload: UpdateAvatarDto
-  ): Promise<AxiosResponse<GetUserInfoDto>> => {
-    const url = '/api/account/updateAvatar';
+  collab_updateInformationFront: (payload: {
+    identityNumber: string;
+    address: string;
+  }): Promise<AxiosResponse<GetUserInfoDto>> => {
+    const url =
+      '/api/account-information-test-scan/updateAccountInformationCitizen';
 
     return axiosClient.patch(url, { ...payload });
   },
-  collab_updateInformationBack: (
-    payload: UpdateAvatarDto
-  ): Promise<AxiosResponse<GetUserInfoDto>> => {
-    const url = '/api/account/updateAvatar';
+  collab_updateInformationBack: (payload: {
+    identityIssueDate: string;
+    placeOfIssue: string;
+  }): Promise<AxiosResponse<GetUserInfoDto>> => {
+    const url =
+      '/api/account-information-test-scan/updateAccountInformationCitizen2';
 
     return axiosClient.patch(url, { ...payload });
   },

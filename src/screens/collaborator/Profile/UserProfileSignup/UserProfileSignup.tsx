@@ -39,10 +39,11 @@ const UserProfileSignup = () => {
   };
 
   const handleConfirmIdentityIssueDatePicker = (date: Date) => {
-    handlers.setValue('identityIssueDate', formatDateToDDMMYYYY(date));
+    handlers.setValue('identityIssueDate', date.toISOString());
     // setIdentityIssueDate(formatToDate({ dateProp: date }));
     hideIdentityIssueDatePicker();
   };
+  
   return (
     <View style={styles.container}>
       <Header style={{ justifyContent: 'center' }}>

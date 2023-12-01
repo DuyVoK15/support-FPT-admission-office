@@ -57,7 +57,7 @@ const AppNavigator: FC = () => {
     state.collab_userInfo?.accountInformation === null &&
     state.roleId === RoleId.COLLAB_ROLE
   )
-    return <UserProfileSignup />;
+    return <SignUpInformationNavigator />;
 
   // Return stack navigator
   return state.collab_isAuthLoading ||
@@ -66,7 +66,7 @@ const AppNavigator: FC = () => {
     state.collab_isSignupAccountInfo ? (
     <LoadingScreen />
   ) : state.collab_isAuthenticated && state.roleId === RoleId.COLLAB_ROLE ? (
-    <SignUpInformationNavigator />
+    <HomeCollaboratorStackScreen />
   ) : state.collab_isAuthenticated && state.roleId === RoleId.ADMISSION_ROLE ? (
     <HomeAdmissionStackScreen />
   ) : (

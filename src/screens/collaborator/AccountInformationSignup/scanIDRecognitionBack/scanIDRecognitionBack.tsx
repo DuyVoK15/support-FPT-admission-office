@@ -12,7 +12,10 @@ import {
 import * as MediaLibrary from 'expo-media-library';
 import { ScreenHeight, ScreenWidth } from '../../../../constants/Demesions';
 import { imageNotFoundUri } from '../../../../utils/images';
-import { ViewIDRecognitionFrontResponse } from '../../../../dtos/collaborator/response/viewIDRecognition.dto';
+import {
+  ViewIDRecognitionBackResponse,
+  ViewIDRecognitionFrontResponse,
+} from '../../../../dtos/collaborator/response/viewIDRecognition.dto';
 import { useAppDispatch } from '../../../../app/store';
 import {
   getInformationFromRecognitionBack,
@@ -31,11 +34,13 @@ import {
   collab_getUserInfo,
   collab_updateBackImage,
   collab_updateFrontImage,
+  collab_updateInformationBack,
 } from '../../../../features/collaborator/collab.accountSlice';
 import { useNavigation } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
 import { ROUTES } from '../../../../constants/Routes';
 import { COLORS } from '../../../../constants/Colors';
+import ErrorStatus from '../../../../dtos/collaborator/response/errorStatus.dto';
 
 const ScanIDRecognitionBack = () => {
   const [hasCameraPermission, setHasCameraPermission] = useState<
@@ -47,7 +52,27 @@ const ScanIDRecognitionBack = () => {
   const fetchUserInfo = async () => {
     try {
       await dispatch(collab_getUserInfo()).then((res) => {
-        console.log(JSON.stringify(res, null, 2));
+        if (res?.meta?.requestStatus === 'rejected') {
+          const resData = res?.payload as ErrorStatus;
+          showToastError(resData?.message);
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const updateInformationBack = async (
+    identityIssueDate: string,
+    placeOfIssue: string
+  ) => {
+    try {
+      await dispatch(
+        collab_updateInformationBack({ identityIssueDate, placeOfIssue })
+      ).then((res) => {
+        if (res?.meta?.requestStatus === 'rejected') {
+          const resData = res?.payload as ErrorStatus;
+          showToastError(resData?.message);
+        }
       });
     } catch (error) {
       console.log(error);
@@ -108,17 +133,17 @@ const ScanIDRecognitionBack = () => {
           // url chứa đường dẫn tới hình ảnh
           console.log('URL của hình ảnh:', url);
 
-          await dispatch(
-            collab_updateBackImage({ identityBackImg: url })
-          ).then(async (res) => {
-            if (res?.meta?.requestStatus === 'fulfilled') {
-              showToastSuccess('Upload front image successful!');
-              await fetchUserInfo();
-              navigation.navigate(ROUTES.ACCOUNT_INFORMATION_CREATION);
-            } else {
-              showToastError('Upload front image failed!');
+          await dispatch(collab_updateBackImage({ identityBackImg: url })).then(
+            async (res) => {
+              if (res?.meta?.requestStatus === 'fulfilled') {
+                showToastSuccess('Upload front image successful!');
+                await fetchUserInfo();
+                navigation.navigate(ROUTES.ACCOUNT_INFORMATION_CREATION);
+              } else {
+                showToastError('Upload front image failed!');
+              }
             }
-          });
+          );
           // Alert.alert('Photo uploaded!');
         })
         .catch((error) => {
@@ -142,6 +167,11 @@ const ScanIDRecognitionBack = () => {
             console.log(JSON.stringify(res, null, 2));
             if (res?.meta?.requestStatus === 'fulfilled') {
               showToastSuccess('Lấy thông tin thành công');
+              const resData = res?.payload as ViewIDRecognitionBackResponse;
+              await updateInformationBack(
+                resData?.data?.[0]?.issue_date,
+                resData?.data?.[0]?.issue_loc
+              );
               await uploadMedia(imageUri ?? '');
             }
           }
@@ -178,7 +208,7 @@ const ScanIDRecognitionBack = () => {
               position: 'absolute',
               height: ScreenHeight * 0.3,
               width: ScreenWidth - 40,
-              top: (ScreenHeight - (ScreenHeight * 0.3))/2,
+              top: (ScreenHeight - ScreenHeight * 0.3) / 2,
               borderWidth: 4,
               borderColor: COLORS?.grey_underline,
               borderRadius: 20,

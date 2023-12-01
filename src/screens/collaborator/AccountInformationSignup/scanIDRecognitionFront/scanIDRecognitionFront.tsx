@@ -26,11 +26,13 @@ import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
 import {
   collab_getUserInfo,
   collab_updateFrontImage,
+  collab_updateInformationFront,
 } from '../../../../features/collaborator/collab.accountSlice';
 import * as FileSystem from 'expo-file-system';
 import { firebase } from '../../../../config/firebase';
 import { ROUTES } from '../../../../constants/Routes';
 import { COLORS } from '../../../../constants/Colors';
+import ErrorStatus from '../../../../dtos/collaborator/response/errorStatus.dto';
 
 const ScanIDRecognitionFront = () => {
   const [hasCameraPermission, setHasCameraPermission] = useState<
@@ -42,7 +44,27 @@ const ScanIDRecognitionFront = () => {
   const fetchUserInfo = async () => {
     try {
       await dispatch(collab_getUserInfo()).then((res) => {
-        console.log(JSON.stringify(res, null, 2));
+        if (res?.meta?.requestStatus === 'rejected') {
+          const resData = res?.payload as ErrorStatus;
+          showToastError(resData?.message);
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const updateInformationFront = async (
+    identityNumber: string,
+    address: string
+  ) => {
+    try {
+      await dispatch(
+        collab_updateInformationFront({ identityNumber, address })
+      ).then((res) => {
+        if (res?.meta?.requestStatus === 'rejected') {
+          const resData = res?.payload as ErrorStatus;
+          showToastError(resData?.message);
+        }
       });
     } catch (error) {
       console.log(error);
@@ -109,6 +131,7 @@ const ScanIDRecognitionFront = () => {
             if (res?.meta?.requestStatus === 'fulfilled') {
               showToastSuccess('Upload front image successful!');
               await fetchUserInfo();
+
               navigation.navigate(ROUTES.ACCOUNT_INFORMATION_CREATION);
             } else {
               showToastError('Upload front image failed!');
@@ -137,11 +160,15 @@ const ScanIDRecognitionFront = () => {
             console.log(JSON.stringify(res, null, 2));
             if (res?.meta?.requestStatus === 'fulfilled') {
               showToastSuccess('Lấy thông tin thành công');
+              const resData = res?.payload as ViewIDRecognitionFrontResponse;
+              await updateInformationFront(
+                resData?.data?.[0]?.id,
+                resData?.data?.[0]?.address
+              );
               await uploadMedia(imageUri ?? '');
             }
           }
         );
-        setImageUri(null);
         // Xử lý dữ liệu trả về ở đây
       } catch (error) {
         setImageUri(null);
@@ -172,7 +199,7 @@ const ScanIDRecognitionFront = () => {
               position: 'absolute',
               height: ScreenHeight * 0.3,
               width: ScreenWidth - 40,
-              top: (ScreenHeight - (ScreenHeight * 0.3))/2,
+              top: (ScreenHeight - ScreenHeight * 0.3) / 2,
               borderWidth: 4,
               borderColor: COLORS?.grey_underline,
               borderRadius: 20,
