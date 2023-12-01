@@ -38,34 +38,51 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
 
   const { handlers, state, stateRedux } = useRPennding();
-  enum TypeButtonEnum {
+  enum TYPE_BUTTON_ENUM {
     REGISTER = 1,
     CANCEL = 2,
     CHECKIN = 3,
   }
+  type ConfirmInfo = {
+    title: string | null;
+    message: string | null;
+    typeButton: number | null;
+  };
   const [showAlert, setShowAlert] = useState<boolean>(false);
-  const [message, setMessage] = useState('');
-  const [typeButton, setTypeButton] = useState(0);
+  const [confirmInfo, setConfirmInfo] = useState<ConfirmInfo | null>(null);
   const [Item, setItem] = useState<DataViewPostRegistration | null>(null);
   const showAlertHandler = (
     action: number | null,
     item: DataViewPostRegistration | null
   ) => {
     switch (action) {
-      case TypeButtonEnum.REGISTER:
-        setTypeButton(TypeButtonEnum.REGISTER);
-        setMessage('Are you sure you want to apply for this position?');
+      case TYPE_BUTTON_ENUM.REGISTER:
+        setConfirmInfo({
+          title: 'CONFIRMATION',
+          message: `Are you sure you want to apply for this position?`,
+          typeButton: TYPE_BUTTON_ENUM.REGISTER,
+        });
         break;
-      case TypeButtonEnum.CANCEL:
-        setTypeButton(TypeButtonEnum.CANCEL);
-        setMessage('Are you sure you want to Cancel?');
+      case TYPE_BUTTON_ENUM.CANCEL:
+        setConfirmInfo({
+          title: 'CONFIRMATION',
+          message: `Are you sure you want to CANCEL "${item?.postPosition?.positionName}" position` ,
+          typeButton: TYPE_BUTTON_ENUM.CANCEL,
+        });
         break;
-      case TypeButtonEnum.CHECKIN:
-        setTypeButton(TypeButtonEnum.CHECKIN);
-        setMessage('Are you sure you want to Check in?');
+      case TYPE_BUTTON_ENUM.CHECKIN:
+        setConfirmInfo({
+          title: 'CONFIRMATION',
+          message: `Do you want to CHECKIN "${item?.postPosition?.positionName}" position`,
+          typeButton: TYPE_BUTTON_ENUM.CHECKIN,
+        });
         break;
       default:
-        setMessage('');
+        setConfirmInfo({
+          title: '',
+          message: '',
+          typeButton: 0,
+        });
     }
     setItem(item);
     setShowAlert(true);
@@ -202,19 +219,19 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
             }}
           >
             <CancelButton
-              onPress={() => showAlertHandler(TypeButtonEnum.CANCEL, item)}
+              onPress={() => showAlertHandler(TYPE_BUTTON_ENUM.CANCEL, item)}
             />
           </View>
           <ConfirmAlert
             show={showAlert}
             title="CONFIRMATION"
-            message={message}
+            message={confirmInfo?.message}
             confirmText="Yes"
             cancelText="No"
             confirmButtonColor={COLORS.orange_button}
             onConfirmPressed={() => {
-              switch (typeButton) {
-                case TypeButtonEnum.CANCEL:
+              switch (confirmInfo?.typeButton) {
+                case TYPE_BUTTON_ENUM.CANCEL:
                   handlers.cancelRegistrationById(Item?.id ?? null);
                   console.log(Item?.id);
                   break;

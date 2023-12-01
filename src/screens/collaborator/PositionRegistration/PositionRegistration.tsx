@@ -32,7 +32,7 @@ import { getAllPost } from '../../../features/collaborator/collab.postSlice';
 import CreatePostRegistrationDto from '../../../dtos/collaborator/parameter/createPostRegistration.dto';
 import CreatePostRegistrationResponse from '../../../dtos/collaborator/response/createPostRegistration.dto';
 import ErrorStatus from '../../../dtos/collaborator/response/errorStatus.dto';
-import ConfirmAlert from '../../../components/shared/AwesomeAlert/ConfirmAlert';
+import ConfirmAlert, { TITLE_ENUM } from '../../../components/shared/AwesomeAlert/ConfirmAlert';
 import { useToast } from 'react-native-toast-notifications';
 import {
   format_Time_To_HHss,
@@ -60,6 +60,7 @@ const PositionRegistration = () => {
 
   type ConfirmInfo = {
     title: string | null;
+    titleType?: number | null;
     message: string | null;
     typeButton: number | null;
   };
@@ -75,6 +76,7 @@ const PositionRegistration = () => {
       case TYPE_BUTTON_ENUM.REGISTER:
         setConfirmInfo({
           title: 'CONFIRMATION',
+          titleType: TITLE_ENUM.WARNING,
           message: `Are you sure you want to apply for "${position?.positionName}" position?`,
           typeButton: TYPE_BUTTON_ENUM.REGISTER,
         });
@@ -82,14 +84,16 @@ const PositionRegistration = () => {
       case TYPE_BUTTON_ENUM.NAVIGATE_TO_CERTIFICATE:
         setConfirmInfo({
           title: 'CONFIRMATION',
-          message: 'You need Certificate for this position?',
+          titleType: TITLE_ENUM.WARNING,
+          message: `You need Certificate "${position?.certificateName}" for this position? View certificate NOW?`,
           typeButton: TYPE_BUTTON_ENUM.NAVIGATE_TO_CERTIFICATE,
         });
         break;
       case TYPE_BUTTON_ENUM.NAVIGATE_TO_REGISTRATION:
         setConfirmInfo({
-          title: 'CONFIRMATION',
-          message: 'You need Certificate for this position?',
+          title: 'SUCCESSFUL',
+          titleType: TITLE_ENUM.SUCCESS,
+          message: 'Register successful. View your Registration NOW!',
           typeButton: TYPE_BUTTON_ENUM.NAVIGATE_TO_REGISTRATION,
         });
         break;
@@ -523,7 +527,8 @@ const PositionRegistration = () => {
 
                           <ConfirmAlert
                             show={showAlert}
-                            title="CONFIRMATION"
+                            title={confirmInfo?.title}
+                            titleType={confirmInfo?.titleType}
                             message={confirmInfo?.message}
                             confirmText="Yes"
                             cancelText="No"
@@ -544,7 +549,12 @@ const PositionRegistration = () => {
                                         {
                                           name: ROUTES.ACCOUNT_STACK_NAVIGATOR,
                                           state: {
-                                            routes: [{ name: ROUTES.ACCOUNT }, { name: ROUTES.CERTIFICATE_HISTORY }],
+                                            routes: [
+                                              { name: ROUTES.ACCOUNT },
+                                              {
+                                                name: ROUTES.CERTIFICATE_HISTORY,
+                                              },
+                                            ],
                                           },
                                         },
                                       ],

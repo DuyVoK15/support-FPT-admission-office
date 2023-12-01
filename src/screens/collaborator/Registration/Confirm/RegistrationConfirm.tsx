@@ -33,54 +33,64 @@ import ChangePositionButton from '../../../../components/shared/Button/ChangePos
 import useRegistrationConfirm from './useRegistrationConfirm';
 import CancelButton from '../../../../components/shared/Button/CancelButton';
 import { SHADOWS } from '../../../../constants/Shadows';
-import ConfirmAlert from '../../../../components/shared/AwesomeAlert/ConfirmAlert';
+import ConfirmAlert, { TITLE_ENUM } from '../../../../components/shared/AwesomeAlert/ConfirmAlert';
 
 const Registration_Confirm = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const { handlers, state, props } = useRegistrationConfirm();
-  enum TypeButtonEnum {
+  enum TYPE_BUTTON_ENUM {
     REGISTER = 1,
     CANCEL = 2,
     CHECKIN = 3,
     CHECKOUT = 4,
   }
+  type ConfirmInfo = {
+    title: string | null;
+    titleType?: number | null;
+    message: string | null;
+    typeButton: number | null;
+  };
   const [showAlert, setShowAlert] = useState<boolean>(false);
-  const [message, setMessage] = useState('');
-  const [typeButton, setTypeButton] = useState(0);
+  const [confirmInfo, setConfirmInfo] = useState<ConfirmInfo | null>(null);
   const [Item, setItem] = useState<DataViewPostRegistration | null>(null);
   const showAlertHandler = (
     action: number | null,
     item: DataViewPostRegistration | null
   ) => {
     switch (action) {
-      case TypeButtonEnum.REGISTER:
-        setTypeButton(TypeButtonEnum.REGISTER);
-        setMessage(
-          `Are you sure you want to apply for "${(
-            <Text>{item?.postPosition?.positionName}</Text>
-          )}" position?`
-        );
+      case TYPE_BUTTON_ENUM.CANCEL:
+        setConfirmInfo({
+          title: 'CONFIRMATION',
+          titleType: TITLE_ENUM.WARNING,
+          message: `Are you sure you want to CANCEL ${item?.postPosition?.positionName} position?`,
+          typeButton: TYPE_BUTTON_ENUM.CANCEL,
+        });
+
         break;
-      case TypeButtonEnum.CANCEL:
-        setTypeButton(TypeButtonEnum.CANCEL);
-        setMessage(
-          `Are you sure you want to Cancel "${item?.postPosition?.positionName}" position?`
-        );
+      case TYPE_BUTTON_ENUM.CHECKIN:
+        setConfirmInfo({
+          title: 'CONFIRMATION',
+          titleType: TITLE_ENUM.WARNING,
+          message: `Do you want to CHECKIN ${item?.postPosition?.positionName} position?`,
+          typeButton: TYPE_BUTTON_ENUM.CHECKIN,
+        });
+
         break;
-      case TypeButtonEnum.CHECKIN:
-        setTypeButton(TypeButtonEnum.CHECKIN);
-        setMessage(
-          `Are you sure you want to Check In "${item?.postPosition?.positionName}" position?`
-        );
-        break;
-      case TypeButtonEnum.CHECKOUT:
-        setTypeButton(TypeButtonEnum.CHECKOUT);
-        setMessage(
-          `Are you sure you want to Check Out "${item?.postPosition?.positionName}" position?`
-        );
+      case TYPE_BUTTON_ENUM.CHECKOUT:
+        setConfirmInfo({
+          title: 'CONFIRMATION',
+          titleType: TITLE_ENUM.WARNING,
+          message: `Do you want to CHECKOUT ${item?.postPosition?.positionName} position?`,
+          typeButton: TYPE_BUTTON_ENUM.CHECKOUT,
+        });
+
         break;
       default:
-        setMessage('');
+        setConfirmInfo({
+          title: '',
+          message: '',
+          typeButton: 0,
+        });
     }
     setItem(item);
     setShowAlert(true);
@@ -259,21 +269,23 @@ const Registration_Confirm = () => {
           >
             {item?.status === RegistrationStatus.CONFIRM ? (
               <CheckInButton
-                onPress={() => showAlertHandler(TypeButtonEnum.CHECKIN, item)}
+                onPress={() => showAlertHandler(TYPE_BUTTON_ENUM.CHECKIN, item)}
               />
             ) : item?.status === RegistrationStatus.CHECKIN ? (
               <CheckOutButton
-                onPress={() => showAlertHandler(TypeButtonEnum.CHECKOUT, item)}
+                onPress={() =>
+                  showAlertHandler(TYPE_BUTTON_ENUM.CHECKOUT, item)
+                }
               />
             ) : (
               <View />
             )}
             {/* View Detail Button */}
-            {/* {item?.status === RegistrationStatus.CONFIRM && (
+            {item?.status === RegistrationStatus.CONFIRM && (
               <CancelButton
-                onPress={() => showAlertHandler(TypeButtonEnum.CANCEL, item)}
+                onPress={() => showAlertHandler(TYPE_BUTTON_ENUM.CANCEL, item)}
               />
-            )} */}
+            )}
           </View>
 
           <DashedLine
@@ -287,32 +299,26 @@ const Registration_Confirm = () => {
           <ConfirmAlert
             show={showAlert}
             title="CONFIRMATION"
-            message={message}
+            message={confirmInfo?.message}
             confirmText="Yes"
             cancelText="No"
             confirmButtonColor={COLORS.orange_button}
             onConfirmPressed={() => {
-              switch (typeButton) {
-                case TypeButtonEnum.REGISTER:
-                  setTypeButton(TypeButtonEnum.REGISTER);
-                  setMessage(
-                    'Are you sure you want to apply for this position?'
-                  );
-                  break;
-                case TypeButtonEnum.CANCEL:
+              switch (confirmInfo?.typeButton) {
+                case TYPE_BUTTON_ENUM.CANCEL:
                   handlers.cancelRegistrationById(Item?.id ?? null);
                   console.log(Item?.id);
                   break;
-                case TypeButtonEnum.CHECKIN:
+                case TYPE_BUTTON_ENUM.CHECKIN:
                   handlers.checkInPostRegistation(Item?.id ?? null);
                   console.log(Item?.id);
                   break;
-                case TypeButtonEnum.CHECKOUT:
+                case TYPE_BUTTON_ENUM.CHECKOUT:
                   handlers.checkOutPostRegistation(Item?.id ?? null);
                   console.log(Item?.id);
                   break;
                 default:
-                  setMessage('');
+                  break;
               }
               hideAlertHandler();
             }}
