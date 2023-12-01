@@ -3,83 +3,101 @@ import { useEffect, useRef, useState } from 'react';
 import {
   Button,
   Image,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import * as MediaLibrary from 'expo-media-library';
-import { ScreenHeight, ScreenWidth } from '../../../../constants/Demesions';
+import { ScreenHeight } from '../../../../constants/Demesions';
+import { COLORS } from '../../../../constants/Colors';
+import { FONTS_FAMILY } from '../../../../constants/Fonts';
+import PickFrontImageTouchable from './PickFrontImageTouchable';
+import PickBackImageTouchable from './PickBackImageTouchable';
+import { useNavigation } from '@react-navigation/native';
+import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
+import { ROUTES } from '../../../../constants/Routes';
+import { useAppSelector } from '../../../../app/hooks';
+import { useAppDispatch } from '../../../../app/store';
+import { collab_getUserInfo } from '../../../../features/collaborator/collab.accountSlice';
+import { imageNotFoundUri } from '../../../../utils/images';
+
 const AccountInfoCreation = () => {
-  const [hasCameraPermission, setHasCameraPermission] = useState<
-    boolean | null
-  >(null);
-  const [image, setImage] = useState<string | null>(null);
+  const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
+  const dispatch = useAppDispatch();
 
-  const [type, setType] = useState<CameraType>(CameraType.back);
-  const [flash, setFlash] = useState(Camera.Constants.FlashMode);
-  const cameraRef = useRef<Camera | null>(null);
-  useEffect(() => {
-    (async () => {
-      MediaLibrary.requestPermissionsAsync();
-      const cameraStatus = await Camera.requestCameraPermissionsAsync();
-      setHasCameraPermission(cameraStatus.status === 'granted');
-    })();
-  }, []);
+  const informationFront = useAppSelector(
+    (state) => state.collan_information.informationFront
+  );
+  const informationBack = useAppSelector(
+    (state) => state.collan_information.informationBack
+  );
 
-  const takePicture = async () => {
-    if (cameraRef) {
-      const photo = await cameraRef.current?.takePictureAsync();
-      setImage(photo?.uri ?? null);
-      console.log(photo);
+  const userInfo = useAppSelector((state) => state.collab_account.userInfo);
+  const fetchUserInfo = async () => {
+    try {
+      await dispatch(collab_getUserInfo()).then((res) => {
+        console.log(JSON.stringify(res, null, 2));
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 
-  const savePicture = async () => {
-    if (cameraRef) {
-      const photo = await MediaLibrary.createAssetAsync(image ? image : "");
-      setImage(null);
-      console.log(photo);
-    }
-  };  
-
-  const uploadImage = (imageUri: string | null) => {};
-  function toggleCameraType() {
-    setType((current) =>
-      current === CameraType.back ? CameraType.front : CameraType.back
-    );
-  }
+  useEffect(() => {
+    console.log('có nha mậy');
+    const fetchUserInfoAsync = async () => {
+      await fetchUserInfo();
+    };
+    fetchUserInfoAsync();
+  }, [informationFront, informationBack]);
 
   return (
     <View style={styles.container}>
-      {!image ? (
-        <Camera
-          style={styles.camera}
-          type={type}
-          flashMode={flash}
-          ref={cameraRef}
-        >
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={takePicture}>
-              <Text style={styles.text}>Take a picture</Text>
-            </TouchableOpacity>
-          </View>
-        </Camera>
-      ) : (
-        <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, margin: 20, justifyContent: 'space-evenly' }}>
+        {userInfo?.data?.accountInformation?.identityFrontImg !== null &&
+        userInfo?.data?.accountInformation?.identityFrontImg !== '' ? (
           <Image
-            source={{ uri: image ? image : '' }}
-            style={{ width: ScreenWidth / 2, height: ScreenHeight / 2 }}
+            source={{
+              uri: userInfo?.data?.accountInformation?.identityFrontImg,
+            }}
+            style={{
+              height: ScreenHeight * 0.3,
+              borderWidth: 4,
+              borderColor: COLORS?.grey_underline,
+              borderRadius: 20,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
             resizeMode="cover"
           />
-          <TouchableOpacity style={styles.button} onPress={() => setImage(null)}>
-            <Text style={styles.text}>Take a picture</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={savePicture}>
-            <Text style={styles.text}>savePicture</Text>
-          </TouchableOpacity>
-        </View>
-      )}
+        ) : (
+          <PickFrontImageTouchable
+            onPress={() => navigation.navigate(ROUTES.SCAN_FRONT_IMAGE)}
+          />
+        )}
+        {userInfo?.data?.accountInformation?.identityBackImg !== null &&
+        userInfo?.data?.accountInformation?.identityBackImg !== '' ? (
+          <Image
+            source={{
+              uri: userInfo?.data?.accountInformation?.identityBackImg,
+            }}
+            style={{
+              height: ScreenHeight * 0.3,
+              borderWidth: 4,
+              borderColor: COLORS?.grey_underline,
+              borderRadius: 20,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            resizeMode="cover"
+          />
+        ) : (
+          <PickBackImageTouchable
+            onPress={() => navigation.navigate(ROUTES.SCAN_BACK_IMAGE)}
+          />
+        )}
+      </View>
     </View>
   );
 };
@@ -88,22 +106,23 @@ export default AccountInfoCreation;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
   },
   camera: {
     flex: 1,
+    justifyContent: 'flex-end',
   },
   buttonContainer: {
-    flex: 1,
     flexDirection: 'row',
     backgroundColor: 'transparent',
-    margin: 64,
+    marginBottom: Platform.OS === 'ios' ? 40 : 20,
+    alignItems: 'center',
+    justifyContent: 'space-around',
   },
   button: {
     flex: 1,
-    alignSelf: 'flex-end',
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: "red"
+    backgroundColor: 'red',
   },
   text: {
     fontSize: 24,
