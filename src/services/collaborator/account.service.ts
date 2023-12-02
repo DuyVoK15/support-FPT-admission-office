@@ -17,9 +17,9 @@ export const accountService = {
   collab_signupAccountInfo: (
     payload: AccountInfoSignup
   ): Promise<AxiosResponse<GetUserInfoDto>> => {
-    const url = '/api/account/createAccountInformation';
+    const url = '/api/account/updateAccountInformation';
 
-    return axiosClient.post(url, { ...payload });
+    return axiosClient.put(url, { ...payload });
   },
   collab_updateProfile: (
     payload: UserInfoUpdate
@@ -39,7 +39,7 @@ export const accountService = {
     identityFrontImg: string;
   }): Promise<AxiosResponse<GetUserInfoDto>> => {
     const url =
-      '/api/account-information-test-scan/updateAccountInformationCitizenFrontImg';
+      '/api/account/updateFrontImg';
 
     return axiosClient.patch(url, { ...payload });
   },
@@ -47,7 +47,7 @@ export const accountService = {
     identityBackImg: string;
   }): Promise<AxiosResponse<GetUserInfoDto>> => {
     const url =
-      '/api/account-information-test-scan/updateAccountInformationCitizenBacImg';
+      '/api/account/updateBackImg';
 
     return axiosClient.patch(url, { ...payload });
   },
@@ -56,7 +56,7 @@ export const accountService = {
     address: string;
   }): Promise<AxiosResponse<GetUserInfoDto>> => {
     const url =
-      '/api/account-information-test-scan/updateAccountInformationCitizen';
+      '/api/account/updateFrontAccountInformationCitizen';
 
     return axiosClient.patch(url, { ...payload });
   },
@@ -65,7 +65,7 @@ export const accountService = {
     placeOfIssue: string;
   }): Promise<AxiosResponse<GetUserInfoDto>> => {
     const url =
-      '/api/account-information-test-scan/updateAccountInformationCitizen2';
+      '/api/account/updateBackAccountInformationCitizen';
 
     return axiosClient.patch(url, { ...payload });
   },

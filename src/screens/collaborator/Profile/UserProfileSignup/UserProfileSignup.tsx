@@ -10,7 +10,10 @@ import React, { FC, useState } from 'react';
 import Header from '../../../../components/shared/Header/Back';
 import ProfileSignupTextInput from '../../../../components/collaborator/Profile/UserProfileSignup/ProfileSignupTextInput';
 import { COLORS } from '../../../../constants/Colors';
-import { formatDateToDDMMYYYY } from '../../../../utils/formats';
+import {
+  formatDateToDDMMYYYY,
+  formatDateTypeToIOSDateString,
+} from '../../../../utils/formats';
 import { FONTS_FAMILY } from '../../../../constants/Fonts';
 import SubmitButton from '../../../../components/shared/Button/SubmitButton';
 import DashedLine from 'react-native-dashed-line';
@@ -39,11 +42,11 @@ const UserProfileSignup = () => {
   };
 
   const handleConfirmIdentityIssueDatePicker = (date: Date) => {
-    handlers.setValue('identityIssueDate', date.toISOString());
+    handlers.setValue('identityIssueDate', formatDateTypeToIOSDateString(date));
     // setIdentityIssueDate(formatToDate({ dateProp: date }));
     hideIdentityIssueDatePicker();
   };
-  
+
   return (
     <View style={styles.container}>
       <Header style={{ justifyContent: 'center' }}>

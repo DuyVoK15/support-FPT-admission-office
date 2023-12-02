@@ -9,6 +9,8 @@ import {
   collab_signupAccountInformation,
 } from '../../../../features/collaborator/collab.accountSlice';
 import { useAppSelector } from '../../../../app/hooks';
+import useCustomToast from '../../../../utils/toasts';
+import ErrorStatus from '../../../../dtos/collaborator/response/errorStatus.dto';
 
 const useUserProfileSignup = () => {
   const dispatch = useAppDispatch();
@@ -63,13 +65,14 @@ const useUserProfileSignup = () => {
     },
   });
 
+  const { showToastSuccess, showToastError } = useCustomToast();
   const onSubmit = async (data: AccountInfoSignup) => {
     const AccountInfoSignup = {
       identityNumber: data.identityNumber,
       idStudent: data.idStudent,
       fbUrl: data.fbUrl,
       address: data.address,
-      identityIssueDate: formatToISO_8601({ dateProp: data.identityIssueDate }),
+      identityIssueDate: formatToISO_8601(data.identityIssueDate),
       placeOfIssue: data.placeOfIssue,
       identityFrontImg: data.identityFrontImg,
       identityBackImg: data.identityBackImg,
@@ -80,6 +83,12 @@ const useUserProfileSignup = () => {
     await dispatch(collab_signupAccountInformation(AccountInfoSignup)).then(
       (res) => {
         console.log(JSON.stringify(res, null, 2));
+        if (res?.meta?.requestStatus === 'fulfilled') {
+          showToastSuccess('Update account information success!');
+        } else {
+          const resData = res?.payload as ErrorStatus;
+          showToastError(resData?.message);
+        }
       }
     );
   };

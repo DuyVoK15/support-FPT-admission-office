@@ -41,6 +41,7 @@ import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
 import { ROUTES } from '../../../../constants/Routes';
 import { COLORS } from '../../../../constants/Colors';
 import ErrorStatus from '../../../../dtos/collaborator/response/errorStatus.dto';
+import { formatToISO_8601 } from '../../../../utils/formats';
 
 const ScanIDRecognitionBack = () => {
   const [hasCameraPermission, setHasCameraPermission] = useState<
@@ -157,30 +158,33 @@ const ScanIDRecognitionBack = () => {
 
   const savePicture = async () => {
     if (cameraRef) {
-      const photo = await MediaLibrary.createAssetAsync(
-        imageUri ? imageUri : ''
-      );
-      setImageUri(null);
+      // const photo = await MediaLibrary.createAssetAsync(
+      //   imageUri ? imageUri : ''
+      // );
+      // setImageUri(null);
       try {
         await dispatch(getInformationFromRecognitionBack(imageUri)).then(
           async (res) => {
             console.log(JSON.stringify(res, null, 2));
             if (res?.meta?.requestStatus === 'fulfilled') {
-              showToastSuccess('Lấy thông tin thành công');
+              showToastSuccess('Get info from CCCD/CMND Back Image');
               const resData = res?.payload as ViewIDRecognitionBackResponse;
               await updateInformationBack(
-                resData?.data?.[0]?.issue_date,
+                formatToISO_8601(resData?.data?.[0]?.issue_date) ?? '',
                 resData?.data?.[0]?.issue_loc
               );
               await uploadMedia(imageUri ?? '');
+            } else {
+              showToastError('Get information failed! Please scan again!');
+              setImageUri(null);
             }
           }
         );
         // Xử lý dữ liệu trả về ở đây
       } catch (error) {
+        setImageUri(null);
         console.log(error);
       }
-      console.log(photo);
     }
   };
   useEffect(() => {

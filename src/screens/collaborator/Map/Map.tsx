@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Platform, Text, View, StyleSheet } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { Platform, Text, View, StyleSheet, Button } from 'react-native';
 import Device from 'expo-device';
 import * as Location from 'expo-location';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
@@ -49,10 +49,25 @@ export default function Map() {
     latitude: '10.2131',
     longitude: '106.123123',
   };
+
+  const mapRef = useRef<MapView>(null);
+  const markerCoordinates = { latitude: 10.826561, longitude: 106.760897 };
+
+  const moveToMarker = () => {
+    if (mapRef.current) {
+      mapRef.current.animateToRegion({
+        latitude: markerCoordinates.latitude,
+        longitude: markerCoordinates.longitude,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      });
+    }
+  };
   return (
     <View style={styles.container}>
       <MapView
         provider={PROVIDER_GOOGLE}
+        ref={mapRef}
         initialRegion={{
           latitude: 10.826561,
           longitude: 106.760897,
@@ -61,19 +76,24 @@ export default function Map() {
         }}
         style={styles.map}
         showsUserLocation={true}
-        showsMyLocationButton={true}
+        // showsMyLocationButton={true}
       >
         <Marker
-          onPress={() => console.log('hello')}
-          coordinate={{ latitude: 10.826561, longitude: 106.760897 }}
+          coordinate={markerCoordinates}
+          title="Marker Title"
+          description="Marker Description"
         />
+       
         {/* <View style={{ position: 'absolute' }}>
           <View style={{ width: 300, height: 300, backgroundColor: 'white' }}>
             <Text>ALOALOA</Text>
           </View>
         </View> */}
       </MapView>
-      <View style={styles.searchContainer}>
+      <View style={{position: 'absolute', width: ScreenWidth * 0.9,top: 60,}}>
+          <Button title="View market" onPress={moveToMarker}/>
+        </View>
+      {/* <View style={styles.searchContainer}>
         <GooglePlacesAutocomplete
           GoogleReverseGeocodingQuery={{ language: 'vi' }}
           GooglePlacesDetailsQuery={{ fields: 'geometry' }}
@@ -97,7 +117,7 @@ export default function Map() {
           // // currentLocationLabel="Đây "
           predefinedPlaces={[homePlace, workPlace]}
         />
-      </View>
+      </View> */}
     </View>
   );
 }
@@ -108,6 +128,7 @@ const styles = StyleSheet.create({
   },
 
   map: {
+    flex: 1,
     width: ScreenWidth,
     height: ScreenHeight,
   },

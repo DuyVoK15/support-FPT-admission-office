@@ -25,17 +25,40 @@ export const formatToDate = (props: DateProps) => {
     return '';
   }
 };
+export const formatDateTypeToIOSDateString = (date: Date | null) => {
+  if (date) {
+    const dateMoment = moment(date);
+    const isISO8601 = moment(date, moment.ISO_8601, true).isValid();
 
-export const formatToISO_8601 = (props: DateProps) => {
-  const { dateProp } = props;
-
-  if (dateProp) {
-    const dateMoment = moment(dateProp, 'DD/MM/YYYY'); // Định dạng ban đầu là 'DD/MM/YYYY'
-    const iso8601Format = dateMoment.format('YYYY-MM-DDTHH:mm:ss'); // Mặc định là ISO 8601
-
-    return iso8601Format;
+    if (isISO8601) {
+      const iso8601Format = moment(date)
+        .startOf('day')
+        .format('YYYY-MM-DDTHH:mm:ss');
+      return iso8601Format;
+    } else {
+      const dateFormat = dateMoment.format('DD/MM/YYYY');
+      return dateFormat;
+    }
   } else {
-    return null;
+    return '';
+  }
+};
+export const formatToISO_8601 = (date: string | null) => {
+  if (date) {
+    const isISO8601 = moment(date, moment.ISO_8601, true).isValid();
+    const isDDMMYYYY = moment(date, 'DD/MM/YYYY', true).isValid();
+
+    if (isISO8601) {
+      return date; // Trả về ngày nếu là định dạng ISO 8601
+    } else if (isDDMMYYYY) {
+      const dateMoment = moment(date, 'DD/MM/YYYY').startOf('day');
+      const iso8601Format = dateMoment.format('YYYY-MM-DDTHH:mm:ss');
+      return iso8601Format; // Trả về định dạng ISO 8601 với thời gian là 00:00:00 nếu là 'DD/MM/YYYY'
+    } else {
+      return null; // Trả về null nếu không phải là bất kỳ định dạng nào hợp lệ
+    }
+  } else {
+    return null; // Trả về null nếu date không tồn tại
   }
 };
 
@@ -170,10 +193,23 @@ export function format_ISODateString_To_MonthDD(isoDateString: string) {
   return customDateString;
 }
 
-export function format_ISODateString_To_DayOfWeekMonthDD(isoDateString: string, includeTime: boolean = false) {
+export function format_ISODateString_To_DayOfWeekMonthDD(
+  isoDateString: string,
+  includeTime: boolean = false
+) {
   const months = [
-    'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
-    'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC',
+    'JAN',
+    'FEB',
+    'MAR',
+    'APR',
+    'MAY',
+    'JUN',
+    'JUL',
+    'AUG',
+    'SEP',
+    'OCT',
+    'NOV',
+    'DEC',
   ];
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -182,8 +218,8 @@ export function format_ISODateString_To_DayOfWeekMonthDD(isoDateString: string, 
   const monthIndex = date.getMonth();
   const day = date.getDate();
   const month = months[monthIndex];
-  const hours = (`0${date.getHours()}`).slice(-2);
-  const minutes = (`0${date.getMinutes()}`).slice(-2);
+  const hours = `0${date.getHours()}`.slice(-2);
+  const minutes = `0${date.getMinutes()}`.slice(-2);
 
   let customDateString = `${dayOfWeek}, ${month} ${day}`;
   if (includeTime) {
@@ -192,7 +228,6 @@ export function format_ISODateString_To_DayOfWeekMonthDD(isoDateString: string, 
 
   return customDateString;
 }
-
 
 export function format_ISODateString_To_MMssDayOfWeekMonthDD(
   isoDateString: string
@@ -300,6 +335,6 @@ export function format_DDMMYYYYYString_To_YYYYMMDate(
     const date = new Date(formattedDate);
 
     return date;
-  } 
+  }
   return new Date();
 }

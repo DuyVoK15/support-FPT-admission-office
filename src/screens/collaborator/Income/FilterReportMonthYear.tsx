@@ -58,8 +58,8 @@ const FilterReportMonthYear: FC<FilterReportMonthYearProps> = (Props) => {
     Props.setDataFilterReport((prevFilter) => ({
       Sort: prevFilter?.Sort || null,
       Order: prevFilter?.Order || null,
-      CreateAtStart: formatToISO_8601({ dateProp: createAtStart }),
-      CreateAtEnd: formatToISO_8601({ dateProp: createAtEnd }),
+      CreateAtStart: formatToISO_8601(createAtStart),
+      CreateAtEnd: formatToISO_8601(createAtEnd),
     }));
   };
   // Handle reset State

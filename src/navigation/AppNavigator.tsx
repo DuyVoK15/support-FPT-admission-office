@@ -53,11 +53,15 @@ const AppNavigator: FC = () => {
     return <Verification />;
 
   // Check if user hasn't account information and role is COLLAB will navigate to User Profile Signup
-  if (
-    state.collab_userInfo?.accountInformation === null &&
-    state.roleId === RoleId.COLLAB_ROLE
-  )
-    return <SignUpInformationNavigator />;
+  const obj = state.collab_userInfo?.accountInformation;
+  if (obj) {
+    const keys: (keyof typeof obj)[] = Object.keys(obj) as (keyof typeof obj)[];
+    if (
+      keys.some((key) => obj[key] === null) &&
+      state.roleId === RoleId.COLLAB_ROLE
+    )
+      return <SignUpInformationNavigator />;
+  }
 
   // Return stack navigator
   return state.collab_isAuthLoading ||

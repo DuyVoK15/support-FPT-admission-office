@@ -116,10 +116,10 @@ const FilterModalButton = (Props: FilterModalButtonProps) => {
   const handleDataUpdate = () => {
     Props.setDataFilterUpcomming((prevFilter) => ({
       postUpcommingCategoryId: prevFilter?.postUpcommingCategoryId || null,
-      createAtStart: formatToISO_8601({ dateProp: createAtStart }),
-      createAtEnd: formatToISO_8601({ dateProp: createAtEnd }),
-      dateFromStart: formatToISO_8601({ dateProp: dateFromStart }),
-      dateFromEnd: formatToISO_8601({ dateProp: dateFromEnd }),
+      createAtStart: formatToISO_8601(createAtStart),
+      createAtEnd: formatToISO_8601(createAtEnd),
+      dateFromStart: formatToISO_8601(dateFromStart),
+      dateFromEnd: formatToISO_8601(dateFromEnd),
       searchText: prevFilter?.searchText || null,
       sort: prevFilter?.sort || null,
       order: prevFilter?.order || null,

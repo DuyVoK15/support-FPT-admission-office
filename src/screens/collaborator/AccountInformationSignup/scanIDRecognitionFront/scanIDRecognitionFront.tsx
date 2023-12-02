@@ -159,7 +159,7 @@ const ScanIDRecognitionFront = () => {
           async (res) => {
             console.log(JSON.stringify(res, null, 2));
             if (res?.meta?.requestStatus === 'fulfilled') {
-              showToastSuccess('Lấy thông tin thành công');
+              showToastSuccess('Get info from CCCD/CMND Front Image');
               const resData = res?.payload as ViewIDRecognitionFrontResponse;
               await updateInformationFront(
                 resData?.data?.[0]?.id,
