@@ -23,6 +23,8 @@ import { collab_getUserInfo } from '../../../../features/collaborator/collab.acc
 import { imageNotFoundUri } from '../../../../utils/images';
 import SubmitButton from '../../../../components/shared/Button/SubmitButton';
 import SubmitButtonDisable from '../../../../components/shared/Button/SubmitButtonDisable';
+import LogoutButton from '../../../../components/shared/Button/LogoutButton';
+import { collab_logout } from '../../../../features/collaborator/collab.authSlice';
 
 const AccountInfoCreation = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -46,6 +48,16 @@ const AccountInfoCreation = () => {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await dispatch(collab_logout()).then((res) => {
+        console.log(JSON.stringify(res, null, 2));
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     console.log('có nha mậy');
     const fetchUserInfoAsync = async () => {
@@ -56,8 +68,9 @@ const AccountInfoCreation = () => {
 
   return (
     <View style={styles.container}>
-      <View style={{ flex: 5, margin: 20, justifyContent: 'space-evenly' }}>
-        {userInfo?.data?.accountInformation?.identityFrontImg !== null &&
+      <View style={{ flex: 8, margin: 20, justifyContent: 'space-evenly' }}>
+        {userInfo?.data?.accountInformation &&
+        userInfo?.data?.accountInformation?.identityFrontImg !== null &&
         userInfo?.data?.accountInformation?.identityFrontImg !== '' ? (
           <Image
             source={{
@@ -78,7 +91,8 @@ const AccountInfoCreation = () => {
             onPress={() => navigation.navigate(ROUTES.SCAN_FRONT_IMAGE)}
           />
         )}
-        {userInfo?.data?.accountInformation?.identityBackImg !== null &&
+        {userInfo?.data?.accountInformation &&
+        userInfo?.data?.accountInformation?.identityBackImg !== null &&
         userInfo?.data?.accountInformation?.identityBackImg !== '' ? (
           <Image
             source={{
@@ -101,7 +115,7 @@ const AccountInfoCreation = () => {
         )}
       </View>
       <View style={{ flex: 1, marginHorizontal: 20 }}>
-        {true? (
+        {true ? (
           <SubmitButton
             titleButton="NEXT STEP"
             onPress={() => navigation.navigate(ROUTES.USER_PROFILE_SIGNUP)}
@@ -109,6 +123,9 @@ const AccountInfoCreation = () => {
         ) : (
           <SubmitButtonDisable titleButton="NEXT STEP" />
         )}
+      </View>
+      <View style={{flex: 1, marginHorizontal: 20, alignItems: 'center'}}>
+          <LogoutButton onPress={handleLogout} />
       </View>
     </View>
   );

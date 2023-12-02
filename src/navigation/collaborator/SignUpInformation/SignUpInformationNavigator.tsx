@@ -12,7 +12,7 @@ const Stack =
   createNativeStackNavigator<HomeCollaboratorStackNavigatorParamList>();
 const SignUpInformationNavigator = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName={ROUTES.ACCOUNT_INFORMATION_CREATION}>
       <Stack.Screen
         name={ROUTES.ACCOUNT_INFORMATION_CREATION}
         component={AccountInfoCreation}
