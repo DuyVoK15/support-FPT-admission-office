@@ -28,6 +28,9 @@ export type HomeCollaboratorStackNavigatorParamList = {
   EVENT_UPCOMMING: undefined;
   EVENT_MISSING_SLOT: undefined;
   EVENT_REOPEN: undefined;
+  TRAINING: undefined;
+  TRAINING_TAB: undefined;
+  TRAINING_STACK_NAVIGATOR: undefined;
   USER_PROFILE: undefined;
   USER_PROFILE_SIGNUP: undefined;
   CERTIFICATE_HISTORY: undefined;
@@ -62,6 +65,9 @@ export type HomeCollaboratorScreenNavigationProp = NativeStackScreenProps<
   'EVENT_UPCOMMING',
   'EVENT_MISSING_SLOT',
   'EVENT_REOPEN',
+  'TRAINING',
+  'TRAINING_TAB',
+  'TRAINING_STACK_NAVIGATOR',
   'MAP',
   'MAP_STACK_NAVIGATOR',
   'REGISTRATION',
@@ -95,7 +101,7 @@ export type HomeCollaboratorScreenNavigationProp = NativeStackScreenProps<
   'APPLICATION',
   'SCAN_FRONT_IMAGE',
   'SCAN_BACK_IMAGE',
-  'ACCOUNT_INFORMATION_CREATION',
+  'ACCOUNT_INFORMATION_CREATION'
 >;
 
 export type HomeAdmissionStackNavigatorParamList = {

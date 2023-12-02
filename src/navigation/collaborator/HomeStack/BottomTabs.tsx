@@ -1,7 +1,7 @@
 import { Platform, StyleSheet } from 'react-native';
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Entypo, FontAwesome, Ionicons } from '@expo/vector-icons';
+import { Entypo, FontAwesome, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { COLORS } from '../../../constants/Colors';
 import {
   HomeCollaboratorScreenNavigationProp,
@@ -12,7 +12,7 @@ import AccountStackNavigator from './MainStack/AccountStackNavigator';
 import HomeStackNavigator from './MainStack/HomeStackNavigator';
 import EventStackNavigator from './MainStack/EventStackNavigator';
 import RegistrationStackNavigator from './MainStack/RegistrationStackNavigator';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import TrainingStackNavigator from './MainStack/TrainingStackNavigator';
 import { ROUTES } from '../../../constants/Routes';
 
 const Tab = createBottomTabNavigator<HomeCollaboratorStackNavigatorParamList>();
@@ -80,7 +80,7 @@ const BottomTabs: React.FC = () => {
           tabBarLabel: 'Home',
         }}
       />
-      <Tab.Screen
+       <Tab.Screen
         name={ROUTES.EVENT_STACK_NAVIGATOR}
         component={EventStackNavigator}
         options={{
@@ -89,6 +89,17 @@ const BottomTabs: React.FC = () => {
             <Ionicons name="calendar" color={color} size={26} />
           ),
           tabBarLabel: 'Event',
+        }}
+      />
+       <Tab.Screen
+        name={ROUTES.TRAINING_STACK_NAVIGATOR}
+        component={TrainingStackNavigator}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="timetable" color={color} size={26} />
+          ),
+          tabBarLabel: 'Training',
         }}
       />
       <Tab.Screen
