@@ -1,7 +1,12 @@
 import { Platform, StyleSheet } from 'react-native';
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Entypo, FontAwesome, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import {
+  Entypo,
+  FontAwesome,
+  Ionicons,
+  MaterialCommunityIcons,
+} from '@expo/vector-icons';
 import { COLORS } from '../../../constants/Colors';
 import {
   HomeCollaboratorScreenNavigationProp,
@@ -14,6 +19,7 @@ import EventStackNavigator from './MainStack/EventStackNavigator';
 import RegistrationStackNavigator from './MainStack/RegistrationStackNavigator';
 import TrainingStackNavigator from './MainStack/TrainingStackNavigator';
 import { ROUTES } from '../../../constants/Routes';
+import MapStackNavigator from './MainStack/MapStackNavigator';
 
 const Tab = createBottomTabNavigator<HomeCollaboratorStackNavigatorParamList>();
 const BottomTabs: React.FC = () => {
@@ -45,11 +51,16 @@ const BottomTabs: React.FC = () => {
               console.log('object');
               navigation.navigate(ROUTES.REGISTRATION_STACK_NAVIGATOR);
               break;
-              // case ROUTES.ACCOUNT_STACK_NAVIGATOR:
-              // e.preventDefault();
-              // console.log('object');
-              // navigation.navigate(ROUTES.ACCOUNT_STACK_NAVIGATOR, {screen: ROUTES.ACCOUNT});
-              // break;
+            case ROUTES.MAP_STACK_NAVIGATOR:
+              e.preventDefault();
+              console.log('object Map');
+              navigation.navigate(ROUTES.MAP_STACK_NAVIGATOR);
+              break;
+            // case ROUTES.ACCOUNT_STACK_NAVIGATOR:
+            // e.preventDefault();
+            // console.log('object');
+            // navigation.navigate(ROUTES.ACCOUNT_STACK_NAVIGATOR, {screen: ROUTES.ACCOUNT});
+            // break;
             // case 'REGISTRATION_CONFIRM':
             //   e.preventDefault();
             //   navigation.navigate('REGISTRATION_CONFIRM');
@@ -80,7 +91,7 @@ const BottomTabs: React.FC = () => {
           tabBarLabel: 'Home',
         }}
       />
-       <Tab.Screen
+      <Tab.Screen
         name={ROUTES.EVENT_STACK_NAVIGATOR}
         component={EventStackNavigator}
         options={{
@@ -91,20 +102,20 @@ const BottomTabs: React.FC = () => {
           tabBarLabel: 'Event',
         }}
       />
-       <Tab.Screen
+      <Tab.Screen
         name={ROUTES.TRAINING_STACK_NAVIGATOR}
         component={TrainingStackNavigator}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="timetable" color={color} size={26} />
+            <Entypo name="briefcase" color={color} size={26}/>
           ),
           tabBarLabel: 'Training',
         }}
       />
       <Tab.Screen
         name={ROUTES.MAP_STACK_NAVIGATOR}
-        component={MapTab}
+        component={MapStackNavigator}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (

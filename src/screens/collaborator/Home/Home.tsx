@@ -55,7 +55,7 @@ const Home = () => {
         <View
           style={{
             marginHorizontal: 20,
-            marginTop: Platform.OS === 'ios' ? 56 : 40,
+            marginTop: Platform.OS === 'ios' ? 56 : 48,
           }}
         >
           <View
@@ -101,7 +101,7 @@ const Home = () => {
             </View>
             <View style={{ flex: 1, alignItems: 'flex-end' }}>
               <TouchableOpacity
-                onPress={() => navigation.navigate('HOME_NOTIFICATION')}
+                onPress={() => navigation.navigate(ROUTES.HOME_NOTIFICATION)}
                 style={{
                   width: 40,
                   height: 40,
@@ -412,8 +412,8 @@ const styles = StyleSheet.create({
     height: ScreenHeight / 4.5,
     width: ScreenWidth,
     backgroundColor: COLORS.orange_button,
-    borderBottomLeftRadius: 33,
-    borderBottomRightRadius: 33,
+    borderBottomLeftRadius: 28,
+    borderBottomRightRadius: 28,
     ...SHADOWS.SHADOW_03,
   },
   cardItem: {

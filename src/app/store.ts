@@ -17,6 +17,12 @@ import collab_informationReducer from '../features/collaborator/collab.scanIDRec
 import admission_authReducer from '../features/admission/admission.authSlice';
 
 export const store = configureStore({
+  middleware: (getDefaultMiddleware) => {
+    return getDefaultMiddleware({
+      immutableCheck: false, // Disable ImmutableStateInvariantMiddleware
+      serializableCheck: false, // If you want to disable serializableCheck as well
+    });
+  },
   reducer: {
     collab_auth: collab_authReducer,
     collab_post: collab_postReducer,

@@ -1,11 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import Training from '../../../../screens/Training/Training';
 
 const TrainingTab = () => {
   return (
-    <View>
-      <Text>TrainingTab</Text>
-    </View>
+    <Training />
   );
 };
 

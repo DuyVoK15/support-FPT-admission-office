@@ -64,6 +64,9 @@ const ScanIDRecognitionFront = () => {
         if (res?.meta?.requestStatus === 'rejected') {
           const resData = res?.payload as ErrorStatus;
           showToastError(resData?.message);
+          setImageUri(null);
+        } else {
+          
         }
       });
     } catch (error) {
@@ -87,7 +90,7 @@ const ScanIDRecognitionFront = () => {
 
   const takePicture = async () => {
     if (cameraRef) {
-      const photo = await cameraRef.current?.takePictureAsync({ quality: 0.5 });
+      const photo = await cameraRef.current?.takePictureAsync({ quality: 1 });
       setImageUri(photo?.uri ?? null);
       console.log(photo);
     }
@@ -131,7 +134,6 @@ const ScanIDRecognitionFront = () => {
             if (res?.meta?.requestStatus === 'fulfilled') {
               showToastSuccess('Upload front image successful!');
               await fetchUserInfo();
-
               navigation.navigate(ROUTES.ACCOUNT_INFORMATION_CREATION);
             } else {
               showToastError('Upload front image failed!');
@@ -166,6 +168,10 @@ const ScanIDRecognitionFront = () => {
                 resData?.data?.[0]?.address
               );
               await uploadMedia(imageUri ?? '');
+              setImageUri(null);
+            } else {
+              showToastError('Get information failed! Please scan again!');
+              setImageUri(null);
             }
           }
         );

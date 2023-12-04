@@ -8,7 +8,7 @@ interface SearchTextInputProps extends TextInputProps {}
 const SearchTextInput: FC<SearchTextInputProps> = (Props) => {
   const { ...otherProps } = Props;
   return (
-    <View style={{ flex: 1, height: 40, justifyContent: 'center' }}>
+    <View style={{ flex: 1, height: 45, justifyContent: 'center' }}>
       <TextInput
         {...otherProps}
         style={{
