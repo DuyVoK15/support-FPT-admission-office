@@ -1,11 +1,30 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Platform, Text, View, StyleSheet, Button } from 'react-native';
+import {
+  Platform,
+  Text,
+  View,
+  StyleSheet,
+  Button,
+  NativeModules,
+} from 'react-native';
 import Device from 'expo-device';
 import * as Location from 'expo-location';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { GOOGLE_API_KEY } from '../../../../env';
 import { ScreenHeight, ScreenWidth } from '../../../constants/Demesions';
+import { StatusBar } from 'expo-status-bar';
+import Constants from 'expo-constants';
+import { useAppDispatch } from '../../../app/store';
+import {
+  getAllPostRegistration_Confirmed,
+  getPostRegistrationById_Confirmed,
+} from '../../../features/collaborator/collab.postRegistrationSlice';
+import { RegistrationStatus } from '../../../enums/collaborator/RegistrationStatus';
+import { useAppSelector } from '../../../app/hooks';
+import DataViewPostRegistration from '../../../models/collaborator/postRegistration.model';
+import ViewPostRegistrationResponse from '../../../dtos/collaborator/response/viewPostRegistration.dto';
+const statusBarHeight = Constants.statusBarHeight;
 
 export default function Map() {
   const [location, setLocation] = useState<Location.LocationObject | null>(
@@ -13,22 +32,22 @@ export default function Map() {
   );
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  useEffect(() => {
-    (async () => {
-      // if (Platform.OS === 'android') {
-      //   Location.setGoogleApiKey;
-      // }
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-        return;
-      }
+  // useEffect(() => {
+  //   (async () => {
+  //     // if (Platform.OS === 'android') {
+  //     //   Location.setGoogleApiKey;
+  //     // }
+  //     let { status } = await Location.requestForegroundPermissionsAsync();
+  //     if (status !== 'granted') {
+  //       setErrorMsg('Permission to access location was denied');
+  //       return;
+  //     }
 
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-      console.log(location);
-    })();
-  }, []);
+  //     let location = await Location.getCurrentPositionAsync({});
+  //     setLocation(location);
+  //     console.log(location);
+  //   })();
+  // }, []);
 
   let text = 'Waiting...';
   if (errorMsg) {
@@ -36,14 +55,6 @@ export default function Map() {
   } else if (location) {
     text = JSON.stringify(location);
   }
-  const homePlace = {
-    description: 'Home',
-    geometry: { location: { lat: 48.8152937, lng: 2.4597668 } },
-  };
-  const workPlace = {
-    description: 'Work',
-    geometry: { location: { lat: 48.8496818, lng: 2.2940881 } },
-  };
 
   const locations = {
     latitude: '10.2131',
@@ -63,9 +74,96 @@ export default function Map() {
       });
     }
   };
+  const [selectedMarkerId, setSelectedMarkerId] = useState(1); // Default selected marker ID
+
+  const handleMarkerPress = (markerId: any) => {
+    setSelectedMarkerId(markerId);
+  };
+
+  useEffect(() => {
+    // Here you can handle moving the map to the selected marker's coordinates
+    const selectedMarker = postRegistrationConfirmList?.data?.find(
+      (marker) => marker.id === selectedMarkerId
+    );
+    if (selectedMarker) {
+      if (mapRef.current) {
+        mapRef.current.animateToRegion({
+          latitude: selectedMarker?.postPosition?.latitude
+            ? Number(selectedMarker?.postPosition?.latitude)
+            : 0,
+          longitude: selectedMarker?.postPosition?.longitude
+            ? Number(selectedMarker?.postPosition?.longitude)
+            : 0,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        });
+      }
+    }
+  }, [selectedMarkerId]);
+  const dispatch = useAppDispatch();
+  const postRegistrationConfirmList = useAppSelector(
+    (state) => state.collab_postRegistration.postRegistrationConfirmed
+  );
+  const fetchPostRegistrationConfirmed = async () => {
+    await dispatch(
+      getAllPostRegistration_Confirmed({
+        RegistrationStatus: [RegistrationStatus.CONFIRM],
+      })
+    ).then((res) => {
+      console.log(JSON.stringify(res, null, 2));
+      const resData = res?.payload as ViewPostRegistrationResponse;
+    });
+  };
+
+  useEffect(() => {
+    const fetch = async () => {
+      await fetchPostRegistrationConfirmed();
+    };
+    fetch();
+    console.log(postRegistrationConfirmList);
+  }, []);
+
+  const renderMarkers = () => {
+    return postRegistrationConfirmList?.data.map((registration, index) => {
+      console.log(registration?.registrationCode);
+
+      return (
+        <Marker
+          key={index}
+          coordinate={{
+            latitude: registration?.postPosition?.latitude
+              ? Number(registration?.postPosition?.latitude)
+              : 0,
+            longitude: registration?.postPosition?.longitude
+              ? Number(registration?.postPosition?.longitude)
+              : 0,
+          }}
+          title={registration?.post?.postCategory?.postCategoryDescription}
+          description={registration?.postPosition?.positionDescription}
+          onPress={() => handleMarkerPress(registration?.id)}
+        />
+      );
+    });
+  };
+  const [markersKey, setMarkersKey] = useState('defaultKey');
+
+  useEffect(() => {
+    // Generate a new key whenever postRegistrationConfirmList changes
+    setMarkersKey(Date.now().toString());
+  }, [postRegistrationConfirmList]);
+
+  const regionTS = {
+    latitude: 10.74325841775703,
+    latitudeDelta: 7.359512544608724,
+    longitude: 106.04260778054595,
+    longitudeDelta: 3.957008980214596,
+  };
+  
   return (
     <View style={styles.container}>
+      <StatusBar backgroundColor="transparent" />
       <MapView
+        key={markersKey.toString()}
         provider={PROVIDER_GOOGLE}
         ref={mapRef}
         initialRegion={{
@@ -75,24 +173,28 @@ export default function Map() {
           longitudeDelta: 0.01,
         }}
         style={styles.map}
+        loadingEnabled={true}
+        loadingIndicatorColor="#666666"
         showsUserLocation={true}
-        // showsMyLocationButton={true}
+        showsMyLocationButton={true}
+        // showsTraffic={true}
+        // followsUserLocation={true}
+        customMapStyle={[]}
+        // onMapLoaded={(map) => console.log(map)}
+
+        onRegionChange={(region) => console.log(region)}
       >
-        <Marker
-          coordinate={markerCoordinates}
-          title="Marker Title"
-          description="Marker Description"
-        />
-       
-        {/* <View style={{ position: 'absolute' }}>
-          <View style={{ width: 300, height: 300, backgroundColor: 'white' }}>
-            <Text>ALOALOA</Text>
-          </View>
-        </View> */}
+        {postRegistrationConfirmList && renderMarkers()}
       </MapView>
-      <View style={{position: 'absolute', width: ScreenWidth * 0.9,top: 60,}}>
-          <Button title="View market" onPress={moveToMarker}/>
-        </View>
+      <View
+        style={{
+          position: 'absolute',
+          width: ScreenWidth * 0.9,
+          top: statusBarHeight + 100,
+        }}
+      >
+        {/* <Button title="Refresh Map" onPress={handleRefresh} /> */}
+      </View>
       {/* <View style={styles.searchContainer}>
         <GooglePlacesAutocomplete
           GoogleReverseGeocodingQuery={{ language: 'vi' }}
@@ -125,6 +227,7 @@ export default function Map() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: statusBarHeight,
   },
 
   map: {

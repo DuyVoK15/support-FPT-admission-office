@@ -31,6 +31,7 @@ export type HomeCollaboratorStackNavigatorParamList = {
   TRAINING: undefined;
   TRAINING_TAB: undefined;
   TRAINING_STACK_NAVIGATOR: undefined;
+  TRAINING_REGISTRATION: undefined;
   USER_PROFILE: undefined;
   USER_PROFILE_SIGNUP: undefined;
   CERTIFICATE_HISTORY: undefined;
@@ -68,6 +69,7 @@ export type HomeCollaboratorScreenNavigationProp = NativeStackScreenProps<
   'TRAINING',
   'TRAINING_TAB',
   'TRAINING_STACK_NAVIGATOR',
+  'TRAINING_REGISTRATION',
   'MAP',
   'MAP_STACK_NAVIGATOR',
   'REGISTRATION',
