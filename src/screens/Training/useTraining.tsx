@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../type';
 import { useAppDispatch } from '../../app/store';
@@ -9,10 +9,13 @@ import {
   getAllCertificateFromAdmission,
   getAllTrainingCertificateRegistration,
 } from '../../features/collaborator/collab.certificateSlice';
+import useCustomToast from '../../utils/toasts';
+import ErrorStatus from '../../dtos/collaborator/response/errorStatus.dto';
 
 const useTraining = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const dispatch = useAppDispatch();
+  const { showToastSuccess, showToastError } = useCustomToast();
   const certificateFromAdmissionList = useAppSelector(
     (state) => state.collab_certificate.certificateFromAdmission
   );
@@ -42,7 +45,12 @@ const useTraining = () => {
       await dispatch(
         createCertificateRegistration({ trainingCertificateId })
       ).then((res) => {
-        console.log(JSON.stringify(res, null, 2));
+        if (res?.meta?.requestStatus === 'fulfilled') {
+          showToastSuccess('Registered success!');
+        } else {
+          const resData = res?.payload as ErrorStatus;
+          showToastError(resData?.message);
+        }
       });
     } catch (error) {
       console.log(error);
@@ -56,9 +64,20 @@ const useTraining = () => {
     };
     fetchData();
   }, []);
-  const handlers = { createTrainingCertificateRegistration };
+
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    const fetchData = async () => {
+      await fetchCertificateFromAdmission();
+      await fetchTrainingCertificateRegistration();
+    };
+    fetchData();
+    setRefreshing(false);
+  }, []);
+  const handlers = { createTrainingCertificateRegistration, onRefresh };
   const props = { navigation };
-  const state = {};
+  const state = { refreshing };
   const setState = {};
   const stateRedux = {
     certificateFromAdmissionList,

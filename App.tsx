@@ -44,7 +44,7 @@ export default function App() {
       <AlertNotificationRoot>
         <ToastProvider
           placement="bottom"
-          duration={3000}
+          duration={4000}
           animationType="zoom-in"
           animationDuration={250}
           successColor="#00FF87"

@@ -1,6 +1,7 @@
 import {
   FlatList,
   Platform,
+  RefreshControl,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -15,6 +16,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import useTraining from './useTraining';
 import { DataCertificateAdmission } from '../../models/collaborator/dataCertificateAdmission.model';
 import { ROUTES } from '../../constants/Routes';
+import RegistrationEmpty from '../../components/shared/Empty/RegistrationEmpty';
 
 const Training = () => {
   const data = [1, 2, 3, 4, 5, 6, 7, 7];
@@ -41,6 +43,10 @@ const Training = () => {
   };
 
   const { state, setState, stateRedux, props, handlers } = useTraining();
+
+  const renderListEmptyComponent = () => {
+    return <RegistrationEmpty />;
+  };
 
   const renderItem = ({ item }: { item: DataCertificateAdmission }) => {
     return (
@@ -232,7 +238,9 @@ const Training = () => {
             }}
           >
             <TouchableOpacity
-            onPress={() => props.navigation.navigate(ROUTES.TRAINING_REGISTRATION)}
+              onPress={() =>
+                props.navigation.navigate(ROUTES.TRAINING_REGISTRATION)
+              }
               style={{
                 paddingVertical: 12,
                 paddingHorizontal: 20,
@@ -240,7 +248,12 @@ const Training = () => {
                 backgroundColor: '#F4762D',
               }}
             >
-              <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_700Bold, color: 'white' }}>
+              <Text
+                style={{
+                  fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
+                  color: 'white',
+                }}
+              >
                 View Your Registration
               </Text>
             </TouchableOpacity>
@@ -251,6 +264,8 @@ const Training = () => {
         <FlatList
           data={stateRedux?.certificateFromAdmissionList?.data}
           renderItem={renderItem}
+          refreshControl={<RefreshControl refreshing={state.refreshing} onRefresh={handlers.onRefresh} />}
+          ListEmptyComponent={renderListEmptyComponent}
         />
       </View>
     </View>
