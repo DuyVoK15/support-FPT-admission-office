@@ -26,7 +26,7 @@ export const scanIDRecognitionService = {
     const url = 'https://api.fpt.ai/vision/idr/vnm';
     return axios.post(url, formData, {
       headers: {
-        'api-key': '8aZaBhEs270HHn5hJfyoaKzEATApl8Gk',
+        'api-key': '6yrkYkXCyHo9qoMXVgp37RG5IWt8kDDg',
         'Content-Type': 'multipart/form-data',
       },
     });
@@ -48,7 +48,7 @@ export const scanIDRecognitionService = {
     const url = 'https://api.fpt.ai/vision/idr/vnm';
     return axios.post(url, formData, {
       headers: {
-        'api-key': '8aZaBhEs270HHn5hJfyoaKzEATApl8Gk',
+        'api-key': '6yrkYkXCyHo9qoMXVgp37RG5IWt8kDDg',
         'Content-Type': 'multipart/form-data',
       },
     });
