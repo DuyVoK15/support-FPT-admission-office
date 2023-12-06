@@ -149,6 +149,7 @@ export const collab_updateInformationBack = createAsyncThunk(
   'account/updateInformationBack',
   async (
     params: {
+      identityNumber: string;
       identityIssueDate: string;
       placeOfIssue: string;
     },

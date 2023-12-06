@@ -96,47 +96,10 @@ const useIndex = () => {
           dispatch_getAllPostRegistration_Confirmed(); // Call dispatch update List
         } else {
           const resRejectedData = res.payload as ErrorStatus;
-          switch (resRejectedData?.statusCode) {
-            case 400:
-              switch (resRejectedData?.errorCode) {
-                case 400:
-                  showToastError(resRejectedData?.message);
-                  break;
-                case 4001:
-                  showToastError(resRejectedData?.message);
-                  break;
-                case 4002:
-                  showToastError(resRejectedData?.message);
-                  break;
-                case 4003:
-                  showToastError(resRejectedData?.message);
-                  break;
-                case 4004:
-                  showToastError(resRejectedData?.message);
-                  break;
-                case 4005:
-                  showToastError(resRejectedData?.message);
-                  break;
-                case 4006:
-                  showToastError(resRejectedData?.message);
-                  break;
-                case 4007:
-                  showToastError(resRejectedData?.message);
-                  break;
-                case 4008:
-                  showToastError(resRejectedData?.message);
-                  break;
-                default:
-                  showToastError('Unknown error!');
-              }
-              break;
-            case 401:
-              showToastError('You not permission!');
-            case 404:
-              showToastError('404 NOT FOUND!');
 
+          switch (resRejectedData?.errorCode) {
             default:
-              showToastError('Undefined error!');
+              showToastError(resRejectedData?.message);
           }
         }
       });
@@ -156,47 +119,10 @@ const useIndex = () => {
           navigation.navigate('REGISTRATION_COMPLETED');
         } else {
           const resRejectedData = res.payload as ErrorStatus;
-          switch (resRejectedData?.statusCode) {
-            case 400:
-              switch (resRejectedData?.errorCode) {
-                case 4001:
-                  showToastError(resRejectedData?.message);
-                  break;
-                case 4002:
-                  showToastError(resRejectedData?.message);
-                  break;
-                case 4003:
-                  showToastError(resRejectedData?.message);
-                  break;
-                case 4004:
-                  showToastError(resRejectedData?.message);
-                  break;
-                case 4005:
-                  showToastError(resRejectedData?.message);
-                  break;
-                case 4006:
-                  showToastError(resRejectedData?.message);
-                  break;
-                case 4006:
-                  showToastError(resRejectedData?.message);
-                  break;
-                case 4007:
-                  showToastError(resRejectedData?.message);
-                  break;
-                case 4008:
-                  showToastError(resRejectedData?.message);
-                  break;
-                default:
-                  showToastError('Unknown error!');
-              }
-              break;
-            case 401:
-              showToastError('You not permission!');
-            case 404:
-              showToastError('404 NOT FOUND!');
 
+          switch (resRejectedData?.errorCode) {
             default:
-              showToastError('Undefined error!');
+              showToastError(resRejectedData?.message);
           }
         }
       }
@@ -231,7 +157,7 @@ const useIndex = () => {
     onRefresh,
     checkInPostRegistation,
     checkOutPostRegistation,
-    cancelRegistrationById
+    cancelRegistrationById,
   };
   const state = { refreshing };
   const props = { postRegistrationList };

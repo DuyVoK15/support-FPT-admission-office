@@ -32,7 +32,9 @@ import { getAllPost } from '../../../features/collaborator/collab.postSlice';
 import CreatePostRegistrationDto from '../../../dtos/collaborator/parameter/createPostRegistration.dto';
 import CreatePostRegistrationResponse from '../../../dtos/collaborator/response/createPostRegistration.dto';
 import ErrorStatus from '../../../dtos/collaborator/response/errorStatus.dto';
-import ConfirmAlert, { TITLE_ENUM } from '../../../components/shared/AwesomeAlert/ConfirmAlert';
+import ConfirmAlert, {
+  TITLE_ENUM,
+} from '../../../components/shared/AwesomeAlert/ConfirmAlert';
 import { useToast } from 'react-native-toast-notifications';
 import {
   format_Time_To_HHss,
@@ -85,7 +87,7 @@ const PositionRegistration = () => {
         setConfirmInfo({
           title: 'CONFIRMATION',
           titleType: TITLE_ENUM.WARNING,
-          message: `You need Certificate "${position?.certificateName}" for this position? View certificate NOW?`,
+          message: `You need Certificate "${position?.certificateName}" for this position? View Training NOW?`,
           typeButton: TYPE_BUTTON_ENUM.NAVIGATE_TO_CERTIFICATE,
         });
         break;
@@ -150,85 +152,23 @@ const PositionRegistration = () => {
             );
           } else {
             const resRejectedData = res.payload as ErrorStatus;
-            switch (resRejectedData?.statusCode) {
-              case 400:
-                switch (resRejectedData?.errorCode) {
-                  case 4001:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4002:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4003:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4004:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4005:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4006:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4007:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4008:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4009:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4010:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4011:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4012:
-                    showAlertHandler(
-                      TYPE_BUTTON_ENUM.NAVIGATE_TO_CERTIFICATE,
-                      null,
-                      null
-                    );
-                    break;
-                  case 4013:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4014:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4015:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4016:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4016:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4016:
-                    showToastError(resRejectedData?.message);
-                    break;
-                  case 4024:
-                    showToastError(
-                      'You have applied for a position that overlaps with this position'
-                    );
-                    break;
-                  default:
-                    showToastError('Undefined error!');
-                }
+
+            switch (resRejectedData?.errorCode) {         
+              case 4012:
+                showAlertHandler(
+                  TYPE_BUTTON_ENUM.NAVIGATE_TO_CERTIFICATE,
+                  null,
+                  position
+                );
                 break;
-              case 401:
-                showToastError('You are NOT PERMISSION!');
-                break;
-              case 404:
-                showToastError(resRejectedData?.message);
-                // showToastError('404 NOT FOUND');
+             
+              case 4024:
+                showToastError(
+                  'You have applied for a position that overlaps with this position'
+                );
                 break;
               default:
-                showToastError('Undefined error!');
+                showToastError(resRejectedData?.message);
             }
           }
         })
@@ -547,13 +487,13 @@ const PositionRegistration = () => {
                                       index: 0,
                                       routes: [
                                         {
-                                          name: ROUTES.ACCOUNT_STACK_NAVIGATOR,
+                                          name: ROUTES.TRAINING_STACK_NAVIGATOR,
                                           state: {
                                             routes: [
-                                              { name: ROUTES.ACCOUNT },
-                                              {
-                                                name: ROUTES.CERTIFICATE_HISTORY,
-                                              },
+                                              { name: ROUTES.TRAINING },
+                                              // {
+                                              //   name: ROUTES.CERTIFICATE_HISTORY,
+                                              // },
                                             ],
                                           },
                                         },

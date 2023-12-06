@@ -1,4 +1,5 @@
 import { DataCertificateAdmission } from '../../../models/collaborator/dataCertificateAdmission.model';
+import { DataTrainingCertificateRegistration } from '../../../models/collaborator/dataTrainingCertificateRegistration';
 import DataEventDay from '../../../models/collaborator/eventDay.model';
 
 export default interface ViewTrainingCertificateRegistrationResponse {
@@ -7,14 +8,7 @@ export default interface ViewTrainingCertificateRegistrationResponse {
     size: number;
     total: number;
   };
-  data: [
-    {
-      id: number;
-      status: number;
-      trainingCertificate: DataCertificateAdmission;
-      eventDay: DataEventDay;
-    },
-  ];
+  data: DataTrainingCertificateRegistration[] | [];
   isError: boolean;
   message: string;
 }
