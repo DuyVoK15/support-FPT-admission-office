@@ -63,18 +63,15 @@ const ScanIDRecognitionBack = () => {
     }
   };
   const updateInformationBack = async (
+    identityNumber: string,
     identityIssueDate: string,
     placeOfIssue: string
   ) => {
     try {
-      await dispatch(
-        collab_updateInformationBack({ identityIssueDate, placeOfIssue })
-      ).then((res) => {
-        if (res?.meta?.requestStatus === 'rejected') {
-          const resData = res?.payload as ErrorStatus;
-          showToastError(resData?.message);
-        }
-      });
+      const res = await dispatch(
+        collab_updateInformationBack({ identityNumber, identityIssueDate, placeOfIssue })
+      );
+      return res;
     } catch (error) {
       console.log(error);
     }
@@ -166,14 +163,35 @@ const ScanIDRecognitionBack = () => {
         await dispatch(getInformationFromRecognitionBack(imageUri)).then(
           async (res) => {
             console.log(JSON.stringify(res, null, 2));
+            const resData = res?.payload as ViewIDRecognitionBackResponse;
             if (res?.meta?.requestStatus === 'fulfilled') {
-              showToastSuccess('Get info from CCCD/CMND Back Image');
-              const resData = res?.payload as ViewIDRecognitionBackResponse;
-              await updateInformationBack(
-                formatToISO_8601(resData?.data?.[0]?.issue_date) ?? '',
-                resData?.data?.[0]?.issue_loc
-              );
-              await uploadMedia(imageUri ?? '');
+              if (
+                resData?.data?.[0]?.issue_date === null ||
+                resData?.data?.[0]?.issue_date === undefined ||
+                resData?.data?.[0]?.issue_loc === null ||
+                resData?.data?.[0]?.issue_loc === undefined
+              ) {
+                showToastError(
+                  'Scanned the wrong side of the CCCD/CMND! Try again!'
+                );
+                setImageUri(null);
+              } else {
+                // showToastSuccess('Get info from CCCD/CMND Back Image');
+                await updateInformationBack(
+                  resData?.data?.[0]?.mrz_details?.id,
+                  formatToISO_8601(resData?.data?.[0]?.issue_date) ?? '',
+                  resData?.data?.[0]?.issue_loc
+                ).then(async (res) => {
+                  if (res?.meta?.requestStatus === 'rejected') {
+                    const resData = res?.payload as ErrorStatus;
+                    showToastError(resData?.message);
+                    setImageUri(null);
+                  } else {
+                    showToastSuccess('Đã trùng')
+                    await uploadMedia(imageUri ?? '');
+                  }
+                });
+              }
             } else {
               showToastError('Get information failed! Please scan again!');
               setImageUri(null);

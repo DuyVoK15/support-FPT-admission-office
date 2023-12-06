@@ -58,17 +58,10 @@ const ScanIDRecognitionFront = () => {
     address: string
   ) => {
     try {
-      await dispatch(
+      const res = await dispatch(
         collab_updateInformationFront({ identityNumber, address })
-      ).then((res) => {
-        if (res?.meta?.requestStatus === 'rejected') {
-          const resData = res?.payload as ErrorStatus;
-          showToastError(resData?.message);
-          setImageUri(null);
-        } else {
-          
-        }
-      });
+      );
+      return res;
     } catch (error) {
       console.log(error);
     }
@@ -161,14 +154,33 @@ const ScanIDRecognitionFront = () => {
           async (res) => {
             console.log(JSON.stringify(res, null, 2));
             if (res?.meta?.requestStatus === 'fulfilled') {
-              showToastSuccess('Get info from CCCD/CMND Front Image');
               const resData = res?.payload as ViewIDRecognitionFrontResponse;
-              await updateInformationFront(
-                resData?.data?.[0]?.id,
-                resData?.data?.[0]?.address
-              );
-              await uploadMedia(imageUri ?? '');
-              setImageUri(null);
+              if (
+                resData?.data?.[0]?.id === null ||
+                resData?.data?.[0]?.id === undefined ||
+                resData?.data?.[0]?.address === null ||
+                resData?.data?.[0]?.address === undefined
+              ) {
+                showToastError(
+                  'Scanned the wrong side of the CCCD/CMND! Try again!'
+                );
+                setImageUri(null);
+              } else {
+                showToastSuccess('Get info from CCCD/CMND Front Image');
+                await updateInformationFront(
+                  resData?.data?.[0]?.id,
+                  resData?.data?.[0]?.address
+                ).then(async (res) => {
+                  if (res?.meta?.requestStatus === 'rejected') {
+                    const resData = res?.payload as ErrorStatus;
+                    showToastError(resData?.message);
+                    setImageUri(null);
+                  } else {
+                    await uploadMedia(imageUri ?? '');
+                    setImageUri(null);
+                  }
+                });
+              }
             } else {
               showToastError('Get information failed! Please scan again!');
               setImageUri(null);

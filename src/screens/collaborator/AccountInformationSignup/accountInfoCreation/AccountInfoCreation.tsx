@@ -25,11 +25,12 @@ import SubmitButton from '../../../../components/shared/Button/SubmitButton';
 import SubmitButtonDisable from '../../../../components/shared/Button/SubmitButtonDisable';
 import LogoutButton from '../../../../components/shared/Button/LogoutButton';
 import { collab_logout } from '../../../../features/collaborator/collab.authSlice';
+import useCustomToast from '../../../../utils/toasts';
 
 const AccountInfoCreation = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const dispatch = useAppDispatch();
-
+  const { showToastError } = useCustomToast();
   const informationFront = useAppSelector(
     (state) => state.collan_information.informationFront
   );
@@ -110,7 +111,13 @@ const AccountInfoCreation = () => {
           />
         ) : (
           <PickBackImageTouchable
-            onPress={() => navigation.navigate(ROUTES.SCAN_BACK_IMAGE)}
+            onPress={() => {
+              userInfo?.data?.accountInformation &&
+              userInfo?.data?.accountInformation?.identityFrontImg !== null &&
+              userInfo?.data?.accountInformation?.identityFrontImg !== ''
+                ? navigation.navigate(ROUTES.SCAN_BACK_IMAGE)
+                : showToastError('Please scan Front Image first!');
+            }}
           />
         )}
       </View>
@@ -124,8 +131,8 @@ const AccountInfoCreation = () => {
           <SubmitButtonDisable titleButton="NEXT STEP" />
         )}
       </View>
-      <View style={{flex: 1, marginHorizontal: 20, alignItems: 'center'}}>
-          <LogoutButton onPress={handleLogout} />
+      <View style={{ flex: 1, marginHorizontal: 20, alignItems: 'center' }}>
+        <LogoutButton onPress={handleLogout} />
       </View>
     </View>
   );
