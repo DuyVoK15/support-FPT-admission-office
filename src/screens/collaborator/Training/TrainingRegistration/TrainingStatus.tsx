@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, ViewProps } from 'react-native';
 import React, { FC } from 'react';
-import { FONTS_FAMILY } from '../../../constants/Fonts';
+import { FONTS_FAMILY } from '../../../../constants/Fonts';
 
 interface TrainingStatusProps extends ViewProps {
   status: 'PENDING' | 'ASSIGNED' | 'NOT PASSED' | 'PASSED' | 'CANCELED';

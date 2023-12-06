@@ -1,12 +1,12 @@
 import { View, Text } from 'react-native';
 import React, { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
-import { useAppDispatch } from '../../../../app/store';
-import { useAppSelector } from '../../../../app/hooks';
-import { getAllTrainingCertificateRegistration } from '../../../../features/collaborator/collab.certificateSlice';
+import { HomeCollaboratorScreenNavigationProp } from '../../../../../../type';
+import { useAppDispatch } from '../../../../../app/store';
+import { useAppSelector } from '../../../../../app/hooks';
+import { getAllTrainingCertificateRegistration } from '../../../../../features/collaborator/collab.certificateSlice';
 
-const useTrainingRegistrationPassed = () => {
+const useTrainingRegistrationCanceled = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const dispatch = useAppDispatch();
   const trainingCertificateRegistrationList = useAppSelector(
@@ -42,4 +42,4 @@ const useTrainingRegistrationPassed = () => {
   };
 };
 
-export default useTrainingRegistrationPassed;
+export default useTrainingRegistrationCanceled;

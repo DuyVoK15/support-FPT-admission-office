@@ -1,27 +1,38 @@
 import { View, Text } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { HomeCollaboratorScreenNavigationProp } from '../../../type';
-import { useAppDispatch } from '../../app/store';
-import { useAppSelector } from '../../app/hooks';
+import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
+import { useAppDispatch } from '../../../app/store';
+import { useAppSelector } from '../../../app/hooks';
 import {
   createCertificateRegistration,
+  getAllCertificate,
   getAllCertificateFromAdmission,
   getAllTrainingCertificateRegistration,
-} from '../../features/collaborator/collab.certificateSlice';
-import useCustomToast from '../../utils/toasts';
-import ErrorStatus from '../../dtos/collaborator/response/errorStatus.dto';
+} from '../../../features/collaborator/collab.certificateSlice';
+import useCustomToast from '../../../utils/toasts';
+import ErrorStatus from '../../../dtos/collaborator/response/errorStatus.dto';
 
 const useTraining = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const dispatch = useAppDispatch();
   const { showToastSuccess, showToastError } = useCustomToast();
+  const certificateList = useAppSelector(
+    (state) => state.collab_certificate.certificate
+  );
   const certificateFromAdmissionList = useAppSelector(
     (state) => state.collab_certificate.certificateFromAdmission
   );
   const trainingCertificateRegistrationList = useAppSelector(
     (state) => state.collab_certificate.trainingCertificateRegistration
   );
+  const fetchAllCertificate = async () => {
+    try {
+      await dispatch(getAllCertificate({})).then((res) => {});
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const fetchCertificateFromAdmission = async () => {
     try {
       await dispatch(getAllCertificateFromAdmission({})).then((res) => {});
@@ -59,6 +70,7 @@ const useTraining = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      await fetchAllCertificate();
       await fetchCertificateFromAdmission();
       await fetchTrainingCertificateRegistration();
     };
@@ -69,6 +81,7 @@ const useTraining = () => {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     const fetchData = async () => {
+      await fetchAllCertificate();
       await fetchCertificateFromAdmission();
       await fetchTrainingCertificateRegistration();
     };
@@ -80,6 +93,7 @@ const useTraining = () => {
   const state = { refreshing };
   const setState = {};
   const stateRedux = {
+    certificateList,
     certificateFromAdmissionList,
     trainingCertificateRegistrationList,
   };

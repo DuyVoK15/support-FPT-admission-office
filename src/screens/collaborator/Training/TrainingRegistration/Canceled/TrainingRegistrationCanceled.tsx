@@ -1,19 +1,20 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { FlatList } from 'react-native';
-import { FONTS_FAMILY } from '../../../../constants/Fonts';
+import { FONTS_FAMILY } from '../../../../../constants/Fonts';
 import TrainingStatus from '../TrainingStatus';
 import DashedLine from 'react-native-dashed-line';
-import { COLORS } from '../../../../constants/Colors';
-import { SHADOWS } from '../../../../constants/Shadows';
-import { DataTrainingCertificateRegistration } from '../../../../models/collaborator/dataTrainingCertificateRegistration';
-import useTrainingRegistrationPending from './useTrainingRegistrationPending';
-import RegistrationEmpty from '../../../../components/shared/Empty/RegistrationEmpty';
+import { COLORS } from '../../../../../constants/Colors';
+import { SHADOWS } from '../../../../../constants/Shadows';
+import { DataTrainingCertificateRegistration } from '../../../../../models/collaborator/dataTrainingCertificateRegistration';
+import useTrainingRegistrationCanceled from './useTrainingRegistrationCanceled';
+import RegistrationEmpty from '../../../../../components/shared/Empty/RegistrationEmpty';
 
-const TrainingRegistrationPending = () => {
+const TrainingRegistrationCanceled = () => {
   const { state, setState, stateRedux, props, handlers } =
-    useTrainingRegistrationPending();
+    useTrainingRegistrationCanceled();
   const renderListEmptyComponent = () => <RegistrationEmpty />;
+
   const renderItem = ({
     item,
   }: {
@@ -52,11 +53,11 @@ const TrainingRegistrationPending = () => {
                     fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
                   }}
                 >
-                  {12}
+                  {item?.id ? item?.id : 'No value'}
                 </Text>
               </Text>
             </View>
-            <TrainingStatus style={{ flex: 0 }} status="ASSIGNED" />
+            <TrainingStatus style={{ flex: 0 }} status="CANCELED" />
           </View>
           <DashedLine
             style={{ marginVertical: 10 }}
@@ -217,10 +218,6 @@ const TrainingRegistrationPending = () => {
   );
 };
 
-export default TrainingRegistrationPending;
+export default TrainingRegistrationCanceled;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
+const styles = StyleSheet.create({});

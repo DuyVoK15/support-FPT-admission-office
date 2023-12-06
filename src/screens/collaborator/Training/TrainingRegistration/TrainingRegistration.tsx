@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import TrainingTopTabs from '../../../navigation/collaborator/TrainingStack/TrainingTopTab';
-import { ScreenHeight } from '../../../constants/Demesions';
-import Header from '../../../components/shared/Header/Back';
-import { FONTS_FAMILY } from '../../../constants/Fonts';
+import TrainingTopTabs from '../../../../navigation/collaborator/TrainingStack/TrainingTopTab';
+import { ScreenHeight } from '../../../../constants/Demesions';
+import Header from '../../../../components/shared/Header/Back';
+import { FONTS_FAMILY } from '../../../../constants/Fonts';
 
 const TrainingRegistration = () => {
   return (

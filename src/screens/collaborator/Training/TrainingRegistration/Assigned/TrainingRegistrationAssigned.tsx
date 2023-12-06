@@ -1,17 +1,23 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
-import { FlatList } from 'react-native';
-import { FONTS_FAMILY } from '../../../../constants/Fonts';
-import TrainingStatus from '../TrainingStatus';
+import useTrainingRegistrationAssigned from './useTrainingRegistrationAssigned';
+import { DataTrainingCertificateRegistration } from '../../../../../models/collaborator/dataTrainingCertificateRegistration';
+import { SHADOWS } from '../../../../../constants/Shadows';
 import DashedLine from 'react-native-dashed-line';
-import { COLORS } from '../../../../constants/Colors';
-import { SHADOWS } from '../../../../constants/Shadows';
-import { DataTrainingCertificateRegistration } from '../../../../models/collaborator/dataTrainingCertificateRegistration';
-import useTrainingRegistrationNotPassed from './useTrainingRegistrationNotPassed';
-import RegistrationEmpty from '../../../../components/shared/Empty/RegistrationEmpty';
-const TrainingRegistrationNotPassed = () => {
+import { COLORS } from '../../../../../constants/Colors';
+import { FONTS_FAMILY } from '../../../../../constants/Fonts';
+import TrainingStatus from '../TrainingStatus';
+import RegistrationEmpty from '../../../../../components/shared/Empty/RegistrationEmpty';
+
+const TrainingRegistrationAssigned = () => {
   const { state, setState, stateRedux, props, handlers } =
-    useTrainingRegistrationNotPassed();
+    useTrainingRegistrationAssigned();
   const renderListEmptyComponent = () => <RegistrationEmpty />;
 
   const renderItem = ({
@@ -52,7 +58,7 @@ const TrainingRegistrationNotPassed = () => {
                     fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
                   }}
                 >
-                  {12}
+                  {item?.id ? item?.id : 'No value'}
                 </Text>
               </Text>
             </View>
@@ -217,6 +223,6 @@ const TrainingRegistrationNotPassed = () => {
   );
 };
 
-export default TrainingRegistrationNotPassed;
+export default TrainingRegistrationAssigned;
 
 const styles = StyleSheet.create({});

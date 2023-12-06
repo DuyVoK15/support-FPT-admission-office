@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import TrainingRegistrationAssigned from '../../../../screens/Training/TrainingRegistration/Assigned/TrainingRegistrationAssigned';
+import TrainingRegistrationAssigned from '../../../../screens/collaborator/Training/TrainingRegistration/Assigned/TrainingRegistrationAssigned';
 
 const AssignedTab = () => {
   return (

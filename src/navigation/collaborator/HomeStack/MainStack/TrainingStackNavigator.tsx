@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HomeCollaboratorStackNavigatorParamList } from '../../../../../type';
 import { ROUTES } from '../../../../constants/Routes';
 import TrainingTab from '../MainTabs/TrainingTab';
-import TrainingRegistration from '../../../../screens/Training/TrainingRegistration/TrainingRegistration';
+import TrainingRegistration from '../../../../screens/collaborator/Training/TrainingRegistration/TrainingRegistration';
 
 const Stack =
   createNativeStackNavigator<HomeCollaboratorStackNavigatorParamList>();

@@ -1,18 +1,18 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { FlatList } from 'react-native';
-import { FONTS_FAMILY } from '../../../../constants/Fonts';
+import { FONTS_FAMILY } from '../../../../../constants/Fonts';
 import TrainingStatus from '../TrainingStatus';
 import DashedLine from 'react-native-dashed-line';
-import { COLORS } from '../../../../constants/Colors';
-import { SHADOWS } from '../../../../constants/Shadows';
-import { DataTrainingCertificateRegistration } from '../../../../models/collaborator/dataTrainingCertificateRegistration';
-import useTrainingRegistrationCanceled from './useTrainingRegistrationCanceled';
-import RegistrationEmpty from '../../../../components/shared/Empty/RegistrationEmpty';
+import { COLORS } from '../../../../../constants/Colors';
+import { SHADOWS } from '../../../../../constants/Shadows';
+import { DataTrainingCertificateRegistration } from '../../../../../models/collaborator/dataTrainingCertificateRegistration';
+import useTrainingRegistrationPassed from './useTrainingRegistrationPassed';
+import RegistrationEmpty from '../../../../../components/shared/Empty/RegistrationEmpty';
 
-const TrainingRegistrationCanceled = () => {
+const TrainingRegistrationPassed = () => {
   const { state, setState, stateRedux, props, handlers } =
-    useTrainingRegistrationCanceled();
+    useTrainingRegistrationPassed();
   const renderListEmptyComponent = () => <RegistrationEmpty />;
 
   const renderItem = ({
@@ -53,11 +53,11 @@ const TrainingRegistrationCanceled = () => {
                     fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
                   }}
                 >
-                  {12}
+                  {item?.id ? item?.id : 'No value'}
                 </Text>
               </Text>
             </View>
-            <TrainingStatus style={{ flex: 0 }} status="ASSIGNED" />
+            <TrainingStatus style={{ flex: 0 }} status="PASSED" />
           </View>
           <DashedLine
             style={{ marginVertical: 10 }}
@@ -218,6 +218,6 @@ const TrainingRegistrationCanceled = () => {
   );
 };
 
-export default TrainingRegistrationCanceled;
+export default TrainingRegistrationPassed;
 
 const styles = StyleSheet.create({});

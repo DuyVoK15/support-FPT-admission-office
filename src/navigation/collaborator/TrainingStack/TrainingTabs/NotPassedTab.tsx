@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import TrainingRegistrationNotPassed from '../../../../screens/Training/TrainingRegistration/NotPassed/TrainingRegistrationNotPassed';
+import TrainingRegistrationNotPassed from '../../../../screens/collaborator/Training/TrainingRegistration/NotPassed/TrainingRegistrationNotPassed';
 
 const NotPassedTab = () => {
   return (

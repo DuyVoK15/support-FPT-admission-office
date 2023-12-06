@@ -1,20 +1,19 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { FlatList } from 'react-native';
-import { FONTS_FAMILY } from '../../../../constants/Fonts';
+import { FONTS_FAMILY } from '../../../../../constants/Fonts';
 import TrainingStatus from '../TrainingStatus';
 import DashedLine from 'react-native-dashed-line';
-import { COLORS } from '../../../../constants/Colors';
-import { SHADOWS } from '../../../../constants/Shadows';
-import { DataTrainingCertificateRegistration } from '../../../../models/collaborator/dataTrainingCertificateRegistration';
-import useTrainingRegistrationPassed from './useTrainingRegistrationPassed';
-import RegistrationEmpty from '../../../../components/shared/Empty/RegistrationEmpty';
+import { COLORS } from '../../../../../constants/Colors';
+import { SHADOWS } from '../../../../../constants/Shadows';
+import { DataTrainingCertificateRegistration } from '../../../../../models/collaborator/dataTrainingCertificateRegistration';
+import useTrainingRegistrationPending from './useTrainingRegistrationPending';
+import RegistrationEmpty from '../../../../../components/shared/Empty/RegistrationEmpty';
 
-const TrainingRegistrationPassed = () => {
+const TrainingRegistrationPending = () => {
   const { state, setState, stateRedux, props, handlers } =
-    useTrainingRegistrationPassed();
+    useTrainingRegistrationPending();
   const renderListEmptyComponent = () => <RegistrationEmpty />;
-
   const renderItem = ({
     item,
   }: {
@@ -53,11 +52,11 @@ const TrainingRegistrationPassed = () => {
                     fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
                   }}
                 >
-                  {12}
+                  {item?.id ? item?.id : 'No value'}
                 </Text>
               </Text>
             </View>
-            <TrainingStatus style={{ flex: 0 }} status="ASSIGNED" />
+            <TrainingStatus style={{ flex: 0 }} status="PENDING" />
           </View>
           <DashedLine
             style={{ marginVertical: 10 }}
@@ -218,6 +217,10 @@ const TrainingRegistrationPassed = () => {
   );
 };
 
-export default TrainingRegistrationPassed;
+export default TrainingRegistrationPending;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import TrainingRegistrationCanceled from '../../../../screens/Training/TrainingRegistration/Canceled/TrainingRegistrationCanceled';
+import TrainingRegistrationCanceled from '../../../../screens/collaborator/Training/TrainingRegistration/Canceled/TrainingRegistrationCanceled';
 
 const CanceledTab = () => {
   return (

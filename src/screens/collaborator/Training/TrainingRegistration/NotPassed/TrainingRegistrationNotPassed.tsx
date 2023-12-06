@@ -1,23 +1,17 @@
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
-import useTrainingRegistrationAssigned from './useTrainingRegistrationAssigned';
-import { DataTrainingCertificateRegistration } from '../../../../models/collaborator/dataTrainingCertificateRegistration';
-import { SHADOWS } from '../../../../constants/Shadows';
-import DashedLine from 'react-native-dashed-line';
-import { COLORS } from '../../../../constants/Colors';
-import { FONTS_FAMILY } from '../../../../constants/Fonts';
+import { FlatList } from 'react-native';
+import { FONTS_FAMILY } from '../../../../../constants/Fonts';
 import TrainingStatus from '../TrainingStatus';
-import RegistrationEmpty from '../../../../components/shared/Empty/RegistrationEmpty';
-
-const TrainingRegistrationAssigned = () => {
+import DashedLine from 'react-native-dashed-line';
+import { COLORS } from '../../../../../constants/Colors';
+import { SHADOWS } from '../../../../../constants/Shadows';
+import { DataTrainingCertificateRegistration } from '../../../../../models/collaborator/dataTrainingCertificateRegistration';
+import useTrainingRegistrationNotPassed from './useTrainingRegistrationNotPassed';
+import RegistrationEmpty from '../../../../../components/shared/Empty/RegistrationEmpty';
+const TrainingRegistrationNotPassed = () => {
   const { state, setState, stateRedux, props, handlers } =
-    useTrainingRegistrationAssigned();
+    useTrainingRegistrationNotPassed();
   const renderListEmptyComponent = () => <RegistrationEmpty />;
 
   const renderItem = ({
@@ -58,11 +52,11 @@ const TrainingRegistrationAssigned = () => {
                     fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
                   }}
                 >
-                  {12}
+                  {item?.id ? item?.id : 'No value'}
                 </Text>
               </Text>
             </View>
-            <TrainingStatus style={{ flex: 0 }} status="ASSIGNED" />
+            <TrainingStatus style={{ flex: 0 }} status="NOT PASSED" />
           </View>
           <DashedLine
             style={{ marginVertical: 10 }}
@@ -223,6 +217,6 @@ const TrainingRegistrationAssigned = () => {
   );
 };
 
-export default TrainingRegistrationAssigned;
+export default TrainingRegistrationNotPassed;
 
 const styles = StyleSheet.create({});

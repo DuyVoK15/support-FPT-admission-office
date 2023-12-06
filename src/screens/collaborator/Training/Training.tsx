@@ -8,15 +8,15 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import { COLORS } from '../../constants/Colors';
-import { SHADOWS } from '../../constants/Shadows';
-import { ScreenHeight, ScreenWidth } from '../../constants/Demesions';
-import { FONTS_FAMILY } from '../../constants/Fonts';
+import { COLORS } from '../../../constants/Colors';
+import { SHADOWS } from '../../../constants/Shadows';
+import { ScreenHeight, ScreenWidth } from '../../../constants/Demesions';
+import { FONTS_FAMILY } from '../../../constants/Fonts';
 import { LinearGradient } from 'expo-linear-gradient';
 import useTraining from './useTraining';
-import { DataCertificateAdmission } from '../../models/collaborator/dataCertificateAdmission.model';
-import { ROUTES } from '../../constants/Routes';
-import RegistrationEmpty from '../../components/shared/Empty/RegistrationEmpty';
+import { DataCertificateAdmission } from '../../../models/collaborator/dataCertificateAdmission.model';
+import { ROUTES } from '../../../constants/Routes';
+import RegistrationEmpty from '../../../components/shared/Empty/RegistrationEmpty';
 
 const Training = () => {
   const data = [1, 2, 3, 4, 5, 6, 7, 7];
@@ -222,7 +222,10 @@ const Training = () => {
                   color: '#F4762D',
                 }}
               >
-                10
+               {stateRedux?.certificateList?.data
+                  ? stateRedux?.certificateList?.data
+                      ?.length
+                  : 0}
               </Text>
             </Text>
           </View>
