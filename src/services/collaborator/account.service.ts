@@ -61,6 +61,7 @@ export const accountService = {
     return axiosClient.patch(url, { ...payload });
   },
   collab_updateInformationBack: (payload: {
+    identityNumber: string;
     identityIssueDate: string;
     placeOfIssue: string;
   }): Promise<AxiosResponse<GetUserInfoDto>> => {
