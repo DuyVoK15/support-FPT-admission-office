@@ -38,4 +38,14 @@ export interface DataIDRecognitionBack {
   issue_loc_prob: string;
   issue_loc: string;
   type: string;
+  mrz: string[];
+  mrz_prob: string;
+  mrz_details: {
+    id: string;
+    name: string;
+    doe: string;
+    dob: string;
+    nationality: string;
+    sex: string;
+  };
 }
