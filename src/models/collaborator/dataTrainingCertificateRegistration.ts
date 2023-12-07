@@ -6,4 +6,6 @@ export interface DataTrainingCertificateRegistration {
   status: number;
   trainingCertificate: DataCertificateAdmission;
   eventDay: DataEventDay;
+  createAt: string;
+  updateAt: string;
 }

@@ -195,7 +195,7 @@ const Training = () => {
             <Text
               style={{ fontFamily: FONTS_FAMILY?.Ubuntu_700Bold, fontSize: 15 }}
             >
-              Total of Certificate Registration:{'  '}
+              Total of Certificate:{' '}
               <Text
                 style={{
                   fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
@@ -203,8 +203,8 @@ const Training = () => {
                   color: '#F4762D',
                 }}
               >
-                {stateRedux?.trainingCertificateRegistrationList?.data
-                  ? stateRedux?.trainingCertificateRegistrationList?.data
+                {stateRedux?.certificateFromAdmissionList?.data
+                  ? stateRedux?.certificateFromAdmissionList?.data
                       ?.length
                   : 0}
               </Text>
@@ -214,7 +214,7 @@ const Training = () => {
             <Text
               style={{ fontFamily: FONTS_FAMILY?.Ubuntu_700Bold, fontSize: 15 }}
             >
-              Total of Completed Certificate{'   '}:{'  '}
+              Total of Completed:{' '}
               <Text
                 style={{
                   fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,

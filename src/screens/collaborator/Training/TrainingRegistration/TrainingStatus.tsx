@@ -13,10 +13,10 @@ const TrainingStatus: FC<TrainingStatusProps> = (Props) => {
     <View
       {...otherProps}
       style={{
-        paddingVertical: 3,
+        paddingVertical: 4,
         paddingHorizontal: 8,
-        borderRadius: 9,
-        borderWidth: 2,
+        borderRadius: 10,
+        borderWidth: 3,
         justifyContent: 'center',
         borderColor: (() => {
           switch (Props.status) {
@@ -38,8 +38,8 @@ const TrainingStatus: FC<TrainingStatusProps> = (Props) => {
     >
       <Text
         style={{
-          fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
-          fontSize: 14,
+          fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
+          fontSize: 15,
           letterSpacing: 0.5,
           color: (() => {
             switch (Props.status) {

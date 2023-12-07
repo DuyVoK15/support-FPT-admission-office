@@ -9,7 +9,9 @@ import { SHADOWS } from '../../../../../constants/Shadows';
 import { DataTrainingCertificateRegistration } from '../../../../../models/collaborator/dataTrainingCertificateRegistration';
 import useTrainingRegistrationNotPassed from './useTrainingRegistrationNotPassed';
 import RegistrationEmpty from '../../../../../components/shared/Empty/RegistrationEmpty';
-import { format_ISODateString_To_DayOfWeekMonthDDYYYY } from '../../../../../utils/formats';
+import { format_ISODateString_To_DayOfWeekMonthDDYYYY, format_ISODateString_To_Full } from '../../../../../utils/formats';
+import InformationRow from '../../../../../components/collaborator/Training/InformationRow';
+import { ROUTES } from '../../../../../constants/Routes';
 const TrainingRegistrationNotPassed = () => {
   const { state, setState, stateRedux, props, handlers } =
     useTrainingRegistrationNotPassed();
@@ -53,7 +55,7 @@ const TrainingRegistrationNotPassed = () => {
                     fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
                   }}
                 >
-                  {item?.id ? item?.id : 'No value'}
+                  {item?.id ? item?.id : 'No date'}
                 </Text>
               </Text>
             </View>
@@ -66,106 +68,84 @@ const TrainingRegistrationNotPassed = () => {
             dashLength={8}
             dashColor={COLORS.super_light_grey}
           />
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <View style={{ flex: 1 }}>
-              <Text
-                style={{
-                  fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
-                }}
-              >
-                Class {''}
-                <Text
-                  style={{
-                    fontFamily: FONTS_FAMILY?.Ubuntu_300Light_Italic,
-                  }}
-                >
-                  {}
-                </Text>
-              </Text>
-            </View>
-            <View style={{ flex: 0 }}>
-              <Text
-                style={{
-                  fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
-                }}
-              >
-                {item?.eventDay?.class ? item?.eventDay?.class : 'No class'}
-              </Text>
-            </View>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginTop: 10,
-            }}
-          >
-            <View style={{ flex: 1 }}>
-              <Text
-                style={{
-                  fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
-                }}
-              >
-                Date {''}
-                <Text
-                  style={{
-                    fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
-                  }}
-                >
-                  {}
-                </Text>
-              </Text>
-            </View>
-            <View style={{ flex: 0 }}>
-              <Text
-                style={{
-                  fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
-                }}
-              >
-                {item?.eventDay?.date ? format_ISODateString_To_DayOfWeekMonthDDYYYY(
-                      item?.eventDay?.date
-                    ) : 'No value'}
-              </Text>
-            </View>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginTop: 10,
-            }}
-          >
-            <View style={{ flex: 1 }}>
-              <Text
-                style={{
-                  fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
-                }}
-              >
-                Time {''}
-                <Text
-                  style={{
-                    fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
-                  }}
-                >
-                  {}
-                </Text>
-              </Text>
-            </View>
-            <View style={{ flex: 0 }}>
-              <Text
-                style={{
-                  fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
-                }}
-              >
-                {item?.eventDay?.timeFrom
-                  ? item?.eventDay?.timeFrom
-                  : 'No time' + '' + item?.eventDay?.timeTo
-                  ? item?.eventDay?.timeTo
-                  : 'No time'}
-              </Text>
-            </View>
-          </View>
 
+          <InformationRow
+            title={'Certificate'}
+            value={
+              item?.trainingCertificate?.certificateName
+                ? item?.trainingCertificate?.certificateName.trim()
+                : 'No class'
+            }
+            fontSizeTitle={15}
+            fontSizeValue={15}
+            fontFamilyValue={FONTS_FAMILY?.Ubuntu_500Medium}
+            colorTextValue={COLORS?.orange_icon}
+          />
+          <InformationRow
+            title={'Class'}
+            value={item?.eventDay?.class ? item?.eventDay?.class : 'Not yet'}
+            marginTop={10}
+          />
+          <InformationRow
+            title={'Date'}
+            value={
+              item?.eventDay?.date
+                ? format_ISODateString_To_DayOfWeekMonthDDYYYY(
+                    item?.eventDay?.date
+                  )
+                : 'Not yet'
+            }
+            marginTop={10}
+          />
+          <InformationRow
+            title={'Time'}
+            value={
+              item?.eventDay?.timeFrom && item?.eventDay?.timeTo
+                ? item?.eventDay?.timeFrom + ' - ' + item?.eventDay?.timeTo
+                : 'Not yet'
+            }
+            marginTop={10}
+          />
+          <DashedLine
+            style={{ marginVertical: 10 }}
+            dashGap={0}
+            dashThickness={1}
+            dashLength={8}
+            dashColor={COLORS.super_light_grey}
+          />
+          <InformationRow
+            title={'Registered at'}
+            value={
+              item?.createAt
+                ? format_ISODateString_To_Full(item?.createAt)
+                  ? format_ISODateString_To_Full(item?.createAt)
+                  : 'Not yet'
+                : 'Not yet'
+            }
+          />
+          <InformationRow
+            title={'Assigned at'}
+            value={
+              item?.createAt
+                ? format_ISODateString_To_Full(item?.updateAt)
+                  ? format_ISODateString_To_Full(item?.updateAt)
+                  : 'Not yet'
+                : 'Not yet'
+            }
+            marginTop={10}
+          />
+          <InformationRow
+            title={'Not Passed at'}
+            colorTextTitle={'red'}
+            value={
+              item?.createAt
+                ? format_ISODateString_To_Full(item?.updateAt)
+                  ? format_ISODateString_To_Full(item?.updateAt)
+                  : 'Not yet'
+                : 'Not yet'
+            }
+            marginTop={10}
+          />
           <View
             style={{
               flexDirection: 'row',
@@ -175,33 +155,26 @@ const TrainingRegistrationNotPassed = () => {
           >
             <View>
               <TouchableOpacity
+              onPress={() => props.navigation.navigate(ROUTES.TRAINING)}
                 style={{
                   paddingVertical: 8,
                   paddingHorizontal: 12,
-                  backgroundColor: 'yellow',
+                  backgroundColor: COLORS?.green_filter_button,
                   borderRadius: 10,
                 }}
               >
-                <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular }}>
-                  View gì đó
+                <Text
+                  style={{
+                    fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                    fontSize: 15,
+                    color: '#FFF',
+                  }}
+                >
+                  Join again
                 </Text>
               </TouchableOpacity>
             </View>
-
-            <View>
-              <TouchableOpacity
-                style={{
-                  paddingVertical: 8,
-                  paddingHorizontal: 12,
-                  backgroundColor: 'yellow',
-                  borderRadius: 10,
-                }}
-              >
-                <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular }}>
-                  View gì đó
-                </Text>
-              </TouchableOpacity>
-            </View>
+        
           </View>
         </View>
       </View>

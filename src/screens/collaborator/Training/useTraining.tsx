@@ -55,9 +55,10 @@ const useTraining = () => {
     try {
       await dispatch(
         createCertificateRegistration({ trainingCertificateId })
-      ).then((res) => {
+      ).then(async (res) => {
         if (res?.meta?.requestStatus === 'fulfilled') {
           showToastSuccess('Registered success!');
+          await fetchTrainingCertificateRegistration();
         } else {
           const resData = res?.payload as ErrorStatus;
           showToastError(resData?.message);
