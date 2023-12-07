@@ -4,8 +4,13 @@ import TrainingTopTabs from '../../../../navigation/collaborator/TrainingStack/T
 import { ScreenHeight } from '../../../../constants/Demesions';
 import Header from '../../../../components/shared/Header/Back';
 import { FONTS_FAMILY } from '../../../../constants/Fonts';
+import BackwardBlur from '../../../../components/shared/Direction/Backward/BackwardBlur';
+import { useNavigation } from '@react-navigation/native';
+import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
+import { ROUTES } from '../../../../constants/Routes';
 
 const TrainingRegistration = () => {
+  const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   return (
     <View style={styles.container}>
       <Header style={{ height: ScreenHeight / 9, flexDirection: "column", alignItems: "center", justifyContent: "flex-end" }}>
@@ -16,6 +21,7 @@ const TrainingRegistration = () => {
             Training Registration
           </Text>
         </View>
+        <BackwardBlur onPress={() => navigation.navigate(ROUTES.TRAINING)} style={{position: 'absolute', left: 0, bottom: 10}} />
       </Header>
       <TrainingTopTabs />
     </View>

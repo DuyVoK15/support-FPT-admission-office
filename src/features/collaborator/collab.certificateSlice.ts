@@ -9,12 +9,18 @@ import ViewTrainingCertificateRegistrationResponse from '../../dtos/collaborator
 import CancelTrainingCertificateRegistrationResponse from '../../dtos/collaborator/response/cancelTrainingCertificateRegistration.dto';
 import ViewCertificateAdmissionResponse from '../../dtos/collaborator/response/viewCertificateFromAdmisstion.dto';
 import { CreateTrainingCertificateRegistrationParam } from '../../dtos/collaborator/parameter/createTrainingCertificateRegistration.dto';
+import { FilterTrainingCertificateRegistrationParam } from '../../dtos/collaborator/parameter/filterTrainingCertificateRegistration.dto';
 
 interface CertificateState {
   certificate: ViewCertificateResponse | null;
   certificateCompleted: ViewCertificateResponse | null;
   certificateRejected: ViewCertificateResponse | null;
   trainingCertificateRegistration: ViewTrainingCertificateRegistrationResponse | null;
+  trainingCertificateRegistration_Pending: ViewTrainingCertificateRegistrationResponse | null;
+  trainingCertificateRegistration_Assigned: ViewTrainingCertificateRegistrationResponse | null;
+  trainingCertificateRegistration_Passed: ViewTrainingCertificateRegistrationResponse | null;
+  trainingCertificateRegistration_NotPassed: ViewTrainingCertificateRegistrationResponse | null;
+  trainingCertificateRegistration_Canceled: ViewTrainingCertificateRegistrationResponse | null;
   cancelResponse: CancelTrainingCertificateRegistrationResponse | null;
   certificateFromAdmission: ViewCertificateAdmissionResponse | null;
   loading: boolean;
@@ -26,6 +32,11 @@ const initialState: CertificateState = {
   certificateCompleted: null,
   certificateRejected: null,
   trainingCertificateRegistration: null,
+  trainingCertificateRegistration_Pending: null,
+  trainingCertificateRegistration_Assigned: null,
+  trainingCertificateRegistration_Passed: null,
+  trainingCertificateRegistration_NotPassed: null,
+  trainingCertificateRegistration_Canceled: null,
   cancelResponse: null,
   certificateFromAdmission: null,
   loading: false,
@@ -73,7 +84,77 @@ export const getAllCertificate_Rejected = createAsyncThunk(
 );
 export const getAllTrainingCertificateRegistration = createAsyncThunk(
   'certificate/viewAllTrainingCertificateRegistration',
-  async (params: FilterCertificateParam, { rejectWithValue }) => {
+  async (params: FilterTrainingCertificateRegistrationParam, { rejectWithValue }) => {
+    try {
+      const response =
+        await certificateService.getTrainingCertificateRegistration(params);
+      // console.log("<PostSlice> Post: ", JSON.stringify(response.data.data))
+      return response.data;
+    } catch (error: any) {
+      const axiosError = error as AxiosError;
+      return rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+export const getAllTrainingCertificateRegistration_Pending = createAsyncThunk(
+  'certificate/viewAllTrainingCertificateRegistration/pending',
+  async (params: FilterTrainingCertificateRegistrationParam, { rejectWithValue }) => {
+    try {
+      const response =
+        await certificateService.getTrainingCertificateRegistration(params);
+      // console.log("<PostSlice> Post: ", JSON.stringify(response.data.data))
+      return response.data;
+    } catch (error: any) {
+      const axiosError = error as AxiosError;
+      return rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+export const getAllTrainingCertificateRegistration_Assigned = createAsyncThunk(
+  'certificate/viewAllTrainingCertificateRegistration/assigned',
+  async (params: FilterTrainingCertificateRegistrationParam, { rejectWithValue }) => {
+    try {
+      const response =
+        await certificateService.getTrainingCertificateRegistration(params);
+      // console.log("<PostSlice> Post: ", JSON.stringify(response.data.data))
+      return response.data;
+    } catch (error: any) {
+      const axiosError = error as AxiosError;
+      return rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+export const getAllTrainingCertificateRegistration_Passed = createAsyncThunk(
+  'certificate/viewAllTrainingCertificateRegistration/passed',
+  async (params: FilterTrainingCertificateRegistrationParam, { rejectWithValue }) => {
+    try {
+      const response =
+        await certificateService.getTrainingCertificateRegistration(params);
+      // console.log("<PostSlice> Post: ", JSON.stringify(response.data.data))
+      return response.data;
+    } catch (error: any) {
+      const axiosError = error as AxiosError;
+      return rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+export const getAllTrainingCertificateRegistration_NotPassed = createAsyncThunk(
+  'certificate/viewAllTrainingCertificateRegistration/notpassed',
+  async (params: FilterTrainingCertificateRegistrationParam, { rejectWithValue }) => {
+    try {
+      const response =
+        await certificateService.getTrainingCertificateRegistration(params);
+      // console.log("<PostSlice> Post: ", JSON.stringify(response.data.data))
+      return response.data;
+    } catch (error: any) {
+      const axiosError = error as AxiosError;
+      return rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+export const getAllTrainingCertificateRegistration_Cannceled = createAsyncThunk(
+  'certificate/viewAllTrainingCertificateRegistration/cannceled',
+  async (params: FilterTrainingCertificateRegistrationParam, { rejectWithValue }) => {
     try {
       const response =
         await certificateService.getTrainingCertificateRegistration(params);
@@ -192,6 +273,101 @@ export const certificateSlice = createSlice({
       )
       .addCase(
         getAllTrainingCertificateRegistration.rejected,
+        (state, action) => {
+          state.error = String(action.payload);
+          state.loading = false;
+        }
+      )
+
+      .addCase(getAllTrainingCertificateRegistration_Pending.pending, (state) => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(
+        getAllTrainingCertificateRegistration_Pending.fulfilled,
+        (state, action) => {
+          state.loading = false;
+          state.trainingCertificateRegistration_Pending = action.payload;
+        }
+      )
+      .addCase(
+        getAllTrainingCertificateRegistration_Pending.rejected,
+        (state, action) => {
+          state.error = String(action.payload);
+          state.loading = false;
+        }
+      )
+
+      .addCase(getAllTrainingCertificateRegistration_Assigned.pending, (state) => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(
+        getAllTrainingCertificateRegistration_Assigned.fulfilled,
+        (state, action) => {
+          state.loading = false;
+          state.trainingCertificateRegistration_Assigned = action.payload;
+        }
+      )
+      .addCase(
+        getAllTrainingCertificateRegistration_Assigned.rejected,
+        (state, action) => {
+          state.error = String(action.payload);
+          state.loading = false;
+        }
+      )
+
+      .addCase(getAllTrainingCertificateRegistration_Passed.pending, (state) => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(
+        getAllTrainingCertificateRegistration_Passed.fulfilled,
+        (state, action) => {
+          state.loading = false;
+          state.trainingCertificateRegistration_Passed = action.payload;
+        }
+      )
+      .addCase(
+        getAllTrainingCertificateRegistration_Passed.rejected,
+        (state, action) => {
+          state.error = String(action.payload);
+          state.loading = false;
+        }
+      )
+
+      .addCase(getAllTrainingCertificateRegistration_NotPassed.pending, (state) => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(
+        getAllTrainingCertificateRegistration_NotPassed.fulfilled,
+        (state, action) => {
+          state.loading = false;
+          state.trainingCertificateRegistration_NotPassed = action.payload;
+        }
+      )
+      .addCase(
+        getAllTrainingCertificateRegistration_NotPassed.rejected,
+        (state, action) => {
+          state.error = String(action.payload);
+          state.loading = false;
+        }
+      )
+
+      .addCase(getAllTrainingCertificateRegistration_Cannceled.pending, (state) => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(
+        getAllTrainingCertificateRegistration_Cannceled.fulfilled,
+        (state, action) => {
+          state.loading = false;
+          state.trainingCertificateRegistration_Canceled = action.payload;
+        }
+      )
+      .addCase(
+        getAllTrainingCertificateRegistration_Cannceled.rejected,
         (state, action) => {
           state.error = String(action.payload);
           state.loading = false;

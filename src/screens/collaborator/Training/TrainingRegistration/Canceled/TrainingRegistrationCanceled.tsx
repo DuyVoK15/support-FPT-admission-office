@@ -9,6 +9,7 @@ import { SHADOWS } from '../../../../../constants/Shadows';
 import { DataTrainingCertificateRegistration } from '../../../../../models/collaborator/dataTrainingCertificateRegistration';
 import useTrainingRegistrationCanceled from './useTrainingRegistrationCanceled';
 import RegistrationEmpty from '../../../../../components/shared/Empty/RegistrationEmpty';
+import { format_ISODateString_To_DayOfWeekMonthDDYYYY } from '../../../../../utils/formats';
 
 const TrainingRegistrationCanceled = () => {
   const { state, setState, stateRedux, props, handlers } =
@@ -122,7 +123,9 @@ const TrainingRegistrationCanceled = () => {
                   fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
                 }}
               >
-                {item?.eventDay?.date ? item?.eventDay?.date : 'No value'}
+                {item?.eventDay?.date ? format_ISODateString_To_DayOfWeekMonthDDYYYY(
+                      item?.eventDay?.date
+                    ) : 'No value'}
               </Text>
             </View>
           </View>

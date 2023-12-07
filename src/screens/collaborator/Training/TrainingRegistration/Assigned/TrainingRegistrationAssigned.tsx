@@ -14,6 +14,7 @@ import { COLORS } from '../../../../../constants/Colors';
 import { FONTS_FAMILY } from '../../../../../constants/Fonts';
 import TrainingStatus from '../TrainingStatus';
 import RegistrationEmpty from '../../../../../components/shared/Empty/RegistrationEmpty';
+import { format_ISODateString_To_DayOfWeekMonthDDYYYY } from '../../../../../utils/formats';
 
 const TrainingRegistrationAssigned = () => {
   const { state, setState, stateRedux, props, handlers } =
@@ -127,7 +128,11 @@ const TrainingRegistrationAssigned = () => {
                   fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
                 }}
               >
-                {item?.eventDay?.date ? item?.eventDay?.date : 'No value'}
+                {item?.eventDay?.date
+                  ? format_ISODateString_To_DayOfWeekMonthDDYYYY(
+                      item?.eventDay?.date
+                    )
+                  : 'No value'}
               </Text>
             </View>
           </View>

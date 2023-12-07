@@ -1,33 +1,44 @@
 import { View, Text } from 'react-native';
 import React, { useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../../../type';
 import { useAppDispatch } from '../../../../../app/store';
 import { useAppSelector } from '../../../../../app/hooks';
-import { getAllTrainingCertificateRegistration } from '../../../../../features/collaborator/collab.certificateSlice';
+import { getAllTrainingCertificateRegistration, getAllTrainingCertificateRegistration_Pending } from '../../../../../features/collaborator/collab.certificateSlice';
+import { TRAINING_CERTI_REGIS_STATUS_ENUM } from '../../../../../enums/collaborator/TrainingCertificateRegistrationStatus';
 
 const useTrainingRegistrationPending = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const dispatch = useAppDispatch();
   const trainingCertificateRegistrationList = useAppSelector(
-    (state) => state.collab_certificate.trainingCertificateRegistration
+    (state) => state.collab_certificate.trainingCertificateRegistration_Pending
   );
   const fetchTrainingCertificateRegistration = async () => {
     try {
-      await dispatch(getAllTrainingCertificateRegistration({})).then(
-        (res) => {}
-      );
+      await dispatch(
+        getAllTrainingCertificateRegistration_Pending({
+          Page: 1,
+          PageSize: 1000,
+          Sort: 'CreateAt',
+          Order: 'DESCENDING',
+          Status: TRAINING_CERTI_REGIS_STATUS_ENUM.PENDING,
+        })
+      ).then((res) => {
+        console.log(JSON.stringify(res, null, 2));
+      });
     } catch (error) {
       console.log(error);
     }
   };
-  useEffect(() => {
-    const fetchData = async () => {
-      await fetchTrainingCertificateRegistration();
-    };
-    fetchData();
-  }, []);
-
+  // useEffect(() => {}, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        await fetchTrainingCertificateRegistration();
+      };
+      fetchData();
+    }, [])
+  );
   const handlers = {};
   const props = { navigation };
   const state = {};
