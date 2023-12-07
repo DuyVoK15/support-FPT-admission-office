@@ -45,6 +45,7 @@ export type HomeCollaboratorStackNavigatorParamList = {
   CERTIFICATE_REJECTED: undefined;
   WALLET: undefined;
   CONTRACT: undefined;
+  CONTRACT_DOCUMENT: undefined;
   ACCOUNT_NOTIFICATION: undefined;
   EVENT_NOTIFICATION: undefined;
   HOME_NOTIFICATION: undefined;
@@ -104,6 +105,7 @@ export type HomeCollaboratorScreenNavigationProp = NativeStackScreenProps<
   'CERTIFICATE_REJECTED',
   'WALLET',
   'CONTRACT',
+  'CONTRACT_DOCUMENT',
   'ACCOUNT_NOTIFICATION',
   'EVENT_NOTIFICATION',
   'HOME_NOTIFICATION',

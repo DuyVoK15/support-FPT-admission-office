@@ -8,7 +8,7 @@ const AppIcon: FC<AppIconProps> = (props) => {
   return (
     <View style={[{ marginTop: 0 }, props.style]}>
       <Image
-        style={{ height: 185, width: 195 }}
+        style={{ height: 185, width: 195, resizeMode: 'contain' }}
         source={require('../../../assets/Images/ic_app.png')}
       />
     </View>

@@ -1,6 +1,7 @@
 import {
   FlatList,
   Image,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -26,7 +27,6 @@ import { WebView } from 'react-native-webview';
 import { ROUTES } from '../../../constants/Routes';
 
 const Contract = () => {
-  const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const { handlers, state, props, stateRedux } = useIndex();
 
   const renderItem = ({ item }: { item: DataContract }) => {
@@ -70,11 +70,7 @@ const Contract = () => {
             {/* <View></View> */}
             <TouchableOpacity
               onPress={() =>
-                handlers.downloadAndOpenFile(
-                  item?.submittedFile !== ''
-                    ? item?.submittedFile
-                    : item?.contract?.sampleFile
-                )
+                props.navigation.navigate(ROUTES.CONTRACT_DOCUMENT, { item })
               }
               style={{
                 borderWidth: 2,
@@ -157,24 +153,22 @@ const Contract = () => {
       <Header>
         <Backward
           titleBackward="Contract"
-          onPress={() => navigation.navigate(ROUTES.ACCOUNT)}
+          onPress={() => props.navigation.navigate(ROUTES.ACCOUNT)}
         />
       </Header>
-      <WebView
-       style={{ flex: 1, minHeight: 200, height: 300, opacity: 0.99 }}
-        source={{
-          uri: `https://docs.google.com/viewerng/viewer?url=${encodeURIComponent('https://firebasestorage.googleapis.com/v0/b/supfamof-c8c84.appspot.com/o/images%2Fadmission%2FeventeventH%E1%BB%A3p-%C4%91%E1%BB%93ng-kho%C3%A1n-g%E1%BB%8Dn-Modify%20(8).docx?alt=media&token=a35c84b6-853e-4a7b-ad85-407170c62461')}`,
-        }}
-        androidHardwareAccelerationDisabled={true}
-        startInLoadingState={true}
-      
-      ></WebView>
-      {/* <View style={{ marginTop: 15 }}>
+
+      <View style={{ marginTop: 15 }}>
         <FlatList
           data={stateRedux?.contractList?.data}
           renderItem={renderItem}
+          refreshControl={
+            <RefreshControl
+              refreshing={state.refreshing}
+              onRefresh={handlers.onRefresh}
+            />
+          }
         />
-      </View> */}
+      </View>
     </View>
   );
 };
