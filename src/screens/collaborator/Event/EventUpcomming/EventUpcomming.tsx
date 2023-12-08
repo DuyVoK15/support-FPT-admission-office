@@ -96,7 +96,7 @@ const EventUpcomming: FC = () => {
         })
       ).then((res) => {
         console.log('===============Data==============');
-        // console.log(JSON.stringify(res, null, 2));
+        console.log(JSON.stringify(res, null, 2));
       });
     } catch (error) {
       console.log('Error: ', error);

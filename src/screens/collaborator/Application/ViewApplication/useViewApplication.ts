@@ -26,8 +26,8 @@ const useViewApplication = () => {
         getAllApplication({
           Page: 1,
           PageSize: 10000,
-          // Sort: 'CreateAt',
-          // Order: 'DESCENDING',
+          Sort: 'ReportDate',
+          Order: 'DESCENDING',
         })
       ).then((res) => {
         console.log(JSON.stringify(res, null, 2));

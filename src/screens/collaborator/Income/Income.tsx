@@ -49,14 +49,18 @@ const Wallet = () => {
               <Text style={styles.textDate}>
                 {item?.createAt
                   ? format_ISODateString_To_DDMonthYYYY(item?.createAt)
-                  : 'No value'}
+                    ? format_ISODateString_To_DDMonthYYYY(item?.createAt)
+                    : 'No date'
+                  : 'No date'}
               </Text>
             </View>
             <View>
               <Text style={styles.textTime}>
                 {item?.createAt
                   ? format_ISODateString_To_HHss(item?.createAt)
-                  : 'No value'}
+                    ? format_ISODateString_To_HHss(item?.createAt)
+                    : 'No time'
+                  : 'No time'}
               </Text>
             </View>
           </View>

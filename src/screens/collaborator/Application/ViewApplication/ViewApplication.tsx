@@ -86,7 +86,7 @@ const ViewApplication = () => {
                 }}
               >
                 <View style={{ flex: 1, alignItems: 'center' }}>
-                  <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular }}>
+                  <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular, fontSize: 15 }}>
                     {item?.account?.name ? item?.account?.name : 'No name'}
                   </Text>
 
@@ -253,6 +253,9 @@ const ViewApplication = () => {
             isVisible={state.isVisible}
             style={{ justifyContent: 'center', alignItems: 'center' }}
             onBackdropPress={handlers.hideModal}
+            avoidKeyboard={true}
+            useNativeDriver={true}
+            useNativeDriverForBackdrop={true}
           >
             <View
               style={{
@@ -352,5 +355,6 @@ export default ViewApplication;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white'
   },
 });

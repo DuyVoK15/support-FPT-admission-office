@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Button,
   NativeModules,
+  FlatList,
 } from 'react-native';
 import Device from 'expo-device';
 import * as Location from 'expo-location';
@@ -18,6 +19,7 @@ import Constants from 'expo-constants';
 import { useAppDispatch } from '../../../app/store';
 import {
   getAllPostRegistration_Confirmed,
+  getAllPostRegistration_Pending,
   getPostRegistrationById_Confirmed,
 } from '../../../features/collaborator/collab.postRegistrationSlice';
 import { RegistrationStatus } from '../../../enums/collaborator/RegistrationStatus';
@@ -25,12 +27,16 @@ import { useAppSelector } from '../../../app/hooks';
 import DataViewPostRegistration from '../../../models/collaborator/postRegistration.model';
 import ViewPostRegistrationResponse from '../../../dtos/collaborator/response/viewPostRegistration.dto';
 const statusBarHeight = Constants.statusBarHeight;
+import { FlashList } from '@shopify/flash-list';
+import { SHADOWS } from '../../../constants/Shadows';
+import Carousel from 'react-native-reanimated-carousel';
 
 export default function Map() {
   const [location, setLocation] = useState<Location.LocationObject | null>(
     null
   );
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [markersKey, setMarkersKey] = useState('defaultKey');
 
   // useEffect(() => {
   //   (async () => {
@@ -49,41 +55,36 @@ export default function Map() {
   //   })();
   // }, []);
 
-  let text = 'Waiting...';
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (location) {
-    text = JSON.stringify(location);
-  }
-
-  const locations = {
-    latitude: '10.2131',
-    longitude: '106.123123',
-  };
+  // let text = 'Waiting...';
+  // if (errorMsg) {
+  //   text = errorMsg;
+  // } else if (location) {
+  //   text = JSON.stringify(location);
+  // }
 
   const mapRef = useRef<MapView>(null);
-  const markerCoordinates = { latitude: 10.826561, longitude: 106.760897 };
+  const [selectedMarkerIndex, setSelectedMarkerIndex] = useState<number>(-1); // Default selected marker ID
 
-  const moveToMarker = () => {
-    if (mapRef.current) {
-      mapRef.current.animateToRegion({
-        latitude: markerCoordinates.latitude,
-        longitude: markerCoordinates.longitude,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
-      });
-    }
+  const handleMarkerPress = (index: number) => {
+    setSelectedMarkerIndex(index);
   };
-  const [selectedMarkerId, setSelectedMarkerId] = useState(1); // Default selected marker ID
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchPostRegistrationConfirmed();
+    };
+    fetchData();
+    
+  }, []);
+  useEffect(() => {
+    setTimeout(() => {
+      handleMarkerPress(0);
 
-  const handleMarkerPress = (markerId: any) => {
-    setSelectedMarkerId(markerId);
-  };
-
+    },2000)
+  },[])
   useEffect(() => {
     // Here you can handle moving the map to the selected marker's coordinates
     const selectedMarker = postRegistrationConfirmList?.data?.find(
-      (marker) => marker.id === selectedMarkerId
+      (item, index) => index === selectedMarkerIndex
     );
     if (selectedMarker) {
       if (mapRef.current) {
@@ -99,15 +100,15 @@ export default function Map() {
         });
       }
     }
-  }, [selectedMarkerId]);
+  }, [selectedMarkerIndex]);
   const dispatch = useAppDispatch();
   const postRegistrationConfirmList = useAppSelector(
-    (state) => state.collab_postRegistration.postRegistrationConfirmed
+    (state) => state.collab_postRegistration.postRegistrationPending
   );
   const fetchPostRegistrationConfirmed = async () => {
     await dispatch(
-      getAllPostRegistration_Confirmed({
-        RegistrationStatus: [RegistrationStatus.CONFIRM],
+      getAllPostRegistration_Pending({
+        RegistrationStatus: [RegistrationStatus.PENDING],
       })
     ).then((res) => {
       console.log(JSON.stringify(res, null, 2));
@@ -116,12 +117,9 @@ export default function Map() {
   };
 
   useEffect(() => {
-    const fetch = async () => {
-      await fetchPostRegistrationConfirmed();
-    };
-    fetch();
-    console.log(postRegistrationConfirmList);
-  }, []);
+    // Generate a new key whenever postRegistrationConfirmList changes
+    setMarkersKey(Date.now().toString());
+  }, [postRegistrationConfirmList]);
 
   const renderMarkers = () => {
     return postRegistrationConfirmList?.data.map((registration, index) => {
@@ -145,12 +143,27 @@ export default function Map() {
       );
     });
   };
-  const [markersKey, setMarkersKey] = useState('defaultKey');
 
-  useEffect(() => {
-    // Generate a new key whenever postRegistrationConfirmList changes
-    setMarkersKey(Date.now().toString());
-  }, [postRegistrationConfirmList]);
+  const carouselRef = useRef<any>(null);
+  const renderItemCarousel = ({ item }: { item: DataViewPostRegistration }) => {
+    return (
+      <View
+        style={{
+          // flex: 1,
+          // marginLeft: ScreenWidth * 0.05,
+          // marginRight: ScreenWidth * 0.05,
+          // marginBottom: 20,
+          backgroundColor: 'white',
+          borderRadius: 10,
+          ...SHADOWS.SHADOW_04,
+        }}
+      >
+        <View style={{ margin: 15 }}>
+          <Text>{item?.registrationCode}</Text>
+        </View>
+      </View>
+    );
+  };
 
   const regionTS = {
     latitude: 10.74325841775703,
@@ -158,7 +171,7 @@ export default function Map() {
     longitude: 106.04260778054595,
     longitudeDelta: 3.957008980214596,
   };
-  
+
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="transparent" />
@@ -186,15 +199,32 @@ export default function Map() {
       >
         {postRegistrationConfirmList && renderMarkers()}
       </MapView>
-      <View
+      <View style={{}}>
+        {postRegistrationConfirmList &&
+          postRegistrationConfirmList?.data?.length > 0 && (
+            <Carousel
+              style={{}}
+              loop
+              width={ScreenWidth}
+              height={ScreenWidth / 2}
+              // autoPlay={true}
+              data={postRegistrationConfirmList?.data}
+              scrollAnimationDuration={200}
+              onSnapToItem={(index) => handleMarkerPress(index)}
+              renderItem={renderItemCarousel}
+            />
+          )}
+      </View>
+
+      {/* <View
         style={{
           position: 'absolute',
           width: ScreenWidth * 0.9,
           top: statusBarHeight + 100,
         }}
-      >
-        {/* <Button title="Refresh Map" onPress={handleRefresh} /> */}
-      </View>
+      > */}
+      {/* <Button title="Refresh Map" onPress={handleRefresh} /> */}
+      {/* </View> */}
       {/* <View style={styles.searchContainer}>
         <GooglePlacesAutocomplete
           GoogleReverseGeocodingQuery={{ language: 'vi' }}
@@ -227,7 +257,7 @@ export default function Map() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: statusBarHeight,
+    paddingTop: Platform.OS === 'android' ? statusBarHeight : 0,
   },
 
   map: {
