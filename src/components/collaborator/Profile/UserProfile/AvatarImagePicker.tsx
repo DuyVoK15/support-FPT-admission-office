@@ -11,6 +11,9 @@ import SuccessPopup from '../../../shared/PopupNotification/SuccessPopup';
 import ErrorPopup from '../../../shared/PopupNotification/ErrorPopup';
 import { collab_updateAvatar } from '../../../../features/collaborator/collab.accountSlice';
 import { collab_getUserInfo } from '../../../../features/collaborator/collab.authSlice';
+import useCustomToast from '../../../../utils/toasts';
+import ErrorStatus from '../../../../dtos/collaborator/response/errorStatus.dto';
+import { useAppSelector } from '../../../../app/hooks';
 
 type AvatarImageProps = {
   style?: any;
@@ -25,13 +28,10 @@ const AvatarImagePicker = (props: AvatarImageProps) => {
   const [imagePicker, setImagePicker] = useState<string>(imgUndefined);
   const [uploading, setUploading] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [isSuccessPopupVisible, setIsSuccessPopupVisible] =
-    useState<boolean>(false);
-  const [isErrorPopupVisible, setIsErrorPopupVisible] =
-    useState<boolean>(false);
 
   const dispatch = useAppDispatch();
-
+  const { showToastSuccess, showToastError } = useCustomToast();
+  const userInfo = useAppSelector((state) => state.collab_account.userInfo);
   // Pick and Upload image
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -66,29 +66,29 @@ const AvatarImagePicker = (props: AvatarImageProps) => {
         xhr.send(null);
       });
       const filename = imagePicker.substring(imagePicker.lastIndexOf('/') + 1);
+      const idStudent =
+        userInfo?.data?.accountInformation?.idStudent + '_' ?? 'NOVALUE_';
+      const finalFilename = idStudent.concat(filename);
       const storageRef = firebase.storage().ref();
-      const ref = storageRef.child(filename);
+      const ref = storageRef.child('mobile/avatar' + '/' + finalFilename);
       await ref.put(blob);
       storageRef
-        .child(filename)
+        .child('mobile/avatar' + '/' + finalFilename)
         .getDownloadURL()
         .then(async (url) => {
           // url chứa đường dẫn tới hình ảnh
           console.log('URL của hình ảnh:', url);
           setImgUrl(url);
-          await dispatch(collab_updateAvatar({ imgUrl: url })).then(async (res) => {
-            const result = res.payload as GetUserInfoDto;
-            if (result?.status?.success) {
-              setIsSuccessPopupVisible(true);
-              await dispatch(collab_getUserInfo());
-            } else {
-              setIsErrorPopupVisible(true);
+          await dispatch(collab_updateAvatar({ imgUrl: url })).then(
+            async (res) => {
+              if (res?.meta?.requestStatus === 'fulfilled') {
+                showToastSuccess('Update Avatar successful!');
+              } else {
+                const resData = res?.payload as ErrorStatus;
+                showToastError(resData?.message);
+              }
             }
-            setTimeout(() => {
-              setIsSuccessPopupVisible(false);
-              setIsErrorPopupVisible(false);
-            }, 5000);
-          });
+          );
           setUploading(false);
           // Alert.alert('Photo uploaded!');
           setImagePicker(imgUndefined);
@@ -181,13 +181,6 @@ const AvatarImagePicker = (props: AvatarImageProps) => {
           title="Update"
           onPress={uploadMedia}
         />
-      )}
-      {isSuccessPopupVisible === true ? (
-        <SuccessPopup message="Changed avatar successful!" />
-      ) : isErrorPopupVisible === true ? (
-        <ErrorPopup message="Changed avatar failed. Please try again!" />
-      ) : (
-        <View />
       )}
     </View>
   );
