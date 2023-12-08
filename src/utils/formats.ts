@@ -200,6 +200,9 @@ export function format_ISODateString_To_DayOfWeekMonthDD(
   isoDateString: string,
   includeTime: boolean = false
 ) {
+  if (isoDateString === null) {
+    return null;
+  }
   const months = [
     'JAN',
     'FEB',
