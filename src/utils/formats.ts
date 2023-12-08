@@ -336,35 +336,22 @@ export function format_ISODateString_To_Full(dateISOString: string | null) {
   if (dateISOString === null) {
     return null;
   }
-  const dateFromISO: Date = new Date(dateISOString);
-  const hours: number = dateFromISO.getUTCHours();
-  const minutes: number = dateFromISO.getUTCMinutes();
 
-  const formattedTime: string = `${hours.toString().padStart(2, '0')}:${minutes
-    .toString()
-    .padStart(2, '0')}`;
+  const [datePart, timePart] = dateISOString.split('T');
+  const [year, month, day] = datePart.split('-');
+  const [hours, minutes] = timePart.split(':');
+
+  const formattedTime: string = `${hours.padStart(2, '0')}:${minutes}`;
 
   const months: string[] = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
   ];
 
-  const monthIndex: number = dateFromISO.getUTCMonth();
-  const month: string = months[monthIndex];
-  const day: number = dateFromISO.getUTCDate();
-  const year: number = dateFromISO.getUTCFullYear();
+  const monthIndex: number = parseInt(month, 10) - 1;
+  const monthString: string = months[monthIndex];
 
-  const formattedDate: string = `${formattedTime} - ${month} ${day}, ${year}`;
+  const formattedDate: string = `${formattedTime} - ${monthString} ${parseInt(day, 10)}, ${year}`;
 
   return formattedDate;
 }
