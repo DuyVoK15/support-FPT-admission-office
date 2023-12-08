@@ -32,11 +32,14 @@ const useIndex = () => {
   const dispatch_getAllPostRegistration_Confirmed = async () => {
     return await dispatch(
       getAllPostRegistration_Confirmed({
+        Page: 1,
+        PageSize: 10000,
         RegistrationStatus: [
           RegistrationStatus.CONFIRM,
           RegistrationStatus.CHECKIN,
         ],
-        Sort: 'CreateAt',
+        Sort: 'ConfirmTime',
+        Order: 'DESCENDING'
       })
     );
   };

@@ -34,6 +34,8 @@ const useIndex = () => {
   const fetchPostRegistration = async () => {
     await dispatch(
       getAllPostRegistration_Pending({
+        Page: 1,
+        PageSize: 10000,
         Sort: dataFilterRegis_Pending?.Sort,
         Order: dataFilterRegis_Pending?.Order,
         RegistrationStatus: dataFilterRegis_Pending?.RegistrationStatus,
