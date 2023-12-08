@@ -13,6 +13,13 @@ export function formatDateToDDMMYYYY(date: Date) {
   return `${day}/${month}/${year}`;
 }
 
+export function format_ISODateString_To_DDMMYYYY(dateISOString: string) {
+  const [year, month, day] = dateISOString.split('T')[0].split('-');
+
+  return `${day.padStart(2, '0')}-${month.padStart(2, '0')}-${year}`;
+}
+
+
 export const formatToDate = (props: DateProps) => {
   const { dateProp } = props;
 
@@ -71,7 +78,7 @@ export const formatToDay = (props: DateProps) => {
 
     return dateFormat;
   } else {
-    return '';
+    return null;
   }
 };
 export const formatToMonthString = (props: DateProps): string => {
@@ -103,51 +110,45 @@ export function format_ISODateString_To_DayOfWeekMonthDDYYYY(
   if (isoDateString === null) {
     return null;
   }
+
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December',
   ];
 
-  const date = new Date(isoDateString);
-  const dayOfWeek = daysOfWeek[date.getDay()];
-  const month = months[date.getMonth()];
-  const day = date.getDate();
-  const year = date.getFullYear();
+  const datePart = isoDateString.split('T')[0];
+  const [year, month, day] = datePart.split('-').map((part) => parseInt(part, 10));
 
-  const customDateString = `${dayOfWeek}, ${month} ${day}, ${year}`;
+  const dayOfWeekIndex = new Date(year, month - 1, day).getDay();
+  const dayOfWeek = daysOfWeek[dayOfWeekIndex];
+  const monthName = months[month - 1];
+
+  const customDateString = `${dayOfWeek}, ${monthName} ${day}, ${year}`;
   return customDateString;
 }
+
 
 export function format_ISODateString_To_DayOfWeek(isoDateString: string) {
   const daysOfWeek = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
+    'Sunday', 'Monday', 'Tuesday',
+    'Wednesday', 'Thursday', 'Friday', 'Saturday',
   ];
 
-  const date = new Date(isoDateString);
-  const dayOfWeek = daysOfWeek[date.getDay()];
+  const datePart = isoDateString.split('T')[0];
+  const [year, month, day] = datePart.split('-').map((part) => parseInt(part, 10));
 
-  const customDateString = `${dayOfWeek}`;
-  return customDateString;
+  const dayIndex = new Date(year, month - 1, day).getDay();
+  const dayOfWeek = daysOfWeek[dayIndex];
+
+  return dayOfWeek;
 }
 
+
 export function format_ISODateString_To_DDMonthYYYY(isoDateString: string) {
+  if (isoDateString === null) {
+    return null;
+  }
   const months = [
     'January',
     'February',
@@ -163,12 +164,12 @@ export function format_ISODateString_To_DDMonthYYYY(isoDateString: string) {
     'December',
   ];
 
-  const date = new Date(isoDateString);
-  const day = date.getDate();
-  const monthIndex = date.getMonth();
-  const year = date.getFullYear();
+  const datePart = isoDateString.split('T')[0];
+  const [year, month, day] = datePart
+    .split('-')
+    .map((part) => parseInt(part, 10));
 
-  const customDateString = `${day} ${months[monthIndex]}, ${year}`;
+  const customDateString = `${day} ${months[month - 1]}, ${year}`;
   return customDateString;
 }
 
@@ -321,17 +322,19 @@ export function format_Time_To_HHss(inputTime: string) {
   }
 }
 // Format time string HH:mm:ss to HH:mm
-export function format_ISODateString_To_HHss(dateIOSString: string) {
-  const dateFromISO: Date = new Date(dateIOSString);
-  const hours: number = dateFromISO.getUTCHours();
-  const minutes: number = dateFromISO.getUTCMinutes();
+export function format_ISODateString_To_HHss(dateIOSString: string | null) {
+  if (dateIOSString === null) {
+    return null;
+  }
+  const timePart = dateIOSString.split('T')[1];
+  const hours = timePart.substring(0, 2);
+  const minutes = timePart.substring(3, 5);
 
-  const formattedTime: string = `${hours.toString().padStart(2, '0')}:${minutes
-    .toString()
-    .padStart(2, '0')}`;
+  const formattedTime = `${hours}:${minutes}`;
 
   return formattedTime;
 }
+
 export function format_ISODateString_To_Full(dateISOString: string | null) {
   if (dateISOString === null) {
     return null;
@@ -344,14 +347,27 @@ export function format_ISODateString_To_Full(dateISOString: string | null) {
   const formattedTime: string = `${hours.padStart(2, '0')}:${minutes}`;
 
   const months: string[] = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
 
   const monthIndex: number = parseInt(month, 10) - 1;
   const monthString: string = months[monthIndex];
 
-  const formattedDate: string = `${formattedTime} - ${monthString} ${parseInt(day, 10)}, ${year}`;
+  const formattedDate: string = `${formattedTime} - ${monthString} ${parseInt(
+    day,
+    10
+  )}, ${year}`;
 
   return formattedDate;
 }
