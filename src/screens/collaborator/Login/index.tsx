@@ -99,7 +99,7 @@ const Login = () => {
           justifyContent: 'space-between',
         }}
       >
-        <AppIcon style={{ flex: 0, marginTop: 50 }} />
+        <AppIcon style={{ flex: 0, marginTop: 100 }} />
         <CampusSelection style={{ flex: 2 }} />
         <View style={{ marginBottom: 10 }}>
           <SelectDropdown
@@ -264,7 +264,7 @@ const Login = () => {
           }
         />
         <Text>{user?.displayName}</Text>
-        <AppVersion style={{ flex: 0 }} />
+        <AppVersion style={{ flex: 0, marginBottom: 5 }} />
       </SafeAreaView>
     </ImageBackground>
   );

@@ -11,6 +11,7 @@ import {
 import { reportService } from '../../services/collaborator/report.service';
 import { ViewApplicationResponse } from '../../dtos/collaborator/response/viewApplication.dto';
 import { applicationService } from '../../services/collaborator/application.service';
+import { FilterApplicationParam } from '../../dtos/collaborator/parameter/filterApplication.dto';
 
 interface ApplicationState {
   application: ViewApplicationResponse | null;
@@ -27,9 +28,9 @@ const initialState: ApplicationState = {
 
 export const getAllApplication = createAsyncThunk(
   'application/getAll',
-  async (_, { rejectWithValue }) => {
+  async (params: FilterApplicationParam, { rejectWithValue }) => {
     try {
-      const response = await applicationService.getAllApplication();
+      const response = await applicationService.getAllApplication(params);
 
       return response.data;
     } catch (error: any) {
@@ -81,7 +82,7 @@ export const applicationSlice = createSlice({
       })
       .addCase(createApplication.fulfilled, (state, action) => {
         state.loading = false;
-        state.application = action.payload;
+        // state.application = action.payload;
       })
       .addCase(createApplication.rejected, (state, action) => {
         state.error = String(action.payload);

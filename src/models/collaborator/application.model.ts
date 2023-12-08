@@ -1,3 +1,5 @@
+import { UserInfo } from './userInfo.model';
+
 export interface DataApplication {
   id: number;
   accountId: number;
@@ -6,4 +8,5 @@ export interface DataApplication {
   problemNote: string;
   replyNote: string;
   status: number;
+  account: UserInfo;
 }

@@ -1,0 +1,7 @@
+enum APPLICATION_STATUS_ENUM {
+    PENDING = 1,
+    APPROVED = 2,
+    REJECTED = 3,
+  }
+  export default APPLICATION_STATUS_ENUM;
+  
