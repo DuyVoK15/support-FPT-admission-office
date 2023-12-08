@@ -69,7 +69,11 @@ const ScanIDRecognitionBack = () => {
   ) => {
     try {
       const res = await dispatch(
-        collab_updateInformationBack({ identityNumber, identityIssueDate, placeOfIssue })
+        collab_updateInformationBack({
+          identityNumber,
+          identityIssueDate,
+          placeOfIssue,
+        })
       );
       return res;
     } catch (error) {
@@ -122,10 +126,9 @@ const ScanIDRecognitionBack = () => {
       });
       const filename = imageUri.substring(imageUri.lastIndexOf('/') + 1);
       const storageRef = firebase.storage().ref();
-      const ref = storageRef.child(filename);
+      const ref = storageRef.child('mobile/back' + filename);
       await ref.put(blob);
-      storageRef
-        .child(filename)
+      ref
         .getDownloadURL()
         .then(async (url) => {
           // url chứa đường dẫn tới hình ảnh
@@ -187,7 +190,7 @@ const ScanIDRecognitionBack = () => {
                     showToastError(resData?.message);
                     setImageUri(null);
                   } else {
-                    showToastSuccess('Đã trùng')
+                    showToastSuccess('Đã trùng');
                     await uploadMedia(imageUri ?? '');
                   }
                 });
