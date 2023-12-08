@@ -8,6 +8,7 @@ import {
 import React from 'react';
 import CertificateCard from '../../../../components/collaborator/Certificate/CertificateCard';
 import useCompletedCertificate from './useCertificateCompleted';
+import { format_ISODateString_To_DDMMYYYY } from '../../../../utils/formats';
 
 const Certificate_Completed_Status = () => {
   const { props, handlers, state } = useCompletedCertificate();
@@ -27,16 +28,28 @@ const Certificate_Completed_Status = () => {
             props?.certificateList?.data?.map((certificate, index) => (
               <CertificateCard
                 key={index}
-                dateReceive="25-9-2023"
+                dateReceive={
+                  certificate?.createAt
+                    ? format_ISODateString_To_DDMMYYYY(certificate?.createAt)
+                      ? format_ISODateString_To_DDMMYYYY(certificate?.createAt)
+                      : 'No date'
+                    : 'No date'
+                }
                 certificateID={
-                  certificate?.id ? String(certificate?.id) : 'No value'
+                  certificate?.id
+                    ? String(certificate?.trainingCertificate?.id)
+                    : 'No value'
                 }
                 certificateName={
                   certificate?.trainingCertificate?.certificateName
                     ? certificate?.trainingCertificate?.certificateName
                     : 'No value'
                 }
-                confirmBy="DatTD"
+                confirmBy={
+                  certificate?.certificateIssuer?.name
+                    ? certificate?.certificateIssuer?.name
+                    : 'No value'
+                }
                 status={'Completed'}
               />
             ))

@@ -2,6 +2,7 @@ import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native
 import React from 'react';
 import CertificateCard from '../../../../components/collaborator/Certificate/CertificateCard';
 import useRejectedCertificate from './useCertificateRejected';
+import { format_ISODateString_To_DDMMYYYY } from '../../../../utils/formats';
 
 const Certificate_Rejected_Status = () => {
   const { state, props, handlers } = useRejectedCertificate();
@@ -22,14 +23,28 @@ const Certificate_Rejected_Status = () => {
               .map((certificate, index) => (
                 <CertificateCard
                 key={index}
-                dateReceive="25-9-2023"
-                certificateID={certificate?.id ? String(certificate?.id) : "No value"}
+                dateReceive={
+                  certificate?.createAt
+                    ? format_ISODateString_To_DDMMYYYY(certificate?.createAt)
+                      ? format_ISODateString_To_DDMMYYYY(certificate?.createAt)
+                      : 'No date'
+                    : 'No date'
+                }
+                certificateID={
+                  certificate?.id
+                    ? String(certificate?.trainingCertificate?.id)
+                    : 'No value'
+                }
                 certificateName={
                   certificate?.trainingCertificate?.certificateName
                     ? certificate?.trainingCertificate?.certificateName
                     : 'No value'
                 }
-                confirmBy="DatTD"
+                confirmBy={
+                  certificate?.certificateIssuer?.name
+                    ? certificate?.certificateIssuer?.name
+                    : 'No value'
+                }
                 status={'Rejected'}
               />
               ))
