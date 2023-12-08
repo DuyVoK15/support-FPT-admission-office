@@ -198,6 +198,29 @@ const Registration_Cancelled = () => {
                   fontSize: 13,
                 }}
               >
+                Confirmed at:{' '}
+                <Text
+                  style={{
+                    marginTop: 3,
+                    fontFamily: FONTS_FAMILY?.Ubuntu_300Light_Italic,
+                    fontSize: 13,
+                  }}
+                >
+                  {item?.confirmTime
+                    ? format_ISODateString_To_DayOfWeekMonthDD(
+                        item?.confirmTime,
+                        true
+                      )
+                    : 'Not confirmed'}
+                </Text>
+              </Text>
+              <Text
+                style={{
+                  marginTop: 3,
+                  fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                  fontSize: 13,
+                }}
+              >
                 Cancelled at:{' '}
                 <Text
                   style={{
