@@ -8,6 +8,8 @@ interface DataViewPostRegistration {
   schoolBusOption: boolean;
   createAt: string;
   updateAt: string;
+  cancelTime: string;
+  confirmTime: string;
   positionId: number;
   note: string;
   postPositionsUnregistereds: DataPosition[] | [];

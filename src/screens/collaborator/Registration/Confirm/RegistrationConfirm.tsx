@@ -362,9 +362,9 @@ const Registration_Confirm = () => {
                     fontSize: 13,
                   }}
                 >
-                  {item?.createAt
+                  {item?.confirmTime
                     ? format_ISODateString_To_DayOfWeekMonthDD(
-                        item?.updateAt,
+                        item?.confirmTime,
                         true
                       )
                     : 'No value'}

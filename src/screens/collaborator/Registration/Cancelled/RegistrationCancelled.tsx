@@ -206,9 +206,9 @@ const Registration_Cancelled = () => {
                     fontSize: 13,
                   }}
                 >
-                  {item?.createAt
+                  {item?.cancelTime
                     ? format_ISODateString_To_DayOfWeekMonthDD(
-                        item?.updateAt,
+                        item?.cancelTime,
                         true
                       )
                     : 'No value'}
