@@ -78,13 +78,13 @@ const Home = () => {
                 >
                   Current Location
                 </Text>
-                <View style={{ marginLeft: 3 }}>
+                {/* <View style={{ marginLeft: 3 }}>
                   <AntDesign
                     name="caretdown"
                     size={14}
                     color="rgba(255,255,255, 0.8)"
                   />
-                </View>
+                </View> */}
               </View>
               <View style={{ marginTop: 2 }}>
                 <Text
@@ -93,9 +93,10 @@ const Home = () => {
                     fontSize: 17,
                     textAlign: 'center',
                     color: '#FFF',
+                    letterSpacing: 1
                   }}
                 >
-                  FPT University HCM
+                  {state.cityName ? state.cityName : 'Not found'}
                 </Text>
               </View>
             </View>

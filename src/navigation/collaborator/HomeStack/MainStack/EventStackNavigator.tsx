@@ -5,7 +5,7 @@ import EventTab from '../MainTabs/EventTab';
 import HomeEventDetail from '../../../../screens/collaborator/Home/homeEventDetail/HomeEventDetail';
 import PositionRegistration from '../../../../screens/collaborator/PositionRegistration/PositionRegistration';
 import { HomeCollaboratorStackNavigatorParamList } from '../../../../../type';
-import EventNotification from '../../../../screens/collaborator/Notification/EventNotification';
+import EventNotification from '../../../../screens/collaborator/Notification/EventNotification/EventNotification';
 import { ROUTES } from '../../../../constants/Routes';
 
 const Stack =

@@ -6,7 +6,7 @@ import UserProfile from '../../../../screens/collaborator/Profile/UserProfile/Us
 import CertificateHistory from '../../../../screens/collaborator/Certificate';
 import Wallet from '../../../../screens/collaborator/Income/Income';
 import Verification from '../../../../screens/collaborator/Verification';
-import Notification from '../../../../screens/collaborator/Notification/AccountNotification';
+import Notification from '../../../../screens/collaborator/Notification/AccountNotification/AccountNotification';
 import Security from '../../../../screens/collaborator/Security';
 import UserProfileSignup from '../../../../screens/collaborator/Profile/UserProfileSignup/UserProfileSignup';
 import UserProfileDisable from '../../../../screens/collaborator/Profile/UserProfileDisable';
@@ -15,7 +15,7 @@ import {
   HomeCollaboratorScreenNavigationProp,
   HomeCollaboratorStackNavigatorParamList,
 } from '../../../../../type';
-import AccountNotification from '../../../../screens/collaborator/Notification/AccountNotification';
+import AccountNotification from '../../../../screens/collaborator/Notification/AccountNotification/AccountNotification';
 import { ROUTES } from '../../../../constants/Routes';
 import {
   useFocusEffect,

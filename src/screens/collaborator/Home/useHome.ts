@@ -11,9 +11,40 @@ import { getAllCheckInPostRegistration } from '../../../features/collaborator/co
 import { useForm } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
+import * as Location from 'expo-location';
 
 const useHome = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
+
+  const [location, setLocation] = useState<Location.LocationObject | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [cityName, setCityName] = useState<string | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({accuracy: 3});
+      setLocation(location);
+
+      // Use reverse geocoding to get city name
+      if (location) {
+        const { latitude, longitude } = location.coords;
+        const address = await Location.reverseGeocodeAsync({
+          latitude,
+          longitude,
+        });
+        if (address && address.length > 0) {
+          setCityName(address[0].city);
+        }
+      }
+    })();
+  }, []);
+
 
   const [textSearch, setTextSearch] = useState<string | null>('');
   const {
@@ -122,7 +153,7 @@ const useHome = () => {
     handleSubmit,
     setValue,
   };
-  const state = { refreshing, textSearch };
+  const state = { refreshing, textSearch,cityName };
   const props = {
     checkInPostRegistrationList,
     postHomeUpcommingList,

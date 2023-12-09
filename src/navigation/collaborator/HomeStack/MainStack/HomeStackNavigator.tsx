@@ -7,7 +7,7 @@ import Event from '../../../../screens/collaborator/Event';
 import EventUpcomming from '../../../../screens/collaborator/Event/EventUpcomming/EventUpcomming';
 import EventTopTabs from '../../EventStack/EventTopTabs';
 import { HomeCollaboratorStackNavigatorParamList } from '../../../../../type';
-import HomeNotification from '../../../../screens/collaborator/Notification/HomeNotitìication';
+import HomeNotification from '../../../../screens/collaborator/Notification/HomeNotitìication/HomeNotification';
 import HomeEventDetail from '../../../../screens/collaborator/Home/homeEventDetail/HomeEventDetail';
 import { ROUTES } from '../../../../constants/Routes';
 
