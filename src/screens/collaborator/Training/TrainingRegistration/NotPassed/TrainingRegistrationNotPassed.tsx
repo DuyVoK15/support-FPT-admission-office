@@ -1,4 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import { FlatList } from 'react-native';
 import { FONTS_FAMILY } from '../../../../../constants/Fonts';
@@ -9,7 +15,10 @@ import { SHADOWS } from '../../../../../constants/Shadows';
 import { DataTrainingCertificateRegistration } from '../../../../../models/collaborator/dataTrainingCertificateRegistration';
 import useTrainingRegistrationNotPassed from './useTrainingRegistrationNotPassed';
 import RegistrationEmpty from '../../../../../components/shared/Empty/RegistrationEmpty';
-import { format_ISODateString_To_DayOfWeekMonthDDYYYY, format_ISODateString_To_Full } from '../../../../../utils/formats';
+import {
+  format_ISODateString_To_DayOfWeekMonthDDYYYY,
+  format_ISODateString_To_Full,
+} from '../../../../../utils/formats';
 import InformationRow from '../../../../../components/collaborator/Training/InformationRow';
 import { ROUTES } from '../../../../../constants/Routes';
 const TrainingRegistrationNotPassed = () => {
@@ -139,8 +148,8 @@ const TrainingRegistrationNotPassed = () => {
             colorTextTitle={'red'}
             value={
               item?.createAt
-                ? format_ISODateString_To_Full(item?.updateAt)
-                  ? format_ISODateString_To_Full(item?.updateAt)
+                ? format_ISODateString_To_Full(item?.confirmAt)
+                  ? format_ISODateString_To_Full(item?.confirmAt)
                   : 'Not yet'
                 : 'Not yet'
             }
@@ -155,7 +164,7 @@ const TrainingRegistrationNotPassed = () => {
           >
             <View>
               <TouchableOpacity
-              onPress={() => props.navigation.navigate(ROUTES.TRAINING)}
+                onPress={() => props.navigation.navigate(ROUTES.TRAINING)}
                 style={{
                   paddingVertical: 8,
                   paddingHorizontal: 12,
@@ -174,7 +183,6 @@ const TrainingRegistrationNotPassed = () => {
                 </Text>
               </TouchableOpacity>
             </View>
-        
           </View>
         </View>
       </View>
@@ -186,6 +194,12 @@ const TrainingRegistrationNotPassed = () => {
         <FlatList
           data={stateRedux?.trainingCertificateRegistrationList?.data}
           renderItem={renderItem}
+          refreshControl={
+            <RefreshControl
+              refreshing={state.refreshing}
+              onRefresh={handlers.onRefresh}
+            />
+          }
           ListEmptyComponent={renderListEmptyComponent}
         />
       </View>

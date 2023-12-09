@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { RefreshControl, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { FlatList } from 'react-native';
 import { FONTS_FAMILY } from '../../../../../constants/Fonts';
@@ -144,8 +144,8 @@ const TrainingRegistrationPassed = () => {
             colorTextTitle={'green'}
             value={
               item?.createAt
-                ? format_ISODateString_To_Full(item?.updateAt)
-                  ? format_ISODateString_To_Full(item?.updateAt)
+                ? format_ISODateString_To_Full(item?.confirmAt)
+                  ? format_ISODateString_To_Full(item?.confirmAt)
                   : 'Not yet'
                 : 'Not yet'
             }
@@ -160,24 +160,26 @@ const TrainingRegistrationPassed = () => {
           >
             <View>
               <TouchableOpacity
-              onPress={() => props.navigation.dispatch(
-                CommonActions.reset({
-                  index: 0,
-                  routes: [
-                    {
-                      name: ROUTES.ACCOUNT_STACK_NAVIGATOR,
-                      state: {
-                        routes: [
-                          { name: ROUTES.ACCOUNT },
-                          {
-                            name: ROUTES.CERTIFICATE_HISTORY,
+                onPress={() =>
+                  props.navigation.dispatch(
+                    CommonActions.reset({
+                      index: 0,
+                      routes: [
+                        {
+                          name: ROUTES.ACCOUNT_STACK_NAVIGATOR,
+                          state: {
+                            routes: [
+                              { name: ROUTES.ACCOUNT },
+                              {
+                                name: ROUTES.CERTIFICATE_HISTORY,
+                              },
+                            ],
                           },
-                        ],
-                      },
-                    },
-                  ],
-                })
-              )}
+                        },
+                      ],
+                    })
+                  )
+                }
                 style={{
                   paddingVertical: 8,
                   paddingHorizontal: 12,
@@ -196,7 +198,6 @@ const TrainingRegistrationPassed = () => {
                 </Text>
               </TouchableOpacity>
             </View>
-        
           </View>
         </View>
       </View>
@@ -208,6 +209,12 @@ const TrainingRegistrationPassed = () => {
         <FlatList
           data={stateRedux?.trainingCertificateRegistrationList?.data}
           renderItem={renderItem}
+          refreshControl={
+            <RefreshControl
+              refreshing={state.refreshing}
+              onRefresh={handlers.onRefresh}
+            />
+          }
           ListEmptyComponent={renderListEmptyComponent}
         />
       </View>

@@ -1,5 +1,6 @@
 import {
   FlatList,
+  RefreshControl,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -193,6 +194,7 @@ const TrainingRegistrationAssigned = () => {
         <FlatList
           data={stateRedux?.trainingCertificateRegistrationList?.data}
           renderItem={renderItem}
+          refreshControl={<RefreshControl refreshing={state.refreshing} onRefresh={handlers.onRefresh} />}
           ListEmptyComponent={renderListEmptyComponent}
         />
       </View>

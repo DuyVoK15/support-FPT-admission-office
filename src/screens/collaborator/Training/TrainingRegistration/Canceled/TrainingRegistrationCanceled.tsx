@@ -9,9 +9,13 @@ import { SHADOWS } from '../../../../../constants/Shadows';
 import { DataTrainingCertificateRegistration } from '../../../../../models/collaborator/dataTrainingCertificateRegistration';
 import useTrainingRegistrationCanceled from './useTrainingRegistrationCanceled';
 import RegistrationEmpty from '../../../../../components/shared/Empty/RegistrationEmpty';
-import { format_ISODateString_To_DayOfWeekMonthDDYYYY, format_ISODateString_To_Full } from '../../../../../utils/formats';
+import {
+  format_ISODateString_To_DayOfWeekMonthDDYYYY,
+  format_ISODateString_To_Full,
+} from '../../../../../utils/formats';
 import InformationRow from '../../../../../components/collaborator/Training/InformationRow';
 import { ROUTES } from '../../../../../constants/Routes';
+import { RefreshControl } from 'react-native';
 
 const TrainingRegistrationCanceled = () => {
   const { state, setState, stateRedux, props, handlers } =
@@ -145,7 +149,7 @@ const TrainingRegistrationCanceled = () => {
           >
             <View>
               <TouchableOpacity
-              onPress={() => props.navigation.navigate(ROUTES.TRAINING)}
+                onPress={() => props.navigation.navigate(ROUTES.TRAINING)}
                 style={{
                   paddingVertical: 8,
                   paddingHorizontal: 12,
@@ -164,7 +168,6 @@ const TrainingRegistrationCanceled = () => {
                 </Text>
               </TouchableOpacity>
             </View>
-        
           </View>
         </View>
       </View>
@@ -176,6 +179,12 @@ const TrainingRegistrationCanceled = () => {
         <FlatList
           data={stateRedux?.trainingCertificateRegistrationList?.data}
           renderItem={renderItem}
+          refreshControl={
+            <RefreshControl
+              refreshing={state.refreshing}
+              onRefresh={handlers.onRefresh}
+            />
+          }
           ListEmptyComponent={renderListEmptyComponent}
         />
       </View>

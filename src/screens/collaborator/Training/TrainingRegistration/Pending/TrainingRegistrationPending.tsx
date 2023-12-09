@@ -1,4 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import { FlatList } from 'react-native';
 import { FONTS_FAMILY } from '../../../../../constants/Fonts';
@@ -9,8 +15,12 @@ import { SHADOWS } from '../../../../../constants/Shadows';
 import { DataTrainingCertificateRegistration } from '../../../../../models/collaborator/dataTrainingCertificateRegistration';
 import useTrainingRegistrationPending from './useTrainingRegistrationPending';
 import RegistrationEmpty from '../../../../../components/shared/Empty/RegistrationEmpty';
-import { format_ISODateString_To_DayOfWeekMonthDDYYYY, format_ISODateString_To_Full } from '../../../../../utils/formats';
+import {
+  format_ISODateString_To_DayOfWeekMonthDDYYYY,
+  format_ISODateString_To_Full,
+} from '../../../../../utils/formats';
 import InformationRow from '../../../../../components/collaborator/Training/InformationRow';
+import ConfirmAlert from '../../../../../components/shared/AwesomeAlert/ConfirmAlert';
 
 const TrainingRegistrationPending = () => {
   const { state, setState, stateRedux, props, handlers } =
@@ -150,7 +160,7 @@ const TrainingRegistrationPending = () => {
             <View>
               <TouchableOpacity
                 onPress={() =>
-                  handlers.handleCancelTrainingCertificateRegistration(item?.id)
+                  handlers.showAlertHandler(props.TYPE_BUTTON_ENUM.CANCEL,item)
                 }
                 style={{
                   paddingVertical: 8,
@@ -181,7 +191,36 @@ const TrainingRegistrationPending = () => {
         <FlatList
           data={stateRedux?.trainingCertificateRegistrationList?.data}
           renderItem={renderItem}
+          refreshControl={
+            <RefreshControl
+              refreshing={state.refreshing}
+              onRefresh={handlers.onRefresh}
+            />
+          }
           ListEmptyComponent={renderListEmptyComponent}
+        />
+        <ConfirmAlert
+          show={state.showAlert}
+          title="CONFIRMATION"
+          message={state.confirmInfo?.message}
+          confirmText="Yes"
+          cancelText="No"
+          confirmButtonColor={COLORS.orange_button}
+          onConfirmPressed={() => {
+            switch (state.confirmInfo?.typeButton) {
+              case props.TYPE_BUTTON_ENUM.CANCEL:
+                handlers.handleCancelTrainingCertificateRegistration(
+                  state.Item?.id ?? null
+                );
+                console.log(state.Item?.id);
+                break;
+
+              default:
+                console.log('Type Button Null');
+            }
+            handlers.hideAlertHandler();
+          }}
+          onCancelPressed={handlers.hideAlertHandler}
         />
       </View>
     </View>
