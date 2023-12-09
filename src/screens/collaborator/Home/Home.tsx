@@ -116,7 +116,7 @@ const Home = () => {
             </View>
           </View>
 
-          <View style={{ marginTop:  Platform.OS === 'ios' ? 25 : 35 }}>
+          <View style={{ marginTop: Platform.OS === 'ios' ? 25 : 35 }}>
             <View
               style={{
                 flexDirection: 'row',
@@ -237,7 +237,9 @@ const Home = () => {
                   >
                     <EventCard
                       onPress={() =>
-                        navigation.navigate(ROUTES.HOME_EVENT_DETAIL, { item: post })
+                        navigation.navigate(ROUTES.HOME_EVENT_DETAIL, {
+                          post: post,
+                        })
                       }
                       imageUrl={
                         post?.postImg ? post?.postImg : imageNotFoundUri
@@ -358,7 +360,7 @@ const Home = () => {
                   <View key={index}>
                     <EventCardWrap
                       onPress={() =>
-                        navigation.navigate('HOME_EVENT_DETAIL', { item: post })
+                        navigation.navigate('HOME_EVENT_DETAIL', { post: post })
                       }
                       imageUrl={
                         post?.postImg ? post?.postImg : imageNotFoundUri
@@ -366,12 +368,20 @@ const Home = () => {
                       title={
                         post?.postCategory?.postCategoryDescription
                           ? post?.postCategory?.postCategoryDescription
-                          : ''
+                          : 'No value'
                       }
-                      dateTime={format_ISODateString_To_DayOfWeekMonthDDYYYY(
-                        post?.dateFrom ? post?.dateFrom : ''
-                      )}
-                      schoolName={post?.postPositions?.[0]?.schoolName}
+                      dateTime={
+                        post?.dateFrom
+                          ? format_ISODateString_To_DayOfWeekMonthDDYYYY(
+                              post?.dateFrom
+                            )
+                            ? format_ISODateString_To_DayOfWeekMonthDDYYYY(
+                                post?.dateFrom
+                              )
+                            : 'No date'
+                          : 'No date'
+                      }
+                      schoolName={post?.postPositions?.[0]?.schoolName ? post?.postPositions?.[0]?.schoolName : 'No value'}
                       totalRegisterAmount={
                         post?.registerAmount
                           ? String(post?.registerAmount)
@@ -382,7 +392,7 @@ const Home = () => {
                           ? String(post?.totalAmountPosition)
                           : '0'
                       }
-                      timeAgo={post?.createAt ? post?.createAt : ''}
+                      timeAgo={post?.createAt ? post?.createAt : 'No Time'}
                     />
                   </View>
                 ))

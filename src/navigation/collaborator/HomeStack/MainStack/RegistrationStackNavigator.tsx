@@ -14,6 +14,7 @@ import {
 } from '../../../../../type';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { ROUTES } from '../../../../constants/Routes';
+import RegistrationDetail from '../../../../screens/collaborator/Registration/RegistrationDetail';
 
 const Stack =
   createNativeStackNavigator<HomeCollaboratorStackNavigatorParamList>();
@@ -81,6 +82,13 @@ const RegistrationStackNavigator = () => {
       <Stack.Screen
         name={ROUTES.REQUEST_UPDATE_HISTORY}
         component={RequestUpdateHistory}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name={ROUTES.REGISTRATION_DETAIL}
+        component={RegistrationDetail}
         options={{
           headerShown: false,
         }}

@@ -1,4 +1,5 @@
 export default interface FilterPostPayload {
+  postId?: number | null,
   DateFrom?: string | null;
   PostCategoryId?: number | null;
   search?: string | null;

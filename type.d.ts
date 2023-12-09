@@ -8,6 +8,7 @@ export type HomeCollaboratorStackNavigatorParamList = {
   MAP: undefined;
   MAP_STACK_NAVIGATOR: undefined;
   REGISTRATION: undefined;
+  REGISTRATION_DETAIL: undefined;
   REGISTRATION_PENDING: undefined;
   REGISTRATION_PENDING_DETAIL: undefined;
   REQUEST_CHANGE_POSITION_PENDING: undefined;
@@ -84,6 +85,7 @@ export type HomeCollaboratorScreenNavigationProp = NativeStackScreenProps<
   'MAP',
   'MAP_STACK_NAVIGATOR',
   'REGISTRATION',
+  'REGISTRATION_DETAIL',
   'REGISTRATION_PENDING',
   'REGISTRATION_PENDING_DETAIL',
   'REQUEST_CHANGE_POSITION_PENDING',

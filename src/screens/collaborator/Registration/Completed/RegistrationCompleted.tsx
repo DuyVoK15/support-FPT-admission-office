@@ -30,6 +30,8 @@ import { useNavigation } from '@react-navigation/native';
 import FilterRegistationButton from '../../../../components/shared/Button/FilterRegistationButton';
 import SortRegistrationButton from '../../../../components/shared/Button/SortRegistrationButton';
 import { SHADOWS } from '../../../../constants/Shadows';
+import RegistrationDetail from '../RegistrationDetail';
+import { ROUTES } from '../../../../constants/Routes';
 
 const Registration_Completed = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -41,7 +43,11 @@ const Registration_Completed = () => {
 
   const renderItem = ({ item }: { item: DataViewPostRegistration }) => {
     return (
-      <View style={styles.containerItem}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate(ROUTES.REGISTRATION_DETAIL, { item })}
+        style={styles.containerItem}
+      >
         <View style={styles.containerRow}>
           <View style={styles.firstRow}>
             <View style={styles.containerImage}>
@@ -284,7 +290,7 @@ const Registration_Completed = () => {
             )} */}
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 

@@ -39,7 +39,7 @@ const useIndex = () => {
           RegistrationStatus.CHECKIN,
         ],
         Sort: 'ConfirmTime',
-        Order: 'DESCENDING'
+        Order: 'DESCENDING',
       })
     );
   };
@@ -164,10 +164,13 @@ const useIndex = () => {
   };
   const state = { refreshing };
   const props = { postRegistrationList };
-
+  const setState = {};
+  const stateRedux = { postRegistrationList };
   return {
     handlers,
     state,
+    setState,
+    stateRedux,
     props,
   };
 };

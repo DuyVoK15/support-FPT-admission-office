@@ -9,8 +9,12 @@ import {
 import { useAppSelector } from '../../../app/hooks';
 import { getAllCheckInPostRegistration } from '../../../features/collaborator/collab.postRegistrationSlice';
 import { useForm } from 'react-hook-form';
+import { useNavigation } from '@react-navigation/native';
+import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
 
 const useHome = () => {
+  const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
+
   const [textSearch, setTextSearch] = useState<string | null>('');
   const {
     control,
@@ -55,7 +59,7 @@ const useHome = () => {
       await fetchCheckInPostRegistration();
     };
     fetch();
-  }, [textSearch]);
+  }, [textSearch, navigation]);
 
   const fetchHomePostReOpen = async () => {
     const params = {
@@ -101,9 +105,9 @@ const useHome = () => {
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     setTextSearch(null);
-    // await fetchHomePostUpcomming();
-    // await fetchHomePostReOpen();
-    // await fetchCheckInPostRegistration();
+    await fetchHomePostUpcomming();
+    await fetchHomePostReOpen();
+    await fetchCheckInPostRegistration();
     setTimeout(() => {
       setRefreshing(false);
     }, 0);

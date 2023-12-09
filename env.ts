@@ -1,1 +1,2 @@
 export const GOOGLE_API_KEY = "AIzaSyCtLvx6ILJlAFYllUPp43kUl5QHSrZJsZ0"
+export const API_KEY_SCAN_CCCD = '6yrkYkXCyHo9qoMXVgp37RG5IWt8kDDg'

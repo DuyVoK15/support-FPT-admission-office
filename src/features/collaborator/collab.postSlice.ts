@@ -7,6 +7,7 @@ import FilterPostPayload from '../../dtos/collaborator/parameter/filterPost.dto'
 import MetaDataPost from '../../models/collaborator/metaDataPost.model';
 import { DataCategory } from '../../models/collaborator/postCategory.model';
 import { DataPost } from '../../models/collaborator/dataPost.model';
+import { PostObjectResponse } from '../../dtos/collaborator/response/postObject.dto';
 
 interface PostState {
   postHomeUpcomming: PostDto;
@@ -16,6 +17,7 @@ interface PostState {
   postMissingSlot: PostDto;
   postCategory: ViewPostCategoryResponse;
   postCategoryId: number | null;
+  postById: PostObjectResponse | null;
   loading: boolean;
   error: string;
   // Thêm các trường khác liên quan đến người dùng nếu cần thiết
@@ -85,6 +87,7 @@ const initialState: PostState = {
     message: '',
   },
   postCategoryId: null,
+  postById: null,
   loading: false,
   error: '',
 };
@@ -95,6 +98,20 @@ export const getAllPost = createAsyncThunk(
     try {
       console.log('Có vô post');
       const response = await postService.getAllPost(params);
+      return response.data;
+    } catch (error: any) {
+      const axiosError = error as AxiosError;
+      return rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+
+export const getPostById = createAsyncThunk(
+  'post/getById',
+  async (params: FilterPostPayload, { rejectWithValue }) => {
+    try {
+      console.log('Có vô post');
+      const response = await postService.getPostById(params);
       return response.data;
     } catch (error: any) {
       const axiosError = error as AxiosError;
@@ -262,7 +279,6 @@ export const postSlice = createSlice({
         state.error = '';
       })
       .addCase(getAllPostUpcomming.fulfilled, (state, action) => {
-        
         const newData = action.payload.response_data.data;
         const page = Number(action.payload.query.Page);
         page > 1
@@ -271,7 +287,7 @@ export const postSlice = createSlice({
         state.postUpcomming.metadata.page = page + 1;
         state.postUpcomming.metadata.total =
           action.payload.response_data.metadata.total;
-          state.loading = false;
+        state.loading = false;
       })
       .addCase(getAllPostUpcomming.rejected, (state, action) => {
         state.error = String(action.payload);
@@ -351,6 +367,18 @@ export const postSlice = createSlice({
         state.postHomeUpcomming = action.payload;
       })
       .addCase(searchPostByPostCode.rejected, (state, action) => {
+        state.error = String(action.payload);
+        state.loading = false;
+      })
+      .addCase(getPostById.pending, (state) => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(getPostById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.postById = action.payload;
+      })
+      .addCase(getPostById.rejected, (state, action) => {
         state.error = String(action.payload);
         state.loading = false;
       });

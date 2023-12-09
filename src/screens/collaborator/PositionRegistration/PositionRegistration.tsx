@@ -1,6 +1,7 @@
 import {
   Alert,
   Button,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -48,171 +49,16 @@ import ConfirmAlertModal from '../../../components/shared/ConfirmAlert/ConfirmAl
 import { DataPosition } from '../../../models/collaborator/dataPosition.model';
 import { ROUTES } from '../../../constants/Routes';
 import { CommonActions } from '@react-navigation/native';
+import usePositionRegistration from './usePositionRegistration';
 
 const PositionRegistration = () => {
-  const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
-  const route = useRoute();
-  const { item } = route?.params as { item: DataPost };
-
-  enum TYPE_BUTTON_ENUM {
-    REGISTER = 1,
-    NAVIGATE_TO_CERTIFICATE = 2,
-    NAVIGATE_TO_REGISTRATION = 3,
-  }
-
-  type ConfirmInfo = {
-    title: string | null;
-    titleType?: number | null;
-    message: string | null;
-    typeButton: number | null;
-  };
-  const [showAlert, setShowAlert] = useState<boolean>(false);
-  const [confirmInfo, setConfirmInfo] = useState<ConfirmInfo | null>(null);
-
-  const showAlertHandler = (
-    action?: number | null,
-    item?: DataPost | null,
-    position?: DataPosition | null
-  ) => {
-    switch (action) {
-      case TYPE_BUTTON_ENUM.REGISTER:
-        setConfirmInfo({
-          title: 'CONFIRMATION',
-          titleType: TITLE_ENUM.WARNING,
-          message: `Are you sure you want to apply for "${position?.positionName}" position?`,
-          typeButton: TYPE_BUTTON_ENUM.REGISTER,
-        });
-        break;
-      case TYPE_BUTTON_ENUM.NAVIGATE_TO_CERTIFICATE:
-        setConfirmInfo({
-          title: 'CONFIRMATION',
-          titleType: TITLE_ENUM.WARNING,
-          message: `You need Certificate "${position?.certificateName}" for this position? View Training NOW?`,
-          typeButton: TYPE_BUTTON_ENUM.NAVIGATE_TO_CERTIFICATE,
-        });
-        break;
-      case TYPE_BUTTON_ENUM.NAVIGATE_TO_REGISTRATION:
-        setConfirmInfo({
-          title: 'SUCCESSFUL',
-          titleType: TITLE_ENUM.SUCCESS,
-          message: 'Register successful. View your Registration NOW!',
-          typeButton: TYPE_BUTTON_ENUM.NAVIGATE_TO_REGISTRATION,
-        });
-        break;
-      default:
-        setConfirmInfo({
-          title: '',
-          message: '',
-          typeButton: 0,
-        });
-    }
-    setShowAlert(true);
-  };
-
-  const hideAlertHandler = () => {
-    setShowAlert(false);
-  };
-
-  const [isSelectedBusOption, setIsSelectedBusOption] = useState(
-    Array(item?.postPositions.length).fill(false)
-  );
-
-  const selectedBusOption = (index: number) => {
-    const updatedStatus = [...isSelectedBusOption];
-    updatedStatus[index] = !updatedStatus[index];
-    console.log(updatedStatus);
-    setIsSelectedBusOption(updatedStatus);
-  };
-
-  const { showToastError, showToastSuccess } = useCustomToast();
-
-  const dispatch = useAppDispatch();
-
-  const [showModal, setShowModal] = useState(false);
-
-  const handleSubmit = async (
-    position?: DataPosition | null,
-    schoolBusOption?: boolean
-  ) => {
-    try {
-      const params = {
-        schoolBusOption,
-        positionId: position?.id,
-      } as CreatePostRegistrationParam;
-      await dispatch(createPostRegistration(params))
-        .then((res) => {
-          const requestStatus = res?.meta?.requestStatus;
-          console.log(JSON.stringify(res, null, 2));
-          if (requestStatus === 'fulfilled') {
-            showToastSuccess('Register successfully!');
-            showAlertHandler(
-              TYPE_BUTTON_ENUM.NAVIGATE_TO_REGISTRATION,
-              null,
-              position
-            );
-          } else {
-            const resRejectedData = res.payload as ErrorStatus;
-
-            switch (resRejectedData?.errorCode) {         
-              case 4012:
-                showAlertHandler(
-                  TYPE_BUTTON_ENUM.NAVIGATE_TO_CERTIFICATE,
-                  null,
-                  position
-                );
-                break;
-             
-              case 4024:
-                showToastError(
-                  'You have applied for a position that overlaps with this position'
-                );
-                break;
-              default:
-                showToastError(resRejectedData?.message);
-            }
-          }
-        })
-        .catch((error) => {
-          hideAlertHandler();
-          console.log(error);
-        });
-    } catch (error) {
-      hideAlertHandler();
-      console.log(error);
-    }
-  };
-
-  const [positionId, setPosisitionId] = useState<number | null>(null);
-  const handleSetPositionId = (id: number | null) => {
-    if (positionId !== id) {
-      setPosisitionId(id);
-    } else {
-      setPosisitionId(null);
-    }
-  };
+  const { state, setState, stateRedux, handlers, props } =
+    usePositionRegistration();
   return (
     <View style={styles.container}>
-      <ConfirmAlertModal
-        isVisible={showModal}
-        title={'SUCCESS'}
-        message={
-          "You've registered successful! Do you want to navigate to Registration Management?"
-        }
-        showFirstButton={true}
-        firstButtonLabel={'Cancel'}
-        onPressFirstButton={() => setShowModal(false)}
-        showSecondButton={true}
-        secondButtonLabel={"Let's go"}
-        onPressSecondButton={() => {
-          setShowModal(false);
-          navigation.navigate('REGISTRATION_STACK_NAVIGATOR');
-        }}
-        onBackdropPress={() => setShowModal(false)}
-      />
-
       <Header>
         <Backward
-          onPress={() => navigation.goBack()}
+          onPress={() => props.navigation.goBack()}
           titleBackward="Position Registration"
         />
       </Header>
@@ -226,18 +72,27 @@ const PositionRegistration = () => {
           Choose your position
         </Text>
       </View>
-      <ScrollView>
+      <ScrollView
+        scrollEventThrottle={16}
+        refreshControl={
+          <RefreshControl
+            refreshing={state.refreshing}
+            onRefresh={handlers.onRefresh}
+          />
+        }
+      >
         <View style={styles.positionContent}>
           <Text style={styles.textPosition} numberOfLines={1}>
             Positions
           </Text>
-          {item?.postPositions && item?.postPositions?.length > 0 ? (
-            item?.postPositions.map((position, index) => {
+          {stateRedux.item?.data?.postPositions &&
+          stateRedux.item?.data?.postPositions?.length > 0 ? (
+            stateRedux.item?.data?.postPositions.map((position, index) => {
               return (
                 <View key={index} style={styles.containerEveryPosition}>
                   <View style={styles.everyPosition}>
                     <TouchableOpacity
-                      onPress={() => handleSetPositionId(position?.id)}
+                      onPress={() => handlers.handleSetPositionId(position?.id)}
                       style={{
                         flexDirection: 'row',
                         alignItems: 'center',
@@ -260,7 +115,7 @@ const PositionRegistration = () => {
                           paddingVertical: 2,
                         }}
                       >
-                        {positionId === position?.id ? (
+                        {state.positionId === position?.id ? (
                           <Entypo
                             name="chevron-small-up"
                             size={26}
@@ -275,7 +130,7 @@ const PositionRegistration = () => {
                         )}
                       </View>
                     </TouchableOpacity>
-                    {positionId === position?.id && (
+                    {state.positionId === position?.id && (
                       <View style={{}}>
                         <DashedLine
                           style={{ marginVertical: 10 }}
@@ -436,11 +291,13 @@ const PositionRegistration = () => {
                           </Text>
                           <Switch
                             disabled={position?.isBusService ? false : true}
-                            value={isSelectedBusOption[index]}
-                            onValueChange={(value) => selectedBusOption(index)}
+                            value={state.isSelectedBusOption[index]}
+                            onValueChange={(value) =>
+                              setState.selectedBusOption(index)
+                            }
                             color={'#fcc995'}
                             thumbColor={
-                              isSelectedBusOption[index]
+                              state.isSelectedBusOption[index]
                                 ? COLORS.orange_button
                                 : '#fff'
                             }
@@ -450,9 +307,9 @@ const PositionRegistration = () => {
                         <View style={{ marginTop: 15 }}>
                           <SubmitButton
                             onPress={() =>
-                              showAlertHandler(
-                                TYPE_BUTTON_ENUM.REGISTER,
-                                item,
+                              handlers.showAlertHandler(
+                                props.TYPE_BUTTON_ENUM.REGISTER,
+                                stateRedux.item?.data,
                                 position
                               )
                             }
@@ -466,23 +323,24 @@ const PositionRegistration = () => {
                           />
 
                           <ConfirmAlert
-                            show={showAlert}
-                            title={confirmInfo?.title}
-                            titleType={confirmInfo?.titleType}
-                            message={confirmInfo?.message}
+                            show={state.showAlert}
+                            title={state.confirmInfo?.title}
+                            titleType={state.confirmInfo?.titleType}
+                            message={state.confirmInfo?.message}
                             confirmText="Yes"
                             cancelText="No"
                             confirmButtonColor={COLORS.orange_button}
                             onConfirmPressed={() => {
-                              switch (confirmInfo?.typeButton) {
-                                case TYPE_BUTTON_ENUM.REGISTER:
-                                  handleSubmit(
+                              switch (state.confirmInfo?.typeButton) {
+                                case props.TYPE_BUTTON_ENUM.REGISTER:
+                                  handlers.handleSubmit(
                                     position,
-                                    isSelectedBusOption[index]
+                                    state.isSelectedBusOption[index]
                                   );
                                   break;
-                                case TYPE_BUTTON_ENUM.NAVIGATE_TO_CERTIFICATE:
-                                  navigation.dispatch(
+                                case props.TYPE_BUTTON_ENUM
+                                  .NAVIGATE_TO_CERTIFICATE:
+                                  props.navigation.dispatch(
                                     CommonActions.reset({
                                       index: 0,
                                       routes: [
@@ -501,17 +359,18 @@ const PositionRegistration = () => {
                                     })
                                   );
                                   break;
-                                case TYPE_BUTTON_ENUM.NAVIGATE_TO_REGISTRATION:
-                                  navigation.navigate(
+                                case props.TYPE_BUTTON_ENUM
+                                  .NAVIGATE_TO_REGISTRATION:
+                                  props.navigation.navigate(
                                     ROUTES.REGISTRATION_STACK_NAVIGATOR
                                   );
                                   break;
                                 default:
                                   console.log('Type Button Null');
                               }
-                              hideAlertHandler();
+                              handlers.hideAlertHandler();
                             }}
-                            onCancelPressed={hideAlertHandler}
+                            onCancelPressed={handlers.hideAlertHandler}
                           />
                         </View>
                         {/* <Button

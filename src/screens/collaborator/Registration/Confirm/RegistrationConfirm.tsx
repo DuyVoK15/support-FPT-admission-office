@@ -33,11 +33,17 @@ import ChangePositionButton from '../../../../components/shared/Button/ChangePos
 import useRegistrationConfirm from './useRegistrationConfirm';
 import CancelButton from '../../../../components/shared/Button/CancelButton';
 import { SHADOWS } from '../../../../constants/Shadows';
-import ConfirmAlert, { TITLE_ENUM } from '../../../../components/shared/AwesomeAlert/ConfirmAlert';
+import ConfirmAlert, {
+  TITLE_ENUM,
+} from '../../../../components/shared/AwesomeAlert/ConfirmAlert';
+import { ROUTES } from '../../../../constants/Routes';
+import Registration_Confirm_Detail from './confirmDetail/RegistrationConfirmDetail';
+import RegistrationDetail from '../RegistrationDetail';
 
 const Registration_Confirm = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
-  const { handlers, state, props } = useRegistrationConfirm();
+  const { handlers, state, props, stateRedux, setState } =
+    useRegistrationConfirm();
   enum TYPE_BUTTON_ENUM {
     REGISTER = 1,
     CANCEL = 2,
@@ -105,7 +111,12 @@ const Registration_Confirm = () => {
   };
   const renderItem = ({ item }: { item: DataViewPostRegistration }) => {
     return (
-      <View key={item?.registrationCode} style={styles.containerItem}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate(ROUTES.REGISTRATION_DETAIL, { item })}
+        key={item?.registrationCode}
+        style={styles.containerItem}
+      >
         <View style={styles.containerRow}>
           <View style={styles.firstRow}>
             <View style={styles.containerImage}>
@@ -185,11 +196,13 @@ const Registration_Confirm = () => {
             >
               <Text style={styles.textSecond}>Time</Text>
               <Text style={styles.textSecond_2}>
-                {item?.postPosition?.timeFrom
-                  ? format_Time_To_HHss(item?.postPosition?.timeFrom)
-                    ? format_Time_To_HHss(item?.postPosition?.timeFrom) + ''
-                    : 'No value'
-                  : 'No value'}
+                {item?.postPosition?.timeFrom &&
+                  item?.postPosition?.timeTo &&
+                  format_Time_To_HHss(item?.postPosition?.timeFrom) &&
+                  format_Time_To_HHss(item?.postPosition?.timeTo) &&
+                  format_Time_To_HHss(item?.postPosition?.timeFrom) +
+                    ' - ' +
+                    format_Time_To_HHss(item?.postPosition?.timeTo)}
               </Text>
             </View>
           </View>
@@ -417,7 +430,7 @@ const Registration_Confirm = () => {
             )}
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 

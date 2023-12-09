@@ -11,7 +11,7 @@ import { POST_STATUS_ENUM } from '../../../enums/collaborator/PostStatus';
 interface EventCardWrapProps extends TouchableOpacityProps {
   imageUrl?: string;
   title?: string;
-  dateTime?: string;
+  dateTime?: string | null;
   schoolName?: string;
   totalRegisterAmount?: string;
   totalAmountPosition?: string;

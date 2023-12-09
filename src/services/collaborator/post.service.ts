@@ -4,10 +4,15 @@ import axiosClient from '../axiosClient';
 import PostDto from '../../dtos/collaborator/post.dto';
 import ViewPostCategoryResponse from '../../dtos/collaborator/response/viewPostCategory.dto';
 import FilterPostPayload from '../../dtos/collaborator/parameter/filterPost.dto';
+import { PostObjectResponse } from '../../dtos/collaborator/response/postObject.dto';
 
 export const postService = {
   getAllPost: (params: FilterPostPayload): Promise<AxiosResponse<PostDto>> => {
     const url = '/api/post/getAll';
+    return axiosClient.get(url, { params });
+  },
+  getPostById: (params: FilterPostPayload): Promise<AxiosResponse<PostObjectResponse>> => {
+    const url = '/api/post/getById';
     return axiosClient.get(url, { params });
   },
   getPostReOpen: (

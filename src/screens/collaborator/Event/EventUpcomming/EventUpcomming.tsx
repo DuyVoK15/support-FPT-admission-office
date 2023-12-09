@@ -56,8 +56,8 @@ const EventUpcomming: FC = () => {
   );
   const postLoading = useAppSelector((state) => state.collab_post.loading);
 
-  const handleNavigate = (item: DataPost) => {
-    navigation.navigate('HOME_EVENT_DETAIL', { item });
+  const handleNavigate = (post: DataPost) => {
+    navigation.navigate('HOME_EVENT_DETAIL', { post });
   };
 
   // Pagination scroll
@@ -173,24 +173,38 @@ const EventUpcomming: FC = () => {
       <View>
         <EventCardWrap
           onPress={() => handleNavigate(post)}
-          imageUrl={post?.postImg ? post?.postImg : imageNotFoundUri}
+          imageUrl={
+            post?.postImg ? post?.postImg : imageNotFoundUri
+          }
           title={
             post?.postCategory?.postCategoryDescription
               ? post?.postCategory?.postCategoryDescription
-              : ''
+              : 'No value'
           }
-          dateTime={format_ISODateString_To_DayOfWeekMonthDDYYYY(
-            post?.dateFrom ? post?.dateFrom : ''
-          )}
-          schoolName={post?.postPositions[0]?.schoolName}
+          dateTime={
+            post?.dateFrom
+              ? format_ISODateString_To_DayOfWeekMonthDDYYYY(
+                  post?.dateFrom
+                )
+                ? format_ISODateString_To_DayOfWeekMonthDDYYYY(
+                    post?.dateFrom
+                  )
+                : 'No date'
+              : 'No date'
+          }
+          schoolName={post?.postPositions?.[0]?.schoolName ? post?.postPositions?.[0]?.schoolName : 'No value'}
           totalRegisterAmount={
-            post?.registerAmount ? String(post?.registerAmount) : '0'
+            post?.registerAmount
+              ? String(post?.registerAmount)
+              : '0'
           }
           totalAmountPosition={
-            post?.totalAmountPosition ? String(post?.totalAmountPosition) : '0'
+            post?.totalAmountPosition
+              ? String(post?.totalAmountPosition)
+              : '0'
           }
           status={post?.status ? String(post?.status) : 'No Status'}
-          timeAgo={post?.createAt ? post?.createAt : ''}
+          timeAgo={post?.createAt ? post?.createAt : 'No time'}
         />
       </View>
     );

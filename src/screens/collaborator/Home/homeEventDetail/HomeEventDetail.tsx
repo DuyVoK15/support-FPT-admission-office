@@ -21,6 +21,7 @@ import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
 import { SHADOWS } from '../../../../constants/Shadows';
 import { ScreenHeight } from '../../../../constants/Demesions';
 import {
+  format_ISODateString_To_DDMonth,
   format_ISODateString_To_DDMonthYYYY,
   format_ISODateString_To_DayOfWeek,
   format_Time_To_HHss,
@@ -32,33 +33,27 @@ import { DataPost } from '../../../../models/collaborator/dataPost.model';
 import { imageUndefinedUserUri } from '../../../../utils/images';
 import RegistrationEmpty from '../../../../components/shared/Empty/RegistrationEmpty';
 import { ROUTES } from '../../../../constants/Routes';
+import useHomeDetail from './useHomeDetail';
+import LoadingScreen from '../../../../components/shared/Loading/Loading';
 
 const HomeEventDetail: FC = () => {
-  // Get Width of Windows
-  const { width } = useWindowDimensions();
-
-  const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
-  // Get item data from
-  const route = useRoute();
-  const { item } = route?.params as { item: DataPost };
-  const handleNavigate = (item: DataPost) => {
-    navigation.navigate(ROUTES.POSITION_REGISTRATION, { item });
-  };
-  useEffect(() => {
-    console.log(JSON.stringify(item, null, 2));
-  }, []);
-
+  const { state, setState, stateRedux, handlers, props } = useHomeDetail();
+  if (stateRedux.loading) {
+    return <LoadingScreen />;
+  }
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
       <ImageBackground
         style={{ height: 250, width: '100%' }}
         source={{
-          uri: item?.postImg ? item?.postImg : imageNotFoundUri,
+          uri: stateRedux.item?.data?.postImg
+            ? stateRedux.item?.data?.postImg
+            : imageNotFoundUri,
         }}
       >
         <BackwardBlur
           style={{ marginTop: 50 }}
-          onPress={() => navigation.goBack()}
+          onPress={() => props.navigation.goBack()}
         />
       </ImageBackground>
 
@@ -96,9 +91,11 @@ const HomeEventDetail: FC = () => {
                       fontSize: 20,
                     }}
                   >
-                    {item?.postCategory?.postCategoryDescription
-                      ? item?.postCategory?.postCategoryDescription
-                      : 'NO EVENT'}
+                    {stateRedux.item?.data?.postCategory
+                      ?.postCategoryDescription
+                      ? stateRedux.item?.data?.postCategory
+                          ?.postCategoryDescription
+                      : 'No value'}
                   </Text>
                 </View>
                 <View style={{ flex: 0 }}>
@@ -107,7 +104,9 @@ const HomeEventDetail: FC = () => {
                       fontFamily: FONTS_FAMILY.Ubuntu_400Regular_Italic,
                     }}
                   >
-                    {item?.postCode ? 'PCode: ' + item?.postCode : ''}
+                    {stateRedux.item?.data?.postCode
+                      ? 'PCode: ' + stateRedux.item?.data?.postCode
+                      : 'No value'}
                   </Text>
                 </View>
               </View>
@@ -133,8 +132,32 @@ const HomeEventDetail: FC = () => {
                       marginVertical: 2,
                     }}
                   >
-                    {item?.dateFrom &&
-                      format_ISODateString_To_DDMonthYYYY(item?.dateFrom)}
+                    {stateRedux.item?.data?.dateFrom &&
+                    stateRedux.item?.data?.dateTo
+                      ? stateRedux.item?.data?.dateFrom ===
+                        stateRedux.item?.data?.dateTo
+                        ? format_ISODateString_To_DDMonthYYYY(
+                            stateRedux.item?.data?.dateFrom
+                          )
+                          ? format_ISODateString_To_DDMonthYYYY(
+                              stateRedux.item?.data?.dateFrom
+                            )
+                          : 'No value'
+                        : format_ISODateString_To_DDMonth(
+                            stateRedux.item?.data?.dateFrom
+                          ) &&
+                          format_ISODateString_To_DDMonthYYYY(
+                            stateRedux.item?.data?.dateTo
+                          )
+                        ? format_ISODateString_To_DDMonth(
+                            stateRedux.item?.data?.dateFrom
+                          ) +
+                          ' - ' +
+                          format_ISODateString_To_DDMonthYYYY(
+                            stateRedux.item?.data?.dateTo
+                          )
+                        : 'No value'
+                      : 'No value'}
                   </Text>
                   <Text
                     style={{
@@ -144,16 +167,16 @@ const HomeEventDetail: FC = () => {
                       marginVertical: 2,
                     }}
                   >
-                    {item?.dateFrom &&
-                      item?.postPositions?.[0]?.timeFrom &&
-                      item?.postPositions?.[0]?.timeTo &&
-                      format_ISODateString_To_DayOfWeek(item?.dateFrom) +
+                    {stateRedux.item?.data?.dateFrom &&
+                      stateRedux.item?.data?.timeFrom &&
+                      stateRedux.item?.data?.timeTo &&
+                      format_ISODateString_To_DayOfWeek(
+                        stateRedux.item?.data?.dateFrom
+                      ) +
                         ', ' +
-                        format_Time_To_HHss(
-                          item?.postPositions?.[0]?.timeFrom
-                        ) +
+                        format_Time_To_HHss(stateRedux.item?.data?.timeFrom) +
                         ' - ' +
-                        format_Time_To_HHss(item?.postPositions?.[0]?.timeTo)}
+                        format_Time_To_HHss(stateRedux.item?.data?.timeTo)}
                   </Text>
                 </View>
               </View>
@@ -179,8 +202,8 @@ const HomeEventDetail: FC = () => {
                       marginVertical: 2,
                     }}
                   >
-                    {item?.postPositions?.[0]?.schoolName
-                      ? item?.postPositions?.[0]?.schoolName
+                    {stateRedux.item?.data?.postPositions?.[0]?.schoolName
+                      ? stateRedux.item?.data?.postPositions?.[0]?.schoolName
                       : 'No value'}
                   </Text>
                   <Text
@@ -192,8 +215,8 @@ const HomeEventDetail: FC = () => {
                       maxWidth: 300,
                     }}
                   >
-                    {item?.postPositions?.[0]?.location
-                      ? item?.postPositions?.[0]?.location
+                    {stateRedux.item?.data?.postPositions?.[0]?.location
+                      ? stateRedux.item?.data?.postPositions?.[0]?.location
                       : 'No value'}
                   </Text>
                 </View>
@@ -228,8 +251,8 @@ const HomeEventDetail: FC = () => {
                       borderRadius: 10,
                     }}
                     source={{
-                      uri: item?.account?.imgUrl
-                        ? item?.account?.imgUrl
+                      uri: stateRedux.item?.data?.account?.imgUrl
+                        ? stateRedux.item?.data?.account?.imgUrl
                         : imageUndefinedUserUri,
                     }}
                   />
@@ -242,7 +265,9 @@ const HomeEventDetail: FC = () => {
                       marginVertical: 2,
                     }}
                   >
-                    {item?.account?.email ? item?.account?.email : 'No value'}
+                    {stateRedux.item?.data?.account?.email
+                      ? stateRedux.item?.data?.account?.email
+                      : 'No value'}
                   </Text>
                   <Text
                     style={{
@@ -283,16 +308,16 @@ const HomeEventDetail: FC = () => {
                     color: 'red',
                   }}
                 >
-                  {item?.registerAmount
-                    ? `Attendees(${item?.registerAmount})`
+                  {stateRedux.item?.data?.registerAmount
+                    ? `Attendees(${stateRedux.item?.data?.registerAmount})`
                     : 'Ateendees(0)'}
                 </Text>
               </View>
               <View>
-                {item?.postDescription ? (
+                {stateRedux.item?.data?.postDescription ? (
                   <RenderHtml
-                    source={{ html: item?.postDescription }}
-                    contentWidth={width}
+                    source={{ html: stateRedux.item?.data?.postDescription }}
+                    contentWidth={props.width}
                   />
                 ) : (
                   <RegistrationEmpty />
@@ -322,11 +347,11 @@ const HomeEventDetail: FC = () => {
                 style={{}}
                 showsHorizontalScrollIndicator={false}
               >
-                {item?.postPositions &&
-                item?.postPositions?.some(
+                {stateRedux.item?.data?.postPositions &&
+                stateRedux.item?.data?.postPositions?.some(
                   (position) => position.certificateName !== null
                 ) === true ? (
-                  item?.postPositions
+                  stateRedux.item?.data?.postPositions
                     ?.filter(
                       (position, index, self) =>
                         position.certificateName !== null &&
@@ -378,7 +403,9 @@ const HomeEventDetail: FC = () => {
             {/* Button */}
             <View style={{ marginVertical: 20, marginHorizontal: 20 }}>
               <SubmitButton
-                onPress={() => handleNavigate(item)}
+                onPress={() =>
+                  handlers.handleNavigate(stateRedux.item?.data ?? null)
+                }
                 titleButton="REGISTER"
               />
             </View>

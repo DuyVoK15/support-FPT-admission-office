@@ -18,6 +18,8 @@ const useRegistrationRejected = () => {
   const fetchPostRegistration = async () => {
     await dispatch(
       getAllPostRegistration_Cancelled({
+        Page: 1,
+        PageSize: 10000,
         RegistrationStatus: [RegistrationStatus.REJECT],
       })
     ).then((res) => {

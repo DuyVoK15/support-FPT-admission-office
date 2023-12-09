@@ -9,6 +9,7 @@ import {
 } from '../../../../features/collaborator/collab.postRegistrationSlice';
 import { RegistrationStatus } from '../../../../enums/collaborator/RegistrationStatus';
 import { useFocusEffect } from '@react-navigation/native';
+import DataViewPostRegistration from '../../../../models/collaborator/postRegistration.model';
 
 const useIndex = () => {
   const dispatch = useAppDispatch();
@@ -18,6 +19,8 @@ const useIndex = () => {
   const fetchPostRegistration = async () => {
     await dispatch(
       getAllPostRegistration_Cancelled({
+        Page: 1,
+        PageSize: 10000,
         Sort: 'CancelTime',
         Order: 'DESCENDING',
         RegistrationStatus: [RegistrationStatus.CANCEL],
@@ -45,15 +48,16 @@ const useIndex = () => {
       setRefreshing(false);
     }, 1000);
   }, []);
-
-  const handlers = { onRefresh };
-  const state = { refreshing };
+;
+  const handlers = { onRefresh, };
+  const state = { refreshing, };
   const props = { postRegistrationList };
-
+  const setState ={}
   return {
     handlers,
     state,
     props,
+    setState
   };
 };
 

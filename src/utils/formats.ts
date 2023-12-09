@@ -173,6 +173,34 @@ export function format_ISODateString_To_DDMonthYYYY(isoDateString: string) {
   return customDateString;
 }
 
+export function format_ISODateString_To_DDMonth(isoDateString: string) {
+  if (isoDateString === null) {
+    return null;
+  }
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
+  const datePart = isoDateString.split('T')[0];
+  const [year, month, day] = datePart
+    .split('-')
+    .map((part) => parseInt(part, 10));
+
+  const customDateString = `${day} ${months[month - 1]}`;
+  return customDateString;
+}
+
 export function format_ISODateString_To_MonthDD(isoDateString: string) {
   const months = [
     'JAN',

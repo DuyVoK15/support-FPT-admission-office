@@ -30,6 +30,8 @@ import CancelButton from '../../../../components/shared/Button/CancelButton';
 import { SHADOWS } from '../../../../constants/Shadows';
 import WarningAlert from '../../../../components/shared/AwesomeAlert/WarningAlert';
 import ConfirmAlert from '../../../../components/shared/AwesomeAlert/ConfirmAlert';
+import RegistrationDetail from '../RegistrationDetail';
+import { ROUTES } from '../../../../constants/Routes';
 
 interface Registration_PendingProps {
   // item: string | null;
@@ -66,7 +68,7 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
       case TYPE_BUTTON_ENUM.CANCEL:
         setConfirmInfo({
           title: 'CONFIRMATION',
-          message: `Are you sure you want to CANCEL "${item?.postPosition?.positionName}" position` ,
+          message: `Are you sure you want to CANCEL "${item?.postPosition?.positionName}" position`,
           typeButton: TYPE_BUTTON_ENUM.CANCEL,
         });
         break;
@@ -97,7 +99,12 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
   };
   const renderItem = ({ item }: { item: DataViewPostRegistration }) => {
     return (
-      <View style={styles.containerItem}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate(ROUTES.REGISTRATION_DETAIL, { item })
+        }
+        style={styles.containerItem}
+      >
         <View style={styles.containerRow}>
           <View style={styles.firstRow}>
             <View style={styles.containerImage}>
@@ -290,7 +297,7 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
             )}
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 

@@ -6,6 +6,7 @@ import {
 } from '../../dtos/collaborator/response/viewReport.dto';
 import { FilterReportParam } from '../../dtos/collaborator/parameter/filterReport.dto';
 import { ViewIDRecognitionBackResponse, ViewIDRecognitionFrontResponse } from '../../dtos/collaborator/response/viewIDRecognition.dto';
+import { API_KEY_SCAN_CCCD } from '../../../env';
 
 // report.service.ts
 export const scanIDRecognitionService = {
@@ -26,7 +27,7 @@ export const scanIDRecognitionService = {
     const url = 'https://api.fpt.ai/vision/idr/vnm';
     return axios.post(url, formData, {
       headers: {
-        'api-key': '6yrkYkXCyHo9qoMXVgp37RG5IWt8kDDg',
+        'api-key': API_KEY_SCAN_CCCD,
         'Content-Type': 'multipart/form-data',
       },
     });
@@ -48,7 +49,7 @@ export const scanIDRecognitionService = {
     const url = 'https://api.fpt.ai/vision/idr/vnm';
     return axios.post(url, formData, {
       headers: {
-        'api-key': '6yrkYkXCyHo9qoMXVgp37RG5IWt8kDDg',
+        'api-key': API_KEY_SCAN_CCCD,
         'Content-Type': 'multipart/form-data',
       },
     });
