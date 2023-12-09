@@ -13,7 +13,10 @@ import LoginButton from '../../../components/collaborator/Login/LoginButton';
 import AppVersion from '../../../components/collaborator/Login/AppVersion';
 import 'expo-dev-client';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 import { useAppDispatch } from '../../../app/store';
 import {
   admission_getUserInfo,
@@ -34,6 +37,7 @@ import { SHADOWS } from '../../../constants/Shadows';
 import LoginUserDto from '../../../dtos/collaborator/login.user.dto';
 import AppConstants from '../../../enums/collaborator/app';
 import usePushNotifications from '../../../../usePushNotifications';
+import { IOS_CLIENT_ID, WEB_CLIENT_ID } from '../../../../env';
 
 const Login = () => {
   const toast = useToast();
@@ -51,25 +55,40 @@ const Login = () => {
 
   useEffect(() => {
     GoogleSignin.configure({
-      webClientId:
-        '799879175588-c3eve1j8aprq6ijv45roetch9huje68f.apps.googleusercontent.com',
-      iosClientId:
-        '799879175588-bn0dkiuaid4tv9rr5ms7n05hv5hq4biq.apps.googleusercontent.com',
+      webClientId: WEB_CLIENT_ID,
+      iosClientId: IOS_CLIENT_ID,
       offlineAccess: true,
     });
   }, []);
 
   const onGoogleButtonPress = async () => {
-    // Check if your device supports Google Play
-    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-    // Get the users ID token
-    const { idToken } = await GoogleSignin.signIn();
+    try {
+      // Check if your device supports Google Play
+      await GoogleSignin.hasPlayServices({
+        showPlayServicesUpdateDialog: true,
+      }).then((res) => {
+        console.log(JSON.stringify(res, null, 2));
+      });
+      // Get the users ID token
+      const { idToken } = await GoogleSignin.signIn();
 
-    // Create a Google credential with the token
-    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+      // Create a Google credential with the token
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
-    // Sign-in the user with the credential
-    return auth().signInWithCredential(googleCredential);
+      // Sign-in the user with the credential
+      return auth().signInWithCredential(googleCredential);
+    } catch (error: any) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        console.log('User cancelled the sign-in flow');
+        await GoogleSignin.signOut();
+        // Handle cancellation gracefully (e.g., show a message to the user)
+      } else {
+        await GoogleSignin.signOut();
+        // Handle other errors
+        console.error('Error signing in with Google:', error);
+        // Show an error message or perform other actions based on the error
+      }
+    }
   };
 
   // Handle user state changes
@@ -147,9 +166,10 @@ const Login = () => {
         <LoginButton
           style={{ flex: 1 }}
           onPress={() =>
-            onGoogleButtonPress().then(() => {
+            onGoogleButtonPress().then(async () => {
               if (gmailSelected === GmailSelectedEnum.NO_SELECT) {
-                toast.show('Please selected an gmail type @!', {
+                await GoogleSignin.signOut().then(()=>console.log('Google Signout'));
+                toast.show('Please selected an gmail type!', {
                   type: 'danger',
                 });
               }
@@ -164,7 +184,7 @@ const Login = () => {
                         console.log('<Login> Có token');
                         await dispatch(collab_loginGoogle(token)).then(
                           async (res) => {
-                            console.log(JSON.stringify(res,null ,2))
+                            console.log(JSON.stringify(res, null, 2));
                             const requestStatus = res?.meta?.requestStatus;
                             switch (requestStatus) {
                               case 'rejected':
@@ -173,11 +193,12 @@ const Login = () => {
                                 if (resRejectedData?.statusCode === 400) {
                                   if (resRejectedData?.errorCode === 4006) {
                                     toast.show(
-                                      'You must login with gmail @fpt.',
+                                      'You must login with gmail @fpt.edu.vn',
                                       { type: 'danger' }
                                     );
                                   }
                                 }
+                                await GoogleSignin.signOut().then(()=>console.log('Google Signout'));
                                 break;
                               case 'fulfilled':
                                 const data = res.payload as LoginUserDto;
@@ -223,11 +244,12 @@ const Login = () => {
                                 if (resRejectedData?.statusCode === 400) {
                                   if (resRejectedData?.errorCode === 4006) {
                                     toast.show(
-                                      'You must login with gmail @fpt.!ádasdasdasdasdasdasdasdasd',
+                                      'You must login with gmail @fe.edu.vn',
                                       { type: 'danger' }
                                     );
                                   }
                                 }
+                                await GoogleSignin.signOut().then(()=>console.log('Google Signout'));
                                 break;
                               case 'fulfilled':
                                 const data = res.payload as LoginUserDto;
@@ -257,13 +279,13 @@ const Login = () => {
                       });
                   }
                   break;
-                default:
+                default: await GoogleSignin.signOut().then(()=>console.log('Google Signout'));
                   console.log('Vui lòng chọn');
               }
             })
           }
         />
-        <Text>{user?.displayName}</Text>
+        {/* <Text>{user?.displayName}</Text> */}
         <AppVersion style={{ flex: 0, marginBottom: 5 }} />
       </SafeAreaView>
     </ImageBackground>

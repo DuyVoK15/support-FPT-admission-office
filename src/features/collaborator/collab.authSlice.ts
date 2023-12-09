@@ -122,21 +122,24 @@ export const collab_logout = createAsyncThunk(
       if (expoPushToken) {
         expoPushTokenCheck = expoPushToken;
       }
-      await authService.collab_logout({
+      const res = await authService.collab_logout({
         expoPushToken: expoPushTokenCheck,
       });
-      // Remove AsyncStorage
-      await auth()
-        .signOut()
-        .then(() => console.log('Current user signed out!'));
-      await AsyncStorage.removeItem(AppConstants.ACCESS_TOKEN);
-      await AsyncStorage.removeItem(AppConstants.ID_TOKEN);
-      await AsyncStorage.removeItem(AppConstants.USER_INFO);
-      await AsyncStorage.removeItem(AppConstants.EXPO_PUSH_TOKEN);
-      // await GoogleSignin.revokeAccess();
-      await GoogleSignin.signOut().then(() => {
-        console.log('Google sign out!');
-      });
+      if (res) {
+        // Remove AsyncStorage
+        await auth()
+          .signOut()
+          .then(() => console.log('Current user signed out!'));
+        await AsyncStorage.removeItem(AppConstants.ACCESS_TOKEN);
+        await AsyncStorage.removeItem(AppConstants.ID_TOKEN);
+        await AsyncStorage.removeItem(AppConstants.USER_INFO);
+        await AsyncStorage.removeItem(AppConstants.ROLE_ID);
+        await AsyncStorage.removeItem(AppConstants.EXPO_PUSH_TOKEN);
+        // await GoogleSignin.revokeAccess();
+        await GoogleSignin.signOut().then(() => {
+          console.log('Google sign out!');
+        });
+      }
 
       return true;
     } catch (error: any) {

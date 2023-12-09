@@ -4,8 +4,9 @@ import createAuthRefreshInterceptor, {
 } from 'axios-auth-refresh';
 import AppConstants from '../enums/collaborator/app';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { BASE_URL_API } from '../../env';
 const axiosClient = axios.create({
-    baseURL: "https://dev.supfamof.id.vn",
+    baseURL: BASE_URL_API,
     headers: {
         'content-type': 'application/json',
         'Access-Control-Allow-Origin': '*',
