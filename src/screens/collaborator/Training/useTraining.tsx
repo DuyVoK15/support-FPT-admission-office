@@ -12,6 +12,7 @@ import {
 } from '../../../features/collaborator/collab.certificateSlice';
 import useCustomToast from '../../../utils/toasts';
 import ErrorStatus from '../../../dtos/collaborator/response/errorStatus.dto';
+import { DataCertificateAdmission } from '../../../models/collaborator/dataCertificateAdmission.model';
 
 const useTraining = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -89,9 +90,55 @@ const useTraining = () => {
     fetchData();
     setRefreshing(false);
   }, []);
-  const handlers = { createTrainingCertificateRegistration, onRefresh };
-  const props = { navigation };
-  const state = { refreshing };
+
+  enum TYPE_BUTTON_ENUM {
+    REGISTER = 1,
+    CANCEL = 2,
+    CHECKIN = 3,
+  }
+  type ConfirmInfo = {
+    title: string | null;
+    message: string | null;
+    typeButton: number | null;
+  };
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [confirmInfo, setConfirmInfo] = useState<ConfirmInfo | null>(null);
+  const [Item, setItem] = useState<DataCertificateAdmission | null>(null);
+  const showAlertHandler = (
+    action: number | null,
+    item: DataCertificateAdmission | null
+  ) => {
+    switch (action) {
+      case TYPE_BUTTON_ENUM.REGISTER:
+        setConfirmInfo({
+          title: 'CONFIRMATION',
+          message: `Are you sure you want to REGISTER "${item?.certificateName}" training?`,
+          typeButton: TYPE_BUTTON_ENUM.REGISTER,
+        });
+        break;
+      default:
+        setConfirmInfo({
+          title: '',
+          message: '',
+          typeButton: 0,
+        });
+    }
+    setItem(item);
+    setShowAlert(true);
+  };
+
+  const hideAlertHandler = () => {
+    setShowAlert(false);
+  };
+
+  const handlers = {
+    createTrainingCertificateRegistration,
+    onRefresh,
+    showAlertHandler,
+    hideAlertHandler,
+  };
+  const props = { navigation, TYPE_BUTTON_ENUM };
+  const state = { refreshing, showAlert, confirmInfo, Item };
   const setState = {};
   const stateRedux = {
     certificateList,

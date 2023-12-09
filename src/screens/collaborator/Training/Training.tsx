@@ -17,6 +17,8 @@ import useTraining from './useTraining';
 import { DataCertificateAdmission } from '../../../models/collaborator/dataCertificateAdmission.model';
 import { ROUTES } from '../../../constants/Routes';
 import RegistrationEmpty from '../../../components/shared/Empty/RegistrationEmpty';
+import { format_ISODateString_To_DayOfWeekMonthDDYYYY } from '../../../utils/formats';
+import ConfirmAlert from '../../../components/shared/AwesomeAlert/ConfirmAlert';
 
 const Training = () => {
   const data = [1, 2, 3, 4, 5, 6, 7, 7];
@@ -63,7 +65,7 @@ const Training = () => {
         }}
       >
         <View style={{ margin: 15 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
             <View style={{ flex: 1 }}>
               <Text
                 style={{
@@ -102,7 +104,7 @@ const Training = () => {
             style={{
               flexDirection: 'row',
               marginTop: 15,
-              alignItems: 'center',
+              alignItems: 'flex-end',
             }}
           >
             <View style={{ flex: 1 }}>
@@ -111,15 +113,24 @@ const Training = () => {
                 <Text
                   style={{ fontFamily: FONTS_FAMILY?.Ubuntu_300Light_Italic }}
                 >
-                  TuesDay, DEC 12 2023
+                  {item?.createAt
+                    ? format_ISODateString_To_DayOfWeekMonthDDYYYY(
+                        item?.createAt
+                      )
+                      ? format_ISODateString_To_DayOfWeekMonthDDYYYY(
+                          item?.createAt
+                        )
+                      : 'No date'
+                    : 'No date'}
                 </Text>
               </Text>
             </View>
             <View>
               <TouchableOpacity
                 onPress={() =>
-                  handlers.createTrainingCertificateRegistration(
-                    item?.id ? item?.id : null
+                  handlers.showAlertHandler(
+                    props.TYPE_BUTTON_ENUM.REGISTER,
+                    item
                   )
                 }
                 style={{
@@ -204,8 +215,7 @@ const Training = () => {
                 }}
               >
                 {stateRedux?.certificateFromAdmissionList?.data
-                  ? stateRedux?.certificateFromAdmissionList?.data
-                      ?.length
+                  ? stateRedux?.certificateFromAdmissionList?.data?.length
                   : 0}
               </Text>
             </Text>
@@ -222,9 +232,8 @@ const Training = () => {
                   color: '#F4762D',
                 }}
               >
-               {stateRedux?.certificateList?.data
-                  ? stateRedux?.certificateList?.data
-                      ?.length
+                {stateRedux?.certificateList?.data
+                  ? stateRedux?.certificateList?.data?.length
                   : 0}
               </Text>
             </Text>
@@ -267,8 +276,36 @@ const Training = () => {
         <FlatList
           data={stateRedux?.certificateFromAdmissionList?.data}
           renderItem={renderItem}
-          refreshControl={<RefreshControl refreshing={state.refreshing} onRefresh={handlers.onRefresh} />}
+          refreshControl={
+            <RefreshControl
+              refreshing={state.refreshing}
+              onRefresh={handlers.onRefresh}
+            />
+          }
           ListEmptyComponent={renderListEmptyComponent}
+        />
+        <ConfirmAlert
+          show={state.showAlert}
+          title="CONFIRMATION"
+          message={state.confirmInfo?.message}
+          confirmText="Yes"
+          cancelText="No"
+          confirmButtonColor={COLORS.orange_button}
+          onConfirmPressed={() => {
+            switch (state.confirmInfo?.typeButton) {
+              case props.TYPE_BUTTON_ENUM.REGISTER:
+                handlers.createTrainingCertificateRegistration(
+                  state?.Item?.id ?? null
+                );
+                console.log(state.Item?.id);
+                break;
+
+              default:
+                console.log('Type Button Null');
+            }
+            handlers.hideAlertHandler();
+          }}
+          onCancelPressed={handlers.hideAlertHandler}
         />
       </View>
     </View>
