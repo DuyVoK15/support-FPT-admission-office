@@ -32,11 +32,15 @@ import Toast from 'react-native-toast-notifications';
 import TrainingStatus from '../../Training/TrainingRegistration/TrainingStatus';
 import ApplicationStatus from './ApplicationStatus';
 import APPLICATION_STATUS_ENUM from '../../../../enums/collaborator/ApplicationStatus';
+import RegistrationEmpty from '../../../../components/shared/Empty/RegistrationEmpty';
 
 const ViewApplication = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const { handlers, props, setState, state, stateRedux } = useViewApplication();
-
+  
+  const renderListEmptyComponent = () => {
+    return <RegistrationEmpty />;
+  };
   const renderItem = ({ item }: { item: DataApplication }) => {
     return (
       <View
@@ -344,6 +348,7 @@ const ViewApplication = () => {
               onRefresh={handlers.onRefresh}
             />
           }
+          ListEmptyComponent={renderListEmptyComponent}
         />
       </View>
     </View>

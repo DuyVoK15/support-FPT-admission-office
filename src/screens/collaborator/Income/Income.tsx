@@ -26,11 +26,15 @@ import { COLORS } from '../../../constants/Colors';
 import Animated from 'react-native-reanimated';
 import IncomeRegistration from './incomeRegistration/IncomeRegistration';
 import { ROUTES } from '../../../constants/Routes';
+import RegistrationEmpty from '../../../components/shared/Empty/RegistrationEmpty';
 
 const Wallet = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const { handlers, props, state, setState, stateRedux } = useIncome();
 
+  const renderListEmptyComponent = () => {
+    return <RegistrationEmpty />;
+  };
   const renderItem = ({ item }: { item: DataReport }) => {
     return (
       <TouchableOpacity
@@ -123,13 +127,13 @@ const Wallet = () => {
           <FlatList
             data={stateRedux?.reportList?.data}
             renderItem={renderItem}
-            contentContainerStyle={{ marginHorizontal: 15, marginTop: 10 }}
             refreshControl={
               <RefreshControl
                 refreshing={state.refreshing}
                 onRefresh={handlers.onRefresh}
               />
             }
+            ListEmptyComponent={renderListEmptyComponent}
           />
           <IncomeRegistration
             isVisible={state.isVisible}
@@ -157,7 +161,9 @@ const styles = StyleSheet.create({
   walletBox: {
     backgroundColor: 'white',
     borderRadius: 15,
-    marginBottom: 15,
+    marginTop: 5,
+    marginBottom: 10,
+    marginHorizontal: 15,
     ...SHADOWS?.SHADOW_03,
   },
   walletContent: {
