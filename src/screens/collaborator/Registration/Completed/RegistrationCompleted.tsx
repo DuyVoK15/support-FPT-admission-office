@@ -131,7 +131,7 @@ const Registration_Completed = () => {
               <Text style={styles.textSecond_2}>
                 {item?.postPosition?.timeFrom
                   ? format_Time_To_HHss(item?.postPosition?.timeFrom)
-                    ? format_Time_To_HHss(item?.postPosition?.timeFrom) + ' AM'
+                    ? format_Time_To_HHss(item?.postPosition?.timeFrom)
                     : 'No value'
                   : 'No value'}
               </Text>

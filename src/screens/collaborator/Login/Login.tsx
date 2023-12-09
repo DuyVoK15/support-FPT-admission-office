@@ -118,7 +118,7 @@ const Login = () => {
           justifyContent: 'space-between',
         }}
       >
-        <AppIcon style={{ flex: 0, marginTop: 100 }} />
+        <AppIcon style={{ flex: 0, marginTop: Platform.OS === 'android' ? 110 : 40 }} />
         <CampusSelection style={{ flex: 2 }} />
         <View style={{ marginBottom: 10 }}>
           <SelectDropdown
@@ -190,8 +190,8 @@ const Login = () => {
                               case 'rejected':
                                 const resRejectedData =
                                   res?.payload as ErrorStatus;
-                                if (resRejectedData?.statusCode === 400) {
-                                  if (resRejectedData?.errorCode === 4006) {
+                                if (resRejectedData?.statusCode === 403) {
+                                  if (resRejectedData?.errorCode === 4031) {
                                     toast.show(
                                       'You must login with gmail @fpt.edu.vn',
                                       { type: 'danger' }
@@ -241,8 +241,8 @@ const Login = () => {
                               case 'rejected':
                                 const resRejectedData =
                                   res?.payload as ErrorStatus;
-                                if (resRejectedData?.statusCode === 400) {
-                                  if (resRejectedData?.errorCode === 4006) {
+                                if (resRejectedData?.statusCode === 403) {
+                                  if (resRejectedData?.errorCode === 4031) {
                                     toast.show(
                                       'You must login with gmail @fe.edu.vn',
                                       { type: 'danger' }

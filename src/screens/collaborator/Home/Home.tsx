@@ -93,7 +93,7 @@ const Home = () => {
                     fontSize: 17,
                     textAlign: 'center',
                     color: '#FFF',
-                    letterSpacing: 1
+                    letterSpacing: 1,
                   }}
                 >
                   {state.cityName ? state.cityName : 'Not found'}
@@ -252,7 +252,7 @@ const Home = () => {
                             })
                             ? timeAgo({
                                 dateProp: post?.createAt,
-                              })
+                              }) ?? 'No value'
                             : 'No value'
                           : 'No value'
                       }
@@ -274,14 +274,15 @@ const Home = () => {
                       dateFrom={
                         post?.dateFrom
                           ? format_ISODateString_To_MonthDD(post?.dateFrom)
-                            ? format_ISODateString_To_MonthDD(post?.dateFrom)
+                            ? format_ISODateString_To_MonthDD(post?.dateFrom) ??
+                              'No value'
                             : 'No value'
                           : 'No value'
                       }
                       timeFrom={
                         post?.timeFrom
                           ? format_Time_To_HHss(post?.timeFrom)
-                            ? format_Time_To_HHss(post?.timeFrom)
+                            ? format_Time_To_HHss(post?.timeFrom) ?? 'No value'
                             : 'No value'
                           : 'No value'
                       }
@@ -382,7 +383,11 @@ const Home = () => {
                             : 'No date'
                           : 'No date'
                       }
-                      schoolName={post?.postPositions?.[0]?.schoolName ? post?.postPositions?.[0]?.schoolName : 'No value'}
+                      schoolName={
+                        post?.postPositions?.[0]?.schoolName
+                          ? post?.postPositions?.[0]?.schoolName
+                          : 'No value'
+                      }
                       totalRegisterAmount={
                         post?.registerAmount
                           ? String(post?.registerAmount)

@@ -85,7 +85,11 @@ const DatePickerField = (props: DatePickerFieldProps) => {
         onFocus={handleFocus}
       >
         <Text style={{ flex: 1 }}>
-          {value ? formatToDate({ dateProp: value }) : '--/--/----'}
+          {value
+            ? formatToDate({ dateProp: value })
+              ? formatToDate({ dateProp: value })
+              : '--/--/----'
+            : '--/--/----'}
         </Text>
         <Ionicons
           style={{ marginRight: 10 }}

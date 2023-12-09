@@ -1,4 +1,10 @@
-import { RefreshControl, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import { FlatList } from 'react-native';
 import { FONTS_FAMILY } from '../../../../../constants/Fonts';
@@ -122,8 +128,8 @@ const TrainingRegistrationPassed = () => {
             title={'Registered at'}
             value={
               item?.createAt
-                ? format_ISODateString_To_Full(item?.createAt)
-                  ? format_ISODateString_To_Full(item?.createAt)
+                ? format_ISODateString_To_Full(item?.createAt) ?? 'Not yet'
+                  ? format_ISODateString_To_Full(item?.createAt) ?? 'Not yet'
                   : 'Not yet'
                 : 'Not yet'
             }
@@ -131,9 +137,9 @@ const TrainingRegistrationPassed = () => {
           <InformationRow
             title={'Assigned at'}
             value={
-              item?.createAt
-                ? format_ISODateString_To_Full(item?.updateAt)
-                  ? format_ISODateString_To_Full(item?.updateAt)
+              item?.updateAt
+                ? format_ISODateString_To_Full(item?.updateAt) ?? 'Not yet'
+                  ? format_ISODateString_To_Full(item?.updateAt) ?? 'Not yet'
                   : 'Not yet'
                 : 'Not yet'
             }
@@ -143,9 +149,9 @@ const TrainingRegistrationPassed = () => {
             title={'Passed at'}
             colorTextTitle={'green'}
             value={
-              item?.createAt
-                ? format_ISODateString_To_Full(item?.confirmAt)
-                  ? format_ISODateString_To_Full(item?.confirmAt)
+              item?.confirmAt
+                ? format_ISODateString_To_Full(item?.confirmAt) ?? 'Not yet'
+                  ? format_ISODateString_To_Full(item?.confirmAt) ?? 'Not yet'
                   : 'Not yet'
                 : 'Not yet'
             }

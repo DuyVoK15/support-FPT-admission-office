@@ -6,7 +6,7 @@ import Dash from 'react-native-dash';
 import DashedLine from 'react-native-dashed-line';
 
 type CertificateCardProps = {
-  dateReceive?: string;
+  dateReceive?: string | null;
   certificateID?: string;
   certificateName?: string;
   confirmBy?: string;

@@ -46,13 +46,19 @@ const DatePickerField = (props: DatePickerFieldProps) => {
           <TextInput
             mode="outlined"
             label={label}
-            value={value ? formatToDate({dateProp: value}) : ''}
+            value={
+              value
+                ? formatToDate({ dateProp: value })
+                  ? formatToDate({ dateProp: value }) ?? 'No date'
+                  : 'No date'
+                : 'No date'
+            }
             theme={theme}
             outlineColor={COLORS.orange_button} // Màu outline
             editable={false}
             contentStyle={{ fontFamily: FONTS_FAMILY.Ubuntu_400Regular }}
             style={{ height: 55, backgroundColor: '#fffefe' }}
-            
+
             // {...otherProps}
           />
         </View>

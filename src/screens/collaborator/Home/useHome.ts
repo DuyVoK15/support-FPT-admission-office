@@ -16,7 +16,9 @@ import * as Location from 'expo-location';
 const useHome = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
 
-  const [location, setLocation] = useState<Location.LocationObject | null>(null);
+  const [location, setLocation] = useState<Location.LocationObject | null>(
+    null
+  );
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [cityName, setCityName] = useState<string | null>(null);
 
@@ -28,7 +30,7 @@ const useHome = () => {
         return;
       }
 
-      let location = await Location.getCurrentPositionAsync({accuracy: 3});
+      let location = await Location.getCurrentPositionAsync({ accuracy: 3 });
       setLocation(location);
 
       // Use reverse geocoding to get city name
@@ -44,7 +46,6 @@ const useHome = () => {
       }
     })();
   }, []);
-
 
   const [textSearch, setTextSearch] = useState<string | null>('');
   const {
@@ -80,7 +81,7 @@ const useHome = () => {
   //     console.log('Gọi 2');
   //     await fetchHomePostReOpen();
   //   };
-  //   fetch();
+  //   fetch(); CHƯƠNG TRÌNH HƯỚNG NGHIỆP
   // }, []);
   useEffect(() => {
     const fetch = async () => {
@@ -136,6 +137,7 @@ const useHome = () => {
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     setTextSearch(null);
+    setValue('search', '');
     await fetchHomePostUpcomming();
     await fetchHomePostReOpen();
     await fetchCheckInPostRegistration();
@@ -153,7 +155,7 @@ const useHome = () => {
     handleSubmit,
     setValue,
   };
-  const state = { refreshing, textSearch,cityName };
+  const state = { refreshing, textSearch, cityName };
   const props = {
     checkInPostRegistrationList,
     postHomeUpcommingList,

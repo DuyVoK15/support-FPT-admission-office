@@ -130,7 +130,9 @@ const Contract = () => {
               >
                 {item?.contract?.startDate
                   ? formatToDate({ dateProp: item?.contract?.startDate })
-                  : 'No value'}
+                    ? formatToDate({ dateProp: item?.contract?.startDate })
+                    : 'No date'
+                  : 'No date'}
               </Text>
             </Text>
             <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_500Medium_Italic }}>
@@ -140,7 +142,9 @@ const Contract = () => {
               >
                 {item?.contract?.endDate
                   ? formatToDate({ dateProp: item?.contract?.endDate })
-                  : 'No value'}
+                    ? formatToDate({ dateProp: item?.contract?.endDate })
+                    : 'No date'
+                  : 'No date'}
               </Text>
             </Text>
           </View>

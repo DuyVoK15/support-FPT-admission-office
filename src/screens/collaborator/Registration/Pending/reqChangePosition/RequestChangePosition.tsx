@@ -108,27 +108,29 @@ const RequestChangePositionPending = () => {
   const dispatch = useAppDispatch();
   const handleChangePosition = async (
     id: number | null,
-    positionId: number | null
+    positionId: number | null,
+    schoolBusOption: boolean | null,
+    note: string | null
   ) => {
     hideAlertHandler();
-    await dispatch(updatePostRegistration({ id, positionId })).then(
-      async (res) => {
+    await dispatch(
+      updatePostRegistration({ id, positionId, schoolBusOption, note })
+    ).then(async (res) => {
+      console.log(JSON.stringify(res, null, 2));
+      if (res?.meta?.requestStatus === 'fulfilled') {
+        await dispatch(
+          getAllPostRegistration_Pending({
+            RegistrationStatus: [RegistrationStatus.PENDING],
+          })
+        );
+        navigation.goBack();
+        showToastSuccess('Update thành công');
         console.log(JSON.stringify(res, null, 2));
-        if (res?.meta?.requestStatus === 'fulfilled') {
-          await dispatch(
-            getAllPostRegistration_Pending({
-              RegistrationStatus: [RegistrationStatus.PENDING],
-            })
-          );
-          navigation.goBack();
-          showToastSuccess('Update thành công');
-          console.log(JSON.stringify(res, null, 2));
-        } else {
-          const resRejectedData = res?.payload as ErrorStatus;
-          showToastError(resRejectedData?.message);
-        }
+      } else {
+        const resRejectedData = res?.payload as ErrorStatus;
+        showToastError(resRejectedData?.message);
       }
-    );
+    });
   };
 
   const { showToastError, showToastSuccess } = useCustomToast();
@@ -191,9 +193,8 @@ const RequestChangePositionPending = () => {
             {list?.data?.[0]?.postPositionsUnregistereds ? (
               list?.data?.[0]?.postPositionsUnregistereds?.map(
                 (position, index) => {
-                  const INDEX = index + 1;
                   return (
-                    <View key={INDEX} style={styles.containerEveryPosition}>
+                    <View key={index} style={styles.containerEveryPosition}>
                       <View style={styles.everyPosition}>
                         <TouchableOpacity
                           onPress={() => handleSetPositionId(position?.id)}
@@ -265,7 +266,11 @@ const RequestChangePositionPending = () => {
                                         ? format_ISODateString_To_DayOfWeekMonthDDYYYY(
                                             position?.date
                                           )
-                                        : ''}
+                                          ? format_ISODateString_To_DayOfWeekMonthDDYYYY(
+                                              position?.date
+                                            )
+                                          : 'No date'
+                                        : 'No date'}
                                     </Text>
                                   </View>
                                   <View style={{ marginBottom: 4 }}>
@@ -425,7 +430,9 @@ const RequestChangePositionPending = () => {
                                 onConfirmPressed={() =>
                                   handleChangePosition(
                                     list?.data?.[0].id,
-                                    position?.id
+                                    position?.id,
+                                    isSelectedBusOption[index],
+                                    ''
                                   )
                                 }
                                 onCancelPressed={hideAlertHandler}
