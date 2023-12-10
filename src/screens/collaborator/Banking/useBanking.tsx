@@ -63,6 +63,7 @@ const useBanking = () => {
       setValue('accountNumber', '');
       setValue('bankName', '');
       setValue('branch', '');
+      setIsDisable(false);
     }
   }, [bankingInformation]);
 
