@@ -25,6 +25,7 @@ import AvatarImagePicker from '../../../../components/collaborator/Profile/UserP
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import SubmitButtonDisable from '../../../../components/shared/Button/SubmitButtonDisable';
 import { ROUTES } from '../../../../constants/Routes';
+import DateOfBirthPicker from '../../../../components/collaborator/Profile/UserProfile/DateOfBirthPicker';
 
 const UserProfile: React.FC = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -102,8 +103,8 @@ const UserProfile: React.FC = () => {
             rules={{
               required: true,
             }}
-            render={({ field: { onChange, value } }) => (
-              <DatePickerField
+            render={({ field: { onChange, value, onBlur } }) => (
+              <DateOfBirthPicker
                 id="1"
                 onPress={() => datePickerHandlers.showDateOfBirthPicker()}
                 label="Date Of Birth"
@@ -111,6 +112,7 @@ const UserProfile: React.FC = () => {
                 isVisible={state.isDateOfBirthPickerVisible}
                 onConfirm={datePickerHandlers.handleConfirmDateOfBirthPicker}
                 onCancel={datePickerHandlers.hideDateOfBirthPicker}
+                onChange={onChange}
               />
             )}
             name="dateOfBirth"
@@ -123,6 +125,7 @@ const UserProfile: React.FC = () => {
             }}
             render={({ field: { onChange, value } }) => (
               <ProfileTextInput
+                disabled
                 label="Citizen Identification Number"
                 placeholder="Citizen Identification Number"
                 value={value}
@@ -139,6 +142,7 @@ const UserProfile: React.FC = () => {
             }}
             render={({ field: { onChange, value } }) => (
               <ProfileTextInput
+                disabled
                 label="Citizen Identification Issue Address"
                 placeholder="Citizen Identification Issue Address"
                 value={value}
@@ -176,6 +180,7 @@ const UserProfile: React.FC = () => {
             }}
             render={({ field: { onChange, value } }) => (
               <ProfileTextInput
+                disabled
                 label="Citizen Identification Issue Place"
                 placeholder="Citizen Identification Issue Place"
                 value={value}
@@ -282,7 +287,7 @@ const UserProfile: React.FC = () => {
             marginHorizontal: 10,
           }}
         >
-          {!props.isDirty || !props.isValid ? (
+          {!props.isDirty ? (
             <SubmitButtonDisable titleButton="SAVE CHANGE" />
           ) : (
             <SubmitButton

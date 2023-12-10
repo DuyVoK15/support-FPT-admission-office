@@ -14,6 +14,7 @@ import { FONTS_FAMILY } from '../../../../constants/Fonts';
 import { COLORS } from '../../../../constants/Colors';
 import { AntDesign } from '@expo/vector-icons';
 import { SHADOWS } from '../../../../constants/Shadows';
+import useCustomToast from '../../../../utils/toasts';
 
 interface BackImagePickerProps {
   setValue?: any;
@@ -38,10 +39,8 @@ const BackImagePicker = (props: BackImagePickerProps) => {
     if (!result.canceled) {
       if (result.assets[0].uri) {
         console.log('URI MOBILE: ', result.assets[0].uri);
-        
 
         await uploadMedia(result.assets[0].uri);
-        
       }
     }
   };
@@ -90,19 +89,16 @@ const BackImagePicker = (props: BackImagePickerProps) => {
 
           setUploading(false);
           Alert.alert('Photo uploaded!');
-          props.setValue("accountInformation.identityBackImg", url);
+          props.setValue('accountInformation.identityBackImg', url);
           setImagePicker(url);
         })
         .catch((error) => {
           // Xử lý lỗi nếu có
           console.log('Lỗi khi lấy URL hình ảnh:', error);
-          
         });
-        
     } catch (error) {
       setUploading(false);
       console.log('Lỗi ở: ', error);
-   
     }
   };
 
@@ -112,37 +108,42 @@ const BackImagePicker = (props: BackImagePickerProps) => {
     try {
       setImagePicker(imgUndefined);
       await imageRef.delete();
-      props.setValue("accountInformation.identityBackImg", "");
+      props.setValue('accountInformation.identityBackImg', '');
       console.log('Xóa ảnh thành công');
     } catch (error) {
       setImagePicker(imgUndefined);
       console.log('Lỗi khi xóa ảnh:', error);
     }
   };
-
+  const { showToastSuccess, showToastError } = useCustomToast();
   return (
-    <TouchableOpacity onPress={pickImage} style={{ alignItems: 'center' }}>
+    <TouchableOpacity
+      onPress={() =>
+        showToastError('You must send request to Admin to change!')
+      }
+      style={{ alignItems: 'center' }}
+    >
       <View>
-        { imagePicker !== imgUndefined? (
-          
+        {imagePicker !== imgUndefined ? (
           <View
-          style={{
-            borderRadius: 10,
-            ...SHADOWS.SHADOW_03,
-            backgroundColor: 'white',
-          }}
-        >
-          <Image
             style={{
-              height: 100,
-              width: 150,
-              resizeMode: 'cover',
               borderRadius: 10,
+              ...SHADOWS.SHADOW_03,
+              backgroundColor: 'white',
             }}
-            source={{ uri: imagePicker }}
-          />
-        </View>
-        ) : props?.identityBackImg && props?.identityBackImg !== imgUndefined ? (
+          >
+            <Image
+              style={{
+                height: 100,
+                width: 150,
+                resizeMode: 'cover',
+                borderRadius: 10,
+              }}
+              source={{ uri: imagePicker }}
+            />
+          </View>
+        ) : props?.identityBackImg &&
+          props?.identityBackImg !== imgUndefined ? (
           <View
             style={{
               borderRadius: 10,

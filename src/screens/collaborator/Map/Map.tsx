@@ -103,12 +103,12 @@ export default function Map() {
   }, [selectedMarkerIndex]);
   const dispatch = useAppDispatch();
   const postRegistrationConfirmList = useAppSelector(
-    (state) => state.collab_postRegistration.postRegistrationPending
+    (state) => state.collab_postRegistration.postRegistrationConfirmed
   );
   const fetchPostRegistrationConfirmed = async () => {
     await dispatch(
-      getAllPostRegistration_Pending({
-        RegistrationStatus: [RegistrationStatus.PENDING],
+      getAllPostRegistration_Confirmed({
+        RegistrationStatus: [RegistrationStatus.CONFIRM],
       })
     ).then((res) => {
       console.log(JSON.stringify(res, null, 2));

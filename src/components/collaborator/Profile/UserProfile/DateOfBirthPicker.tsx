@@ -18,14 +18,14 @@ import { DefaultTheme, TextInput } from 'react-native-paper';
 import { FONTS_FAMILY } from '../../../../constants/Fonts';
 import { formatToDate } from '../../../../utils/formats';
 
-interface DatePickerFieldProps extends ViewProps, DateTimePickerProps {
+interface DateOfBirthPickerProps extends ViewProps, DateTimePickerProps {
   label?: string;
   value?: string;
   onFocus?: () => void;
   onPress?: () => void;
 }
 
-const DatePickerField = (props: DatePickerFieldProps) => {
+const DateOfBirthPicker = (props: DateOfBirthPickerProps) => {
   const {
     label,
     value,
@@ -41,12 +41,9 @@ const DatePickerField = (props: DatePickerFieldProps) => {
   const theme = DefaultTheme;
   return (
     <View style={[{ marginVertical: 10, elevation: 2 }]} {...otherProps}>
-      <View
-      //  onPress={onPress}
-      >
+      <TouchableOpacity onPress={onPress}>
         <View pointerEvents="none">
           <TextInput
-            disabled={true}
             mode="outlined"
             label={label}
             value={
@@ -65,7 +62,7 @@ const DatePickerField = (props: DatePickerFieldProps) => {
             // {...otherProps}
           />
         </View>
-      </View>
+      </TouchableOpacity>
 
       <DateTimePickerModal
         id={id}
@@ -78,5 +75,5 @@ const DatePickerField = (props: DatePickerFieldProps) => {
     </View>
   );
 };
-export default DatePickerField;
+export default DateOfBirthPicker;
 const styles = StyleSheet.create({});

@@ -15,6 +15,7 @@ import { COLORS } from '../../../../constants/Colors';
 import { AntDesign } from '@expo/vector-icons';
 import { SHADOWS } from '../../../../constants/Shadows';
 import useUserProfile from '../../../../screens/collaborator/Profile/UserProfile/useUserProfile';
+import useCustomToast from '../../../../utils/toasts';
 
 interface FrontImagePickerProps {
   setValue?: any;
@@ -25,8 +26,6 @@ const FrontImagePicker = (props: FrontImagePickerProps) => {
   const [imagePicker, setImagePicker] = useState<string>(imgUndefined);
   const [fileName, setFileName] = useState<string>('');
   const [uploading, setUploading] = useState<boolean>(false);
-
-
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -87,10 +86,10 @@ const FrontImagePicker = (props: FrontImagePickerProps) => {
         .then(async (url) => {
           // url chứa đường dẫn tới hình ảnh
           console.log('URL của hình ảnh:', url);
-        
+
           setUploading(false);
           Alert.alert('Photo uploaded!');
-          props.setValue("accountInformation.identityFrontImg", url);
+          props.setValue('accountInformation.identityFrontImg', url);
           setImagePicker(uri);
         })
         .catch((error) => {
@@ -109,16 +108,22 @@ const FrontImagePicker = (props: FrontImagePickerProps) => {
     try {
       await imageRef.delete();
       setImagePicker(imgUndefined);
-      props.setValue("accountInformation.identityFrontImg", "");
+      props.setValue('accountInformation.identityFrontImg', '');
       console.log('Xóa ảnh thành công');
     } catch (error) {
       console.log('Lỗi khi xóa ảnh:', error);
     }
   };
+  const { showToastSuccess, showToastError } = useCustomToast();
   return (
-    <TouchableOpacity onPress={pickImage} style={{ alignItems: 'center' }}>
+    <TouchableOpacity
+      onPress={() =>
+        showToastError('You must send request to Admin to change!')
+      }
+      style={{ alignItems: 'center' }}
+    >
       <View>
-        { imagePicker !== imgUndefined ? (
+        {imagePicker !== imgUndefined ? (
           <View
             style={{
               borderRadius: 10,
@@ -137,7 +142,8 @@ const FrontImagePicker = (props: FrontImagePickerProps) => {
               progressiveRenderingEnabled={true}
             />
           </View>
-        ): props?.identityFrontImg && props?.identityFrontImg !== imgUndefined ? (
+        ) : props?.identityFrontImg &&
+          props?.identityFrontImg !== imgUndefined ? (
           <View
             style={{
               borderRadius: 10,
