@@ -23,6 +23,7 @@ import DatePickerField from '../../../../components/collaborator/Profile/UserPro
 import { ScreenWidth } from '../../../../constants/Demesions';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ErrorText from './ErrorText';
+import { imageNotFoundUri } from '../../../../utils/images';
 
 const UserProfileSignup = () => {
   const { state, handlers, props } = useUserProfileSignup();
@@ -244,8 +245,12 @@ const UserProfileSignup = () => {
               >
                 <View>
                   <Image
-                    style={{ height: 100, width: 150, resizeMode: 'cover' }}
-                    source={require('../../../../assets/Images/ic_id_card.png')}
+                    style={{ height: 100, width: 150, resizeMode: 'cover', borderRadius: 10 }}
+                    source={{
+                      uri: state.userInfo?.accountInformation?.identityFrontImg
+                        ? state.userInfo?.accountInformation?.identityFrontImg
+                        : imageNotFoundUri,
+                    }}
                   />
                 </View>
                 <View style={styles.containerTextImage}>
@@ -262,8 +267,12 @@ const UserProfileSignup = () => {
               <TouchableOpacity style={{ alignItems: 'center' }}>
                 <View>
                   <Image
-                    style={{ height: 100, width: 150, resizeMode: 'cover' }}
-                    source={require('../../../../assets/Images/ic_id_card.png')}
+                    style={{ height: 100, width: 150, resizeMode: 'cover', borderRadius: 10 }}
+                    source={{
+                      uri: state.userInfo?.accountInformation?.identityBackImg
+                        ? state.userInfo?.accountInformation?.identityBackImg
+                        : imageNotFoundUri,
+                    }}
                   />
                 </View>
                 <View style={styles.containerTextImage}>
