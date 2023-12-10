@@ -24,6 +24,7 @@ import {
 } from '@react-navigation/native';
 import ViewApplication from '../../../../screens/collaborator/Application/ViewApplication/ViewApplication';
 import ViewContractDocument from '../../../../screens/collaborator/Contract/ViewContractDocument';
+import Banking from '../../../../screens/collaborator/Banking/Banking';
 
 const Stack =
   createNativeStackNavigator<HomeCollaboratorStackNavigatorParamList>();
@@ -62,6 +63,13 @@ const AccountStackNavigator = () => {
       <Stack.Screen
         name={ROUTES.USER_PROFILE}
         component={UserProfile}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name={ROUTES.BANKING}
+        component={Banking}
         options={{
           headerShown: false,
         }}

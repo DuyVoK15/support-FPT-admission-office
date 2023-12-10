@@ -58,6 +58,7 @@ export type HomeCollaboratorStackNavigatorParamList = {
   SCAN_FRONT_IMAGE: undefined;
   SCAN_BACK_IMAGE: undefined;
   ACCOUNT_INFORMATION_CREATION: undefined;
+  BANKING: undefined;
 };
 
 export type HomeCollaboratorScreenNavigationProp = NativeStackScreenProps<
@@ -142,6 +143,7 @@ export type HomeAdmissionStackNavigatorParamList = {
   POSITION_REGISTRATION: undefined;
   SECURITY: undefined;
   USER_PROFILE_DISABLE: undefined;
+  BANKING: undefined;
 };
 
 export type HomeAdmissionScreenNavigationProp = NativeStackScreenProps<

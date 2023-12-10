@@ -134,6 +134,27 @@ const Account = () => {
             </TouchableOpacity>
 
             <TouchableOpacity
+              onPress={() => navigation.navigate(ROUTES.BANKING)}
+              style={styles.containerRow}
+            >
+              <View style={styles.column1}>
+                <AntDesign
+                  name="bank"
+                  size={24}
+                  color={COLORS.orange_icon}
+                />
+              </View>
+              <View style={styles.column2}>
+                <View>
+                  <Text style={styles.text}>My Banking</Text>
+                </View>
+              </View>
+              <View style={styles.column3}>
+                <Entypo name="chevron-small-right" size={24} color="black" />
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
               onPress={() => navigation.navigate(ROUTES.CERTIFICATE_HISTORY)}
               style={styles.containerRow}
             >

@@ -14,15 +14,7 @@ const CertificateHistory = () => {
     <View style={{ flex: 1 }}>
       <Header>
         <Backward
-          onPress={() => navigation.dispatch(
-            CommonActions.navigate({
-              name: ROUTES.ACCOUNT_STACK_NAVIGATOR,
-              params: {
-                screen: ROUTES.ACCOUNT,
-                
-              },
-            })
-          )}
+          onPress={() => navigation.goBack()}
           titleBackward="Cerificate History"
         />
       </Header>

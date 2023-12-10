@@ -126,7 +126,7 @@ const ScanIDRecognitionBack = () => {
       });
       const filename = imageUri.substring(imageUri.lastIndexOf('/') + 1);
       const storageRef = firebase.storage().ref();
-      const ref = storageRef.child('mobile/idCard' + filename);
+      const ref = storageRef.child('mobile/idCard' + '/' + filename);
       await ref.put(blob);
       ref
         .getDownloadURL()
