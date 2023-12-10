@@ -28,6 +28,7 @@ const ConfirmAlert = (props: ConfrimAlert) => {
       contentContainerStyle={{
         // height: ScreenWidth * 0.6,
         width: ScreenWidth * 0.8,
+        paddingBottom: 20
       }}
       show={props.show}
       showProgress={false}
@@ -60,6 +61,9 @@ const ConfirmAlert = (props: ConfrimAlert) => {
       confirmButtonColor={props.confirmButtonColor}
       onCancelPressed={props.onCancelPressed}
       onConfirmPressed={props.onConfirmPressed}
+      confirmButtonStyle={{paddingVertical: 12, paddingHorizontal: 18, marginLeft: 10}}
+      cancelButtonStyle={{paddingVertical: 12, paddingHorizontal: 18, marginRight: 10}}
+      
     />
   );
 };

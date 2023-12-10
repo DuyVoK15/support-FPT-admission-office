@@ -20,8 +20,8 @@ const useIndex = () => {
         Page: 1,
         PageSize: 10000,
         RegistrationStatus: [RegistrationStatus.CHECKOUT],
-        // Sort: 'CheckOutTime',
-        // Order: 'DESCENDING'
+        Sort: 'CreateAt',
+        Order: 'DESCENDING'
       })
     ).then((res) => {
       console.log(JSON.stringify(res, null, 2));

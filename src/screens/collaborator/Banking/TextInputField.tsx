@@ -30,7 +30,6 @@ const TextInputField: FC<TextInputFieldProps> = (Props) => {
           backgroundColor: '#FFF',
           fontSize: 15,
           fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
-          ...SHADOWS.SHADOW_03,
         }}
         contentStyle={{
           fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,

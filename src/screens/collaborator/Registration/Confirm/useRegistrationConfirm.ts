@@ -140,7 +140,7 @@ const useIndex = () => {
     ).then((res) => {
       console.log(JSON.stringify(res, null, 2));
       if (res?.meta?.requestStatus === 'fulfilled') {
-        showToastSuccess('Cancel successful!');
+        showToastSuccess('Send request cancel successful!');
       } else {
         const resRejected = res?.payload as ErrorStatus;
         showToastError(resRejected?.message);
