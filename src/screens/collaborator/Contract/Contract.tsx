@@ -164,37 +164,42 @@ const Contract = () => {
               <ContractStatus status={item?.status ? item?.status : 0} />
             </Text>
           </View>
-          <View
-            style={{
-              marginTop: 20,
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-            }}
-          >
-            <Button
-              onPress={() =>
-                handlers.showAlertHandler(props.TYPE_BUTTON_ENUM.APPROVE, item)
-              }
-              style={{ borderRadius: 10, backgroundColor: 'green' }}
-              contentStyle={{}}
-              mode="contained"
+          {item?.status === CONTRACT_STATUS_ENUM.PENDING && (
+            <View
+              style={{
+                marginTop: 20,
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+              }}
             >
-              <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_500Medium }}>
-                Approve
-              </Text>
-            </Button>
-            <Button
-              onPress={() =>
-                handlers.showAlertHandler(props.TYPE_BUTTON_ENUM.REJECT, item)
-              }
-              style={{ borderRadius: 10, backgroundColor: 'red' }}
-              mode="contained"
-            >
-              <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_500Medium }}>
-                Reject
-              </Text>
-            </Button>
-          </View>
+              <Button
+                onPress={() =>
+                  handlers.showAlertHandler(
+                    props.TYPE_BUTTON_ENUM.APPROVE,
+                    item
+                  )
+                }
+                style={{ borderRadius: 10, backgroundColor: 'green' }}
+                contentStyle={{}}
+                mode="contained"
+              >
+                <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_500Medium }}>
+                  Approve
+                </Text>
+              </Button>
+              <Button
+                onPress={() =>
+                  handlers.showAlertHandler(props.TYPE_BUTTON_ENUM.REJECT, item)
+                }
+                style={{ borderRadius: 10, backgroundColor: 'red' }}
+                mode="contained"
+              >
+                <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_500Medium }}>
+                  Reject
+                </Text>
+              </Button>
+            </View>
+          )}
         </View>
       </View>
     );
@@ -218,6 +223,7 @@ const Contract = () => {
               onRefresh={handlers.onRefresh}
             />
           }
+          keyExtractor={(item, index) => index.toString()}
         />
         <ConfirmAlert
           show={state.showAlert}

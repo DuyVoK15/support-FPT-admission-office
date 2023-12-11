@@ -89,6 +89,7 @@ const useIndex = () => {
           console.log(JSON.stringify(res, null, 2));
           if (res?.meta?.requestStatus === 'fulfilled') {
             showToastSuccess('Update contract successful!');
+            fetchContract();
           } else {
             const resData = res?.payload as ErrorStatus;
             showToastError(resData?.message);

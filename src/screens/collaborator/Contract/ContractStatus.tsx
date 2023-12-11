@@ -22,7 +22,7 @@ const ContractStatus: FC<ContractStatusProps> = (Props) => {
             case CONTRACT_STATUS_ENUM.COMPLETED:
               return 'blue';
             default:
-              return 'Pending'; // Set your default border color here
+              return 'black'; // Set your default border color here
           }
         })(),
         letterSpacing: 0.5
@@ -39,7 +39,7 @@ const ContractStatus: FC<ContractStatusProps> = (Props) => {
           case CONTRACT_STATUS_ENUM.COMPLETED:
             return 'COMPLETED';
           default:
-            return 'Pending'; // Set your default border color here
+            return 'No status'; // Set your default border color here
         }
       })()}
     </Text>

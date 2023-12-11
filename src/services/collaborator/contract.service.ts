@@ -16,7 +16,7 @@ export const contractService = {
   updateContract: (
     params: UpdateContractParam
   ): Promise<AxiosResponse<ViewContractResponse>> => {
-    const url = '/api/contract/confirmContract';
-    return axiosClient.put(url, { params });
+    const url = `/api/contract/confirmContract?accountContractId=${params?.accountContractId}&status=${params?.status}`;
+    return axiosClient.put(url);
   },
 };
