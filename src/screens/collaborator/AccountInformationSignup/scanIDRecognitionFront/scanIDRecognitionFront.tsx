@@ -33,14 +33,25 @@ import { firebase } from '../../../../config/firebase';
 import { ROUTES } from '../../../../constants/Routes';
 import { COLORS } from '../../../../constants/Colors';
 import ErrorStatus from '../../../../dtos/collaborator/response/errorStatus.dto';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const ScanIDRecognitionFront = () => {
   const [hasCameraPermission, setHasCameraPermission] = useState<
     boolean | null
   >(null);
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
-
   const dispatch = useAppDispatch();
+  const { showToastSuccess, showToastError } = useCustomToast();
+
+  const informationFront = useAppSelector(
+    (state) => state.collan_information.informationFront
+  );
+  const loadingScan = useAppSelector(
+    (state) => state.collan_information.loading
+  );
+  const loadingUpdate = useAppSelector(
+    (state) => state.collab_account.loading_update
+  );
   const fetchUserInfo = async () => {
     try {
       await dispatch(collab_getUserInfo()).then((res) => {
@@ -89,12 +100,9 @@ const ScanIDRecognitionFront = () => {
     }
   };
 
-  const { showToastSuccess, showToastError } = useCustomToast();
-  const informationFront = useAppSelector(
-    (state) => state.collan_information.informationFront
-  );
-
+  const [loadingUpload, setLoadingUpload] = useState<boolean>(false);
   const uploadMedia = async (imageUri: string) => {
+    setLoadingUpload(true);
     try {
       const { uri } = await FileSystem.getInfoAsync(imageUri);
       const blob = await new Promise<Blob>((resolve, reject) => {
@@ -119,7 +127,6 @@ const ScanIDRecognitionFront = () => {
         .then(async (url) => {
           // url chứa đường dẫn tới hình ảnh
           console.log('URL của hình ảnh:', url);
-
           await dispatch(
             collab_updateFrontImage({ identityFrontImg: url })
           ).then(async (res) => {
@@ -132,14 +139,19 @@ const ScanIDRecognitionFront = () => {
             }
           });
           // Alert.alert('Photo uploaded!');
+          setLoadingUpload(false);
         })
+
         .catch((error) => {
           // Xử lý lỗi nếu có
+          setLoadingUpload(false);
           console.log('Lỗi khi lấy URL hình ảnh:', error);
         });
     } catch (error) {
+      setLoadingUpload(false);
       console.log('Lỗi ở: ', error);
     }
+    setLoadingUpload(false);
   };
 
   const savePicture = async () => {
@@ -197,9 +209,11 @@ const ScanIDRecognitionFront = () => {
 
   return (
     <View style={styles.container}>
+      <Spinner visible={loadingScan || loadingUpdate || loadingUpload} />
       {!imageUri ? (
         <Camera
           style={styles.camera}
+          ratio="16:9"
           type={type}
           // flashMode={flash}
           ref={cameraRef}

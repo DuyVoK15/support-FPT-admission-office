@@ -20,6 +20,7 @@ interface AccountState {
   verifyResponse: ViewVerifyAccountResponse | null;
   loading: boolean;
   loading_signup_accinfo: boolean;
+  loading_update: boolean;
   error: GetUserInfoDto | null;
   statusCode: number | null;
 }
@@ -31,6 +32,7 @@ const initialState: AccountState = {
   verifyResponse: null,
   loading: false,
   loading_signup_accinfo: false,
+  loading_update: false,
   error: null,
   statusCode: null,
 };
@@ -315,55 +317,55 @@ export const accountSlice = createSlice({
       })
 
       .addCase(collab_updateFrontImage.pending, (state) => {
-        state.loading = true;
+        state.loading_update = true;
         state.error = null;
       })
       .addCase(collab_updateFrontImage.fulfilled, (state, action) => {
         state.userInfo = action.payload;
-        state.loading = false;
+        state.loading_update = false;
       })
       .addCase(collab_updateFrontImage.rejected, (state, action) => {
         state.error = action.payload as GetUserInfoDto;
-        state.loading = false;
+        state.loading_update = false;
       })
 
       .addCase(collab_updateBackImage.pending, (state) => {
-        state.loading = true;
+        state.loading_update = true;
         state.error = null;
       })
       .addCase(collab_updateBackImage.fulfilled, (state, action) => {
         state.userInfo = action.payload;
-        state.loading = false;
+        state.loading_update = false;
       })
       .addCase(collab_updateBackImage.rejected, (state, action) => {
         state.error = action.payload as GetUserInfoDto;
-        state.loading = false;
+        state.loading_update = false;
       })
 
       .addCase(collab_updateInformationFront.pending, (state) => {
-        state.loading = true;
+        state.loading_update = true;
         state.error = null;
       })
       .addCase(collab_updateInformationFront.fulfilled, (state, action) => {
         state.userInfo = action.payload;
-        state.loading = false;
+        state.loading_update = false;
       })
       .addCase(collab_updateInformationFront.rejected, (state, action) => {
         state.error = action.payload as GetUserInfoDto;
-        state.loading = false;
+        state.loading_update = false;
       })
 
       .addCase(collab_updateInformationBack.pending, (state) => {
-        state.loading = true;
+        state.loading_update = true;
         state.error = null;
       })
       .addCase(collab_updateInformationBack.fulfilled, (state, action) => {
         state.userInfo = action.payload;
-        state.loading = false;
+        state.loading_update = false;
       })
       .addCase(collab_updateInformationBack.rejected, (state, action) => {
         state.error = action.payload as GetUserInfoDto;
-        state.loading = false;
+        state.loading_update = false;
       })
 
       .addCase(collab_loadStatusCode.pending, (state) => {

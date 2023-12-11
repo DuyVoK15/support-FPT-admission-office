@@ -69,7 +69,7 @@ export const contractSlice = createSlice({
       })
       .addCase(updateContract.fulfilled, (state, action) => {
         state.loading = false;
-        state.contract = action.payload;
+        // state.contract = action.payload;
       })
       .addCase(updateContract.rejected, (state, action) => {
         state.error = String(action.payload);
