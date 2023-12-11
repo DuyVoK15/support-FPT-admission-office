@@ -63,26 +63,26 @@ const usePositionRegistration = () => {
   };
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [confirmInfo, setConfirmInfo] = useState<ConfirmInfo | null>(null);
-
+  const [Item, setItem] = useState<DataPosition | null>(null);
   const showAlertHandler = (
-    action?: number | null,
-    item?: DataPost | null,
-    position?: DataPosition | null
+    action: number | null,
+    item: DataPosition | null
   ) => {
     switch (action) {
       case TYPE_BUTTON_ENUM.REGISTER:
         setConfirmInfo({
           title: 'CONFIRMATION',
           titleType: TITLE_ENUM.WARNING,
-          message: `Are you sure you want to apply for "${position?.positionName}" position?`,
+          message: `Are you sure you want to apply for "${item?.positionName}" position?`,
           typeButton: TYPE_BUTTON_ENUM.REGISTER,
         });
+
         break;
       case TYPE_BUTTON_ENUM.NAVIGATE_TO_CERTIFICATE:
         setConfirmInfo({
           title: 'CONFIRMATION',
           titleType: TITLE_ENUM.WARNING,
-          message: `You need Certificate "${position?.certificateName}" for this position? View Training NOW?`,
+          message: `You need Certificate "${item?.certificateName}" for this position? View Training NOW?`,
           typeButton: TYPE_BUTTON_ENUM.NAVIGATE_TO_CERTIFICATE,
         });
         break;
@@ -101,6 +101,7 @@ const usePositionRegistration = () => {
           typeButton: 0,
         });
     }
+    setItem(item);
     setShowAlert(true);
   };
 
@@ -124,7 +125,7 @@ const usePositionRegistration = () => {
   const [showModal, setShowModal] = useState(false);
 
   const handleSubmit = async (
-    position?: DataPosition | null,
+    position: DataPosition | null,
     schoolBusOption?: boolean
   ) => {
     try {
@@ -140,7 +141,6 @@ const usePositionRegistration = () => {
             showToastSuccess('Register successfully!');
             showAlertHandler(
               TYPE_BUTTON_ENUM.NAVIGATE_TO_REGISTRATION,
-              null,
               position
             );
           } else {
@@ -150,7 +150,6 @@ const usePositionRegistration = () => {
               case 4012:
                 showAlertHandler(
                   TYPE_BUTTON_ENUM.NAVIGATE_TO_CERTIFICATE,
-                  null,
                   position
                 );
                 break;
@@ -189,12 +188,20 @@ const usePositionRegistration = () => {
     showAlertHandler,
     hideAlertHandler,
     handleSetPositionId,
-    handleSubmit,selectedBusOption,
-    onRefresh
+    handleSubmit,
+    selectedBusOption,
+    onRefresh,
   };
   const props = { navigation, width, TYPE_BUTTON_ENUM };
-  const state = { showAlert, confirmInfo, positionId,isSelectedBusOption,refreshing };
-  const setState = { setPosisitionId,selectedBusOption };
+  const state = {
+    showAlert,
+    confirmInfo,
+    positionId,
+    isSelectedBusOption,
+    refreshing,
+    Item,
+  };
+  const setState = { setPosisitionId, selectedBusOption };
   const stateRedux = { item, loading };
   return {
     handlers,

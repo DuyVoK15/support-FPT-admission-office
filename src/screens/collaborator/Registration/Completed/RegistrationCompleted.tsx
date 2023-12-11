@@ -26,7 +26,7 @@ import { FlashList } from '@shopify/flash-list';
 import DetailButton from '../../../../components/shared/Button/DetailButton';
 import DataViewPostRegistration from '../../../../models/collaborator/postRegistration.model';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import FilterRegistationButton from '../../../../components/shared/Button/FilterRegistationButton';
 import SortRegistrationButton from '../../../../components/shared/Button/SortRegistrationButton';
 import { SHADOWS } from '../../../../constants/Shadows';
@@ -45,7 +45,8 @@ const Registration_Completed = () => {
     return (
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate(ROUTES.REGISTRATION_DETAIL, { item })}
+          navigation.navigate(ROUTES.REGISTRATION_DETAIL, { item })
+        }
         style={styles.containerItem}
       >
         <View style={styles.containerRow}>
@@ -167,9 +168,24 @@ const Registration_Completed = () => {
           >
             <DetailButton
               onPress={() =>
-                navigation.navigate('REGISTRATION_PENDING_DETAIL', {
-                  item,
-                })
+                navigation.dispatch(
+                  CommonActions.reset({
+                    index: 0,
+                    routes: [
+                      {
+                        name: ROUTES.ACCOUNT_STACK_NAVIGATOR,
+                        state: {
+                          routes: [
+                            { name: ROUTES.ACCOUNT },
+                            {
+                              name: ROUTES.INCOME,
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  })
+                )
               }
             />
           </View>

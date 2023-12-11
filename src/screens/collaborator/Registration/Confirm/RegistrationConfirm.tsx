@@ -68,7 +68,7 @@ const Registration_Confirm = () => {
         setConfirmInfo({
           title: 'CONFIRMATION',
           titleType: TITLE_ENUM.WARNING,
-          message: `Are you sure you want to CANCEL ${item?.postPosition?.positionName} position?`,
+          message: `Are you sure you want to CANCEL "${item?.postPosition?.positionName}" position?`,
           typeButton: TYPE_BUTTON_ENUM.CANCEL,
         });
 
@@ -77,7 +77,7 @@ const Registration_Confirm = () => {
         setConfirmInfo({
           title: 'CONFIRMATION',
           titleType: TITLE_ENUM.WARNING,
-          message: `Do you want to CHECKIN ${item?.postPosition?.positionName} position?`,
+          message: `Do you want to CHECKIN "${item?.postPosition?.positionName}" position?`,
           typeButton: TYPE_BUTTON_ENUM.CHECKIN,
         });
 
@@ -86,7 +86,7 @@ const Registration_Confirm = () => {
         setConfirmInfo({
           title: 'CONFIRMATION',
           titleType: TITLE_ENUM.WARNING,
-          message: `Do you want to CHECKOUT ${item?.postPosition?.positionName} position?`,
+          message: `Do you want to CHECKOUT "${item?.postPosition?.positionName}" position?`,
           typeButton: TYPE_BUTTON_ENUM.CHECKOUT,
         });
 
@@ -113,7 +113,8 @@ const Registration_Confirm = () => {
     return (
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate(ROUTES.REGISTRATION_DETAIL, { item })}
+          navigation.navigate(ROUTES.REGISTRATION_DETAIL, { item })
+        }
         key={item?.registrationCode}
         style={styles.containerItem}
       >
@@ -309,34 +310,6 @@ const Registration_Confirm = () => {
             dashColor={COLORS.super_light_grey}
           />
 
-          <ConfirmAlert
-            show={showAlert}
-            title="CONFIRMATION"
-            message={confirmInfo?.message}
-            confirmText="Yes"
-            cancelText="No"
-            confirmButtonColor={COLORS.orange_button}
-            onConfirmPressed={() => {
-              switch (confirmInfo?.typeButton) {
-                case TYPE_BUTTON_ENUM.CANCEL:
-                  handlers.cancelRegistrationById(Item?.id ?? null);
-                  console.log(Item?.id);
-                  break;
-                case TYPE_BUTTON_ENUM.CHECKIN:
-                  handlers.checkInPostRegistation(Item?.id ?? null);
-                  console.log(Item?.id);
-                  break;
-                case TYPE_BUTTON_ENUM.CHECKOUT:
-                  handlers.checkOutPostRegistation(Item?.id ?? null);
-                  console.log(Item?.id);
-                  break;
-                default:
-                  break;
-              }
-              hideAlertHandler();
-            }}
-            onCancelPressed={hideAlertHandler}
-          />
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <View style={{ flex: 1 }}>
               <Text
@@ -410,6 +383,7 @@ const Registration_Confirm = () => {
             {item?.postPositionsUnregistereds?.length > 0 && (
               <View>
                 <TouchableOpacity
+                  style={{paddingVertical: 15, paddingLeft: 10}}
                   onPress={() =>
                     navigation.navigate('REQUEST_CHANGE_POSITION_CONFIRM', {
                       id: item?.id,
@@ -418,7 +392,7 @@ const Registration_Confirm = () => {
                 >
                   <Text
                     style={{
-                      fontFamily: FONTS_FAMILY?.Ubuntu_400Regular_Italic,
+                      fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
                       fontSize: 13,
                       textDecorationLine: 'underline',
                     }}
@@ -466,6 +440,34 @@ const Registration_Confirm = () => {
             />
           }
           ListEmptyComponent={renderListEmptyComponent}
+        />
+        <ConfirmAlert
+          show={showAlert}
+          title="CONFIRMATION"
+          message={confirmInfo?.message}
+          confirmText="Yes"
+          cancelText="No"
+          confirmButtonColor={COLORS.orange_button}
+          onConfirmPressed={() => {
+            switch (confirmInfo?.typeButton) {
+              case TYPE_BUTTON_ENUM.CANCEL:
+                handlers.cancelRegistrationById(Item?.id ?? null);
+                console.log(Item?.id);
+                break;
+              case TYPE_BUTTON_ENUM.CHECKIN:
+                handlers.checkInPostRegistation(Item?.id ?? null);
+                console.log(Item?.id);
+                break;
+              case TYPE_BUTTON_ENUM.CHECKOUT:
+                handlers.checkOutPostRegistation(Item?.id ?? null);
+                console.log(Item?.id);
+                break;
+              default:
+                break;
+            }
+            hideAlertHandler();
+          }}
+          onCancelPressed={hideAlertHandler}
         />
       </View>
     </View>

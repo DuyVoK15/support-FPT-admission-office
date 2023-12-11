@@ -1,6 +1,7 @@
 import {
   Alert,
   Button,
+  Image,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -50,6 +51,7 @@ import { DataPosition } from '../../../models/collaborator/dataPosition.model';
 import { ROUTES } from '../../../constants/Routes';
 import { CommonActions } from '@react-navigation/native';
 import usePositionRegistration from './usePositionRegistration';
+import { ic_certificateUri, imageNotFoundUri } from '../../../utils/images';
 
 const PositionRegistration = () => {
   const { state, setState, stateRedux, handlers, props } =
@@ -90,6 +92,17 @@ const PositionRegistration = () => {
             stateRedux.item?.data?.postPositions.map((position, index) => {
               return (
                 <View key={index} style={styles.containerEveryPosition}>
+                  { position?.certificateName && <View style={{ position: 'absolute', top: -20, left: -15 }}>
+                    <Image
+                      source={{
+                        uri: ic_certificateUri
+                          ? ic_certificateUri
+                          : imageNotFoundUri,
+                      }}
+                      style={{ width: 45, height: 45, resizeMode: 'cover' }}
+                    />
+                  </View>}
+                 
                   <View style={styles.everyPosition}>
                     <TouchableOpacity
                       onPress={() => handlers.handleSetPositionId(position?.id)}
@@ -309,7 +322,6 @@ const PositionRegistration = () => {
                             onPress={() =>
                               handlers.showAlertHandler(
                                 props.TYPE_BUTTON_ENUM.REGISTER,
-                                stateRedux.item?.data,
                                 position
                               )
                             }
@@ -334,7 +346,7 @@ const PositionRegistration = () => {
                               switch (state.confirmInfo?.typeButton) {
                                 case props.TYPE_BUTTON_ENUM.REGISTER:
                                   handlers.handleSubmit(
-                                    position,
+                                    state.Item,
                                     state.isSelectedBusOption[index]
                                   );
                                   break;
@@ -455,7 +467,7 @@ const styles = StyleSheet.create({
     overflow: 'scroll',
   },
   containerEveryPosition: {
-    marginTop: 10,
+    marginTop: 20,
     backgroundColor: '#fff',
     borderRadius: 10,
     ...SHADOWS.SHADOW_03,

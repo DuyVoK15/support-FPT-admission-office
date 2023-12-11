@@ -1,4 +1,5 @@
 import {
+  Image,
   RefreshControl,
   StyleSheet,
   Text,
@@ -39,6 +40,10 @@ import { async } from '@firebase/util';
 import { useAppSelector } from '../../../../../app/hooks';
 import RegistrationEmpty from '../../../../../components/shared/Empty/RegistrationEmpty';
 import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
+import {
+  ic_certificateUri,
+  imageNotFoundUri,
+} from '../../../../../utils/images';
 
 interface RequestChangePositionProps {
   onRefresh: () => void;
@@ -48,15 +53,6 @@ const RequestChangePositionConfirm = () => {
   const route = useRoute();
   const { id } = route?.params as { id: number };
   // console.log("d", id);
-
-  const [showAlert, setShowAlert] = useState<boolean>(false);
-  const showAlertHandler = () => {
-    setShowAlert(true);
-  };
-
-  const hideAlertHandler = () => {
-    setShowAlert(false);
-  };
 
   const list = useAppSelector(
     (state) => state.collab_postRegistration.postRegistrationConfirmedById
@@ -154,7 +150,46 @@ const RequestChangePositionConfirm = () => {
   };
 
   const { showToastError, showToastSuccess } = useCustomToast();
+  enum TYPE_BUTTON_ENUM {
+    SEND_REQUEST = 1,
+  }
+  type ConfirmInfo = {
+    title: string | null;
+    message: string | null;
+    typeButton: number | null;
+  };
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [confirmInfo, setConfirmInfo] = useState<ConfirmInfo | null>(null);
+  const [Item, setItem] = useState<DataPosition | null>(null);
+  const [Index, setIndex] = useState<number | null>(null);
+  const showAlertHandler = (
+    action: number | null,
+    item: DataPosition | null,
+    index: number
+  ) => {
+    switch (action) {
+      case TYPE_BUTTON_ENUM.SEND_REQUEST:
+        setConfirmInfo({
+          title: 'CONFIRMATION',
+          message: `Are you sure you want to SEND_REQUEST "${item?.positionName}" position`,
+          typeButton: TYPE_BUTTON_ENUM.SEND_REQUEST,
+        });
+        break;
+      default:
+        setConfirmInfo({
+          title: '',
+          message: '',
+          typeButton: 0,
+        });
+    }
+    setItem(item);
+    setIndex(index);
+    setShowAlert(true);
+  };
 
+  const hideAlertHandler = () => {
+    setShowAlert(false);
+  };
   return (
     <View style={styles.container}>
       <Header>
@@ -265,6 +300,24 @@ const RequestChangePositionConfirm = () => {
                 (position, index) => {
                   return (
                     <View key={index} style={styles.containerEveryPosition}>
+                      {position?.certificateName && (
+                        <View
+                          style={{ position: 'absolute', top: -20, left: -15 }}
+                        >
+                          <Image
+                            source={{
+                              uri: ic_certificateUri
+                                ? ic_certificateUri
+                                : imageNotFoundUri,
+                            }}
+                            style={{
+                              width: 45,
+                              height: 45,
+                              resizeMode: 'cover',
+                            }}
+                          />
+                        </View>
+                      )}
                       <View style={styles.everyPosition}>
                         <TouchableOpacity
                           onPress={() => handleSetPositionId(position?.id)}
@@ -446,6 +499,23 @@ const RequestChangePositionConfirm = () => {
                                   </View>
                                 </View>
                               </View>
+                              <View style={{ marginTop: 15 }}>
+                                <Text
+                                  style={[
+                                    styles.paragraph,
+                                    {
+                                      fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
+                                    },
+                                  ]}
+                                >
+                                  Certificate Need?: {''}
+                                  <Text style={{ color: COLORS?.orange_icon }}>
+                                    {position?.certificateName
+                                      ? position?.certificateName
+                                      : 'None'}
+                                  </Text>
+                                </Text>
+                              </View>
                             </View>
 
                             <DashedLine
@@ -477,7 +547,13 @@ const RequestChangePositionConfirm = () => {
                             </View>
                             <View>
                               <SubmitButton
-                                onPress={showAlertHandler}
+                                onPress={() =>
+                                  showAlertHandler(
+                                    TYPE_BUTTON_ENUM.SEND_REQUEST,
+                                    position,
+                                    index
+                                  )
+                                }
                                 style={{
                                   marginHorizontal: 40,
                                   height: 40,
@@ -485,23 +561,6 @@ const RequestChangePositionConfirm = () => {
                                 }}
                                 textStyle={{ fontSize: 16 }}
                                 titleButton="SEND REQUEST"
-                              />
-                              <ConfirmAlert
-                                show={showAlert}
-                                title="CONFIRMATION"
-                                message={`Are you sure want to Change To "${position?.positionName}" position?`}
-                                confirmText="Yes"
-                                cancelText="No"
-                                confirmButtonColor={COLORS.orange_button}
-                                onConfirmPressed={() =>
-                                  handleChangePosition(
-                                    list?.data?.[0].id,
-                                    position?.id,
-                                    isSelectedBusOption[index],
-                                    ''
-                                  )
-                                }
-                                onCancelPressed={hideAlertHandler}
                               />
                             </View>
                           </View>
@@ -544,6 +603,31 @@ const RequestChangePositionConfirm = () => {
             </View> */}
         </ScrollView>
       </View>
+      <ConfirmAlert
+        show={showAlert}
+        title={confirmInfo?.title}
+        message={confirmInfo?.message}
+        confirmText="Yes"
+        cancelText="No"
+        confirmButtonColor={COLORS.orange_button}
+        onConfirmPressed={() => {
+          switch (confirmInfo?.typeButton) {
+            case TYPE_BUTTON_ENUM.SEND_REQUEST:
+              {
+                handleChangePosition(
+                  id,
+                  Item?.id ?? null,
+                  isSelectedBusOption[Index ?? -1],
+                  ''
+                );
+              }
+              break;
+            default:
+          }
+          hideAlertHandler();
+        }}
+        onCancelPressed={hideAlertHandler}
+      />
     </View>
   );
 };
@@ -575,7 +659,7 @@ const styles = StyleSheet.create({
     overflow: 'scroll',
   },
   containerEveryPosition: {
-    marginTop: 10,
+    marginTop: 20,
     backgroundColor: '#fff',
     borderRadius: 10,
     ...SHADOWS.SHADOW_03,

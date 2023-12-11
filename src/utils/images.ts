@@ -14,3 +14,8 @@ const imageFPT = Asset.fromModule(
   require('../assets/Images/ic_fpt_university_hcm.jpg')
 );
 export const imageFPTUri = imageFPT?.uri;
+
+const ic_certificate = Asset.fromModule(
+  require('../assets/Images/ic_certificate.png')
+);
+export const ic_certificateUri = ic_certificate?.uri;

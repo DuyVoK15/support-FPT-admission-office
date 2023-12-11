@@ -41,9 +41,7 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
 
   const { handlers, state, stateRedux } = useRPennding();
   enum TYPE_BUTTON_ENUM {
-    REGISTER = 1,
-    CANCEL = 2,
-    CHECKIN = 3,
+    CANCEL = 1,
   }
   type ConfirmInfo = {
     title: string | null;
@@ -53,30 +51,17 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [confirmInfo, setConfirmInfo] = useState<ConfirmInfo | null>(null);
   const [Item, setItem] = useState<DataViewPostRegistration | null>(null);
+  
   const showAlertHandler = (
     action: number | null,
     item: DataViewPostRegistration | null
   ) => {
     switch (action) {
-      case TYPE_BUTTON_ENUM.REGISTER:
-        setConfirmInfo({
-          title: 'CONFIRMATION',
-          message: `Are you sure you want to apply for this position?`,
-          typeButton: TYPE_BUTTON_ENUM.REGISTER,
-        });
-        break;
       case TYPE_BUTTON_ENUM.CANCEL:
         setConfirmInfo({
           title: 'CONFIRMATION',
           message: `Are you sure you want to CANCEL "${item?.postPosition?.positionName}" position`,
           typeButton: TYPE_BUTTON_ENUM.CANCEL,
-        });
-        break;
-      case TYPE_BUTTON_ENUM.CHECKIN:
-        setConfirmInfo({
-          title: 'CONFIRMATION',
-          message: `Do you want to CHECKIN "${item?.postPosition?.positionName}" position`,
-          typeButton: TYPE_BUTTON_ENUM.CHECKIN,
         });
         break;
       default:
@@ -229,28 +214,13 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
               onPress={() => showAlertHandler(TYPE_BUTTON_ENUM.CANCEL, item)}
             />
           </View>
-          <ConfirmAlert
-            show={showAlert}
-            title="CONFIRMATION"
-            message={confirmInfo?.message}
-            confirmText="Yes"
-            cancelText="No"
-            confirmButtonColor={COLORS.orange_button}
-            onConfirmPressed={() => {
-              switch (confirmInfo?.typeButton) {
-                case TYPE_BUTTON_ENUM.CANCEL:
-                  handlers.cancelRegistrationById(Item?.id ?? null);
-                  console.log(Item?.id);
-                  break;
 
-                default:
-                  console.log('Type Button Null');
-              }
-              hideAlertHandler();
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
             }}
-            onCancelPressed={hideAlertHandler}
-          />
-          <View style={{ flexDirection: 'row', marginTop: 15 }}>
+          >
             <View style={{ flex: 1 }}>
               <Text
                 style={{
@@ -277,6 +247,7 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
             {item?.postPositionsUnregistereds?.length > 0 && (
               <View>
                 <TouchableOpacity
+                  style={{ paddingVertical: 15, paddingLeft: 10 }}
                   onPress={() =>
                     navigation.navigate('REQUEST_CHANGE_POSITION_PENDING', {
                       id: item?.id,
@@ -285,7 +256,7 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
                 >
                   <Text
                     style={{
-                      fontFamily: FONTS_FAMILY?.Ubuntu_400Regular_Italic,
+                      fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
                       fontSize: 13,
                       textDecorationLine: 'underline',
                     }}
@@ -335,6 +306,27 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
           }
           ListEmptyComponent={renderListEmptyComponent}
         />
+        <ConfirmAlert
+          show={showAlert}
+          title="CONFIRMATION"
+          message={confirmInfo?.message}
+          confirmText="Yes"
+          cancelText="No"
+          confirmButtonColor={COLORS.orange_button}
+          onConfirmPressed={() => {
+            switch (confirmInfo?.typeButton) {
+              case TYPE_BUTTON_ENUM.CANCEL:
+                handlers.cancelRegistrationById(Item?.id ?? null);
+                console.log(Item?.id);
+                break;
+
+              default:
+                console.log('Type Button Null');
+            }
+            hideAlertHandler();
+          }}
+          onCancelPressed={hideAlertHandler}
+        />
       </View>
     </View>
   );
@@ -356,6 +348,7 @@ const styles = StyleSheet.create({
   },
   containerRow: {
     margin: 15,
+    marginBottom: 0
   },
   firstRow: { flexDirection: 'row', alignItems: 'center' },
   containerImage: {

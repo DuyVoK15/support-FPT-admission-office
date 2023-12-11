@@ -13,32 +13,22 @@ const DetailButton: FC<DetailButtonProps> = (props) => {
       {...otherProps}
       style={{
         flexDirection: 'row',
-        paddingVertical: 10,
-        width: 110,
+        paddingVertical: 14,
+        paddingHorizontal: 16,
         alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 15,
+        justifyContent: 'space-around',
+        borderRadius: 10,
         backgroundColor: COLORS?.orange_button,
       }}
     >
-      <View style={{ flex: 1, marginLeft: 15 }}>
-        <Text
-          style={{
-            fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
-            fontSize: 15,
-          }}
-        >
-          Details
-        </Text>
-      </View>
-
-      <View style={{ flex: 0, marginRight: 15 }}>
-        <MaterialCommunityIcons
-          name="google-circles-extended"
-          size={20}
-          color="black"
-        />
-      </View>
+      <Text
+        style={{
+          fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+          fontSize: 15,
+        }}
+      >
+        View Report
+      </Text>
     </TouchableOpacity>
   );
 };
