@@ -12,6 +12,7 @@ import useCustomToast from '../../../../utils/toasts';
 import ErrorStatus from '../../../../dtos/collaborator/response/errorStatus.dto';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
 import DataViewPostRegistration from '../../../../models/collaborator/postRegistration.model';
+import { ROUTES } from '../../../../constants/Routes';
 
 export type dataFilterRegistration = {
   Sort: string | null;
@@ -61,7 +62,7 @@ const useIndex = () => {
       console.log(JSON.stringify(res, null, 2));
       if (res?.meta?.requestStatus === 'fulfilled') {
         showToastSuccess('Cancel successful!');
-        // navigation.navigate('REGISTRATION_CANCELLED');
+        navigation.navigate(ROUTES.REGISTRATION_CANCELLED);
       } else {
         const resRejected = res?.payload as ErrorStatus;
         showToastError(resRejected?.message);

@@ -1,4 +1,5 @@
 import {
+  Animated,
   Image,
   ImageBackground,
   Platform,
@@ -28,28 +29,57 @@ import { RegistrationStatus } from '../../../enums/collaborator/RegistrationStat
 import RegistrationEmpty from '../../../components/shared/Empty/RegistrationEmpty';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
+import { ROUTES } from '../../../constants/Routes';
 
 const RegistrationDetail = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const route = useRoute();
   const { item } = route?.params as { item: DataViewPostRegistration };
+
+  const pan = React.useRef(new Animated.ValueXY()).current;
+
   return (
     <View style={{ flex: 1, margin: 0, backgroundColor: '#FFF' }}>
       {item ? (
         <View style={styles.container}>
-          <ImageBackground
-            style={{ width: '100%', height: 250 }}
-            source={{
-              uri: item?.post?.postImg ? item?.post?.postImg : imageNotFoundUri,
-            }}
-          >
-            <CloseBlur
-              style={{ marginTop: Platform.OS === 'android' ? 20 : 50 }}
-              onPress={() => navigation.goBack()}
-            />
-          </ImageBackground>
           <View style={styles.containerRegistration}>
-            <ScrollView>
+            <ScrollView
+              scrollEventThrottle={1}
+              onScroll={Animated.event(
+                [{ nativeEvent: { contentOffset: { y: pan.y } } }],
+                {
+                  useNativeDriver: false,
+                }
+              )}
+            >
+              <Animated.Image
+                resizeMode="cover"
+                style={{
+                  width: '100%',
+                  height: 250,
+                  transform: [
+                    {
+                      translateY: pan.y.interpolate({
+                        inputRange: [-1000, 0],
+                        outputRange: [-100, 0],
+                        extrapolate: 'clamp',
+                      }),
+                    },
+                    {
+                      scale: pan.y.interpolate({
+                        inputRange: [-3000, 0],
+                        outputRange: [20, 1],
+                        extrapolate: 'clamp',
+                      }),
+                    },
+                  ],
+                }}
+                source={{
+                  uri: item?.post?.postImg
+                    ? item?.post?.postImg
+                    : imageNotFoundUri,
+                }}
+              />
               <View style={styles.containerMargin}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <View style={{ flex: 0 }}>
@@ -430,6 +460,10 @@ const RegistrationDetail = () => {
       ) : (
         <RegistrationEmpty />
       )}
+      <BackwardBlur
+        onPress={() => navigation.goBack()}
+        style={{ position: 'absolute', left: 0, top: 50 }}
+      />
     </View>
   );
 };

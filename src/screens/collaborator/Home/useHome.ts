@@ -41,7 +41,7 @@ const useHome = () => {
           longitude,
         });
         if (address && address.length > 0) {
-          setCityName(address[0].city);
+          setCityName(address[0].city + ', ' + address[0].country);
         }
       }
     })();
@@ -141,6 +141,28 @@ const useHome = () => {
     await fetchHomePostUpcomming();
     await fetchHomePostReOpen();
     await fetchCheckInPostRegistration();
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({ accuracy: 3 });
+      setLocation(location);
+
+      // Use reverse geocoding to get city name
+      if (location) {
+        const { latitude, longitude } = location.coords;
+        const address = await Location.reverseGeocodeAsync({
+          latitude,
+          longitude,
+        });
+        if (address && address.length > 0) {
+          setCityName(address[0].city + ', ' + address[0].country);
+        }
+      }
+    })();
     setTimeout(() => {
       setRefreshing(false);
     }, 0);
