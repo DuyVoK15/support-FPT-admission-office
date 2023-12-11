@@ -24,11 +24,11 @@ import {
 import { SHADOWS } from '../../../constants/Shadows';
 import { COLORS } from '../../../constants/Colors';
 import Animated from 'react-native-reanimated';
-import IncomeRegistration from './incomeRegistration/IncomeRegistration';
 import { ROUTES } from '../../../constants/Routes';
 import RegistrationEmpty from '../../../components/shared/Empty/RegistrationEmpty';
+import IncomeRegistration from './incomeRegistration/IncomeRegistration';
 
-const Wallet = () => {
+const InCome = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const { handlers, props, state, setState, stateRedux } = useIncome();
 
@@ -40,7 +40,7 @@ const Wallet = () => {
       <TouchableOpacity
         style={styles.walletBox}
         onPress={() =>
-          handlers.getRegistrationByReportId({ accountReportId: 2 })
+          navigation.navigate(ROUTES.INCOME_REGISTRATION, { id: item?.id })
         }
       >
         <View style={styles.walletContent}>
@@ -97,7 +97,7 @@ const Wallet = () => {
         />
       </Header>
 
-      <View style={styles.containerWallet}>
+      <View style={styles.containerInCome}>
         <View style={{ marginHorizontal: 15 }}>
           <Text
             style={{ fontFamily: FONTS_FAMILY?.Ubuntu_500Medium, fontSize: 22 }}
@@ -135,22 +135,17 @@ const Wallet = () => {
             }
             ListEmptyComponent={renderListEmptyComponent}
           />
-          <IncomeRegistration
-            isVisible={state.isVisible}
-            incomeRegistration={stateRedux.incomeRegistration}
-            onCloseButton={handlers.hideRegistration}
-          />
         </View>
       </View>
     </View>
   );
 };
 
-export default Wallet;
+export default InCome;
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  containerWallet: {
+  containerInCome: {
     flex: 1,
     marginTop: 10,
   },

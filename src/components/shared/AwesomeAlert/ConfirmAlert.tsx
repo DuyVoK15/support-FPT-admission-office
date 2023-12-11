@@ -61,9 +61,10 @@ const ConfirmAlert = (props: ConfrimAlert) => {
       confirmButtonColor={props.confirmButtonColor}
       onCancelPressed={props.onCancelPressed}
       onConfirmPressed={props.onConfirmPressed}
-      confirmButtonStyle={{paddingVertical: 12, paddingHorizontal: 18, marginLeft: 10}}
-      cancelButtonStyle={{paddingVertical: 12, paddingHorizontal: 18, marginRight: 10}}
-      
+      confirmButtonStyle={{paddingVertical: 12, paddingHorizontal: 16, marginLeft: 15}}
+      cancelButtonStyle={{paddingVertical: 12, paddingHorizontal: 16, marginRight: 15}}
+      cancelButtonTextStyle={{fontFamily: FONTS_FAMILY?.Ubuntu_500Medium, fontSize: 16}}
+      confirmButtonTextStyle={{fontFamily: FONTS_FAMILY?.Ubuntu_500Medium, fontSize: 16}}
     />
   );
 };

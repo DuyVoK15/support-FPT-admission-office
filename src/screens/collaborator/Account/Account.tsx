@@ -176,7 +176,7 @@ const Account = () => {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => navigation.navigate(ROUTES.WALLET)}
+              onPress={() => navigation.navigate(ROUTES.INCOME)}
               style={styles.containerRow}
             >
               <View style={styles.column1}>

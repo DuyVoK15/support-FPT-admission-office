@@ -4,7 +4,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AccountTab from '../MainTabs/AccountTab';
 import UserProfile from '../../../../screens/collaborator/Profile/UserProfile/UserProfile';
 import CertificateHistory from '../../../../screens/collaborator/Certificate';
-import Wallet from '../../../../screens/collaborator/Income/Income';
 import Verification from '../../../../screens/collaborator/Verification';
 import Notification from '../../../../screens/collaborator/Notification/AccountNotification/AccountNotification';
 import Security from '../../../../screens/collaborator/Security';
@@ -25,6 +24,8 @@ import {
 import ViewApplication from '../../../../screens/collaborator/Application/ViewApplication/ViewApplication';
 import ViewContractDocument from '../../../../screens/collaborator/Contract/ViewContractDocument';
 import Banking from '../../../../screens/collaborator/Banking/Banking';
+import InCome from '../../../../screens/collaborator/Income/Income';
+import IncomeRegistration from '../../../../screens/collaborator/Income/incomeRegistration/IncomeRegistration';
 
 const Stack =
   createNativeStackNavigator<HomeCollaboratorStackNavigatorParamList>();
@@ -82,8 +83,15 @@ const AccountStackNavigator = () => {
         }}
       />
       <Stack.Screen
-        name={ROUTES.WALLET}
-        component={Wallet}
+        name={ROUTES.INCOME}
+        component={InCome}
+        options={{
+          headerShown: false,
+        }}
+      />
+       <Stack.Screen
+        name={ROUTES.INCOME_REGISTRATION}
+        component={IncomeRegistration}
         options={{
           headerShown: false,
         }}

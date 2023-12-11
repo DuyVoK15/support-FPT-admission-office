@@ -44,7 +44,8 @@ export type HomeCollaboratorStackNavigatorParamList = {
   CERTIFICATE_ALL: undefined;
   CERTIFICATE_COMPLETED: undefined;
   CERTIFICATE_REJECTED: undefined;
-  WALLET: undefined;
+  INCOME: undefined;
+  INCOME_REGISTRATION: undefined;
   CONTRACT: undefined;
   CONTRACT_DOCUMENT: undefined;
   ACCOUNT_NOTIFICATION: undefined;
@@ -106,7 +107,8 @@ export type HomeCollaboratorScreenNavigationProp = NativeStackScreenProps<
   'CERTIFICATE_ALL',
   'CERTIFICATE_COMPLETED',
   'CERTIFICATE_REJECTED',
-  'WALLET',
+  'INCOME',
+  'INCOME_REGISTRATION',
   'CONTRACT',
   'CONTRACT_DOCUMENT',
   'ACCOUNT_NOTIFICATION',
