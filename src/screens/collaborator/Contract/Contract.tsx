@@ -25,6 +25,10 @@ import { DataContract } from '../../../models/collaborator/contract.model';
 import { formatToDate } from '../../../utils/formats';
 import { WebView } from 'react-native-webview';
 import { ROUTES } from '../../../constants/Routes';
+import ContractStatus from './ContractStatus';
+import { CONTRACT_STATUS_ENUM } from '../../../enums/collaborator/ContractStatus.';
+import { Button } from 'react-native-paper';
+import ConfirmAlert from '../../../components/shared/AwesomeAlert/ConfirmAlert';
 
 const Contract = () => {
   const { handlers, state, props, stateRedux } = useIndex();
@@ -148,6 +152,49 @@ const Contract = () => {
               </Text>
             </Text>
           </View>
+
+          <View style={{ marginTop: 10, alignItems: 'center' }}>
+            <Text
+              style={{
+                fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                fontSize: 18,
+              }}
+            >
+              Status: {''}
+              <ContractStatus status={item?.status ? item?.status : 0} />
+            </Text>
+          </View>
+          <View
+            style={{
+              marginTop: 20,
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+            }}
+          >
+            <Button
+              onPress={() =>
+                handlers.showAlertHandler(props.TYPE_BUTTON_ENUM.APPROVE, item)
+              }
+              style={{ borderRadius: 10, backgroundColor: 'green' }}
+              contentStyle={{}}
+              mode="contained"
+            >
+              <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_500Medium }}>
+                Approve
+              </Text>
+            </Button>
+            <Button
+              onPress={() =>
+                handlers.showAlertHandler(props.TYPE_BUTTON_ENUM.REJECT, item)
+              }
+              style={{ borderRadius: 10, backgroundColor: 'red' }}
+              mode="contained"
+            >
+              <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_500Medium }}>
+                Reject
+              </Text>
+            </Button>
+          </View>
         </View>
       </View>
     );
@@ -161,7 +208,7 @@ const Contract = () => {
         />
       </Header>
 
-      <View style={{ marginTop: 15 }}>
+      <View style={{ flex: 1, marginTop: 15 }}>
         <FlatList
           data={stateRedux?.contractList?.data}
           renderItem={renderItem}
@@ -171,6 +218,16 @@ const Contract = () => {
               onRefresh={handlers.onRefresh}
             />
           }
+        />
+        <ConfirmAlert
+          show={state.showAlert}
+          title="CONFIRMATION"
+          message={state.confirmInfo?.message}
+          confirmText="Yes"
+          cancelText="No"
+          confirmButtonColor={COLORS.orange_button}
+          onConfirmPressed={handlers.handleConfirm}
+          onCancelPressed={handlers.hideAlertHandler}
         />
       </View>
     </View>

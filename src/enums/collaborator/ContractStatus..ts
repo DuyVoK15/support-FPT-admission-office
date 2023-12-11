@@ -1,0 +1,6 @@
+export enum CONTRACT_STATUS_ENUM {
+  PENDING = 1,
+  APRROVED = 2,
+  REJECTED = 3,
+  COMPLETED = 4,
+}
