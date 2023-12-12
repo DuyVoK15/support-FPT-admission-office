@@ -9,6 +9,7 @@ import React from 'react';
 import CertificateCard from '../../../../components/collaborator/Certificate/CertificateCard';
 import useAllCertificate from './useCertificateAll';
 import { format_ISODateString_To_DDMMYYYY } from '../../../../utils/formats';
+import CERTIFICATE_STATUS_ENUM from '../../../../enums/collaborator/CertificateStatus';
 
 const Certificate_All_Status = () => {
   const { state, props, handlers } = useAllCertificate();
@@ -50,7 +51,11 @@ const Certificate_All_Status = () => {
                     ? certificate?.certificateIssuer?.name
                     : 'No value'
                 }
-                status={'Completed'}
+                status={
+                  certificate?.status === CERTIFICATE_STATUS_ENUM.COMPLETED
+                    ? 'Completed'
+                    : 'Rejected'
+                }
               />
             ))
           ) : (

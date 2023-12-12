@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, ViewProps } from 'react-native';
 import React, { FC } from 'react';
 import { FONTS_FAMILY } from '../../../../constants/Fonts';
 import APPLICATION_STATUS_ENUM from '../../../../enums/collaborator/ApplicationStatus';
+import { COLORS } from '../../../../constants/Colors';
 
 interface ApplicationStatusProps extends ViewProps {
   status: APPLICATION_STATUS_ENUM;
@@ -15,16 +16,16 @@ const ApplicationStatus: FC<ApplicationStatusProps> = (Props) => {
         paddingVertical: 4,
         paddingHorizontal: 8,
         borderRadius: 10,
-        borderWidth: 3,
+        borderWidth: 2.5,
         justifyContent: 'center',
         borderColor: (() => {
           switch (Props.status) {
             case APPLICATION_STATUS_ENUM.PENDING:
-              return 'orange';
+              return COLORS?.orange_button;
             case APPLICATION_STATUS_ENUM.APPROVED:
-              return 'green';
+              return COLORS?.green_status;
             case APPLICATION_STATUS_ENUM.REJECTED:
-              return 'red';
+              return COLORS?.red_status;
             default:
               return 'black'; // Set your default border color here
           }
@@ -33,17 +34,17 @@ const ApplicationStatus: FC<ApplicationStatusProps> = (Props) => {
     >
       <Text
         style={{
-          fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
+          fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
           fontSize: 15,
           letterSpacing: 0.5,
           color: (() => {
             switch (Props.status) {
               case APPLICATION_STATUS_ENUM.PENDING:
-                return 'orange';
+                return COLORS?.orange_button;
               case APPLICATION_STATUS_ENUM.APPROVED:
-                return 'green';
+                return COLORS?.green_status;
               case APPLICATION_STATUS_ENUM.REJECTED:
-                return 'red';
+                return COLORS?.red_status;
               default:
                 return 'black'; // Set your default border color here
             }

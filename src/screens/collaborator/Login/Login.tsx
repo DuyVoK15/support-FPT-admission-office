@@ -38,6 +38,7 @@ import LoginUserDto from '../../../dtos/collaborator/login.user.dto';
 import AppConstants from '../../../enums/collaborator/app';
 import usePushNotifications from '../../../../usePushNotifications';
 import { IOS_CLIENT_ID, WEB_CLIENT_ID } from '../../../../env';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const Login = () => {
   const toast = useToast();
@@ -61,7 +62,9 @@ const Login = () => {
     });
   }, []);
 
+  const [loadingSignIn, setLoadingSignIn] = useState<boolean>(false);
   const onGoogleButtonPress = async () => {
+    setLoadingSignIn(true);
     try {
       // Check if your device supports Google Play
       await GoogleSignin.hasPlayServices({
@@ -76,16 +79,19 @@ const Login = () => {
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
       // Sign-in the user with the credential
+      setLoadingSignIn(false);
       return auth().signInWithCredential(googleCredential);
     } catch (error: any) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        setLoadingSignIn(false);
         console.log('User cancelled the sign-in flow');
         await GoogleSignin.signOut();
         // Handle cancellation gracefully (e.g., show a message to the user)
       } else {
+        setLoadingSignIn(false);
         await GoogleSignin.signOut();
         // Handle other errors
-        console.error('Error signing in with Google:', error);
+        console.log('Error signing in with Google:', error);
         // Show an error message or perform other actions based on the error
       }
     }
@@ -111,6 +117,7 @@ const Login = () => {
       style={{ height: '100%', width: '100%' }}
       source={require('../../../assets/Images/bg_login.png')}
     >
+      <Spinner visible={loadingSignIn} />
       <SafeAreaView
         style={{
           flex: 1,
@@ -118,7 +125,9 @@ const Login = () => {
           justifyContent: 'space-between',
         }}
       >
-        <AppIcon style={{ flex: 0, marginTop: Platform.OS === 'android' ? 110 : 40 }} />
+        <AppIcon
+          style={{ flex: 0, marginTop: Platform.OS === 'android' ? 110 : 40 }}
+        />
         <CampusSelection style={{ flex: 2 }} />
         <View style={{ marginBottom: 10 }}>
           <SelectDropdown
@@ -168,7 +177,9 @@ const Login = () => {
           onPress={() =>
             onGoogleButtonPress().then(async () => {
               if (gmailSelected === GmailSelectedEnum.NO_SELECT) {
-                await GoogleSignin.signOut().then(()=>console.log('Google Signout'));
+                await GoogleSignin.signOut().then(() =>
+                  console.log('Google Signout')
+                );
                 toast.show('Please selected an gmail type!', {
                   type: 'danger',
                 });
@@ -198,7 +209,9 @@ const Login = () => {
                                     );
                                   }
                                 }
-                                await GoogleSignin.signOut().then(()=>console.log('Google Signout'));
+                                await GoogleSignin.signOut().then(() =>
+                                  console.log('Google Signout')
+                                );
                                 break;
                               case 'fulfilled':
                                 const data = res.payload as LoginUserDto;
@@ -249,7 +262,9 @@ const Login = () => {
                                     );
                                   }
                                 }
-                                await GoogleSignin.signOut().then(()=>console.log('Google Signout'));
+                                await GoogleSignin.signOut().then(() =>
+                                  console.log('Google Signout')
+                                );
                                 break;
                               case 'fulfilled':
                                 const data = res.payload as LoginUserDto;
@@ -279,7 +294,10 @@ const Login = () => {
                       });
                   }
                   break;
-                default: await GoogleSignin.signOut().then(()=>console.log('Google Signout'));
+                default:
+                  await GoogleSignin.signOut().then(() =>
+                    console.log('Google Signout')
+                  );
                   console.log('Vui lòng chọn');
               }
             })

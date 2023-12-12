@@ -8,6 +8,7 @@ export interface DataRequestUpdateHistory {
   busOption: boolean;
   status: number;
   createAt: string;
+  updateAt: string;
   postRegistration: {
     id: number;
     registrationCode: string;

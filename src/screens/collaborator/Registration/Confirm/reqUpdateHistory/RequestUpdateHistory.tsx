@@ -40,7 +40,13 @@ const RequestUpdateHistory = () => {
   const fetchRequestUpdateHistory = async () => {
     try {
       await disptach(
-        getAllRequestUpdateHistory({ PostRegistrationId: id, Sort: 'CreateAt' })
+        getAllRequestUpdateHistory({
+          Page: 1,
+          PageSize: 10000,
+          PostRegistrationId: id,
+          Sort: 'CreateAt',
+          Order: 'DESCENDING'
+        })
       ).then((res) => {
         console.log(JSON.stringify(res, null, 2));
       });
@@ -211,10 +217,34 @@ const RequestUpdateHistory = () => {
                   {item?.createAt
                     ? format_ISODateString_To_DayOfWeekMonthDDYYYY(
                         item?.createAt
-                      )
-                    : 'No value'}
+                      ) ? format_ISODateString_To_DayOfWeekMonthDDYYYY(
+                        item?.createAt
+                      ) : 'Not yet'
+                    : 'Not yet'}
                 </Text>
               </Text>
+              {/* <Text
+                style={{
+                  fontFamily: FONTS_FAMILY?.Ubuntu_300Light_Italic,
+                  fontSize: 13,
+                }}
+              >
+                Response at:{' '}
+                <Text
+                  style={{
+                    fontFamily: FONTS_FAMILY?.Ubuntu_400Regular_Italic,
+                    fontSize: 13,
+                  }}
+                >
+                  {item?.createAt
+                    ? format_ISODateString_To_DayOfWeekMonthDDYYYY(
+                        item?.updateAt
+                      ) ? format_ISODateString_To_DayOfWeekMonthDDYYYY(
+                        item?.updateAt
+                      ) : 'Not yet'
+                    : 'Not yet'}
+                </Text>
+              </Text> */}
             </View>
           </View>
         </View>
