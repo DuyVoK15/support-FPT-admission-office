@@ -1,4 +1,5 @@
 import {
+  Animated,
   Image,
   ImageBackground,
   Platform,
@@ -38,43 +39,56 @@ import LoadingScreen from '../../../../components/shared/Loading/Loading';
 
 const HomeEventDetail: FC = () => {
   const { state, setState, stateRedux, handlers, props } = useHomeDetail();
+  const pan = React.useRef(new Animated.ValueXY()).current;
+
   if (stateRedux.loading) {
     return <LoadingScreen />;
   }
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
-      <ImageBackground
-        style={{ height: 250, width: '100%' }}
-        source={{
-          uri: stateRedux.item?.data?.postImg
-            ? stateRedux.item?.data?.postImg
-            : imageNotFoundUri,
-        }}
-      >
-        <BackwardBlur
-          style={{ marginTop: 50 }}
-          onPress={() => props.navigation.goBack()}
-        />
-      </ImageBackground>
-
       <View
         style={{
-          flex: 1,
-          position: 'absolute',
-          top: 222,
-          width: '100%',
-          height:
-            Platform.OS === 'ios'
-              ? ScreenHeight - 222 - 80
-              : ScreenHeight - 222 - 20,
           backgroundColor: 'white',
-          borderTopLeftRadius: 20,
-          borderTopRightRadius: 20,
-          ...SHADOWS.SHADOW_03,
         }}
       >
-        <ScrollView style={{ marginTop: 30 }}>
-          <View style={{ marginHorizontal: 20 }}>
+        <ScrollView
+          scrollEventThrottle={1}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { y: pan.y } } }],
+            {
+              useNativeDriver: false,
+            }
+          )}
+        >
+          <Animated.Image
+            resizeMode="cover"
+            style={{
+              width: '100%',
+              height: 250,
+              transform: [
+                {
+                  translateY: pan.y.interpolate({
+                    inputRange: [-1000, 0],
+                    outputRange: [-100, 0],
+                    extrapolate: 'clamp',
+                  }),
+                },
+                {
+                  scale: pan.y.interpolate({
+                    inputRange: [-3000, 0],
+                    outputRange: [20, 1],
+                    extrapolate: 'clamp',
+                  }),
+                },
+              ],
+            }}
+            source={{
+              uri: stateRedux.item?.data?.postImg
+                ? stateRedux.item?.data?.postImg
+                : imageNotFoundUri,
+            }}
+          />
+          <View style={{ margin: 20 }}>
             {/* ---------------------------------- */}
             <View>
               <View
@@ -411,6 +425,11 @@ const HomeEventDetail: FC = () => {
             </View>
           </View>
         </ScrollView>
+      </View>
+      <View style={{ position: 'absolute', top: 50 }}>
+        <BackwardBlur
+          onPress={() => props.navigation.goBack()}
+        />
       </View>
     </View>
   );
