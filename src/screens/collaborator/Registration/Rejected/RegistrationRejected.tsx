@@ -31,6 +31,8 @@ import FilterRegistationButton from '../../../../components/shared/Button/Filter
 import SortRegistrationButton from '../../../../components/shared/Button/SortRegistrationButton';
 import { SHADOWS } from '../../../../constants/Shadows';
 import { ROUTES } from '../../../../constants/Routes';
+import RegistrationStatus from '../RegistrationStatus';
+import { REGISTRATION_STATUS_ENUM } from '../../../../enums/collaborator/RegistrationStatus';
 
 const Registration_Cancelled = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -138,16 +140,8 @@ const Registration_Cancelled = () => {
             </View>
           </View>
 
-          <View style={[styles.containerStatus, { borderColor: '#000' }]}>
-            <View style={styles.statusRow}>
-              <View>
-                <Text style={[styles.thirdText, { color: '#000' }]}>
-                  Rejected
-                </Text>
-              </View>
-              <View style={[styles.statusDot, { backgroundColor: '#000' }]} />
-            </View>
-          </View>
+          <RegistrationStatus status={REGISTRATION_STATUS_ENUM.REJECT} />
+
 
           <DashedLine
             style={{ marginVertical: 10 }}

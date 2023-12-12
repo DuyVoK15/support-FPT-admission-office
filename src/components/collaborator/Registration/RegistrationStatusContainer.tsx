@@ -2,10 +2,10 @@ import { StyleSheet, Text, View } from 'react-native';
 import React, { FC } from 'react';
 import { COLORS } from '../../../constants/Colors';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
-import { RegistrationStatus } from '../../../enums/collaborator/RegistrationStatus';
+import { REGISTRATION_STATUS_ENUM } from '../../../enums/collaborator/RegistrationStatus';
 
 interface RegistrationStatusProps {
-  status: RegistrationStatus | 0;
+  status: REGISTRATION_STATUS_ENUM | 0;
 }
 const RegistrationStatusContainer: FC<RegistrationStatusProps> = (Props) => {
   return (
@@ -17,17 +17,17 @@ const RegistrationStatusContainer: FC<RegistrationStatusProps> = (Props) => {
         borderWidth: 3,
         borderColor: (() => {
           switch (Props.status) {
-            case RegistrationStatus.PENDING:
+            case REGISTRATION_STATUS_ENUM.PENDING:
               return 'orange';
-            case RegistrationStatus.CONFIRM:
+            case REGISTRATION_STATUS_ENUM.CONFIRM:
               return 'green';
-            case RegistrationStatus.CHECKIN:
+            case REGISTRATION_STATUS_ENUM.CHECKIN:
               return '#65B4E2';
-            case RegistrationStatus.CHECKOUT:
+            case REGISTRATION_STATUS_ENUM.CHECKOUT:
               return '#8E7241';
-            case RegistrationStatus.CANCEL:
+            case REGISTRATION_STATUS_ENUM.CANCEL:
               return 'red';
-            case RegistrationStatus.REJECT:
+            case REGISTRATION_STATUS_ENUM.REJECT:
               return 'black';
             default:
               return 'black'; // Set your default border color here
@@ -41,39 +41,39 @@ const RegistrationStatusContainer: FC<RegistrationStatusProps> = (Props) => {
           fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
           color: (() => {
             switch (Props.status) {
-              case RegistrationStatus.PENDING:
+              case REGISTRATION_STATUS_ENUM.PENDING:
                 return 'orange';
-              case RegistrationStatus.CONFIRM:
+              case REGISTRATION_STATUS_ENUM.CONFIRM:
                 return 'green';
-              case RegistrationStatus.CHECKIN:
+              case REGISTRATION_STATUS_ENUM.CHECKIN:
                 return '#65B4E2';
-              case RegistrationStatus.CHECKOUT:
+              case REGISTRATION_STATUS_ENUM.CHECKOUT:
                 return '#8E7241';
-              case RegistrationStatus.CANCEL:
+              case REGISTRATION_STATUS_ENUM.CANCEL:
                 return 'red';
-              case RegistrationStatus.REJECT:
+              case REGISTRATION_STATUS_ENUM.REJECT:
                 return 'black';
               default:
                 return 'black'; // Set your default border color here
             }
           })(),
           fontSize: 15,
-          letterSpacing: 0.6
+          letterSpacing: 0.6,
         }}
       >
         {(() => {
           switch (Props.status) {
-            case RegistrationStatus.PENDING:
+            case REGISTRATION_STATUS_ENUM.PENDING:
               return 'Pending';
-            case RegistrationStatus.CONFIRM:
+            case REGISTRATION_STATUS_ENUM.CONFIRM:
               return 'Confirmed';
-            case RegistrationStatus.CHECKIN:
+            case REGISTRATION_STATUS_ENUM.CHECKIN:
               return 'Checked In';
-            case RegistrationStatus.CHECKOUT:
+            case REGISTRATION_STATUS_ENUM.CHECKOUT:
               return 'Checked Out';
-            case RegistrationStatus.CANCEL:
+            case REGISTRATION_STATUS_ENUM.CANCEL:
               return 'Cancelled';
-            case RegistrationStatus.REJECT:
+            case REGISTRATION_STATUS_ENUM.REJECT:
               return 'Rejected';
             default:
               return 'black'; // Set your default border color here

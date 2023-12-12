@@ -7,7 +7,7 @@ import {
   getAllPostRegistration_Cancelled,
   getAllPostRegistration_Completed,
 } from '../../../../features/collaborator/collab.postRegistrationSlice';
-import { RegistrationStatus } from '../../../../enums/collaborator/RegistrationStatus';
+import { REGISTRATION_STATUS_ENUM } from '../../../../enums/collaborator/RegistrationStatus';
 import { useFocusEffect } from '@react-navigation/native';
 import DataViewPostRegistration from '../../../../models/collaborator/postRegistration.model';
 
@@ -23,7 +23,7 @@ const useIndex = () => {
         PageSize: 10000,
         Sort: 'CancelTime',
         Order: 'DESCENDING',
-        RegistrationStatus: [RegistrationStatus.CANCEL],
+        RegistrationStatus: [REGISTRATION_STATUS_ENUM.CANCEL],
       })
     ).then((res) => {
       console.log(JSON.stringify(res, null, 2));

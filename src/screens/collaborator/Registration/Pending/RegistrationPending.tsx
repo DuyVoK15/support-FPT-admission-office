@@ -32,6 +32,8 @@ import WarningAlert from '../../../../components/shared/AwesomeAlert/WarningAler
 import ConfirmAlert from '../../../../components/shared/AwesomeAlert/ConfirmAlert';
 import RegistrationDetail from '../RegistrationDetail';
 import { ROUTES } from '../../../../constants/Routes';
+import RegistrationStatus from '../RegistrationStatus';
+import { REGISTRATION_STATUS_ENUM } from '../../../../enums/collaborator/RegistrationStatus';
 
 interface Registration_PendingProps {
   // item: string | null;
@@ -180,19 +182,7 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
             </View>
           </View>
 
-          <View style={styles.containerStatus}>
-            <View style={styles.statusRow}>
-              <View>
-                <Text style={styles.thirdText}>Pending</Text>
-              </View>
-              <View
-                style={[
-                  styles.statusDot,
-                  { backgroundColor: COLORS?.orange_button },
-                ]}
-              />
-            </View>
-          </View>
+          <RegistrationStatus status={REGISTRATION_STATUS_ENUM.PENDING} />
 
           <DashedLine
             style={{ marginVertical: 10 }}

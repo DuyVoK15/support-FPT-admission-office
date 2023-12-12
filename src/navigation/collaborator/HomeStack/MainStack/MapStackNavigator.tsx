@@ -5,7 +5,6 @@ import MapTab from '../MainTabs/MapTab';
 import { ROUTES } from '../../../../constants/Routes';
 import { useAppDispatch } from '../../../../app/store';
 import { getPostRegistrationById_Confirmed } from '../../../../features/collaborator/collab.postRegistrationSlice';
-import { RegistrationStatus } from '../../../../enums/collaborator/RegistrationStatus';
 import ViewPostRegistrationResponse from '../../../../dtos/collaborator/response/viewPostRegistration.dto';
 
 const Stack = createNativeStackNavigator();

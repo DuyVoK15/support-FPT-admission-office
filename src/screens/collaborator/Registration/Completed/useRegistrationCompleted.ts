@@ -6,7 +6,7 @@ import {
   getAllPostRegistration,
   getAllPostRegistration_Completed,
 } from '../../../../features/collaborator/collab.postRegistrationSlice';
-import { RegistrationStatus } from '../../../../enums/collaborator/RegistrationStatus';
+import { REGISTRATION_STATUS_ENUM } from '../../../../enums/collaborator/RegistrationStatus';
 import { useFocusEffect } from '@react-navigation/native';
 
 const useIndex = () => {
@@ -19,7 +19,7 @@ const useIndex = () => {
       getAllPostRegistration_Completed({
         Page: 1,
         PageSize: 10000,
-        RegistrationStatus: [RegistrationStatus.CHECKOUT],
+        RegistrationStatus: [REGISTRATION_STATUS_ENUM.CHECKOUT],
         Sort: 'CreateAt',
         Order: 'DESCENDING'
       })

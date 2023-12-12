@@ -35,7 +35,7 @@ import {
 } from '../../../../../features/collaborator/collab.postRegistrationSlice';
 import ErrorStatus from '../../../../../dtos/collaborator/response/errorStatus.dto';
 import DataViewPostRegistration from '../../../../../models/collaborator/postRegistration.model';
-import { RegistrationStatus } from '../../../../../enums/collaborator/RegistrationStatus';
+import { REGISTRATION_STATUS_ENUM } from '../../../../../enums/collaborator/RegistrationStatus';
 import { async } from '@firebase/util';
 import { useAppSelector } from '../../../../../app/hooks';
 import RegistrationEmpty from '../../../../../components/shared/Empty/RegistrationEmpty';
@@ -64,7 +64,7 @@ const RequestChangePositionConfirm = () => {
     try {
       await dispatch(
         getPostRegistrationById_Confirmed({
-          RegistrationStatus: [RegistrationStatus.CONFIRM],
+          RegistrationStatus: [REGISTRATION_STATUS_ENUM.CONFIRM],
           Id: id,
         })
       ).then((res) => {

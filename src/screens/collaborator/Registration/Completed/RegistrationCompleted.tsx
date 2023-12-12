@@ -32,6 +32,8 @@ import SortRegistrationButton from '../../../../components/shared/Button/SortReg
 import { SHADOWS } from '../../../../constants/Shadows';
 import RegistrationDetail from '../RegistrationDetail';
 import { ROUTES } from '../../../../constants/Routes';
+import RegistrationStatus from '../RegistrationStatus';
+import { REGISTRATION_STATUS_ENUM } from '../../../../enums/collaborator/RegistrationStatus';
 
 const Registration_Completed = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -139,16 +141,8 @@ const Registration_Completed = () => {
             </View>
           </View>
 
-          <View style={[styles.containerStatus, { borderColor: '#000' }]}>
-            <View style={styles.statusRow}>
-              <View>
-                <Text style={[styles.thirdText, { color: '#000' }]}>
-                  Completed
-                </Text>
-              </View>
-              <View style={[styles.statusDot, { backgroundColor: '#000' }]} />
-            </View>
-          </View>
+          <RegistrationStatus status={REGISTRATION_STATUS_ENUM.CHECKOUT} />
+
 
           <DashedLine
             style={{ marginVertical: 10 }}

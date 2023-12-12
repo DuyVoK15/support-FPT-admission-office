@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../../app/store';
 import { useAppSelector } from '../../../app/hooks';
 import { getAllPostRegistration } from '../../../features/collaborator/collab.postRegistrationSlice';
-import { RegistrationStatus } from '../../../enums/collaborator/RegistrationStatus';
+import { REGISTRATION_STATUS_ENUM } from '../../../enums/collaborator/RegistrationStatus';
 
 const useIndex = () => {
   const dispatch = useAppDispatch();
@@ -11,7 +11,7 @@ const useIndex = () => {
     (state) => state.collab_postRegistration.postRegistrationPending
   );
   const fetchPostRegistration = async () => {
-    await dispatch(getAllPostRegistration({Status: RegistrationStatus.PENDING})).then((res) => {
+    await dispatch(getAllPostRegistration({Status: REGISTRATION_STATUS_ENUM.PENDING})).then((res) => {
       console.log(JSON.stringify(res, null, 2));
     }); 
   };

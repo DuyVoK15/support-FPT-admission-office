@@ -7,7 +7,7 @@ import {
   getAllPostRegistration_Cancelled,
   getAllPostRegistration_Completed,
 } from '../../../../features/collaborator/collab.postRegistrationSlice';
-import { RegistrationStatus } from '../../../../enums/collaborator/RegistrationStatus';
+import { REGISTRATION_STATUS_ENUM } from '../../../../enums/collaborator/RegistrationStatus';
 import { useFocusEffect } from '@react-navigation/native';
 
 const useRegistrationRejected = () => {
@@ -20,7 +20,7 @@ const useRegistrationRejected = () => {
       getAllPostRegistration_Cancelled({
         Page: 1,
         PageSize: 10000,
-        RegistrationStatus: [RegistrationStatus.REJECT],
+        RegistrationStatus: [REGISTRATION_STATUS_ENUM.REJECT],
       })
     ).then((res) => {
       console.log(JSON.stringify(res, null, 2));

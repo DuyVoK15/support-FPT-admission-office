@@ -32,6 +32,8 @@ import SortRegistrationButton from '../../../../components/shared/Button/SortReg
 import { SHADOWS } from '../../../../constants/Shadows';
 import RegistrationDetail from '../RegistrationDetail';
 import { ROUTES } from '../../../../constants/Routes';
+import { REGISTRATION_STATUS_ENUM } from '../../../../enums/collaborator/RegistrationStatus';
+import RegistrationStatus from '../RegistrationStatus';
 
 const Registration_Cancelled = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -135,16 +137,8 @@ const Registration_Cancelled = () => {
             </View>
           </View>
 
-          <View style={[styles.containerStatus, { borderColor: '#000' }]}>
-            <View style={styles.statusRow}>
-              <View>
-                <Text style={[styles.thirdText, { color: '#000' }]}>
-                  Cancelled
-                </Text>
-              </View>
-              <View style={[styles.statusDot, { backgroundColor: '#000' }]} />
-            </View>
-          </View>
+          <RegistrationStatus status={REGISTRATION_STATUS_ENUM.CANCEL} />
+
 
           <DashedLine
             style={{ marginVertical: 10 }}

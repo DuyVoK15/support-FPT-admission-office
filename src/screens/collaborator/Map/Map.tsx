@@ -22,7 +22,7 @@ import {
   getAllPostRegistration_Pending,
   getPostRegistrationById_Confirmed,
 } from '../../../features/collaborator/collab.postRegistrationSlice';
-import { RegistrationStatus } from '../../../enums/collaborator/RegistrationStatus';
+import { REGISTRATION_STATUS_ENUM } from '../../../enums/collaborator/RegistrationStatus';
 import { useAppSelector } from '../../../app/hooks';
 import DataViewPostRegistration from '../../../models/collaborator/postRegistration.model';
 import ViewPostRegistrationResponse from '../../../dtos/collaborator/response/viewPostRegistration.dto';
@@ -108,7 +108,7 @@ export default function Map() {
   const fetchPostRegistrationConfirmed = async () => {
     await dispatch(
       getAllPostRegistration_Confirmed({
-        RegistrationStatus: [RegistrationStatus.CONFIRM],
+        RegistrationStatus: [REGISTRATION_STATUS_ENUM.CONFIRM],
       })
     ).then((res) => {
       console.log(JSON.stringify(res, null, 2));

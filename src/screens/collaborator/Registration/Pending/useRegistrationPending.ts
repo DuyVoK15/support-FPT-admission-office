@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useAppSelector } from '../../../../app/hooks';
 import { useAppDispatch } from '../../../../app/store';
-import { RegistrationStatus } from '../../../../enums/collaborator/RegistrationStatus';
+import { REGISTRATION_STATUS_ENUM } from '../../../../enums/collaborator/RegistrationStatus';
 import {
   cancelPostRegistration,
   getAllPostRegistration,
@@ -31,7 +31,7 @@ const useIndex = () => {
     useState<dataFilterRegistration | null>({
       Sort: 'CreateAt',
       Order: 'DESCENDING',
-      RegistrationStatus: [RegistrationStatus.PENDING],
+      RegistrationStatus: [REGISTRATION_STATUS_ENUM.PENDING],
     });
   const fetchPostRegistration = async () => {
     await dispatch(

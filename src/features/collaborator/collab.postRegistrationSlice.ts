@@ -9,8 +9,8 @@ import CreatePostRegistrationParam from '../../dtos/collaborator/parameter/creat
 import UpdatePostRegistrationPayload from '../../dtos/collaborator/parameter/updatePostRegistration.dto';
 import { FilterPostRegistration } from '../../dtos/collaborator/parameter/filterPostRegistration.dto';
 import { CancelPostRegistrationParam } from '../../dtos/collaborator/parameter/cancelPostRegistration.dto';
-import { RegistrationStatus } from '../../enums/collaborator/RegistrationStatus';
 import { ViewRequestUpdateHistory } from '../../dtos/collaborator/response/viewUpdateRequest.dto';
+import { REGISTRATION_STATUS_ENUM } from '../../enums/collaborator/RegistrationStatus';
 
 interface PostRegistrationState {
   postRegistration: ViewPostRegistrationResponse | null;
@@ -276,16 +276,16 @@ export const postRegistrationSlice = createSlice({
         state.postRegistration = action.payload.response_data;
         let result = action.payload.query_data.RegistrationStatus?.join('-');
         switch (result) {
-          case RegistrationStatus.PENDING.toString():
+          case REGISTRATION_STATUS_ENUM.PENDING.toString():
             state.postRegistrationPending = action.payload.response_data;
             break;
-          case RegistrationStatus.CONFIRM + '-' + RegistrationStatus.CHECKIN:
+          case REGISTRATION_STATUS_ENUM.CONFIRM + '-' + REGISTRATION_STATUS_ENUM.CHECKIN:
             state.postRegistrationConfirmed = action.payload.response_data;
             break;
-          case RegistrationStatus.CHECKOUT.toString():
+          case REGISTRATION_STATUS_ENUM.CHECKOUT.toString():
             state.postRegistrationCompleted = action.payload.response_data;
             break;
-          case RegistrationStatus.CANCEL.toString():
+          case REGISTRATION_STATUS_ENUM.CANCEL.toString():
             state.postRegistrationCancelled = action.payload.response_data;
             break;
           default:

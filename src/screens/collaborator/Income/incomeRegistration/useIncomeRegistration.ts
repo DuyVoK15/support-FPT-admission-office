@@ -19,8 +19,12 @@ const useIncomeRegistration = () => {
   );
   const fetchIncomeRegistration = async () => {
     try {
-      await dispatch(getRegistrationByReport({ accountReportId: id ?? null }));
-    } catch (error) {}
+      await dispatch(
+        getRegistrationByReport({ accountReportId: id ?? null })
+      ).then((res) => console.log(JSON.stringify(res, null, 2)));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {

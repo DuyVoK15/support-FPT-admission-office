@@ -1,4 +1,4 @@
-export enum RegistrationStatus {
+export enum REGISTRATION_STATUS_ENUM {
   PENDING = 1,
   CONFIRM = 2,
   REJECT = 3,

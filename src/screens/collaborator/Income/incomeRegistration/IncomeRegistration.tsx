@@ -27,7 +27,7 @@ import {
   format_Time_To_HHss,
 } from '../../../../utils/formats';
 import RegistrationStatusContainer from '../../../../components/collaborator/Registration/RegistrationStatusContainer';
-import { RegistrationStatus } from '../../../../enums/collaborator/RegistrationStatus';
+import { REGISTRATION_STATUS_ENUM } from '../../../../enums/collaborator/RegistrationStatus';
 import RegistrationEmpty from '../../../../components/shared/Empty/RegistrationEmpty';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
@@ -62,18 +62,18 @@ const IncomeRegistration = () => {
                     <RegistrationStatusContainer
                       status={(() => {
                         switch (item?.status) {
-                          case RegistrationStatus.PENDING:
-                            return RegistrationStatus.PENDING;
-                          case RegistrationStatus.CONFIRM:
-                            return RegistrationStatus.CONFIRM;
-                          case RegistrationStatus.CHECKIN:
-                            return RegistrationStatus.CHECKIN;
-                          case RegistrationStatus.CHECKOUT:
-                            return RegistrationStatus.CHECKOUT;
-                          case RegistrationStatus.CANCEL:
-                            return RegistrationStatus.CANCEL;
-                          case RegistrationStatus.REJECT:
-                            return RegistrationStatus.REJECT;
+                          case REGISTRATION_STATUS_ENUM.PENDING:
+                            return REGISTRATION_STATUS_ENUM.PENDING;
+                          case REGISTRATION_STATUS_ENUM.CONFIRM:
+                            return REGISTRATION_STATUS_ENUM.CONFIRM;
+                          case REGISTRATION_STATUS_ENUM.CHECKIN:
+                            return REGISTRATION_STATUS_ENUM.CHECKIN;
+                          case REGISTRATION_STATUS_ENUM.CHECKOUT:
+                            return REGISTRATION_STATUS_ENUM.CHECKOUT;
+                          case REGISTRATION_STATUS_ENUM.CANCEL:
+                            return REGISTRATION_STATUS_ENUM.CANCEL;
+                          case REGISTRATION_STATUS_ENUM.REJECT:
+                            return REGISTRATION_STATUS_ENUM.REJECT;
                           default:
                             return 0; // Set your default border color here
                         }

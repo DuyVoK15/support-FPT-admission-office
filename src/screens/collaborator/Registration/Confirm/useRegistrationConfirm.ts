@@ -1,4 +1,4 @@
-import { RegistrationStatus } from '../../../../enums/collaborator/RegistrationStatus';
+import { REGISTRATION_STATUS_ENUM } from '../../../../enums/collaborator/RegistrationStatus';
 import { View, Text, Platform } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../../../app/store';
@@ -35,8 +35,8 @@ const useIndex = () => {
         Page: 1,
         PageSize: 10000,
         RegistrationStatus: [
-          RegistrationStatus.CONFIRM,
-          RegistrationStatus.CHECKIN,
+          REGISTRATION_STATUS_ENUM.CONFIRM,
+          REGISTRATION_STATUS_ENUM.CHECKIN,
         ],
         Sort: 'ConfirmTime',
         Order: 'DESCENDING',
@@ -47,7 +47,7 @@ const useIndex = () => {
   const dispatch_getAllPostRegistration_Completed = async () => {
     return await dispatch(
       getAllPostRegistration_Completed({
-        RegistrationStatus: [RegistrationStatus.CHECKOUT],
+        RegistrationStatus: [REGISTRATION_STATUS_ENUM.CHECKOUT],
         Sort: 'CreateAt',
       })
     );

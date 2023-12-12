@@ -20,7 +20,7 @@ import {
 import { imageNotFoundUri } from '../../../../utils/images';
 import { useNavigation } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
-import { RegistrationStatus } from '../../../../enums/collaborator/RegistrationStatus';
+import { REGISTRATION_STATUS_ENUM } from '../../../../enums/collaborator/RegistrationStatus';
 import CheckInButton from '../../../../components/shared/Button/CheckInButton';
 import CheckOutButton from '../../../../components/shared/Button/CheckOutButton';
 import DetailButton from '../../../../components/shared/Button/DetailButton';
@@ -39,6 +39,7 @@ import ConfirmAlert, {
 import { ROUTES } from '../../../../constants/Routes';
 import Registration_Confirm_Detail from './confirmDetail/RegistrationConfirmDetail';
 import RegistrationDetail from '../RegistrationDetail';
+import RegistrationStatus from '../RegistrationStatus';
 
 const Registration_Confirm = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -208,61 +209,19 @@ const Registration_Confirm = () => {
             </View>
           </View>
 
-          <View
-            style={[
-              styles.containerStatus,
-              {
-                borderColor: item?.status
-                  ? item?.status === RegistrationStatus.CONFIRM
-                    ? COLORS?.green_filter_button
-                    : item?.status === RegistrationStatus.CHECKIN
-                    ? COLORS?.blue_date
-                    : '#000'
-                  : '#000',
-              },
-            ]}
-          >
-            <View style={styles.statusRow}>
-              <View>
-                <Text
-                  style={[
-                    styles.thirdText,
-                    {
-                      color: item?.status
-                        ? item?.status === RegistrationStatus.CONFIRM
-                          ? COLORS?.green_filter_button
-                          : item?.status === RegistrationStatus.CHECKIN
-                          ? COLORS?.blue_date
-                          : '#000'
-                        : '#000',
-                    },
-                  ]}
-                >
-                  {item?.status
-                    ? item?.status === RegistrationStatus.CONFIRM
-                      ? 'Confirmed'
-                      : item?.status === RegistrationStatus.CHECKIN
-                      ? 'Checked In'
-                      : 'No Status'
-                    : 'No Status'}
-                </Text>
-              </View>
-              <View
-                style={[
-                  styles.statusDot,
-                  {
-                    backgroundColor: item?.status
-                      ? item?.status === RegistrationStatus.CONFIRM
-                        ? COLORS?.green_filter_button
-                        : item?.status === RegistrationStatus.CHECKIN
-                        ? COLORS?.blue_date
-                        : '#000'
-                      : '#000',
-                  },
-                ]}
-              />
-            </View>
-          </View>
+          <RegistrationStatus
+            status={(() => {
+              switch (item?.status) {
+                case REGISTRATION_STATUS_ENUM.CONFIRM:
+                  return REGISTRATION_STATUS_ENUM.CONFIRM;
+                case REGISTRATION_STATUS_ENUM.CHECKIN:
+                  return REGISTRATION_STATUS_ENUM.CHECKIN;
+
+                default:
+                  return 0; // Set your default border color here
+              }
+            })()}
+          />
 
           <DashedLine
             style={{ marginVertical: 10 }}
@@ -281,11 +240,11 @@ const Registration_Confirm = () => {
               justifyContent: 'space-evenly',
             }}
           >
-            {item?.status === RegistrationStatus.CONFIRM ? (
+            {item?.status === REGISTRATION_STATUS_ENUM.CONFIRM ? (
               <CheckInButton
                 onPress={() => showAlertHandler(TYPE_BUTTON_ENUM.CHECKIN, item)}
               />
-            ) : item?.status === RegistrationStatus.CHECKIN ? (
+            ) : item?.status === REGISTRATION_STATUS_ENUM.CHECKIN ? (
               <CheckOutButton
                 onPress={() =>
                   showAlertHandler(TYPE_BUTTON_ENUM.CHECKOUT, item)
@@ -295,7 +254,7 @@ const Registration_Confirm = () => {
               <View />
             )}
             {/* View Detail Button */}
-            {item?.status === RegistrationStatus.CONFIRM && (
+            {item?.status === REGISTRATION_STATUS_ENUM.CONFIRM && (
               <CancelButton
                 onPress={() => showAlertHandler(TYPE_BUTTON_ENUM.CANCEL, item)}
               />
@@ -383,7 +342,7 @@ const Registration_Confirm = () => {
             {item?.postPositionsUnregistereds?.length > 0 && (
               <View>
                 <TouchableOpacity
-                  style={{paddingVertical: 15, paddingLeft: 10}}
+                  style={{ paddingVertical: 15, paddingLeft: 10 }}
                   onPress={() =>
                     navigation.navigate('REQUEST_CHANGE_POSITION_CONFIRM', {
                       id: item?.id,
