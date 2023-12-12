@@ -10,6 +10,7 @@ import { HomeCollaboratorStackNavigatorParamList } from '../../../../../type';
 import HomeNotification from '../../../../screens/collaborator/Notification/HomeNotitìication/HomeNotification';
 import HomeEventDetail from '../../../../screens/collaborator/Home/homeEventDetail/HomeEventDetail';
 import { ROUTES } from '../../../../constants/Routes';
+import CertificateHistory from '../../../../screens/collaborator/Certificate';
 
 const Stack =
   createNativeStackNavigator<HomeCollaboratorStackNavigatorParamList>();

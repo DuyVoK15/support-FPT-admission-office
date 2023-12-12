@@ -167,24 +167,7 @@ const TrainingRegistrationPassed = () => {
             <View>
               <TouchableOpacity
                 onPress={() =>
-                  props.navigation.dispatch(
-                    CommonActions.reset({
-                      index: 0,
-                      routes: [
-                        {
-                          name: ROUTES.ACCOUNT_STACK_NAVIGATOR,
-                          state: {
-                            routes: [
-                              { name: ROUTES.ACCOUNT },
-                              {
-                                name: ROUTES.CERTIFICATE_HISTORY,
-                              },
-                            ],
-                          },
-                        },
-                      ],
-                    })
-                  )
+                  props.navigation.navigate(ROUTES.CERTIFICATE_HISTORY)
                 }
                 style={{
                   paddingVertical: 8,
