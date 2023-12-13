@@ -1,4 +1,10 @@
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, { FC, useEffect, useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ROUTES } from '../constants/Routes';
@@ -28,6 +34,11 @@ import useAppNavigator from './useAppNavigator';
 import AccountInfoCreation from '../screens/collaborator/AccountInformationSignup/accountInfoCreation/AccountInfoCreation';
 import ScanIDRecognitionBack from '../screens/collaborator/AccountInformationSignup/scanIDRecognitionBack/scanIDRecognitionBack';
 import SignUpInformationNavigator from './collaborator/SignUpInformation/SignUpInformationNavigator';
+import NetInfo from '@react-native-community/netinfo';
+import NetworkCheck from '../../NetworkCheck';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { FONTS_FAMILY } from '../constants/Fonts';
+import { ScreenWidth } from '../constants/Demesions';
 
 const AuthStackScreen: React.FC = () => {
   return <LoginScreen />;
@@ -35,7 +46,20 @@ const AuthStackScreen: React.FC = () => {
 
 const AppNavigator: FC = () => {
   const { state } = useAppNavigator();
+  const [connectionStatus, setConnectionStatus] = useState(false);
+  const [connectionType, setConnectionType] = useState<string | null>(null);
 
+  const handleNetworkChange = (state: any) => {
+    setConnectionStatus(state.isConnected);
+    setConnectionType(state.type);
+  };
+  useEffect(() => {
+    const netInfoSubscription = NetInfo.addEventListener(handleNetworkChange);
+
+    return () => {
+      netInfoSubscription && netInfoSubscription();
+    };
+  }, []);
   // Check Loading Screen
   // if (
   //   state.collab_isAuthLoading ||
@@ -64,17 +88,24 @@ const AppNavigator: FC = () => {
   }
 
   // Return stack navigator
-  return state.collab_isAuthLoading ||
-    state.collab_isLoadAuthStateLoading ||
-    state.collab_isUserLoading ||
-    state.collab_isSignupAccountInfo ? (
-    <LoadingScreen />
-  ) : state.collab_isAuthenticated && state.roleId === RoleId.COLLAB_ROLE ? (
-    <HomeCollaboratorStackScreen />
-  ) : state.collab_isAuthenticated && state.roleId === RoleId.ADMISSION_ROLE ? (
-    <HomeAdmissionStackScreen />
-  ) : (
-    <AuthStackScreen />
+  return (
+    <>
+      <NetworkCheck visible={connectionStatus} />
+      {state.collab_isAuthLoading ||
+      state.collab_isLoadAuthStateLoading ||
+      state.collab_isUserLoading ||
+      state.collab_isSignupAccountInfo ? (
+        <LoadingScreen />
+      ) : state.collab_isAuthenticated &&
+        state.roleId === RoleId.COLLAB_ROLE ? (
+        <HomeCollaboratorStackScreen />
+      ) : state.collab_isAuthenticated &&
+        state.roleId === RoleId.ADMISSION_ROLE ? (
+        <HomeAdmissionStackScreen />
+      ) : (
+        <AuthStackScreen />
+      )}
+    </>
   );
 };
 

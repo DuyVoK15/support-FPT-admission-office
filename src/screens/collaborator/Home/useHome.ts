@@ -22,30 +22,29 @@ const useHome = () => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [cityName, setCityName] = useState<string | null>(null);
 
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-        return;
-      }
+  const getCurrentLocation = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      setErrorMsg('Permission to access location was denied');
+      return;
+    }
 
-      let location = await Location.getCurrentPositionAsync({ accuracy: 3 });
-      setLocation(location);
+    let location = await Location.getCurrentPositionAsync({ accuracy: 3 });
+    setLocation(location);
 
-      // Use reverse geocoding to get city name
-      if (location) {
-        const { latitude, longitude } = location.coords;
-        const address = await Location.reverseGeocodeAsync({
-          latitude,
-          longitude,
-        });
-        if (address && address.length > 0) {
-          setCityName(address[0].city + ', ' + address[0].country);
-        }
+    // Use reverse geocoding to get city name
+    if (location) {
+      const { latitude, longitude } = location.coords;
+      const address = await Location.reverseGeocodeAsync({
+        latitude,
+        longitude,
+      });
+      if (address && address.length > 0) {
+        setCityName(address[0].region + ', ' + address[0].country);
       }
-    })();
-  }, []);
+      console.log(JSON.stringify(address, null, 2));
+    }
+  };
 
   const [textSearch, setTextSearch] = useState<string | null>('');
   const {
@@ -89,6 +88,7 @@ const useHome = () => {
       await fetchHomePostUpcomming();
       await fetchHomePostReOpen();
       await fetchCheckInPostRegistration();
+      await getCurrentLocation();
     };
     fetch();
   }, [textSearch, navigation]);
@@ -141,28 +141,7 @@ const useHome = () => {
     await fetchHomePostUpcomming();
     await fetchHomePostReOpen();
     await fetchCheckInPostRegistration();
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-        return;
-      }
-
-      let location = await Location.getCurrentPositionAsync({ accuracy: 3 });
-      setLocation(location);
-
-      // Use reverse geocoding to get city name
-      if (location) {
-        const { latitude, longitude } = location.coords;
-        const address = await Location.reverseGeocodeAsync({
-          latitude,
-          longitude,
-        });
-        if (address && address.length > 0) {
-          setCityName(address[0].city + ', ' + address[0].country);
-        }
-      }
-    })();
+    await getCurrentLocation();
     setTimeout(() => {
       setRefreshing(false);
     }, 0);

@@ -20,7 +20,9 @@ import usePushNotifications from './usePushNotifications';
 import { AlertNotificationRoot } from 'react-native-alert-notification';
 import { MyContextProvider } from './src/context/stateContext';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import NetInfo from "@react-native-community/netinfo";
 import { LogBox } from 'react-native';
+import { useEffect } from 'react';
 LogBox.ignoreLogs([
   'Sending `onAnimatedValueUpdate` with no listeners registered.',
 ]);
@@ -38,6 +40,15 @@ export default function App() {
   if (!fontsLoaded && !fontError) {
     return null;
   }
+  // Check Network Internet Connection
+  // useEffect(() => {
+  //   const unsubscribe = NetInfo.addEventListener((state) => {
+  //     console.log(state);
+  //   });
+  //   return () => {
+  //     unsubscribe();
+  //   };
+  // }, []);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
