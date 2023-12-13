@@ -72,8 +72,9 @@ export default function Map() {
   //       return;
   //     }
 
-  //     let location = await Location.getCurrentPositionAsync({});
-  //     setLocation(location);
+  //     let location = await Location.reverseGeocodeAsync({ latitude: 10.848789, longitude: 106.768068 });
+
+  //     // setLocation(location);
   //     console.log(location);
   //   })();
   // }, []);
@@ -89,24 +90,10 @@ export default function Map() {
   const markerRefs = useRef<any>([]);
   const [selectedMarkerIndex, setSelectedMarkerIndex] = useState<number>(-1); // Default selected marker ID
 
-  const handleMarkerPress = (index: number) => {
-    setSelectedMarkerIndex(index);
-  };
-  useEffect(() => {
-    const fetchData = async () => {
-      await fetchPostRegistrationConfirmed();
-    };
-    fetchData();
-  }, []);
-  useEffect(() => {
-    setTimeout(() => {
-      handleMarkerPress(0);
-    }, 2000);
-  }, []);
-  useEffect(() => {
-    // Here you can handle moving the map to the selected marker's coordinates
+  const handleMarkerPress = (Index: number) => {
+    // setSelectedMarkerIndex(Index);
     const selectedMarker = postRegistrationConfirmList?.data?.find(
-      (item, index) => index === selectedMarkerIndex
+      (item, index) => index === Index
     );
     if (selectedMarker) {
       if (mapRef.current) {
@@ -123,13 +110,28 @@ export default function Map() {
 
         if (
           markerRefs &&
-          markerRefs.current[selectedMarkerIndex] &&
-          markerRefs.current[selectedMarkerIndex].showCallout
+          markerRefs.current[Index] &&
+          markerRefs.current[Index].showCallout
         ) {
-          markerRefs.current[selectedMarkerIndex].showCallout();
+          markerRefs.current[Index].showCallout();
         }
       }
     }
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchPostRegistrationConfirmed();
+    };
+    fetchData();
+  }, []);
+  useEffect(() => {
+    setTimeout(() => {
+      handleMarkerPress(0);
+    }, 2000);
+  }, []);
+  useEffect(() => {
+    // Here you can handle moving the map to the selected marker's coordinates
+    
   }, [selectedMarkerIndex]);
   const dispatch = useAppDispatch();
   const postRegistrationConfirmList = useAppSelector(
@@ -155,7 +157,7 @@ export default function Map() {
 
   const renderMarkers = () => {
     return postRegistrationConfirmList?.data.map((registration, index) => {
-      console.log(registration?.registrationCode);
+      // console.log(registration?.registrationCode);
 
       return (
         <Marker
@@ -283,8 +285,15 @@ export default function Map() {
     longitudeDelta: 3.957008980214596,
   };
 
-  const openGoogleMaps = (latitude: string, longitude: string) => {
-    const url = `https://www.google.com/maps?q=${latitude},${longitude}`;
+  const openGoogleMaps = async (latitude: string, longitude: string) => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({accuracy: 3})
+    const url = `https://www.google.com/maps/dir/?api=1&origin=${location?.coords?.latitude},${location?.coords?.longitude}&destination=${latitude},${longitude}&travelmode=driving`;
     Linking.openURL(url);
   };
 
@@ -452,7 +461,7 @@ export default function Map() {
           onScroll={(event) => {
             const offset = event.nativeEvent.contentOffset.x;
 
-            const index = Math.floor(offset / (ScreenWidth - 50));
+            const index = Math.floor(offset / (ScreenWidth * 0.8));
             handleMarkerPress(index);
             console.log(index);
           }}
