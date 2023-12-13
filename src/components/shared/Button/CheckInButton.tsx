@@ -13,27 +13,28 @@ const CheckInButton: FC<CheckInButtonProps> = (props) => {
       {...otherProps}
       style={{
         flexDirection: 'row',
-        paddingVertical: 10,
-        width: 115,
+        paddingVertical: 12,
+        paddingHorizontal: 18,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-evenly',
         borderRadius: 15,
-        backgroundColor: '#00FF87',
+        backgroundColor: '#02cc3b',
       }}
     >
-      <View style={{ flex: 1, marginLeft: 13 }}>
+      <View style={{ flex: 0 }}>
         <Text
           style={{
             fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
             fontSize: 15,
+            color: '#FFF',
           }}
         >
           Check In
         </Text>
       </View>
 
-      <View style={{ flex: 0, marginRight: 13 }}>
-        <Feather name="log-in" size={20} color="black" />
+      <View style={{ flex: 0, marginLeft: 5 }}>
+        <Feather name="log-in" size={20} color="#FFF" />
       </View>
     </TouchableOpacity>
   );

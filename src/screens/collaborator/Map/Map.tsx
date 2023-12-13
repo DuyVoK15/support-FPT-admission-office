@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Platform,
   Text,
@@ -10,6 +10,7 @@ import {
   Linking,
   TouchableOpacity,
   Image,
+  Alert,
 } from 'react-native';
 import Device from 'expo-device';
 import * as Location from 'expo-location';
@@ -44,7 +45,14 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import { transformer } from '../../../../metro.config';
-import { Entypo } from '@expo/vector-icons';
+import {
+  Entypo,
+  FontAwesome5,
+  Fontisto,
+  MaterialIcons,
+} from '@expo/vector-icons';
+import CheckInButton from '../../../components/shared/Button/CheckInButton';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 interface ItemCarouselProps {
   item?: DataViewPostRegistration;
@@ -53,45 +61,57 @@ interface ItemCarouselProps {
 }
 
 export default function Map() {
-  const [scrollX, setScrollX] = useState(0);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [markersKey, setMarkersKey] = useState('defaultKey');
+
+  const mapRef = useRef<MapView>(null);
+  const markerRefs = useRef<any>([]);
+  const [selectedMarkerIndex, setSelectedMarkerIndex] = useState<number>(0); // Default selected marker ID
 
   const [location, setLocation] = useState<Location.LocationObject | null>(
     null
   );
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [markersKey, setMarkersKey] = useState('defaultKey');
-
-  // useEffect(() => {
-  //   (async () => {
-  //     // if (Platform.OS === 'android') {
-  //     //   Location.setGoogleApiKey;
-  //     // }
-  //     let { status } = await Location.requestForegroundPermissionsAsync();
-  //     if (status !== 'granted') {
-  //       setErrorMsg('Permission to access location was denied');
-  //       return;
+  // const fetchLocation = useCallback(async () => {
+  //   let { status } = await Location.requestForegroundPermissionsAsync();
+  //   if (status !== 'granted') {
+  //     setErrorMsg('Permission to access location was denied');
+  //     return;
+  //   }
+  //   await Location.watchPositionAsync(
+  //     {
+  //       accuracy: Location.Accuracy.Highest,
+  //       timeInterval: 10000,
+  //       distanceInterval: 0,
+  //     },
+  //     (location) => {
+  //       console.log("data", location);
+  //       setLocation(location);
   //     }
-
-  //     let location = await Location.reverseGeocodeAsync({ latitude: 10.848789, longitude: 106.768068 });
-
-  //     // setLocation(location);
-  //     console.log(location);
-  //   })();
+  //   );
   // }, []);
+  // useEffect(() => {
+  //   fetchLocation();
+  // }, []);
+  const getCurrentLocation = async () => {
+    try {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
 
-  // let text = 'Waiting...';
-  // if (errorMsg) {
-  //   text = errorMsg;
-  // } else if (location) {
-  //   text = JSON.stringify(location);
-  // }
-
-  const mapRef = useRef<MapView>(null);
-  const markerRefs = useRef<any>([]);
-  const [selectedMarkerIndex, setSelectedMarkerIndex] = useState<number>(-1); // Default selected marker ID
+      let location: Location.LocationObject =
+        await Location.getCurrentPositionAsync({ accuracy: 2 });
+      console.log('1');
+      setLocation(location);
+      return location;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleMarkerPress = (Index: number) => {
-    // setSelectedMarkerIndex(Index);
+    setSelectedMarkerIndex(Index);
     const selectedMarker = postRegistrationConfirmList?.data?.find(
       (item, index) => index === Index
     );
@@ -118,6 +138,23 @@ export default function Map() {
       }
     }
   };
+
+  const handleCurrentButton = async () => {
+    const currentLocation = await getCurrentLocation();
+    if (mapRef.current) {
+      mapRef.current.animateToRegion({
+        latitude: currentLocation?.coords?.latitude
+          ? currentLocation?.coords?.latitude
+          : 0,
+        longitude: currentLocation?.coords?.longitude
+          ? currentLocation?.coords?.longitude
+          : 0,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      });
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       await fetchPostRegistrationConfirmed();
@@ -125,14 +162,9 @@ export default function Map() {
     fetchData();
   }, []);
   useEffect(() => {
-    setTimeout(() => {
-      handleMarkerPress(0);
-    }, 2000);
+    handleMarkerPress(selectedMarkerIndex);
   }, []);
-  useEffect(() => {
-    // Here you can handle moving the map to the selected marker's coordinates
-    
-  }, [selectedMarkerIndex]);
+
   const dispatch = useAppDispatch();
   const postRegistrationConfirmList = useAppSelector(
     (state) => state.collab_postRegistration.postRegistrationConfirmed
@@ -285,35 +317,85 @@ export default function Map() {
     longitudeDelta: 3.957008980214596,
   };
 
+  const [isOpenMapLoading, setIsOpenMapLoading] = useState(false);
   const openGoogleMaps = async (latitude: string, longitude: string) => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-        return;
-      }
+    setIsOpenMapLoading(true);
+    try {
+      // console.log('1');
+      // let { status } = await Location.requestForegroundPermissionsAsync();
 
-      let location = await Location.getCurrentPositionAsync({accuracy: 3})
-    const url = `https://www.google.com/maps/dir/?api=1&origin=${location?.coords?.latitude},${location?.coords?.longitude}&destination=${latitude},${longitude}&travelmode=driving`;
-    Linking.openURL(url);
+      // if (status !== 'granted') {
+      //   setErrorMsg('Permission to access location was denied');
+      //   setIsOpenMapLoading(false);
+      //   return;
+      // }
+      // const location = await Location.getCurrentPositionAsync({
+      //   accuracy:
+      //     Platform.OS === 'android'
+      //       ? Location.Accuracy.Low
+      //       : Location.Accuracy.Lowest,
+      //   timeInterval: 10000,
+      //   distanceInterval: 0
+      // });
+      // console.log('2');
+      const url = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}&travelmode=bicycling`;
+      console.log('3');
+      const supported = await Linking.canOpenURL(url);
+      console.log('4');
+      if (supported) {
+        console.log('5');
+        await Linking.openURL(url)
+          .then((res) => {
+            console.log('6');
+            console.log(res);
+            setIsOpenMapLoading(false);
+          })
+          .catch((error) => {
+            console.log('7');
+            setIsOpenMapLoading(false);
+            console.log('linking', error);
+          })
+          .finally(() => {
+            console.log('8');
+            setIsOpenMapLoading(false);
+          });
+      } else {
+        console.log('9');
+        Alert.alert(`Don't know how to open this URL: ${url}`);
+      }
+    } catch (error) {
+      setIsOpenMapLoading(false);
+      console.log(error);
+    }
+    // try {
+    //   let { status } = await Location.requestForegroundPermissionsAsync();
+
+    //   if (status !== 'granted') {
+    //     setErrorMsg('Permission to access location was denied');
+    //     setIsOpenMapLoading(false);
+    //     return;
+    //   }
+    // } catch (error) {
+    //   setIsOpenMapLoading(false);
+    //   console.log("granted", error);
+    // }
   };
 
   const renderCarouselItem = ({ item }: { item: DataViewPostRegistration }) => {
     return (
       <View
-        style={[
-          {
-            backgroundColor: 'transparent',
-            width: ScreenWidth,
-            justifyContent: 'center',
-            alignItems: 'center',
-            // marginLeft: index === 0 ? SIDE_CARD_LENGTH : SPACING,
-            // marginRight: index === 2 ? SIDE_CARD_LENGTH : SPACING,
-          },
-          // cardStyle,
-        ]}
+        style={{
+          backgroundColor: 'transparent',
+          width: ScreenWidth,
+          justifyContent: 'center',
+          alignItems: 'center',
+
+          paddingVertical: 15,
+        }}
       >
         <View
           style={{
+            ...SHADOWS.SHADOW_06,
             width: ScreenWidth * 0.9,
             borderRadius: 15,
             // height: ScreenWidth * 0.3,
@@ -379,17 +461,26 @@ export default function Map() {
               </View>
             </View>
             <RegistrationStatus status={REGISTRATION_STATUS_ENUM.CONFIRM} />
-            <View style={{ marginTop: 15, alignItems: 'flex-start' }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+                marginTop: 15,
+                // alignItems: 'flex-start  ',
+              }}
+            >
+              <CheckInButton />
               <TouchableOpacity
-              onPress={() =>
-                openGoogleMaps(
-                  item?.postPosition?.latitude
-                    ? item?.postPosition?.latitude
-                    : '0',
+                onPress={() =>
+                  openGoogleMaps(
+                    item?.postPosition?.latitude
+                      ? item?.postPosition?.latitude
+                      : '0',
                     item?.postPosition?.longitude
-                    ? item?.postPosition?.longitude
-                    : '0'
-                )}
+                      ? item?.postPosition?.longitude
+                      : '0'
+                  )
+                }
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
@@ -405,13 +496,14 @@ export default function Map() {
                     style={{
                       fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
                       color: '#FFF',
+                      fontSize: 15,
                     }}
                   >
-                    Show on Google Map
+                    See direction
                   </Text>
                 </View>
                 <View style={{ marginLeft: 5 }}>
-                  <Entypo name="direction" size={24} color="white" />
+                  <Fontisto name="map" size={20} color="#FFF" />
                 </View>
               </TouchableOpacity>
             </View>
@@ -423,6 +515,7 @@ export default function Map() {
 
   return (
     <View style={styles.container}>
+      <Spinner visible={isOpenMapLoading} />
       <MapView
         key={markersKey.toString()}
         provider={PROVIDER_GOOGLE}
@@ -437,7 +530,7 @@ export default function Map() {
         loadingEnabled={true}
         loadingIndicatorColor="#666666"
         showsUserLocation={true}
-        showsMyLocationButton={true}
+        showsMyLocationButton={false}
         // showsTraffic={true}
         // followsUserLocation={true}
         customMapStyle={[]}
@@ -448,7 +541,24 @@ export default function Map() {
       >
         {postRegistrationConfirmList && renderMarkers()}
       </MapView>
-      <View style={{ position: 'absolute', bottom: 20 }}>
+      <TouchableOpacity
+        onPress={handleCurrentButton}
+        style={{
+          position: 'absolute',
+          top: 50,
+          right: 10,
+          borderRadius: 100,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#FFF',
+          height: 50,
+          width: 50,
+          ...SHADOWS.SHADOW_05,
+        }}
+      >
+        <MaterialIcons name="my-location" size={24} color="black" />
+      </TouchableOpacity>
+      <View style={{ position: 'absolute', bottom: 5 }}>
         <FlatList
           style={{}}
           horizontal
@@ -515,7 +625,6 @@ export default function Map() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Platform.OS === 'android' ? statusBarHeight : 0,
   },
 
   map: {
