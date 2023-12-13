@@ -2,6 +2,7 @@ export interface DataContract {
   id: number;
   contractId: number;
   accountId: number;
+  submittedBinaryFile: string;
   submittedFile: string;
   status: number;
   createAt: string;

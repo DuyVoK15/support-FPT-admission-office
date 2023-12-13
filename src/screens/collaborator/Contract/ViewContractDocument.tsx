@@ -27,7 +27,7 @@ const ViewContractDocument = () => {
       <WebView
         style={{ width: ScreenWidth, height: ScreenHeight }}
         source={{
-          uri: item?.contract?.sampleFile
+          uri: item?.submittedFile
             ? encode
             : '404 Not Found',
         }}

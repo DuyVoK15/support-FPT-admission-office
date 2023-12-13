@@ -74,7 +74,11 @@ const Contract = () => {
             {/* <View></View> */}
             <TouchableOpacity
               onPress={() =>
-                props.navigation.navigate(ROUTES.CONTRACT_DOCUMENT, { item })
+                handlers.downloadAndOpenFile(
+                  item?.submittedFile
+                    ? item?.submittedFile
+                    : item?.contract?.sampleFile
+                )
               }
               style={{
                 borderWidth: 2,
