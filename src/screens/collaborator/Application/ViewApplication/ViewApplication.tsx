@@ -37,7 +37,7 @@ import RegistrationEmpty from '../../../../components/shared/Empty/RegistrationE
 const ViewApplication = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const { handlers, props, setState, state, stateRedux } = useViewApplication();
-  
+
   const renderListEmptyComponent = () => {
     return <RegistrationEmpty />;
   };
@@ -56,7 +56,7 @@ const ViewApplication = () => {
         <View style={{ marginVertical: 15 }}>
           <View style={{ marginHorizontal: 15 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View style={{flex: 1}}>
+              <View style={{ flex: 1 }}>
                 <Text
                   style={{
                     fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
@@ -67,7 +67,10 @@ const ViewApplication = () => {
                   <Text>{item?.id ? item?.id : 'No value'}</Text>
                 </Text>
               </View>
-              <ApplicationStatus style={{flex: 0}} status={item?.status ? item?.status : 0 } />
+              <ApplicationStatus
+                style={{ flex: 0 }}
+                status={item?.status ? item?.status : 0}
+              />
             </View>
           </View>
 
@@ -90,7 +93,12 @@ const ViewApplication = () => {
                 }}
               >
                 <View style={{ flex: 1, alignItems: 'center' }}>
-                  <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular, fontSize: 15 }}>
+                  <Text
+                    style={{
+                      fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
+                      fontSize: 15,
+                    }}
+                  >
                     {item?.account?.name ? item?.account?.name : 'No name'}
                   </Text>
 
@@ -360,6 +368,6 @@ export default ViewApplication;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
 });

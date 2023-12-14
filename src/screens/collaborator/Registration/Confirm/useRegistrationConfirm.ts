@@ -72,6 +72,11 @@ const useIndex = () => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const { showToastError, showToastSuccess } = useCustomToast();
 
+  const delay = (timeInMilliseconds: number) => {
+    return new Promise<null>((resolve) => {
+      setTimeout(() => resolve(null), timeInMilliseconds);
+    });
+  };
   // Check in function
   const checkInPostRegistation = async (postRegistrationId: number | null) => {
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -79,35 +84,45 @@ const useIndex = () => {
       setErrorMsg('Permission to access location was denied');
       return;
     }
+    let location: Location.LocationObject | null = null;
+    try {
+      location = (await Promise.race([
+        delay(3000),
+        Location.getCurrentPositionAsync({
+          accuracy: Location.LocationAccuracy.Low,
+          distanceInterval: 0,
+        }),
+      ])) as Location.LocationObject;
+      if (!location) {
+        console.log('Can not get your location!');
+        showToastError('Error when get your current location! Try again!');
+      } else {
+        await dispatch(
+          checkInPostRegistration({
+            postRegistrationId: postRegistrationId,
+            longtitude: location?.coords?.longitude,
+            latitude: location?.coords?.latitude,
+          })
+        ).then(async (res) => {
+          console.log(JSON.stringify(res, null, 2));
+          if (res?.meta?.requestStatus === 'fulfilled') {
+            const resFulfilledData = res.payload as CheckAttendanceResponse;
+            showToastSuccess('Check In Successful!');
+          } else {
+            const resRejectedData = res.payload as ErrorStatus;
 
-    let location = await Location.getCurrentPositionAsync({
-      accuracy: Location.Accuracy.Balanced,
-    });
-    console.log(location?.coords?.latitude + ' ' + location?.coords?.longitude);
-    if (location) {
-      await dispatch(
-        checkInPostRegistration({
-          postRegistrationId: postRegistrationId,
-          longtitude: location?.coords?.longitude,
-          latitude: location?.coords?.latitude,
-        })
-      ).then(async (res) => {
-        console.log(JSON.stringify(res, null, 2));
-        if (res?.meta?.requestStatus === 'fulfilled') {
-          const resFulfilledData = res.payload as CheckAttendanceResponse;
-          showToastSuccess('Check In Successful!');
-          dispatch_getAllPostRegistration_Confirmed(); // Call dispatch update List
-        } else {
-          const resRejectedData = res.payload as ErrorStatus;
-
-          switch (resRejectedData?.errorCode) {
-            default:
-              showToastError(resRejectedData?.message);
+            switch (resRejectedData?.errorCode) {
+              default:
+                showToastError(resRejectedData?.message);
+            }
           }
-        }
-      });
-    } else {
-      console.log('Can not get your location!');
+        });
+      }
+      console.log(
+        location?.coords?.latitude + ' ' + location?.coords?.longitude
+      );
+    } catch (error) {
+      console.log(error);
     }
   };
 

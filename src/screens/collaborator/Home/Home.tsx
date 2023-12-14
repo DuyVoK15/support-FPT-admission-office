@@ -54,8 +54,10 @@ const Home = () => {
       <View style={styles.viewHeader}>
         <View
           style={{
+            flex: 1,
             marginHorizontal: 20,
             marginTop: Platform.OS === 'ios' ? 56 : 48,
+            justifyContent: 'space-between'
           }}
         >
           <View
@@ -67,7 +69,7 @@ const Home = () => {
             <TouchableOpacity style={{ flex: 1 }}>
               <Octicons name="three-bars" size={30} color="white" />
             </TouchableOpacity>
-            <View style={{ flex: 8, alignItems: 'center' }}>
+            <View style={{ flex: 7, alignItems: 'center' }}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Text
                   style={{
@@ -117,7 +119,7 @@ const Home = () => {
             </View>
           </View>
 
-          <View style={{ marginTop: Platform.OS === 'ios' ? 25 : 35 }}>
+          <View style={{ marginBottom: 20}}>
             <View
               style={{
                 flexDirection: 'row',

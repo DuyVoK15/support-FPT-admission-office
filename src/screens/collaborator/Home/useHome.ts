@@ -12,6 +12,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
 import * as Location from 'expo-location';
+import { getLocation } from '../../../../useCurrentLocation';
 
 const useHome = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -23,13 +24,7 @@ const useHome = () => {
   const [cityName, setCityName] = useState<string | null>(null);
 
   const getCurrentLocation = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      setErrorMsg('Permission to access location was denied');
-      return;
-    }
-
-    let location = await Location.getCurrentPositionAsync({ accuracy: 3 });
+    const location = await getLocation();
     setLocation(location);
 
     // Use reverse geocoding to get city name
