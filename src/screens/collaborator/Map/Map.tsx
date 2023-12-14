@@ -41,11 +41,12 @@ export default function Map() {
           data={stateRedux.postRegistrationConfirmList?.data}
           onScroll={(event) => {
             const offset = event.nativeEvent.contentOffset.x;
+            console.log(offset);
             const index = Math.floor(offset / (ScreenWidth * 0.8));
             handlers.handleMarkerPress(index);
-            console.log(index);
+            
           }}
-          scrollEventThrottle={0}
+          scrollEventThrottle={16}
           renderItem={props.renderCarouselItem}
           keyExtractor={(item, index) => index.toString()}
         />
