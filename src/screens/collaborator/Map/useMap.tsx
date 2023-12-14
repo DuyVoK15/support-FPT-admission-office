@@ -250,7 +250,7 @@ const useMap = () => {
   const openGoogleMaps = async (latitude: string, longitude: string) => {
     setIsOpenMapLoading(true);
     try {
-      const url = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}&travelmode=bicycling`;
+      const url = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`;
       const supported = await Linking.canOpenURL(url);
       if (supported) {
         await Linking.openURL(url)
