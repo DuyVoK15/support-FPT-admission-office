@@ -21,6 +21,7 @@ interface PostRegistrationState {
   postRegistrationCompleted: ViewPostRegistrationResponse | null;
   postRegistrationCancelled: ViewPostRegistrationResponse | null;
   postRegistrationRejected: ViewPostRegistrationResponse | null;
+  postRegistrationConfirmedOnMap: ViewPostRegistrationResponse | null;
   createPostRegistration: CreatePostRegistrationResponse | null;
   deletePostRegistraion: DeletePostRegistraionResponse | null;
   updatePostRegistration: UpdatePostRegistrationResponse | null;
@@ -42,6 +43,7 @@ const initialState: PostRegistrationState = {
   postRegistrationCompleted: null,
   postRegistrationCancelled: null,
   postRegistrationRejected: null,
+  postRegistrationConfirmedOnMap: null,
   createPostRegistration: null,
   deletePostRegistraion: null,
   updatePostRegistration: null,
@@ -177,6 +179,23 @@ export const getAllPostRegistration_Rejected = createAsyncThunk(
     try {
       const response =
         await postRegistrationService.getAllPostRegistration(params);
+      return {
+        response_data: response.data,
+        query_data: params,
+      };
+    } catch (error: any) {
+      const axiosError = error as AxiosError;
+
+      return rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+export const getAllPostRegistrationConfirmedOnMap = createAsyncThunk(
+  'postRegistration/getAll/confirm/onMap',
+  async (params: FilterPostRegistration, { rejectWithValue }) => {
+    try {
+      const response =
+        await postRegistrationService.getAllPostRegistrationConfirmedOnMap(params);
       return {
         response_data: response.data,
         query_data: params,
@@ -384,6 +403,19 @@ export const postRegistrationSlice = createSlice({
         state.postRegistrationRejected = action.payload.response_data;
       })
       .addCase(getAllPostRegistration_Rejected.rejected, (state, action) => {
+        state.error = String(action.payload);
+        state.loading = false;
+      })
+      // Confirm on Map
+      .addCase(getAllPostRegistrationConfirmedOnMap.pending, (state) => {
+        state.loading = true;
+        state.error = '';
+      })
+      .addCase(getAllPostRegistrationConfirmedOnMap.fulfilled, (state, action) => {
+        state.loading = false;
+        state.postRegistrationConfirmedOnMap = action.payload.response_data;
+      })
+      .addCase(getAllPostRegistrationConfirmedOnMap.rejected, (state, action) => {
         state.error = String(action.payload);
         state.loading = false;
       })

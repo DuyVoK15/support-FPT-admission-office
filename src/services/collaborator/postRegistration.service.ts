@@ -23,6 +23,14 @@ export const postRegistrationService = {
       },
     });
   },
+  getAllPostRegistrationConfirmedOnMap: (
+    params: FilterPostRegistration
+  ): Promise<AxiosResponse<ViewPostRegistrationDto>> => {
+    const url = '/api/post-registration/getRegistrationMapByAccountId';
+    return axiosClient.get(url, {
+      params,
+    });
+  },
   createPostRegistration: (
     params: CreatePostRegistrationDto
   ): Promise<AxiosResponse<CreatePostRegistrationResponse>> => {

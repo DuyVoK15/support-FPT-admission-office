@@ -14,6 +14,7 @@ interface DataViewPostRegistration {
   note: string;
   postPositionsUnregistereds: DataPosition[] | [];
   isUpdated: boolean;
+  isNearCheckIn: boolean;
   post: DataPost;
   postPosition: DataPosition;
   checkAttendances: [
