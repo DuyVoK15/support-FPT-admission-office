@@ -65,6 +65,10 @@ import ErrorStatus from '../../../dtos/collaborator/response/errorStatus.dto';
 import { checkInPostRegistration } from '../../../features/collaborator/collab.checkAttendanceSlice';
 import { CheckAttendanceResponse } from '../../../dtos/collaborator/response/checkAttendance.dto';
 import SeeDirectionButon from './SeeDirectionButon';
+import {
+  format_ISODateString_To_DayOfWeekMonthDD,
+  format_Time_To_HHss,
+} from '../../../utils/formats';
 
 const useMap = () => {
   const dispatch = useAppDispatch();
@@ -281,7 +285,6 @@ const useMap = () => {
           width: ScreenWidth,
           justifyContent: 'center',
           alignItems: 'center',
-
           paddingVertical: 15,
         }}
       >
@@ -294,20 +297,53 @@ const useMap = () => {
             backgroundColor: 'white',
           }}
         >
-          <View style={{ margin: 15 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{}}>
+            <View style={{ alignItems: 'center' }}>
+              {item?.isNearCheckIn && (
+                <View
+                  style={{
+                    position: 'absolute',
+                    bottom: -20,
+                    right: 20,
+                    height: 40,
+                    paddingHorizontal: 16,
+                    backgroundColor: '#FFF',
+                    ...SHADOWS.SHADOW_05,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: 5,
+                    zIndex: 999,
+                    borderWidth: 3,
+                    borderColor: COLORS?.orange_button,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
+                      color: COLORS?.orange_button,
+                    }}
+                  >
+                    Upcomming
+                  </Text>
+                </View>
+              )}
+
               <View
                 style={{
-                  flex: 0,
-                  borderRadius: 10,
+                  width: ScreenWidth * 0.9,
+                  borderTopLeftRadius: 10,
+                  borderTopRightRadius: 10,
+                  borderBottomWidth: 0.4,
+                  borderColor: COLORS?.grey_underline,
                 }}
               >
                 <Image
                   style={{
-                    height: ScreenWidth * 0.2,
-                    width: ScreenWidth * 0.3,
+                    height: ScreenWidth * 0.25,
+                    width: '100%',
                     resizeMode: 'cover',
-                    borderRadius: 10,
+                    borderTopLeftRadius: 10,
+                    borderTopRightRadius: 10,
                   }}
                   source={{
                     uri: item?.post?.postImg
@@ -316,66 +352,95 @@ const useMap = () => {
                   }}
                 />
               </View>
-              <View style={{ flex: 1, marginLeft: 15 }}>
-                <Text
-                  style={{
-                    fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
-                    fontSize: 13,
-                    color: COLORS.light_black,
-                  }}
-                >
-                  General
-                </Text>
-                <Text
-                  style={{
-                    fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
-                    fontSize: 16,
-                    color: 'black',
-                    marginTop: 5,
-                  }}
-                >
-                  {item?.post?.postCategory?.postCategoryDescription
-                    ? item?.post?.postCategory?.postCategoryDescription
-                    : 'No value'}
-                </Text>
-                <Text
-                  style={{
-                    fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
-                    fontSize: 12,
-                    color: COLORS?.light_grey,
-                    marginTop: 5,
-                  }}
-                >
-                  {item?.registrationCode
-                    ? 'PRCode: ' + item?.registrationCode
-                    : 'No value'}
-                </Text>
-              </View>
             </View>
-            <RegistrationStatus status={REGISTRATION_STATUS_ENUM.CONFIRM} />
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-evenly',
-                marginTop: 15,
-                // alignItems: 'flex-start  ',
-              }}
-            >
-              <CheckInButton
-                onPress={() => showAlertHandler(TYPE_BUTTON_ENUM.CHECKIN, item)}
-              />
-              <SeeDirectionButon
-                onPress={() =>
-                  openGoogleMaps(
-                    item?.postPosition?.latitude
-                      ? item?.postPosition?.latitude
-                      : '0',
-                    item?.postPosition?.longitude
-                      ? item?.postPosition?.longitude
-                      : '0'
-                  )
-                }
-              />
+
+            <View style={{ margin: 15 }}>
+              <View
+                style={[
+                  styles.secondRow,
+                  { marginTop: item?.isNearCheckIn ? 10 : 0 },
+                ]}
+              >
+                <View
+                  style={{
+                    flex: 4,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text style={styles.textSecond}>Position</Text>
+                  <Text style={styles.textSecond_2}>
+                    {item?.postPosition?.positionName
+                      ? item?.postPosition?.positionName
+                      : 'No value'}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flex: 3,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text style={styles.textSecond}>Date</Text>
+                  <Text style={styles.textSecond_2}>
+                    {item?.postPosition?.date
+                      ? format_ISODateString_To_DayOfWeekMonthDD(
+                          item?.postPosition?.date
+                        )
+                        ? format_ISODateString_To_DayOfWeekMonthDD(
+                            item?.postPosition?.date
+                          )
+                        : 'No value'
+                      : 'No value'}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flex: 4,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text style={styles.textSecond}>Time</Text>
+                  <Text style={styles.textSecond_2}>
+                    {item?.postPosition?.timeFrom &&
+                      item?.postPosition?.timeTo &&
+                      format_Time_To_HHss(item?.postPosition?.timeFrom) &&
+                      format_Time_To_HHss(item?.postPosition?.timeTo) &&
+                      format_Time_To_HHss(item?.postPosition?.timeFrom) +
+                        ' - ' +
+                        format_Time_To_HHss(item?.postPosition?.timeTo)}
+                  </Text>
+                </View>
+              </View>
+
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-evenly',
+                  marginTop: 15,
+                  // alignItems: 'flex-start  ',
+                }}
+              >
+                <CheckInButton
+                  onPress={() =>
+                    showAlertHandler(TYPE_BUTTON_ENUM.CHECKIN, item)
+                  }
+                />
+                <SeeDirectionButon
+                  onPress={() =>
+                    openGoogleMaps(
+                      item?.postPosition?.latitude
+                        ? item?.postPosition?.latitude
+                        : '0',
+                      item?.postPosition?.longitude
+                        ? item?.postPosition?.longitude
+                        : '0'
+                    )
+                  }
+                />
+              </View>
             </View>
           </View>
         </View>
@@ -447,7 +512,7 @@ const useMap = () => {
                     fontSize: 14,
                   }}
                 >
-                  Position:
+                  PRCode:
                   <Text
                     style={{
                       fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
@@ -455,8 +520,29 @@ const useMap = () => {
                     }}
                   >
                     {' '}
-                    {registration?.postPosition?.positionName
-                      ? registration?.postPosition?.positionName
+                    {registration?.registrationCode
+                      ? registration?.registrationCode
+                      : 'No value'}
+                  </Text>
+                </Text>
+              </View>
+              <View style={{ marginTop: 10 }}>
+                <Text
+                  style={{
+                    fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
+                    fontSize: 14,
+                  }}
+                >
+                  PCode:
+                  <Text
+                    style={{
+                      fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                      fontSize: 14,
+                    }}
+                  >
+                    {' '}
+                    {registration?.post?.postCode
+                      ? registration?.post?.postCode
                       : 'No value'}
                   </Text>
                 </Text>
@@ -482,19 +568,27 @@ const useMap = () => {
                   </Text>
                 </Text>
               </View>
-
-              <TouchableOpacity style={{ alignItems: 'center', marginTop: 10 }}>
+              <View style={{ marginTop: 10 }}>
                 <Text
                   style={{
-                    fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
+                    fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
                     fontSize: 14,
-                    color: '#4287f5',
-                    textDecorationLine: 'underline',
                   }}
                 >
-                  Click to Show On GoogleMap
+                  Address:
+                  <Text
+                    style={{
+                      fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                      fontSize: 14,
+                    }}
+                  >
+                    {' '}
+                    {registration?.postPosition?.schoolName
+                      ? registration?.postPosition?.schoolName
+                      : 'No value'}
+                  </Text>
                 </Text>
-              </TouchableOpacity>
+              </View>
             </View>
           </Callout>
         </Marker>
@@ -576,4 +670,36 @@ const useMap = () => {
 
 export default useMap;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  secondRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    // marginTop: 10,
+    // marginBottom: 20,
+  },
+  column: {
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  textColumn: {
+    fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
+    fontSize: 14,
+  },
+  textColumn_2: {
+    fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+    fontSize: 13,
+  },
+  textSecond: {
+    fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+    fontSize: 13,
+    color: COLORS.light_grey,
+  },
+  textSecond_2: {
+    fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+    fontSize: 14,
+    color: 'black',
+    marginVertical: 5,
+    textAlign: 'center',
+  },
+});

@@ -1,51 +1,66 @@
-import React, { Component } from 'react';
-import { StyleProp, Text, TextStyle, TouchableOpacity, View } from 'react-native';
+import React, { Component, FC } from 'react';
+import {
+  StyleProp,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+  TouchableOpacityProps,
+  View,
+} from 'react-native';
 import { COLORS } from '../../../constants/Colors';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SHADOWS } from '../../../constants/Shadows';
 
-type SubmitButtonProps = TouchableOpacity['props'] & {
+interface SubmitButtonProps extends TouchableOpacityProps {
   titleButton?: string;
   color?: string;
   textStyle?: StyleProp<TextStyle>;
-};
+}
 
-export default class SubmitButton extends Component<SubmitButtonProps> {
-  render() {
-    const { titleButton, style, textStyle, ...otherProps } = this.props;
-    return (
-      <TouchableOpacity
-        style={[
-          {
-            height: 55,
-            backgroundColor: COLORS.orange_button,
-            borderRadius: 15,
-            alignItems: 'center',
-            justifyContent: 'center',
-            ...SHADOWS.SHADOW_05
-          },
-          style,
-        ]}
-        {...otherProps}
-      >
+const SubmitButton: FC<SubmitButtonProps> = (Props) => {
+  const { titleButton, style, textStyle, ...otherProps } = Props;
+  return (
+    <TouchableOpacity
+      style={[
+        {
+          flexDirection: 'row',
+          height: 55,
+          backgroundColor: COLORS.orange_button,
+          borderRadius: 15,
+          alignItems: 'center',
+          justifyContent: 'center',
+          ...SHADOWS.SHADOW_05,
+        },
+        style,
+      ]}
+      {...otherProps}
+    >
+      <View style={{ flex: 0 }} />
+      <View style={{ flex: 1, alignItems: 'center' }}>
         <Text
-          style={[{
-            fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
-            fontSize: 20,
-            color: 'white',
-          }, textStyle]}
+          style={[
+            {
+              fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
+              fontSize: 20,
+              color: 'white',
+            },
+            textStyle,
+          ]}
         >
           {titleButton}
         </Text>
-
+      </View>
+      <View style={{position: 'absolute', right: 10}}>
         <MaterialCommunityIcons
-          style={{ position: 'absolute', right: 10 }}
+          style={{ flex: 0 }}
           name="arrow-right-circle"
           size={30}
           color="black"
         />
-      </TouchableOpacity>
-    );
-  }
-}
+      </View>
+    </TouchableOpacity>
+  );
+};
+
+export default SubmitButton;
