@@ -45,8 +45,12 @@ const Registration_Cancelled = () => {
 
   const renderItem = ({ item }: { item: DataViewPostRegistration }) => {
     return (
-      <TouchableOpacity onPress={() =>
-        navigation.navigate(ROUTES.REGISTRATION_DETAIL, { item })} style={styles.containerItem}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate(ROUTES.REGISTRATION_DETAIL, { item })
+        }
+        style={styles.containerItem}
+      >
         <View style={styles.containerRow}>
           <View style={styles.firstRow}>
             <View style={styles.containerImage}>
@@ -139,16 +143,15 @@ const Registration_Cancelled = () => {
 
           <RegistrationStatus status={REGISTRATION_STATUS_ENUM.CANCEL} />
 
-
           <DashedLine
-            style={{ marginVertical: 10 }}
+            style={{ marginTop: 10 }}
             dashGap={0}
             dashThickness={1}
             dashLength={8}
             dashColor={COLORS.super_light_grey}
           />
 
-          <View
+          {/* <View
             style={{
               flexDirection: 'row',
               marginTop: 10,
@@ -163,10 +166,10 @@ const Registration_Cancelled = () => {
                 })
               }
             />
-          </View>
+          </View> */}
 
           <View style={{ flexDirection: 'row', marginTop: 15 }}>
-          <View style={{ flex: 1 }}>
+            <View style={{ flex: 1 }}>
               <Text
                 style={{
                   fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
@@ -234,7 +237,6 @@ const Registration_Cancelled = () => {
                     : 'No value'}
                 </Text>
               </Text>
-              
             </View>
             {/* {item?.postPositionsUnregistereds?.length > 0 && (
               <View>
@@ -259,7 +261,6 @@ const Registration_Cancelled = () => {
             )} */}
           </View>
         </View>
-        
       </TouchableOpacity>
     );
   };
@@ -281,12 +282,11 @@ const Registration_Cancelled = () => {
           <SortRegistrationButton />
         </View>
       </View>
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <FlatList
           data={props.postRegistrationList?.data}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={{ marginVertical: 10, marginHorizontal: Platform.OS === 'ios' ? 10 : 0 }}
           refreshControl={
             <RefreshControl
               refreshing={state.refreshing}
@@ -309,11 +309,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   containerItem: {
-    marginBottom: 15,
-    marginHorizontal: Platform.OS === 'ios' ? 0 : 10,
+    marginTop: 10,
+    marginBottom: 5,
+    marginHorizontal: 10,
     backgroundColor: '#FFF',
     borderRadius: 15,
-    ...SHADOWS.SHADOW_06
+    ...SHADOWS.SHADOW_06,
   },
   containerRow: {
     margin: 15,

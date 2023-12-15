@@ -331,10 +331,6 @@ const Registration_Completed = () => {
               onRefresh={handlers.onRefresh}
             />
           }
-          contentContainerStyle={{
-            marginVertical: 10,
-            marginHorizontal: Platform.OS === 'ios' ? 10 : 0,
-          }}
           ListEmptyComponent={renderListEmptyComponent}
           ListHeaderComponentStyle={{ marginTop: 15 }}
         />
@@ -351,8 +347,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   containerItem: {
-    marginBottom: 15,
-    marginHorizontal: Platform.OS === 'ios' ? 0 : 10,
+    marginTop: 10,
+    marginBottom: 5,
+    marginHorizontal: 10,
     backgroundColor: '#FFF',
     borderRadius: 15,
     ...SHADOWS.SHADOW_06,

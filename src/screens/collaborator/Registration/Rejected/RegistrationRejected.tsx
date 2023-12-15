@@ -232,10 +232,6 @@ const Registration_Cancelled = () => {
         <FlatList
           data={props.postRegistrationList?.data}
           renderItem={renderItem}
-          contentContainerStyle={{
-            marginVertical: 10,
-            marginHorizontal: Platform.OS === 'ios' ? 10 : 0,
-          }}
           refreshControl={
             <RefreshControl
               refreshing={state.refreshing}
@@ -258,8 +254,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   containerItem: {
-    marginBottom: 15,
-    marginHorizontal: Platform.OS === 'ios' ? 0 : 10,
+    marginTop: 10,
+    marginBottom: 5,
+    marginHorizontal: 10,
     backgroundColor: '#FFF',
     borderRadius: 15,
     ...SHADOWS.SHADOW_06,

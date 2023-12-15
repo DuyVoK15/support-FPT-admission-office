@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect } from 'react';
 import Header from '../../../components/shared/Header/Back';
 import { ScreenHeight } from '../../../constants/Demesions';
@@ -10,13 +10,20 @@ import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
 
 const Registration = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
-  
+
   return (
     <View style={{ flex: 1 }}>
-      <Header style={{ height: ScreenHeight / 9, flexDirection: "column", alignItems: "center", justifyContent: "flex-end" }}>
-        <View style={{ marginBottom: 10, alignItems: "center" }}>
+      <Header
+        style={{
+          height: Platform.OS === 'android' ? ScreenHeight * 0.1 :  ScreenHeight * 0.11,
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+        }}
+      >
+        <View style={{ marginBottom: 10, alignItems: 'center' }}>
           <Text
-            style={{ fontFamily: FONTS_FAMILY.Ubuntu_500Medium, fontSize: 24 }}
+            style={{ fontFamily: FONTS_FAMILY.Ubuntu_500Medium, fontSize: 24, letterSpacing: 0.5 }}
           >
             My Registration
           </Text>
