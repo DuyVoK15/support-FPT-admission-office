@@ -20,6 +20,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../../constants/Colors';
 import { useNavigation } from '@react-navigation/native';
 import { HomeAdmissionScreenNavigationProp } from '../../../../type';
+import { ROUTES } from '../../../constants/Routes';
 
 const Event = () => {
   const dispatch = useAppDispatch();
@@ -31,7 +32,7 @@ const Event = () => {
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <TouchableOpacity
             style={{ flex: 1 }}
-            onPress={() => navigation.navigate('HOME')}
+            onPress={() => navigation.navigate(ROUTES.HOME_STACK_NAVIGATOR)}
           >
             <Image
               style={{ height: 50, width: 50, resizeMode: 'contain' }}

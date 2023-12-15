@@ -15,7 +15,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
 import { useAppDispatch } from '../../../../app/store';
 import {
@@ -24,7 +24,10 @@ import {
 } from '../../../../features/collaborator/collab.postSlice';
 import { useAppSelector } from '../../../../app/hooks';
 import { cardGap } from '../../../../constants/Demesions';
-import { format_ISODateString_To_DayOfWeekMonthDDYYYY } from '../../../../utils/formats';
+import {
+  format_ISODateString_To_DayOfWeekMonthDDYYYY,
+  timeAgo,
+} from '../../../../utils/formats';
 import EventCardWrap from '../../../../components/collaborator/Home/EventCardWrap';
 import { imageNotFoundUri } from '../../../../utils/images';
 import CategoryFilterList from '../../../../components/collaborator/Event/ReOpenEvent/CategoryFilterList';
@@ -111,12 +114,18 @@ const EventReOpen: FC = () => {
   };
 
   // Sử dụng useEffect để gọi API khi postReOpenCategoryId thay đổi
-  useEffect(() => {
-    fetchPost();
-    fetchPostCategory();
-  }, [dataFilterReOpen]);
+  useFocusEffect(
+    React.useCallback(() => {
+      // Đây là nơi bạn muốn chạy lại các logic hoặc useEffect khi tab này được focus
+      fetchPost();
+      // Thực hiện các hành động cần thiết khi tab này được chọn
+      // Ví dụ: gọi các hàm, cập nhật state, hoặc fetch dữ liệu mới,...
+    }, [dataFilterReOpen])
+  );
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    fetchPostCategory();
+  }, []);
 
   // Refresh function fetchPost()
   const [isRefresh, setIsRefresh] = useState(false);
@@ -179,9 +188,7 @@ const EventReOpen: FC = () => {
       <View>
         <EventCardWrap
           onPress={() => handleNavigate(post)}
-          imageUrl={
-            post?.postImg ? post?.postImg : imageNotFoundUri
-          }
+          imageUrl={post?.postImg ? post?.postImg : imageNotFoundUri}
           title={
             post?.postCategory?.postCategoryDescription
               ? post?.postCategory?.postCategoryDescription
@@ -189,28 +196,30 @@ const EventReOpen: FC = () => {
           }
           dateTime={
             post?.dateFrom
-              ? format_ISODateString_To_DayOfWeekMonthDDYYYY(
-                  post?.dateFrom
-                )
-                ? format_ISODateString_To_DayOfWeekMonthDDYYYY(
-                    post?.dateFrom
-                  )
+              ? format_ISODateString_To_DayOfWeekMonthDDYYYY(post?.dateFrom)
+                ? format_ISODateString_To_DayOfWeekMonthDDYYYY(post?.dateFrom)
                 : 'No date'
               : 'No date'
           }
-          schoolName={post?.postPositions?.[0]?.schoolName ? post?.postPositions?.[0]?.schoolName : 'No value'}
+          schoolName={
+            post?.postPositions?.[0]?.schoolName
+              ? post?.postPositions?.[0]?.schoolName
+              : 'No value'
+          }
           totalRegisterAmount={
-            post?.registerAmount
-              ? String(post?.registerAmount)
-              : '0'
+            post?.registerAmount ? String(post?.registerAmount) : '0'
           }
           totalAmountPosition={
-            post?.totalAmountPosition
-              ? String(post?.totalAmountPosition)
-              : '0'
+            post?.totalAmountPosition ? String(post?.totalAmountPosition) : '0'
           }
           status={post?.status ? String(post?.status) : 'No Status'}
-          timeAgo={post?.createAt ? post?.createAt : 'No time'}
+          timeAgo={
+            post?.createAt
+              ? timeAgo({ dateProp: post?.createAt })
+                ? timeAgo({ dateProp: post?.createAt })
+                : 'No time'
+              : 'No Time'
+          }
         />
       </View>
     );

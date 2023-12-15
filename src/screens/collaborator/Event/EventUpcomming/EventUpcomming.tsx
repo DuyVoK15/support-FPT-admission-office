@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native';
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
 import { useAppDispatch } from '../../../../app/store';
 import {
@@ -18,6 +18,7 @@ import { ScreenWidth, cardGap } from '../../../../constants/Demesions';
 import {
   formatDateToDDMMYYYY,
   format_ISODateString_To_DayOfWeekMonthDDYYYY,
+  timeAgo,
 } from '../../../../utils/formats';
 import EventCardWrap from '../../../../components/collaborator/Home/EventCardWrap';
 import { imageNotFoundUri } from '../../../../utils/images';
@@ -104,9 +105,14 @@ const EventUpcomming: FC = () => {
   };
 
   // Sử dụng useEffect để gọi API khi postUpcommingCategoryId thay đổi
-  useEffect(() => {
-    fetchPost();
-  }, [dataFilterUpcomming]);
+  useFocusEffect(
+    React.useCallback(() => {
+      // Đây là nơi bạn muốn chạy lại các logic hoặc useEffect khi tab này được focus
+      fetchPost();
+      // Thực hiện các hành động cần thiết khi tab này được chọn
+      // Ví dụ: gọi các hàm, cập nhật state, hoặc fetch dữ liệu mới,...
+    }, [dataFilterUpcomming])
+  );
 
   useEffect(() => {
     fetchPostCategory();
@@ -204,7 +210,13 @@ const EventUpcomming: FC = () => {
               : '0'
           }
           status={post?.status ? String(post?.status) : 'No Status'}
-          timeAgo={post?.createAt ? post?.createAt : 'No time'}
+          timeAgo={
+            post?.createAt
+              ? timeAgo({ dateProp: post?.createAt })
+                ? 'Posted at: '+ timeAgo({ dateProp: post?.createAt })
+                : 'No time'
+              : 'No Time'
+          }
         />
       </View>
     );

@@ -235,7 +235,7 @@ const Home = () => {
             </TouchableOpacity>
           </View>
 
-          <View style={{ height: ScreenWidth * 0.85, marginTop: 10 }}>
+          <View style={{ marginTop: 10 }}>
             <FlatList
               horizontal
               data={props.postHomeUpcommingList?.data}
@@ -330,7 +330,9 @@ const Home = () => {
                   <View key={index}>
                     <EventCardWrap
                       onPress={() =>
-                        navigation.navigate('HOME_EVENT_DETAIL', { post: post })
+                        navigation.navigate(ROUTES.HOME_EVENT_DETAIL, {
+                          post: post,
+                        })
                       }
                       imageUrl={
                         post?.postImg ? post?.postImg : imageNotFoundUri
