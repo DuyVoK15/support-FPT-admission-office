@@ -75,6 +75,7 @@ const useMap = () => {
   const { showToastSuccess, showToastError } = useCustomToast();
   const mapRef = useRef<MapView>(null);
   const markerRefs = useRef<any>([]);
+  const flatListRef = useRef<any>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [markersKey, setMarkersKey] = useState('defaultKey');
   const [selectedMarkerIndex, setSelectedMarkerIndex] = useState<number>(0); // Default selected marker ID
@@ -98,14 +99,16 @@ const useMap = () => {
         Order: 'DESCENDING',
       })
     ).then((res) => {
-      console.log(JSON.stringify(res, null, 2));
-      if (res?.meta?.requestStatus === 'fulfilled') {
-        // showToastSuccess('You check in Success');
-      } else {
-        const resData = res?.payload as ErrorStatus;
-        // showToastError(resData?.message);
-      }
+      const resData = res?.payload as ViewPostRegistrationResponse;
+      // console.log(JSON.stringify(resData, null, 2));
     });
+  };
+
+  const initialRegionObject = {
+    latitude: 10.841417,
+    longitude: 106.810074,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
   };
 
   useEffect(() => {
@@ -113,6 +116,7 @@ const useMap = () => {
       await fetchPostRegistrationConfirmed();
     };
     fetchData();
+    setInitialRegion(initialRegionObject);
   }, []);
 
   const delay = (timeInMilliseconds: number) => {
@@ -187,7 +191,7 @@ const useMap = () => {
     }
   };
 
-  const handleMarkerPress = (Index: number) => {
+  const handleMarkerPress = async (Index: number) => {
     setSelectedMarkerIndex(Index);
     const selectedMarker = postRegistrationConfirmList?.data?.find(
       (item, index) => index === Index
@@ -232,24 +236,24 @@ const useMap = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchUserLocation = async () => {
-      try {
-        const userLocation = await getCurrentLocation();
-        if (userLocation) {
-          setInitialRegion({
-            latitude: userLocation?.coords?.latitude,
-            longitude: userLocation?.coords?.longitude,
-            latitudeDelta: 0.01,
-            longitudeDelta: 0.01,
-          });
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchUserLocation();
-  }, []);
+  // useEffect(() => {
+  //   const fetchUserLocation = async () => {
+  //     try {
+  //       const userLocation = await getCurrentLocation();
+  //       if (userLocation) {
+  //         setInitialRegion({
+  //           latitude: userLocation?.coords?.latitude,
+  //           longitude: userLocation?.coords?.longitude,
+  //           latitudeDelta: 0.01,
+  //           longitudeDelta: 0.01,
+  //         });
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   fetchUserLocation();
+  // }, []);
 
   const openGoogleMaps = async (latitude: string, longitude: string) => {
     setIsOpenMapLoading(true);
@@ -285,7 +289,7 @@ const useMap = () => {
           width: ScreenWidth,
           justifyContent: 'center',
           alignItems: 'center',
-          paddingVertical: 15,
+          paddingVertical: 10,
         }}
       >
         <View
@@ -468,28 +472,8 @@ const useMap = () => {
           description={registration?.postPosition?.positionDescription}
           // onPress={(event) => console.log(event)}
           isPreselected={true}
-          onCalloutPress={() =>
-            openGoogleMaps(
-              registration?.postPosition?.latitude
-                ? registration?.postPosition?.latitude
-                : '0',
-              registration?.postPosition?.longitude
-                ? registration?.postPosition?.longitude
-                : '0'
-            )
-          }
         >
           <Callout
-            onPress={() =>
-              openGoogleMaps(
-                registration?.postPosition?.latitude
-                  ? registration?.postPosition?.latitude
-                  : '0',
-                registration?.postPosition?.longitude
-                  ? registration?.postPosition?.longitude
-                  : '0'
-              )
-            }
             style={{ backgroundColor: '#FFF', padding: 10, borderRadius: 10 }}
           >
             <View style={{ borderRadius: 10 }}>
@@ -596,6 +580,12 @@ const useMap = () => {
     });
   };
 
+  const scrollToIndexZero = async () => {
+    if (flatListRef.current) {
+      flatListRef.current.scrollToOffset({ x: 0, animated: true });
+    }
+  };
+
   useEffect(() => {
     // Generate a new key whenever postRegistrationConfirmList changes
     setMarkersKey(Date.now().toString());
@@ -639,15 +629,61 @@ const useMap = () => {
     setShowAlert(false);
   };
 
+  const [isShowMarker, setIsShowMarker] = useState<boolean>(false);
+  const showMarker = () => {
+    setIsShowMarker(true);
+  };
+  const hideMarker = () => {
+    setIsShowMarker(false);
+  };
+  const [isVisibleRegistration, setIsVisibleRegistration] =
+    useState<boolean>(false);
+  const showRegistration = () => {
+    setIsVisibleRegistration(true);
+    showMarker();
+    handleMarkerPress(0);
+  };
+  const hideRegistration = () => {
+    setIsVisibleRegistration(false);
+    hideMarker();
+    if (
+      markerRefs &&
+      markerRefs.current[selectedMarkerIndex] &&
+      markerRefs.current[selectedMarkerIndex].hideCallout
+    ) {
+      markerRefs.current[selectedMarkerIndex].hideCallout();
+    }
+  };
+
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    const fetchData = async () => {
+      await fetchPostRegistrationConfirmed();
+      await scrollToIndexZero();
+    };
+    fetchData();
+
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 0);
+  }, []);
+
   const handlers = {
     handleMarkerPress,
     handleCurrentButton,
     checkInPostRegistation,
     showAlertHandler,
     hideAlertHandler,
+    showRegistration,
+    hideRegistration,
+    showMarker,
+    hideMarker,
+    onRefresh,
+    scrollToIndexZero,
   };
   const props = { renderCarouselItem, renderMarkers, TYPE_BUTTON_ENUM };
-  const ref = { mapRef, markerRefs };
+  const ref = { mapRef, markerRefs, flatListRef };
   const state = {
     isOpenMapLoading,
     initialRegion,
@@ -655,6 +691,9 @@ const useMap = () => {
     showAlert,
     confirmInfo,
     Item,
+    isVisibleRegistration,
+    isShowMarker,
+    refreshing,
   };
   const setState = {};
   const stateRedux = { postRegistrationConfirmList };

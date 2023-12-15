@@ -195,11 +195,10 @@ export const getAllPostRegistrationConfirmedOnMap = createAsyncThunk(
   async (params: FilterPostRegistration, { rejectWithValue }) => {
     try {
       const response =
-        await postRegistrationService.getAllPostRegistrationConfirmedOnMap(params);
-      return {
-        response_data: response.data,
-        query_data: params,
-      };
+        await postRegistrationService.getAllPostRegistrationConfirmedOnMap(
+          params
+        );
+      return response.data;
     } catch (error: any) {
       const axiosError = error as AxiosError;
 
@@ -298,7 +297,9 @@ export const postRegistrationSlice = createSlice({
           case REGISTRATION_STATUS_ENUM.PENDING.toString():
             state.postRegistrationPending = action.payload.response_data;
             break;
-          case REGISTRATION_STATUS_ENUM.CONFIRM + '-' + REGISTRATION_STATUS_ENUM.CHECKIN:
+          case REGISTRATION_STATUS_ENUM.CONFIRM +
+            '-' +
+            REGISTRATION_STATUS_ENUM.CHECKIN:
             state.postRegistrationConfirmed = action.payload.response_data;
             break;
           case REGISTRATION_STATUS_ENUM.CHECKOUT.toString():
@@ -411,14 +412,20 @@ export const postRegistrationSlice = createSlice({
         state.loading = true;
         state.error = '';
       })
-      .addCase(getAllPostRegistrationConfirmedOnMap.fulfilled, (state, action) => {
-        state.loading = false;
-        state.postRegistrationConfirmedOnMap = action.payload.response_data;
-      })
-      .addCase(getAllPostRegistrationConfirmedOnMap.rejected, (state, action) => {
-        state.error = String(action.payload);
-        state.loading = false;
-      })
+      .addCase(
+        getAllPostRegistrationConfirmedOnMap.fulfilled,
+        (state, action) => {
+          state.loading = false;
+          state.postRegistrationConfirmedOnMap = action.payload;
+        }
+      )
+      .addCase(
+        getAllPostRegistrationConfirmedOnMap.rejected,
+        (state, action) => {
+          state.error = String(action.payload);
+          state.loading = false;
+        }
+      )
       // Create
       .addCase(createPostRegistration.pending, (state) => {
         state.loading = true;

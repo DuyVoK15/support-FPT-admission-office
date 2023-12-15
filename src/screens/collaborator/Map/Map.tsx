@@ -1,6 +1,12 @@
 import React from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Text,
+} from 'react-native';
+import MapView, { PROVIDER_GOOGLE, Polyline } from 'react-native-maps';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { GOOGLE_API_KEY } from '../../../../env';
 import { ScreenHeight, ScreenWidth } from '../../../constants/Demesions';
@@ -9,14 +15,17 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import CurrentUserLocationButton from './CurrentUserLocationButton';
 import useMap from './useMap';
 import ConfirmAlert from '../../../components/shared/AwesomeAlert/ConfirmAlert';
+import { Entypo, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { FONTS_FAMILY } from '../../../constants/Fonts';
+import { SHADOWS } from '../../../constants/Shadows';
 
 export default function Map() {
   const { ref, state, setState, stateRedux, props, handlers } = useMap();
   return (
     <View style={styles.container}>
-      <Spinner visible={state.isOpenMapLoading} />
+      <Spinner visible={state.isOpenMapLoading || state.refreshing} />
       <MapView
-        key={state.markersKey.toString()}
+        // key={state.markersKey.toString()}
         provider={PROVIDER_GOOGLE}
         ref={ref.mapRef}
         initialRegion={state.initialRegion}
@@ -28,28 +37,111 @@ export default function Map() {
         moveOnMarkerPress={false}
       >
         {stateRedux.postRegistrationConfirmList && props.renderMarkers()}
+        {/* <Polyline
+          coordinates={[
+            { latitude: 10.8025259, longitude: 106.4351431 },
+            { latitude: 10.123123, longitude: 106.123123 },
+         
+          ]}
+          strokeColor="#000" // fallback for when `strokeColors` is not supported by the map-provider
+          strokeColors={[
+            '#7F0000',
+            '#00000000', // no color, creates a "long" gradient between the previous and next coordinate
+            '#B24112',
+            '#E5845C',
+            '#238C23',
+            '#7F0000',
+          ]}
+          strokeWidth={6}
+        /> */}
       </MapView>
       <CurrentUserLocationButton onPress={handlers.handleCurrentButton} />
-      <View style={{ flex: 1, position: 'absolute', bottom: 5 }}>
-        <FlatList
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          decelerationRate={'fast'}
-          snapToInterval={ScreenWidth}
-          snapToAlignment="center"
-          pagingEnabled={true}
-          data={stateRedux.postRegistrationConfirmList?.data}
-          onScroll={(event) => {
-            const offset = event.nativeEvent.contentOffset.x;
-            console.log(offset);
-            const index = Math.floor(offset / (ScreenWidth * 0.8));
-            handlers.handleMarkerPress(index);
-            
-          }}
-          scrollEventThrottle={16}
-          renderItem={props.renderCarouselItem}
-          keyExtractor={(item, index) => index.toString()}
-        />
+      <View
+        style={{ flex: 1, position: 'absolute', bottom: 10, width: '100%' }}
+      >
+        <View style={{ flexDirection: 'row' }}>
+          <View style={{ flex: 1 }}></View>
+          <View style={{ flex: 4, alignItems: 'center' }}>
+            {state.isVisibleRegistration ? (
+              <TouchableOpacity
+                onPress={handlers.hideRegistration}
+                style={{
+                  alignItems: 'center',
+                  paddingHorizontal: 20,
+                  paddingTop: 10,
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="chevron-double-down"
+                  size={30}
+                  color="black"
+                />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={handlers.showRegistration}
+                style={{ alignItems: 'center' }}
+              >
+                <MaterialCommunityIcons
+                  name="chevron-double-up"
+                  size={30}
+                  color="black"
+                />
+                <Text
+                  style={{
+                    fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
+                    fontSize: 16,
+                    color: '#000',
+                  }}
+                >
+                  Show Registration
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'flex-end',
+              alignItems: 'flex-end',
+              right: 20,
+            }}
+          >
+            <TouchableOpacity
+              onPress={handlers.onRefresh}
+              style={{
+                backgroundColor: '#FFF',
+                padding: 6,
+                borderRadius: 100,
+                ...SHADOWS.SHADOW_05,
+              }}
+            >
+              <Ionicons name="reload" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {state.isVisibleRegistration && (
+          <FlatList
+            ref={ref.flatListRef}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            decelerationRate={'fast'}
+            snapToInterval={ScreenWidth}
+            snapToAlignment="center"
+            pagingEnabled={true}
+            data={stateRedux.postRegistrationConfirmList?.data}
+            onScroll={(event) => {
+              const offset = event.nativeEvent.contentOffset.x;
+              console.log(offset);
+              const index = Math.floor(offset / (ScreenWidth * 0.8));
+              handlers.handleMarkerPress(index);
+            }}
+            scrollEventThrottle={16}
+            renderItem={props.renderCarouselItem}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        )}
       </View>
       <ConfirmAlert
         show={state.showAlert}
