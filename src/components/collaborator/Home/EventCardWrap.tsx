@@ -16,7 +16,7 @@ interface EventCardWrapProps extends TouchableOpacityProps {
   totalRegisterAmount?: string;
   totalAmountPosition?: string;
   status?: string;
-  timeAgo?: string;
+  timeAgo?: string | null;
 }
 
 const EventCardWrap: FC<EventCardWrapProps> = (props) => {
@@ -107,12 +107,7 @@ const EventCardWrap: FC<EventCardWrapProps> = (props) => {
                   fontSize: 11,
                 }}
               >
-                {props?.timeAgo
-                  ? 'Posted ' +
-                    timeAgo({
-                      dateProp: props.timeAgo ? props.timeAgo : null,
-                    })
-                  : ''}
+                {props?.timeAgo ? props?.timeAgo : 'No time'}
               </Text>
             </View>
           </View>
@@ -145,15 +140,15 @@ const EventCardWrap: FC<EventCardWrapProps> = (props) => {
                   Number(props.status) === POST_STATUS_ENUM.OPENING
                     ? 'white'
                     : Number(props.status) === POST_STATUS_ENUM.RE_OPEN
-                    ? "white"
+                    ? 'white'
                     : 'yellow',
               }}
             >
               {Number(props.status) === POST_STATUS_ENUM.OPENING
-                    ? 'Opening'
-                    : Number(props.status) === POST_STATUS_ENUM.RE_OPEN
-                    ? "Re-Open"
-                    : 'Closed'}
+                ? 'Opening'
+                : Number(props.status) === POST_STATUS_ENUM.RE_OPEN
+                ? 'Re-Open'
+                : 'Closed'}
             </Text>
           </View>
         )}

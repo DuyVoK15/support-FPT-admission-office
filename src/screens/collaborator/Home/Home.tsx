@@ -1,4 +1,5 @@
 import {
+  FlatList,
   Platform,
   RefreshControl,
   ScrollView,
@@ -44,6 +45,7 @@ import SearchTextInput from '../../../components/collaborator/Home/SearchTextInp
 import MovingText from '../../../components/shared/TextAnimated/MovingText';
 import ConfirmAlert from '../../../components/shared/ConfirmAlert/ConfirmAlert';
 import { ROUTES } from '../../../constants/Routes';
+import { FlashList } from '@shopify/flash-list';
 
 const Home = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -57,7 +59,7 @@ const Home = () => {
             flex: 1,
             marginHorizontal: 20,
             marginTop: Platform.OS === 'ios' ? 56 : 48,
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
           }}
         >
           <View
@@ -119,7 +121,7 @@ const Home = () => {
             </View>
           </View>
 
-          <View style={{ marginBottom: 20}}>
+          <View style={{ marginBottom: 20 }}>
             <View
               style={{
                 flexDirection: 'row',
@@ -164,7 +166,10 @@ const Home = () => {
                     backgroundColor: COLORS.super_light_grey,
                     right: 10,
                   }}
-                  onPress={() => handlers.setTextSearch('')}
+                  onPress={() => {
+                    handlers.setTextSearch('');
+                    handlers.setValue('search', '');
+                  }}
                 >
                   <MaterialIcons name="clear" size={22} color="white" />
                 </TouchableOpacity>
@@ -230,71 +235,31 @@ const Home = () => {
             </TouchableOpacity>
           </View>
 
-          <View style={{ height: ScreenWidth * 0.85, marginTop: 20 }}>
-            <ScrollView horizontal scrollEventThrottle={16}>
-              {props.postHomeUpcommingList?.data ? (
-                props.postHomeUpcommingList?.data.map((post, index) => (
-                  <View
-                    key={index}
-                    style={{ marginTop: 5, marginHorizontal: 15 }}
+          <View style={{ height: ScreenWidth * 0.85, marginTop: 10 }}>
+            <FlatList
+              horizontal
+              data={props.postHomeUpcommingList?.data}
+              renderItem={props.renderItemUpcomming}
+              ListEmptyComponent={
+                <View
+                  style={{
+                    width: ScreenWidth,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                      fontSize: 26,
+                      color: COLORS?.light_grey,
+                    }}
                   >
-                    <EventCard
-                      onPress={() =>
-                        navigation.navigate(ROUTES.HOME_EVENT_DETAIL, {
-                          post: post,
-                        })
-                      }
-                      imageUrl={
-                        post?.postImg ? post?.postImg : imageNotFoundUri
-                      }
-                      timeAgo={
-                        post?.createAt
-                          ? timeAgo({
-                              dateProp: post?.createAt,
-                            })
-                            ? timeAgo({
-                                dateProp: post?.createAt,
-                              }) ?? 'No value'
-                            : 'No value'
-                          : 'No value'
-                      }
-                      titleEvent={
-                        post?.postCategory?.postCategoryDescription
-                          ? post?.postCategory?.postCategoryDescription
-                          : 'No value'
-                      }
-                      schoolName={
-                        post?.postPositions?.[0]?.schoolName
-                          ? post?.postPositions?.[0]?.schoolName
-                          : 'No value'
-                      }
-                      location={
-                        post?.postPositions?.[0]?.location
-                          ? post?.postPositions?.[0]?.location
-                          : 'No value'
-                      }
-                      dateFrom={
-                        post?.dateFrom
-                          ? format_ISODateString_To_MonthDD(post?.dateFrom)
-                            ? format_ISODateString_To_MonthDD(post?.dateFrom) ??
-                              'No value'
-                            : 'No value'
-                          : 'No value'
-                      }
-                      timeFrom={
-                        post?.timeFrom
-                          ? format_Time_To_HHss(post?.timeFrom)
-                            ? format_Time_To_HHss(post?.timeFrom) ?? 'No value'
-                            : 'No value'
-                          : 'No value'
-                      }
-                    />
-                  </View>
-                ))
-              ) : (
-                <View />
-              )}
-            </ScrollView>
+                    No Data
+                  </Text>
+                </View>
+              }
+            />
           </View>
         </View>
 
@@ -359,7 +324,8 @@ const Home = () => {
                 rowGap: cardGap - 2,
               }}
             >
-              {props.postHomeReOpenList?.data ? (
+              {props.postHomeReOpenList?.data &&
+              props.postHomeReOpenList?.data?.length > 0 ? (
                 props.postHomeReOpenList?.data.map((post, index) => (
                   <View key={index}>
                     <EventCardWrap
@@ -400,21 +366,44 @@ const Home = () => {
                           ? String(post?.totalAmountPosition)
                           : '0'
                       }
-                      timeAgo={post?.createAt ? post?.createAt : 'No Time'}
+                      timeAgo={
+                        post?.createAt
+                          ? timeAgo({ dateProp: post?.createAt })
+                            ? timeAgo({ dateProp: post?.createAt })
+                            : 'No time'
+                          : 'No Time'
+                      }
                     />
                   </View>
                 ))
               ) : (
-                <View />
+                <View
+                  style={{
+                    height: ScreenWidth,
+                    width: ScreenWidth,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                      fontSize: 26,
+                      color: COLORS?.light_grey,
+                    }}
+                  >
+                    No Data
+                  </Text>
+                </View>
               )}
             </View>
           </View>
         </View>
       </ScrollView>
 
-      {Number(props.checkInPostRegistrationList?.data?.length) > 0 && (
+      {/* {Number(props.checkInPostRegistrationList?.data?.length) > 0 && (
         <HomeRegistrationPopup />
-      )}
+      )} */}
     </View>
   );
 };

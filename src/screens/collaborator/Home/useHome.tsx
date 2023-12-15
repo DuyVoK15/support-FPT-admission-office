@@ -13,6 +13,15 @@ import { useNavigation } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
 import * as Location from 'expo-location';
 import { getLocation } from '../../../../useCurrentLocation';
+import { DataPost } from '../../../models/collaborator/dataPost.model';
+import {
+  format_ISODateString_To_MonthDD,
+  format_Time_To_HHss,
+  timeAgo,
+} from '../../../utils/formats';
+import EventCard from '../../../components/collaborator/Home/EventCard';
+import { ROUTES } from '../../../constants/Routes';
+import { imageNotFoundUri } from '../../../utils/images';
 
 const useHome = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -142,6 +151,61 @@ const useHome = () => {
     }, 0);
   }, []);
 
+  const renderItemUpcomming = ({ item }: { item: DataPost }) => {
+    return (
+      <View style={{ marginTop: 5, marginHorizontal: 15 }}>
+        <EventCard
+          onPress={() =>
+            navigation.navigate(ROUTES.HOME_EVENT_DETAIL, {
+              item: item,
+            })
+          }
+          imageUrl={item?.postImg ? item?.postImg : imageNotFoundUri}
+          timeAgo={
+            item?.createAt
+              ? timeAgo({
+                  dateProp: item?.createAt,
+                })
+                ? timeAgo({
+                    dateProp: item?.createAt,
+                  }) ?? 'No value'
+                : 'No value'
+              : 'No value'
+          }
+          titleEvent={
+            item?.postCategory?.postCategoryDescription
+              ? item?.postCategory?.postCategoryDescription
+              : 'No value'
+          }
+          schoolName={
+            item?.postPositions?.[0]?.schoolName
+              ? item?.postPositions?.[0]?.schoolName
+              : 'No value'
+          }
+          location={
+            item?.postPositions?.[0]?.location
+              ? item?.postPositions?.[0]?.location
+              : 'No value'
+          }
+          dateFrom={
+            item?.dateFrom
+              ? format_ISODateString_To_MonthDD(item?.dateFrom)
+                ? format_ISODateString_To_MonthDD(item?.dateFrom) ?? 'No value'
+                : 'No value'
+              : 'No value'
+          }
+          timeFrom={
+            item?.timeFrom
+              ? format_Time_To_HHss(item?.timeFrom)
+                ? format_Time_To_HHss(item?.timeFrom) ?? 'No value'
+                : 'No value'
+              : 'No value'
+          }
+        />
+      </View>
+    );
+  };
+
   const handlers = {
     handleSearchPost,
     onRefresh,
@@ -157,6 +221,7 @@ const useHome = () => {
     postHomeUpcommingList,
     postHomeReOpenList,
     control,
+    renderItemUpcomming,
   };
   return { handlers, state, props };
 };
