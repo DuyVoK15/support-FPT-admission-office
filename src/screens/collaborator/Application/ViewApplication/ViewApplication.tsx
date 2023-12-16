@@ -272,7 +272,7 @@ const ViewApplication = () => {
             <View
               style={{
                 backgroundColor: 'white',
-                height: ScreenHeight * 0.35,
+                height: ScreenHeight * 0.4,
                 width: ScreenWidth - 20,
                 borderRadius: 20,
                 ...SHADOWS.SHADOW_09,
@@ -281,22 +281,25 @@ const ViewApplication = () => {
               <View style={{ flex: 1, margin: 15 }}>
                 <Text
                   style={{
-                    fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
-                    marginBottom: 5,
+                    fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                    marginBottom: 10,
+                    fontSize: 15
                   }}
                 >
-                  Write your answer below
+                  Write your problem below
                 </Text>
                 <TextInput
                   style={{
                     fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
                     flex: 1,
-                    borderWidth: 2,
+                    borderWidth: 3,
+                    borderColor: COLORS?.light_grey,
                     borderRadius: 10,
                     borderStyle: 'dashed',
                     padding: 10,
+                    textAlignVertical: 'top'
                   }}
-                  placeholder="Enter some text ..."
+                  placeholder="Enter problem . . . "
                   multiline={true}
                   clearButtonMode="always"
                   value={state.problemNote}
