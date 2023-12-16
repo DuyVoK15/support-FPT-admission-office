@@ -12,21 +12,21 @@ function delay(timeInMilliseconds: number) {
 }
 
 export async function getLocation() {
-  const ANDROID_DELAY_IN_MS = 4 * 1000; // 👈 4s
+  const ANDROID_DELAY_IN_MS = 1500; // 👈 4s
   const IOS_DELAY_IN_MS = 15 * 1000; // 👈 15s
 
   const DELAY_IN_MS =
     Platform.OS === 'ios' ? IOS_DELAY_IN_MS : ANDROID_DELAY_IN_MS;
 
-  const MAX_TRIES = 3;
+  const MAX_TRIES = 6;
   let tries = 1;
-
   let location: LocationObject | null = null;
 
   let locationError: Error | null = null;
 
   do {
     try {
+      console.log('try time', tries);
       location = await Promise.race([
         delay(DELAY_IN_MS),
         getCurrentPositionAsync({

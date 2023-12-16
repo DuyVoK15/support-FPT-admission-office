@@ -20,6 +20,7 @@ import ErrorStatus from '../../../../dtos/collaborator/response/errorStatus.dto'
 import useCustomToast from '../../../../utils/toasts';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
+import { getLocation } from '../../../../../useCurrentLocation';
 
 const useIndex = () => {
   const dispatch = useAppDispatch();
@@ -72,12 +73,13 @@ const useIndex = () => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const { showToastError, showToastSuccess } = useCustomToast();
 
-  const delay = (timeInMilliseconds: number) => {
-    return new Promise<null>((resolve) => {
-      setTimeout(() => resolve(null), timeInMilliseconds);
-    });
-  };
+  // const delay = (timeInMilliseconds: number) => {
+  //   return new Promise<null>((resolve) => {
+  //     setTimeout(() => resolve(null), timeInMilliseconds);
+  //   });
+  // };
   // Check in function
+  const [loadingLocation, setLoadingLocation] = useState<boolean>(false);
   const checkInPostRegistation = async (postRegistrationId: number | null) => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
@@ -85,16 +87,12 @@ const useIndex = () => {
       return;
     }
     let location: Location.LocationObject | null = null;
+    setLoadingLocation(true);
     try {
-      location = (await Promise.race([
-        delay(3000),
-        Location.getCurrentPositionAsync({
-          accuracy: Location.LocationAccuracy.Low,
-          distanceInterval: 0,
-        }),
-      ])) as Location.LocationObject;
+      location = await getLocation();
       if (!location) {
         console.log('Can not get your location!');
+        setLoadingLocation(false);
         showToastError('Error when get your current location! Try again!');
       } else {
         await dispatch(
@@ -104,6 +102,7 @@ const useIndex = () => {
             latitude: location?.coords?.latitude,
           })
         ).then(async (res) => {
+          setLoadingLocation(false);
           console.log(JSON.stringify(res, null, 2));
           if (res?.meta?.requestStatus === 'fulfilled') {
             const resFulfilledData = res.payload as CheckAttendanceResponse;
@@ -118,10 +117,12 @@ const useIndex = () => {
           }
         });
       }
+      setLoadingLocation(false);
       console.log(
         location?.coords?.latitude + ' ' + location?.coords?.longitude
       );
     } catch (error) {
+      setLoadingLocation(false);
       console.log(error);
     }
   };
@@ -177,7 +178,7 @@ const useIndex = () => {
     checkOutPostRegistation,
     cancelRegistrationById,
   };
-  const state = { refreshing };
+  const state = { refreshing, loadingLocation };
   const props = { postRegistrationList };
   const setState = {};
   const stateRedux = { postRegistrationList };

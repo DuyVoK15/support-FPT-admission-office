@@ -22,10 +22,9 @@ const EventCard: FC<EventCardProps> = (props) => {
   return (
     <TouchableOpacity
       style={{
-        width: ScreenWidth * 0.7,
-        height: ScreenWidth * 0.8,
+        width: 300,
+        height: 360,
         backgroundColor: 'white',
-        padding: 10,
         borderRadius: 30,
         shadowColor: '#000',
         shadowOffset: {
@@ -38,7 +37,9 @@ const EventCard: FC<EventCardProps> = (props) => {
       }}
       {...otherProps}
     >
-      <View style={{ flex: 1, marginHorizontal: 5, marginVertical: 5 }}>
+      <View
+        style={{ flex: 1, margin: 15, marginBottom: 20, overflow: 'hidden' }}
+      >
         <View
           style={{
             alignItems: 'center',
@@ -49,7 +50,7 @@ const EventCard: FC<EventCardProps> = (props) => {
         >
           <Image
             style={{
-              height: 170,
+              height: 180,
               width: '100%',
               borderRadius: 20,
               resizeMode: 'cover',
@@ -59,79 +60,94 @@ const EventCard: FC<EventCardProps> = (props) => {
             }}
           />
         </View>
-
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <View style={{ alignItems: 'center', marginBottom: 5 }}>
-            <Text
-              style={{
-                fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
-                fontSize: 18,
-              }}
-            >
-              {props.titleEvent}
-            </Text>
-          </View>
-          <View style={{ flex: 1, alignItems: 'flex-end' }}>
-            <Text
-              style={{
-                fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
-                fontSize: 11,
-              }}
-            >
-              {props.timeAgo}
-            </Text>
-          </View>
-        </View>
-
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-          <View style={{ marginRight: 5 }}>
-            <Entypo name="graduation-cap" size={20} color={COLORS.light_grey} />
-          </View>
-          <View>
-            <Text
-              style={{
-                fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
-                fontSize: 12,
-                color: COLORS.light_grey,
-              }}
-            >
-              {props.schoolName?.slice(0, 30) + '...'}
-            </Text>
+        <View style={{ flex: 1 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ marginBottom: 5, maxWidth: '60%' }}>
+              <Text
+                numberOfLines={2}
+                ellipsizeMode="tail"
+                style={{
+                  fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
+                  fontSize: 18,
+                }}
+              >
+                {props.titleEvent}
+              </Text>
+            </View>
+            <View style={{ flex: 1, alignItems: 'flex-end' }}>
+              <Text
+                style={{
+                  fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+                  fontSize: 11,
+                }}
+              >
+                {props.timeAgo}
+              </Text>
+            </View>
           </View>
         </View>
 
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginTop: 1,
-          }}
-        >
-          <View style={{ marginRight: 5 }}>
-            <Entypo name="location" size={20} color={COLORS.grey_icon} />
-          </View>
-          <View>
-            <Text
-              style={{
-                fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
-                fontSize: 12,
-                color: COLORS.grey_icon,
-              }}
-            >
-              {props.location?.slice(0, 30) + '...'}
-            </Text>
+        <View style={{ flex: 0, marginBottom: 5 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ marginRight: 5 }}>
+              <Entypo
+                name="graduation-cap"
+                size={22}
+                color={COLORS.light_grey}
+              />
+            </View>
+            <View>
+              <Text
+                style={{
+                  fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+                  fontSize: 13,
+                  color: COLORS.light_grey,
+                }}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {props.schoolName}
+              </Text>
+            </View>
           </View>
         </View>
+
+        <View style={{ flex: 0 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
+            <View style={{ marginRight: 5 }}>
+              <Entypo name="location" size={22} color={COLORS.grey_icon} />
+            </View>
+            <View style={{}}>
+              <Text
+                style={{
+                  fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+                  fontSize: 13,
+                  color: COLORS.grey_icon,
+                  width: '100%',
+                }}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {props.location}
+              </Text>
+            </View>
+          </View>
+        </View>
+
         <DashedLine
-          style={{ marginVertical: 10 }}
+          style={{ flex: 0, marginVertical: 10 }}
           dashGap={0}
           dashThickness={1}
           dashLength={8}
           dashColor={COLORS.super_light_grey}
         />
 
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 0 }}>
           <Text
             style={{
               fontFamily: FONTS_FAMILY.Ubuntu_500Medium,

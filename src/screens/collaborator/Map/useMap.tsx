@@ -69,6 +69,7 @@ import {
   format_ISODateString_To_DayOfWeekMonthDD,
   format_Time_To_HHss,
 } from '../../../utils/formats';
+import { getLocation } from '../../../../useCurrentLocation';
 
 const useMap = () => {
   const dispatch = useAppDispatch();
@@ -133,13 +134,7 @@ const useMap = () => {
     }
     let location: Location.LocationObject | null = null;
     try {
-      location = (await Promise.race([
-        delay(3000),
-        Location.getCurrentPositionAsync({
-          accuracy: Location.LocationAccuracy.Low,
-          distanceInterval: 0,
-        }),
-      ])) as Location.LocationObject;
+      location = await getLocation();
       if (!location) {
         console.log('Can not get your location!');
         showToastError('Error when get your current location! Try again!');

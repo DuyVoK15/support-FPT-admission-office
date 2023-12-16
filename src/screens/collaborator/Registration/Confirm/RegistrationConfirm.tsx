@@ -40,6 +40,7 @@ import { ROUTES } from '../../../../constants/Routes';
 import Registration_Confirm_Detail from './confirmDetail/RegistrationConfirmDetail';
 import RegistrationDetail from '../RegistrationDetail';
 import RegistrationStatus from '../RegistrationStatus';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const Registration_Confirm = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -369,6 +370,7 @@ const Registration_Confirm = () => {
 
   return (
     <View style={styles.container}>
+      <Spinner visible={state.loadingLocation} textContent='Wait for get current location' />
       <View
         style={{
           flexDirection: 'row',
