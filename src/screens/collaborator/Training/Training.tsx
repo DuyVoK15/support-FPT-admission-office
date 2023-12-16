@@ -19,6 +19,10 @@ import { ROUTES } from '../../../constants/Routes';
 import RegistrationEmpty from '../../../components/shared/Empty/RegistrationEmpty';
 import { format_ISODateString_To_DayOfWeekMonthDDYYYY } from '../../../utils/formats';
 import ConfirmAlert from '../../../components/shared/AwesomeAlert/ConfirmAlert';
+import { responsiveFontSize } from '../../../utils/responsive';
+
+const CARD_HEIGHT = 830;
+const CARD_WIDTH = 380;
 
 const Training = () => {
   const data = [1, 2, 3, 4, 5, 6, 7, 7];
@@ -71,7 +75,7 @@ const Training = () => {
                 style={{
                   fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
                   color: 'white',
-                  fontSize: 20,
+                  fontSize: responsiveFontSize(18),
                 }}
               >
                 Certificate: {''}
@@ -79,7 +83,7 @@ const Training = () => {
                   style={{
                     fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
                     color: 'black',
-                    fontSize: 20,
+                    fontSize: responsiveFontSize(18),
                   }}
                 >
                   {item?.certificateName ? item?.certificateName : 'No value'}
@@ -90,7 +94,7 @@ const Training = () => {
               <Text
                 style={{
                   fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
-                  fontSize: 16,
+                  fontSize: responsiveFontSize(16),
                 }}
               >
                 ID: {''}
@@ -108,7 +112,12 @@ const Training = () => {
             }}
           >
             <View style={{ flex: 1 }}>
-              <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_500Medium }}>
+              <Text
+                style={{
+                  fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                  fontSize: responsiveFontSize(14),
+                }}
+              >
                 Create at:{' '}
                 <Text
                   style={{ fontFamily: FONTS_FAMILY?.Ubuntu_300Light_Italic }}
@@ -160,7 +169,7 @@ const Training = () => {
         start={{ x: 0.5, y: 0 }} // Bắt đầu từ giữa màn hình ở dưới cùng
         end={{ x: 0.5, y: 1 }} // Kết thúc ở giữa màn hình ở trên cùng
         locations={[0, 1]} // Chỉ có 2 vị trí: 0 và 1
-        style={{ height: ScreenHeight * 0.25 }}
+        style={{ height: CARD_HEIGHT * 0.25 }}
       >
         <View
           style={{
@@ -169,7 +178,10 @@ const Training = () => {
           }}
         >
           <Text
-            style={{ fontFamily: FONTS_FAMILY?.Ubuntu_700Bold, fontSize: 30 }}
+            style={{
+              fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
+              fontSize: responsiveFontSize(26),
+            }}
           >
             Training Certificate
           </Text>
@@ -178,11 +190,16 @@ const Training = () => {
           <Text
             style={{
               fontFamily: FONTS_FAMILY?.Ubuntu_500Medium_Italic,
-              fontSize: 16,
+              fontSize: responsiveFontSize(16),
             }}
           >
             Hello, {''}
-            <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_700Bold }}>
+            <Text
+              style={{
+                fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
+                fontSize: responsiveFontSize(16),
+              }}
+            >
               Võ Thanh Duy K15
             </Text>
           </Text>
@@ -192,25 +209,28 @@ const Training = () => {
         style={{
           flex: 1,
           position: 'absolute',
-          height: ScreenHeight * 0.3 * 0.55,
+          height: CARD_HEIGHT * 0.3 * 0.55,
           width: ScreenWidth - 30,
           borderRadius: 15,
-          top: ScreenHeight * 0.25 - ScreenHeight * 0.3 * 0.55 * 0.5,
+          top: CARD_HEIGHT * 0.25 - CARD_HEIGHT * 0.3 * 0.55 * 0.5,
           left: 15,
           backgroundColor: '#FFF',
           ...SHADOWS.SHADOW_04,
         }}
       >
-        <View style={{ flex: 1, margin: 15 }}>
+        <View style={{ flex: 1, margin: 15, marginTop: 10, marginBottom: 10 }}>
           <View style={{ flex: 1 }}>
             <Text
-              style={{ fontFamily: FONTS_FAMILY?.Ubuntu_700Bold, fontSize: 15 }}
+              style={{
+                fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
+                fontSize: responsiveFontSize(15),
+              }}
             >
               Total of Certificate:{' '}
               <Text
                 style={{
                   fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
-                  fontSize: 18,
+                  fontSize: responsiveFontSize(18),
                   color: '#F4762D',
                 }}
               >
@@ -220,15 +240,18 @@ const Training = () => {
               </Text>
             </Text>
           </View>
-          <View>
+          <View style={{ flex: 1 }}>
             <Text
-              style={{ fontFamily: FONTS_FAMILY?.Ubuntu_700Bold, fontSize: 15 }}
+              style={{
+                fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
+                fontSize: responsiveFontSize(15),
+              }}
             >
               Total of Completed:{' '}
               <Text
                 style={{
                   fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
-                  fontSize: 18,
+                  fontSize: responsiveFontSize(18),
                   color: '#F4762D',
                 }}
               >
@@ -238,37 +261,39 @@ const Training = () => {
               </Text>
             </Text>
           </View>
-          <View
-            style={{
-              marginTop: 10,
-              alignItems: 'center',
-              padding: 2,
-              borderWidth: 2,
-              alignSelf: 'center',
-              borderRadius: 12,
-              borderColor: '#F4762D',
-            }}
-          >
-            <TouchableOpacity
-              onPress={() =>
-                props.navigation.navigate(ROUTES.TRAINING_REGISTRATION)
-              }
+          <View style={{ flex: 0 }}>
+            <View
               style={{
-                paddingVertical: 12,
-                paddingHorizontal: 20,
-                borderRadius: 10,
-                backgroundColor: '#F4762D',
+                marginTop: 10,
+                alignItems: 'center',
+                padding: 2,
+                borderWidth: 2,
+                alignSelf: 'center',
+                borderRadius: 12,
+                borderColor: '#F4762D',
               }}
             >
-              <Text
+              <TouchableOpacity
+                onPress={() =>
+                  props.navigation.navigate(ROUTES.TRAINING_REGISTRATION)
+                }
                 style={{
-                  fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
-                  color: 'white',
+                  paddingVertical: 12,
+                  paddingHorizontal: 20,
+                  borderRadius: 10,
+                  backgroundColor: '#F4762D',
                 }}
               >
-                View Your Registration
-              </Text>
-            </TouchableOpacity>
+                <Text
+                  style={{
+                    fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
+                    color: 'white',
+                  }}
+                >
+                  View Your Registration
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>

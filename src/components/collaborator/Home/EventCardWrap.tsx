@@ -71,6 +71,7 @@ const EventCardWrap: FC<EventCardWrapProps> = (props) => {
           <View style={{ flexGrow: 1, flexDirection: 'column', marginTop: 10 }}>
             <View style={{ flex: 1 }}>
               <Text
+                numberOfLines={2}
                 style={{
                   fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
                   fontSize: 18,
@@ -79,8 +80,9 @@ const EventCardWrap: FC<EventCardWrapProps> = (props) => {
                 {props.title}
               </Text>
             </View>
-            <View style={{ flex: 1, marginTop: 20 }}>
+            <View style={{ flex: 0, marginBottom: 5 }}>
               <Text
+                numberOfLines={1}
                 style={{
                   fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
                   fontSize: 12,
@@ -90,8 +92,9 @@ const EventCardWrap: FC<EventCardWrapProps> = (props) => {
                 {props.dateTime}
               </Text>
             </View>
-            <View style={{ flex: 1, marginBottom: 7 }}>
+            <View style={{ flex: 0, marginBottom: 5 }}>
               <Text
+                numberOfLines={1}
                 style={{
                   fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
                   fontSize: 14,
