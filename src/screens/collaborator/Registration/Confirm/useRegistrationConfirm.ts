@@ -81,15 +81,9 @@ const useIndex = () => {
   // Check in function
   const [loadingLocation, setLoadingLocation] = useState<boolean>(false);
   const checkInPostRegistation = async (postRegistrationId: number | null) => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      setErrorMsg('Permission to access location was denied');
-      return;
-    }
-    let location: Location.LocationObject | null = null;
     setLoadingLocation(true);
     try {
-      location = await getLocation();
+      let location = await getLocation();
       if (!location) {
         console.log('Can not get your location!');
         setLoadingLocation(false);

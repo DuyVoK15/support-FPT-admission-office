@@ -132,9 +132,8 @@ const useMap = () => {
       setErrorMsg('Permission to access location was denied');
       return;
     }
-    let location: Location.LocationObject | null = null;
     try {
-      location = await getLocation();
+      let location = await getLocation();
       if (!location) {
         console.log('Can not get your location!');
         showToastError('Error when get your current location! Try again!');

@@ -3,6 +3,8 @@ import {
   LocationAccuracy,
   LocationObject,
 } from 'expo-location';
+import * as Location from 'expo-location';
+
 import { Platform } from 'react-native';
 
 function delay(timeInMilliseconds: number) {
@@ -12,6 +14,11 @@ function delay(timeInMilliseconds: number) {
 }
 
 export async function getLocation() {
+  let { status } = await Location.requestForegroundPermissionsAsync();
+  if (status !== 'granted') {
+    // setErrorMsg('Permission to access location was denied');
+    return;
+  }
   const ANDROID_DELAY_IN_MS = 1500; // 👈 4s
   const IOS_DELAY_IN_MS = 15 * 1000; // 👈 15s
 
@@ -45,7 +52,8 @@ export async function getLocation() {
       locationError = err as Error;
     } finally {
       tries += 1;
-    }``
+    }
+    ``;
   } while (!location && tries <= MAX_TRIES);
 
   if (!location) {
