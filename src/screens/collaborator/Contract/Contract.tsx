@@ -185,8 +185,6 @@ const Contract = () => {
               }}
             >
               <View style={{ margin: 15 }}>
-                <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular }}>
-                  {' '}
                   {item?.contract?.contractDescription ? (
                     <RenderHTML
                       source={{ html: item?.contract?.contractDescription }}
@@ -195,7 +193,6 @@ const Contract = () => {
                   ) : (
                     'No data'
                   )}
-                </Text>
               </View>
             </View>
           </View>
@@ -216,8 +213,8 @@ const Contract = () => {
                 {item?.contract?.signingDate
                   ? formatToDate({ dateProp: item?.contract?.signingDate })
                     ? formatToDate({ dateProp: item?.contract?.signingDate })
-                    : 'No date'
-                  : 'No date'}
+                    : 'Not signed yet'
+                  : 'Not signed yet'}
               </Text>
             </Text>
           </View>
