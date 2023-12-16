@@ -86,6 +86,10 @@ const useAppNavigator = () => {
     }
   }, [collab_userInfoSignup]);
 
+  if (Platform.OS !== 'ios') {
+    const {} = usePushNotifications();
+  }
+
   const handlers = {};
   const state = {
     collab_isAuthenticated,

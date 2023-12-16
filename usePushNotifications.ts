@@ -7,6 +7,7 @@ import Contants from 'expo-constants';
 import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppConstants from './src/enums/collaborator/app';
+import { useAppSelector } from './src/app/hooks';
 
 export interface PushNotificationState {
   expoPushToken?: Notifications.ExpoPushToken;
@@ -75,9 +76,11 @@ const usePushNotifications = (): PushNotificationState => {
     return token;
   }
 
+  const isAuthenticated = useAppSelector((state) => state.collab_auth.isAuthenticated)
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) => {
       setExpoPushToken(token);
+      console.log(token)
     });
 
     notificationListener.current =
@@ -96,7 +99,7 @@ const usePushNotifications = (): PushNotificationState => {
 
       Notifications.removeNotificationSubscription(responseListener.current!);
     };
-  }, []);
+  }, [isAuthenticated]);
 
   return {
     expoPushToken,

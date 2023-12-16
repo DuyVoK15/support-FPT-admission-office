@@ -108,10 +108,6 @@ const Login = () => {
     return subscriber; // unsubscribe on unmount
   }, []);
 
-  if (Platform.OS !== 'ios') {
-    const {} = usePushNotifications();
-  }
-
   return (
     <ImageBackground
       style={{ height: '100%', width: '100%' }}
