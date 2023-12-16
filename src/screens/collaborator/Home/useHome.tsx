@@ -26,15 +26,11 @@ import { imageNotFoundUri } from '../../../utils/images';
 const useHome = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
 
-  const [location, setLocation] = useState<Location.LocationObject | null>(
-    null
-  );
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [cityName, setCityName] = useState<string | null>(null);
 
   const getCurrentLocation = async () => {
     const location = await getLocation();
-    setLocation(location);
 
     // Use reverse geocoding to get city name
     if (location) {
