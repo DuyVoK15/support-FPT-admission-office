@@ -2,6 +2,7 @@
   "expo": {
     "name": "SupFAmOf",
     "slug": "support-FPT-admission-office",
+    "scheme": "supfamof",
     "version": "1.0.0",
     "privacy": "public",
     "description": "App to support FPT Addmision Officer to manage event and collaborators",

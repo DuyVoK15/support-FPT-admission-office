@@ -45,7 +45,7 @@ export async function getLocation() {
       locationError = err as Error;
     } finally {
       tries += 1;
-    }
+    }``
   } while (!location && tries <= MAX_TRIES);
 
   if (!location) {

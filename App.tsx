@@ -20,12 +20,16 @@ import usePushNotifications from './usePushNotifications';
 import { AlertNotificationRoot } from 'react-native-alert-notification';
 import { MyContextProvider } from './src/context/stateContext';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import NetInfo from "@react-native-community/netinfo";
+import NetInfo from '@react-native-community/netinfo';
 import { LogBox } from 'react-native';
 import { useEffect } from 'react';
 LogBox.ignoreLogs([
   'Sending `onAnimatedValueUpdate` with no listeners registered.',
 ]);
+import { Linking } from 'react-native';
+import * as Notifications from 'expo-notifications';
+import { ROUTES } from './src/constants/Routes';
+
 export default function App() {
   const [fontsLoaded, fontError] = useFonts({
     Ubuntu_300Light,
@@ -76,7 +80,65 @@ export default function App() {
         >
           <Provider store={store}>
             <MyContextProvider>
-              <NavigationContainer>
+              <NavigationContainer
+                linking={{
+                  prefixes: ["supfamof://"],
+                  config: {
+                    initialRouteName: 'Home', // Set the initial route to 'Home'
+                    screens: {
+                      Home: ROUTES.HOME, // Empty string signifies the default path for the 'Home' screen
+
+                      // ... Additional screens and their paths
+                    },
+                  },
+                  async getInitialURL() {
+                    // First, you may want to do the default deep link handling
+                    // Check if app was opened from a deep link
+                    const url = await Linking.getInitialURL();
+
+                    if (url != null) {
+                      return url;
+                    }
+
+                    // Handle URL from expo push notifications
+                    const response =
+                      await Notifications.getLastNotificationResponseAsync();
+
+                    return response?.notification.request.content.data.url;
+                  },
+                  subscribe(listener) {
+                    const onReceiveURL = ({ url }: { url: string }) =>
+                      listener(url);
+
+                    // Listen to incoming links from deep linking
+                    const eventListenerSubscription = Linking.addEventListener(
+                      'url',
+                      onReceiveURL
+                    );
+
+                    // Listen to expo push notifications
+                    const subscription =
+                      Notifications.addNotificationResponseReceivedListener(
+                        (response) => {
+                          const url =
+                            response.notification.request.content.data.url;
+
+                          // Any custom logic to see whether the URL needs to be handled
+                          //...
+
+                          // Let React Navigation handle the URL
+                          listener(url);
+                        }
+                      );
+
+                    return () => {
+                      // Clean up the event listeners
+                      eventListenerSubscription.remove();
+                      subscription.remove();
+                    };
+                  },
+                }}
+              >
                 <SafeAreaProvider>
                   <AppNavigator />
                   <StatusBar backgroundColor="transparent" translucent={true} />
