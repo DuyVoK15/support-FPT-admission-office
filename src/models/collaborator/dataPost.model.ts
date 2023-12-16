@@ -18,6 +18,7 @@ export interface DataPost {
   timeTo: string;
   registerAmount: number;
   totalAmountPosition: number;
+  pendingRegisterAmount: number;
   account: {
     id: number;
     roleId: number;
