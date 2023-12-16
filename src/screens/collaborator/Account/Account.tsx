@@ -297,7 +297,7 @@ const Account = () => {
 
           <View style={styles.containerColumn}>
             <TouchableOpacity
-              onPress={() => navigation.navigate(ROUTES.USER_PROFILE_SIGNUP)}
+              onPress={() => null}
               style={styles.containerRow}
             >
               <View style={styles.column1}>
