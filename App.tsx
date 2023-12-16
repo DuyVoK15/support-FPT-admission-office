@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import AppNavigator from './src/navigation/AppNavigator';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { Provider } from 'react-redux';
 import { store } from './src/app/store';
 import {
@@ -29,6 +29,7 @@ LogBox.ignoreLogs([
 import { Linking } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import { ROUTES } from './src/constants/Routes';
+import { HomeCollaboratorScreenNavigationProp } from './type';
 
 export default function App() {
   const [fontsLoaded, fontError] = useFonts({
@@ -53,7 +54,6 @@ export default function App() {
   //     unsubscribe();
   //   };
   // }, []);
-
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <AlertNotificationRoot>
@@ -82,12 +82,12 @@ export default function App() {
             <MyContextProvider>
               <NavigationContainer
                 linking={{
-                  prefixes: ["supfamof://"],
+                  prefixes: ['supfamof://'],
                   config: {
-                    initialRouteName: 'Home', // Set the initial route to 'Home'
+                    initialRouteName: 'HOME_STACK_NAVIGATOR', // Set the initial route to 'Home'
                     screens: {
-                      Home: ROUTES.HOME, // Empty string signifies the default path for the 'Home' screen
-
+                      HOME_STACK_NAVIGATOR: 'home/', // Empty string signifies the default path for the 'Home' screen
+                      Event_Stack_Navigator: 'event/',
                       // ... Additional screens and their paths
                     },
                   },
@@ -125,7 +125,7 @@ export default function App() {
 
                           // Any custom logic to see whether the URL needs to be handled
                           //...
-
+                          console.log(JSON.stringify(url, null, 2));
                           // Let React Navigation handle the URL
                           listener(url);
                         }
