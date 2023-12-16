@@ -462,3 +462,7 @@ export function format_DDMMYYYYYString_To_YYYYMMDate(
   }
   return new Date();
 }
+
+export const numberWithCommas = (numberString: number) => {
+  return Number(numberString).toLocaleString('en-US');
+};

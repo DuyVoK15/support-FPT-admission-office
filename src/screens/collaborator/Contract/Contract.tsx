@@ -8,6 +8,7 @@ import {
   Touchable,
   TouchableOpacity,
   View,
+  useWindowDimensions,
 } from 'react-native';
 import React, { useState } from 'react';
 import Header from '../../../components/shared/Header/Back';
@@ -22,17 +23,18 @@ import { ScreenWidth } from '../../../constants/Demesions';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
 import DashedLine from 'react-native-dashed-line';
 import { DataContract } from '../../../models/collaborator/contract.model';
-import { formatToDate } from '../../../utils/formats';
+import { formatToDate, numberWithCommas } from '../../../utils/formats';
 import { WebView } from 'react-native-webview';
 import { ROUTES } from '../../../constants/Routes';
 import ContractStatus from './ContractStatus';
 import { CONTRACT_STATUS_ENUM } from '../../../enums/collaborator/ContractStatus.';
 import { Button } from 'react-native-paper';
 import ConfirmAlert from '../../../components/shared/AwesomeAlert/ConfirmAlert';
+import RenderHTML from 'react-native-render-html';
 
 const Contract = () => {
   const { handlers, state, props, stateRedux } = useIndex();
-
+  const { width } = useWindowDimensions();
   const renderItem = ({ item }: { item: DataContract }) => {
     return (
       <View
@@ -166,6 +168,57 @@ const Contract = () => {
             >
               Status: {''}
               <ContractStatus status={item?.status ? item?.status : 0} />
+            </Text>
+          </View>
+          <View style={{ marginTop: 10, marginHorizontal: 15 }}>
+            <View style={{ marginBottom: 10 }}>
+              <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_500Medium }}>
+                Description
+              </Text>
+            </View>
+            <View
+              style={{
+                borderWidth: 3,
+                borderStyle: 'dashed',
+                borderColor: COLORS?.orange_button,
+                borderRadius: 10,
+              }}
+            >
+              <View style={{ margin: 15 }}>
+                <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular }}>
+                  {' '}
+                  {item?.contract?.contractDescription ? (
+                    <RenderHTML
+                      source={{ html: item?.contract?.contractDescription }}
+                      contentWidth={width}
+                    />
+                  ) : (
+                    'No data'
+                  )}
+                </Text>
+              </View>
+            </View>
+          </View>
+          <View style={{ marginTop: 10, marginHorizontal: 15 }}>
+            <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_500Medium }}>
+              Salary: {''}
+              <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular }}>
+                {item?.contract?.totalSalary
+                  ? numberWithCommas(item?.contract?.totalSalary) + ' VNĐ'
+                  : 'Not yet'}
+              </Text>
+            </Text>
+          </View>
+          <View style={{ marginTop: 10, marginHorizontal: 15 }}>
+            <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_500Medium }}>
+              Signed Date: {''}
+              <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular }}>
+                {item?.contract?.signingDate
+                  ? formatToDate({ dateProp: item?.contract?.signingDate })
+                    ? formatToDate({ dateProp: item?.contract?.signingDate })
+                    : 'No date'
+                  : 'No date'}
+              </Text>
             </Text>
           </View>
           {item?.status === CONTRACT_STATUS_ENUM.PENDING && (
