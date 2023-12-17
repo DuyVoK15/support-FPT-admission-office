@@ -5,6 +5,7 @@ import { Entypo, Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../../constants/Colors';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
 import DashedLine from 'react-native-dashed-line';
+import { responsiveFontSize } from '../../../utils/responsive';
 
 type EventCardProps = TouchableOpacity['props'] & {
   imageUrl?: string;
@@ -22,8 +23,10 @@ const EventCard: FC<EventCardProps> = (props) => {
   return (
     <TouchableOpacity
       style={{
-        width: 300,
-        height: 360,
+        minWidth: ScreenWidth * 0.8,
+        minHeight: ScreenHeight * 0.43,
+        width: ScreenWidth * 0.8,
+        height: ScreenHeight * 0.43,
         backgroundColor: 'white',
         borderRadius: 30,
         shadowColor: '#000',
@@ -50,7 +53,7 @@ const EventCard: FC<EventCardProps> = (props) => {
         >
           <Image
             style={{
-              height: 180,
+              height: ScreenHeight * 0.43 * 0.5,
               width: '100%',
               borderRadius: 20,
               resizeMode: 'cover',
@@ -62,26 +65,26 @@ const EventCard: FC<EventCardProps> = (props) => {
         </View>
         <View style={{ flex: 1 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <View style={{ marginBottom: 5, maxWidth: '60%' }}>
+            <View style={{ width: '60%' }}>
               <Text
-                numberOfLines={2}
+                numberOfLines={1}
                 ellipsizeMode="tail"
                 style={{
                   fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
-                  fontSize: 18,
+                  fontSize: responsiveFontSize(18),
                 }}
               >
                 {props.titleEvent}
               </Text>
             </View>
-            <View style={{ flex: 1, alignItems: 'flex-end' }}>
+            <View style={{ width: '40%', alignItems: 'flex-end',  }}>
               <Text
                 style={{
                   fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
-                  fontSize: 11,
+                  fontSize: responsiveFontSize(12),
                 }}
               >
-                {props.timeAgo}
+                {props.timeAgo + 'ádlkalsdnkasndklna'}
               </Text>
             </View>
           </View>
@@ -100,7 +103,7 @@ const EventCard: FC<EventCardProps> = (props) => {
               <Text
                 style={{
                   fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
-                  fontSize: 13,
+                  fontSize: responsiveFontSize(13),
                   color: COLORS.light_grey,
                 }}
                 numberOfLines={1}
@@ -126,7 +129,7 @@ const EventCard: FC<EventCardProps> = (props) => {
               <Text
                 style={{
                   fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
-                  fontSize: 13,
+                  fontSize: responsiveFontSize(13),
                   color: COLORS.grey_icon,
                   width: '100%',
                 }}
@@ -151,7 +154,7 @@ const EventCard: FC<EventCardProps> = (props) => {
           <Text
             style={{
               fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
-              fontSize: 14,
+              fontSize: responsiveFontSize(14),
               color: COLORS.red_date,
             }}
           >

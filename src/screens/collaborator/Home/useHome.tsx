@@ -149,7 +149,7 @@ const useHome = () => {
 
   const renderItemUpcomming = ({ item }: { item: DataPost }) => {
     return (
-      <View style={{ marginTop: 5, marginBottom: 10, marginHorizontal: 15 }}>
+      <View style={{ marginTop: 5, marginBottom: 10, marginHorizontal: 15, }}>
         <EventCard
           onPress={() =>
             navigation.navigate(ROUTES.HOME_EVENT_DETAIL, {

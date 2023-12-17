@@ -212,7 +212,7 @@ const EventReOpen: FC = () => {
           totalAmountPosition={
             post?.totalAmountPosition ? String(post?.totalAmountPosition) : '0'
           }
-          status={post?.status ? String(post?.status) : 'No Status'}
+          status={post?.status ? post?.status : 0}
           timeAgo={
             post?.createAt
               ? timeAgo({ dateProp: post?.createAt })

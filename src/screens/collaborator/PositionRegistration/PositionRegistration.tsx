@@ -92,17 +92,19 @@ const PositionRegistration = () => {
             stateRedux.item?.data?.postPositions.map((position, index) => {
               return (
                 <View key={index} style={styles.containerEveryPosition}>
-                  { position?.certificateName && <View style={{ position: 'absolute', top: -20, left: -15 }}>
-                    <Image
-                      source={{
-                        uri: ic_certificateUri
-                          ? ic_certificateUri
-                          : imageNotFoundUri,
-                      }}
-                      style={{ width: 45, height: 45, resizeMode: 'cover' }}
-                    />
-                  </View>}
-                 
+                  {position?.certificateName && (
+                    <View style={{ position: 'absolute', top: -20, left: -15 }}>
+                      <Image
+                        source={{
+                          uri: ic_certificateUri
+                            ? ic_certificateUri
+                            : imageNotFoundUri,
+                        }}
+                        style={{ width: 45, height: 45, resizeMode: 'cover' }}
+                      />
+                    </View>
+                  )}
+
                   <View style={styles.everyPosition}>
                     <TouchableOpacity
                       onPress={() => handlers.handleSetPositionId(position?.id)}
@@ -249,7 +251,16 @@ const PositionRegistration = () => {
                                     fontSize: 16,
                                   }}
                                 >
-                                  Attendee Number
+                                  Attendee Number {''}
+                                  <Text style={{ color: COLORS?.red_status }}>
+                                    (
+                                    {stateRedux.item?.data
+                                      ?.pendingRegisterAmount
+                                      ? stateRedux.item?.data
+                                          ?.pendingRegisterAmount
+                                      : 0}
+                                    )
+                                  </Text>
                                 </Text>
                               </View>
                               <View style={{ marginBottom: 4 }}>
@@ -264,7 +275,7 @@ const PositionRegistration = () => {
                                     ? position?.positionRegisterAmount +
                                       ' / ' +
                                       position?.amount +
-                                      ' collaborators'
+                                      ' collaborators have CONFIRMED'
                                     : ''}
                                 </Text>
                               </View>

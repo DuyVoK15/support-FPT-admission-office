@@ -319,11 +319,11 @@ const HomeEventDetail: FC = () => {
                   style={{
                     fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
                     fontSize: 14,
-                    color: 'red',
+                    color: COLORS?.red_date,
                   }}
                 >
                   {stateRedux.item?.data?.registerAmount
-                    ? `Attendees(${stateRedux.item?.data?.registerAmount})`
+                    ? `Attendees(${stateRedux.item?.data?.pendingRegisterAmount})`
                     : 'Ateendees(0)'}
                 </Text>
               </View>

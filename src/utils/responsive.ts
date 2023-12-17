@@ -7,3 +7,8 @@ export const responsiveFontSize = (fontSize: number) => {
   const scaledFontSize = fontSize * scale;
   return Math.round(PixelRatio.roundToNearestPixel(scaledFontSize));
 };
+
+export const responsiveComponentWidth = (width: number) => {
+  const scaledFontSize = width * scale;
+  return Math.round(PixelRatio.roundToNearestPixel(scaledFontSize));
+};

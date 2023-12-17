@@ -23,6 +23,7 @@ export type HomeCollaboratorStackNavigatorParamList = {
   ACCOUNT: undefined;
   ACCOUNT_STACK_NAVIGATOR: undefined;
   EVENT: undefined;
+  EVENT_TOP_TABS: undefined
   EVENT_TAB: undefined;
   EVENT_STACK_NAVIGATOR: undefined;
   EVENT_DETAIL: undefined;
@@ -69,6 +70,7 @@ export type HomeCollaboratorScreenNavigationProp = NativeStackScreenProps<
   'HOME_STACK_NAVIGATOR',
   'POSITION_REGISTRATION',
   'EVENT',
+  'EVENT_TOP_TABS',
   'EVENT_TAB',
   'EVENT_STACK_NAVIGATOR',
   'EVENT_DETAIL',

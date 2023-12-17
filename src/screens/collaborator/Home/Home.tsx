@@ -31,7 +31,7 @@ import {
   timeAgo,
 } from '../../../utils/formats';
 import { COLORS } from '../../../constants/Colors';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
 import { SHADOWS } from '../../../constants/Shadows';
 import EventCardWrap from '../../../components/collaborator/Home/EventCardWrap';
@@ -190,7 +190,7 @@ const Home = () => {
         }
         nestedScrollEnabled={true}
       >
-        <View style={{ flex: 1, paddingTop: 20 }}>
+        <View style={{ flex: 1, marginTop: 10 }}>
           <View
             style={{
               flexDirection: 'row',
@@ -280,14 +280,29 @@ const Home = () => {
                   fontSize: 24,
                 }}
               >
-                Post Re-Open
+                Re-Open Event
               </Text>
             </View>
             <TouchableOpacity
               style={{ flexDirection: 'row', alignItems: 'center' }}
-              onPress={
-                () => navigation.navigate('EVENT_STACK_NAVIGATOR')
-                // () => console.log('navigation')
+              onPress={() =>
+                navigation.dispatch(
+                  CommonActions.reset({
+                    index: 0,
+                    routes: [
+                      {
+                        name: ROUTES.EVENT_STACK_NAVIGATOR,
+                        state: {
+                          routes: [
+                            {
+                              name: ROUTES.EVENT,
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  })
+                )
               }
             >
               <View>
@@ -375,6 +390,7 @@ const Home = () => {
                             : 'No time'
                           : 'No Time'
                       }
+                      status={post?.status ? post?.status : 0}
                     />
                   </View>
                 ))
