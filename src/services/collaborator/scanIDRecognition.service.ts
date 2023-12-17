@@ -5,7 +5,10 @@ import {
   ViewReportResponse,
 } from '../../dtos/collaborator/response/viewReport.dto';
 import { FilterReportParam } from '../../dtos/collaborator/parameter/filterReport.dto';
-import { ViewIDRecognitionBackResponse, ViewIDRecognitionFrontResponse } from '../../dtos/collaborator/response/viewIDRecognition.dto';
+import {
+  ViewIDRecognitionBackResponse,
+  ViewIDRecognitionFrontResponse,
+} from '../../dtos/collaborator/response/viewIDRecognition.dto';
 import { API_KEY_SCAN_CCCD } from '../../../env';
 
 // report.service.ts
@@ -17,7 +20,7 @@ export const scanIDRecognitionService = {
     const fileName = imageUri?.split('/').pop();
     const fileType = 'image/jpeg'; // Change the type according to the image format being sent
 
-    const file = {
+    const file: any = {
       uri: imageUri,
       type: fileType,
       name: fileName || 'photo.jpg',
@@ -39,7 +42,7 @@ export const scanIDRecognitionService = {
     const fileName = imageUri?.split('/').pop();
     const fileType = 'image/jpeg'; // Change the type according to the image format being sent
 
-    const file = {
+    const file: any = {
       uri: imageUri,
       type: fileType,
       name: fileName || 'photo.jpg',
