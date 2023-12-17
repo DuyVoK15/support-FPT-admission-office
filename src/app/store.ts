@@ -14,6 +14,7 @@ import collab_checkAttendanceReducer from '../features/collaborator/collab.check
 import collab_notificationReducer from '../features/collaborator/collab.notificationSlice';
 import collab_informationReducer from '../features/collaborator/collab.scanIDRecognitionSlice';
 import collab_bankingReducer from '../features/collaborator/collab.bankingSlice';
+import collab_locationReducer from '../features/collaborator/collab.locationSlice';
 
 import admission_authReducer from '../features/admission/admission.authSlice';
 
@@ -37,6 +38,7 @@ export const store = configureStore({
     collab_notification: collab_notificationReducer,
     collan_information: collab_informationReducer,
     collab_banking: collab_bankingReducer,
+    collab_location: collab_locationReducer,
     // Thêm reducers khác nếu cần thiết
     admission_auth: admission_authReducer,
   },
