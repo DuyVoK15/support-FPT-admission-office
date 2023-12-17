@@ -126,16 +126,14 @@ const useMap = () => {
     });
   };
 
+  const [loadingLocation, setLoadingLocation] = useState<boolean>(false);
   const checkInPostRegistation = async (postRegistrationId: number | null) => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      setErrorMsg('Permission to access location was denied');
-      return;
-    }
+    setLoadingLocation(true);
     try {
       let location = await getLocation();
       if (!location) {
         console.log('Can not get your location!');
+        setLoadingLocation(false);
         showToastError('Error when get your current location! Try again!');
       } else {
         await dispatch(
@@ -145,6 +143,7 @@ const useMap = () => {
             latitude: location?.coords?.latitude,
           })
         ).then(async (res) => {
+          setLoadingLocation(false);
           console.log(JSON.stringify(res, null, 2));
           if (res?.meta?.requestStatus === 'fulfilled') {
             const resFulfilledData = res.payload as CheckAttendanceResponse;
@@ -159,10 +158,12 @@ const useMap = () => {
           }
         });
       }
+      setLoadingLocation(false);
       console.log(
         location?.coords?.latitude + ' ' + location?.coords?.longitude
       );
     } catch (error) {
+      setLoadingLocation(false);
       console.log(error);
     }
   };
@@ -688,6 +689,7 @@ const useMap = () => {
     isVisibleRegistration,
     isShowMarker,
     refreshing,
+    loadingLocation,
   };
   const setState = {};
   const stateRedux = { postRegistrationConfirmList };

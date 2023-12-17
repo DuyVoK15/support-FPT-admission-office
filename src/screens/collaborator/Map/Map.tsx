@@ -18,12 +18,17 @@ import ConfirmAlert from '../../../components/shared/AwesomeAlert/ConfirmAlert';
 import { Entypo, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
 import { SHADOWS } from '../../../constants/Shadows';
+import LoadingLocation from '../../../components/shared/PopupNotification/LoadingLocation';
 
 export default function Map() {
   const { ref, state, setState, stateRedux, props, handlers } = useMap();
   return (
     <View style={styles.container}>
       <Spinner visible={state.isOpenMapLoading || state.refreshing} />
+      <Spinner
+        visible={state.loadingLocation}
+        children={<LoadingLocation />}
+      />
       <MapView
         // key={state.markersKey.toString()}
         provider={PROVIDER_GOOGLE}

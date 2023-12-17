@@ -41,6 +41,7 @@ import Registration_Confirm_Detail from './confirmDetail/RegistrationConfirmDeta
 import RegistrationDetail from '../RegistrationDetail';
 import RegistrationStatus from '../RegistrationStatus';
 import Spinner from 'react-native-loading-spinner-overlay';
+import LoadingLocation from '../../../../components/shared/PopupNotification/LoadingLocation';
 
 const Registration_Confirm = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -370,7 +371,10 @@ const Registration_Confirm = () => {
 
   return (
     <View style={styles.container}>
-      <Spinner visible={state.loadingLocation} textContent='Wait for get current location' />
+      <Spinner
+        visible={state.loadingLocation}
+        children={<LoadingLocation />}
+      />
       <View
         style={{
           flexDirection: 'row',
@@ -420,6 +424,7 @@ const Registration_Confirm = () => {
                 console.log(Item?.id);
                 break;
               default:
+                hideAlertHandler();
                 break;
             }
             hideAlertHandler();
