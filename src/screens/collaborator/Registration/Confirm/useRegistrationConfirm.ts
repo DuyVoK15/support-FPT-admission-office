@@ -20,7 +20,11 @@ import ErrorStatus from '../../../../dtos/collaborator/response/errorStatus.dto'
 import useCustomToast from '../../../../utils/toasts';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
-import { getLocation } from '../../../../../useCurrentLocation';
+import {
+  getLastCurrentLocation,
+  getLocation,
+} from '../../../../../useCurrentLocation';
+import { updateCurrentLocation } from '../../../../features/collaborator/collab.locationSlice';
 
 const useIndex = () => {
   const dispatch = useAppDispatch();
@@ -29,7 +33,9 @@ const useIndex = () => {
   const postRegistrationList = useAppSelector(
     (state) => state.collab_postRegistration.postRegistrationConfirmed
   );
-
+  const currentLocation = useAppSelector(
+    (state) => state.collab_location.currentLocation
+  );
   const dispatch_getAllPostRegistration_Confirmed = async () => {
     return await dispatch(
       getAllPostRegistration_Confirmed({
@@ -70,6 +76,9 @@ const useIndex = () => {
       // Ví dụ: gọi các hàm, cập nhật state, hoặc fetch dữ liệu mới,...
     }, [])
   );
+  const [currentPosition, setCurrentPosition] =
+    useState<Location.LocationObject | null>(null);
+
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const { showToastError, showToastSuccess } = useCustomToast();
 
@@ -83,8 +92,7 @@ const useIndex = () => {
   const checkInPostRegistation = async (postRegistrationId: number | null) => {
     setLoadingLocation(true);
     try {
-      let location = await getLocation();
-      if (!location) {
+      if (!currentLocation) {
         console.log('Can not get your location!');
         setLoadingLocation(false);
         showToastError('Error when get your current location! Try again!');
@@ -92,14 +100,15 @@ const useIndex = () => {
         await dispatch(
           checkInPostRegistration({
             postRegistrationId: postRegistrationId,
-            longtitude: location?.coords?.longitude,
-            latitude: location?.coords?.latitude,
+            longtitude: currentLocation?.coords?.longitude,
+            latitude: currentLocation?.coords?.latitude,
           })
         ).then(async (res) => {
           setLoadingLocation(false);
           console.log(JSON.stringify(res, null, 2));
           if (res?.meta?.requestStatus === 'fulfilled') {
             const resFulfilledData = res.payload as CheckAttendanceResponse;
+            fetchPostRegistration();
             showToastSuccess('Check In Successful!');
           } else {
             const resRejectedData = res.payload as ErrorStatus;
@@ -113,7 +122,9 @@ const useIndex = () => {
       }
       setLoadingLocation(false);
       console.log(
-        location?.coords?.latitude + ' ' + location?.coords?.longitude
+        currentLocation?.coords?.latitude +
+          ' ' +
+          currentLocation?.coords?.longitude
       );
     } catch (error) {
       setLoadingLocation(false);

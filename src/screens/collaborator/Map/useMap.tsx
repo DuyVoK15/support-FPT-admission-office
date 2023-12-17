@@ -91,6 +91,9 @@ const useMap = () => {
   const postRegistrationConfirmList = useAppSelector(
     (state) => state.collab_postRegistration.postRegistrationConfirmedOnMap
   );
+  const currentLocation = useAppSelector(
+    (state) => state.collab_location.currentLocation
+  );
   const fetchPostRegistrationConfirmed = async () => {
     await dispatch(
       getAllPostRegistrationConfirmedOnMap({
@@ -130,8 +133,7 @@ const useMap = () => {
   const checkInPostRegistation = async (postRegistrationId: number | null) => {
     setLoadingLocation(true);
     try {
-      let location = await getLocation();
-      if (!location) {
+      if (!currentLocation) {
         console.log('Can not get your location!');
         setLoadingLocation(false);
         showToastError('Error when get your current location! Try again!');
@@ -139,8 +141,8 @@ const useMap = () => {
         await dispatch(
           checkInPostRegistration({
             postRegistrationId: postRegistrationId,
-            longtitude: location?.coords?.longitude,
-            latitude: location?.coords?.latitude,
+            longtitude: currentLocation?.coords?.longitude,
+            latitude: currentLocation?.coords?.latitude,
           })
         ).then(async (res) => {
           setLoadingLocation(false);
@@ -148,6 +150,7 @@ const useMap = () => {
           if (res?.meta?.requestStatus === 'fulfilled') {
             const resFulfilledData = res.payload as CheckAttendanceResponse;
             showToastSuccess('Check In Successful!');
+            fetchPostRegistrationConfirmed();
           } else {
             const resRejectedData = res.payload as ErrorStatus;
 
@@ -160,7 +163,9 @@ const useMap = () => {
       }
       setLoadingLocation(false);
       console.log(
-        location?.coords?.latitude + ' ' + location?.coords?.longitude
+        currentLocation?.coords?.latitude +
+          ' ' +
+          currentLocation?.coords?.longitude
       );
     } catch (error) {
       setLoadingLocation(false);

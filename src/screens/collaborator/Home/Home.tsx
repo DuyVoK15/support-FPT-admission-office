@@ -92,7 +92,7 @@ const Home = () => {
               </View>
               <View style={{ marginTop: 2 }}>
                 <Text
-                numberOfLines={2}
+                  numberOfLines={2}
                   style={{
                     fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
                     fontSize: 17,
@@ -101,7 +101,10 @@ const Home = () => {
                     letterSpacing: 1,
                   }}
                 >
-                  {state.cityName ? state.cityName : 'Not found'}
+                  {/* {state.cityName ? state.cityName : 'Not found'} */}
+                  {state.currentLocation?.coords?.latitude +
+                    ', ' +
+                    state.currentLocation?.coords?.longitude}
                 </Text>
               </View>
             </View>

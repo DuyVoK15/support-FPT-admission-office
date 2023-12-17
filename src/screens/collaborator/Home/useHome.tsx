@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, Platform } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../../app/store';
 import {
@@ -22,17 +22,65 @@ import {
 import EventCard from '../../../components/collaborator/Home/EventCard';
 import { ROUTES } from '../../../constants/Routes';
 import { imageNotFoundUri } from '../../../utils/images';
+import { updateCurrentLocation } from '../../../features/collaborator/collab.locationSlice';
 
 const useHome = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
 
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [cityName, setCityName] = useState<string | null>(null);
+  const [location, setLocation] = useState<Location.LocationObject | null>();
+  const currentLocation = useAppSelector(
+    (state) => state.collab_location.currentLocation
+  );
+  useEffect(() => {
+    console.log("BỊ GỌI")
+    let subscription: { remove: any };
 
-  const getCurrentLocation = async () => {
-    const location = await getLocation();
+    const startWatchingPosition = async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.log('Permission to access location was denied');
+        return;
+      }
+      subscription = await Location.watchPositionAsync(
+        {
+          accuracy: Location.Accuracy.High,
+          timeInterval: 5000, // Update every 5 seconds (can be adjusted)
+          distanceInterval: 10, // Minimum distance 10(in meters) for an update
+        },
+        async (newPosition) => {
+          console.log(newPosition);
+          await dispatch(updateCurrentLocation(newPosition));
+          if (newPosition) {
+            const { latitude, longitude } = newPosition.coords;
+            const address = await Location.reverseGeocodeAsync({
+              latitude,
+              longitude,
+            });
+            if (address && address.length > 0) {
+              setCityName(address[0].region + ', ' + address[0].country);
+            }
+            console.log(JSON.stringify(address, null, 2));
+          }
+        }
+      );
+      console.log('object');
+    };
 
+    startWatchingPosition();
+
+    // Clean up subscription on unmount
+    return () => {
+      if (subscription) {
+        subscription.remove();
+      }
+    };
+  }, []);
+
+  const getCurrentLocation = useCallback(async () => {
     // Use reverse geocoding to get city name
+    console.log('a', location);
     if (location) {
       const { latitude, longitude } = location.coords;
       const address = await Location.reverseGeocodeAsync({
@@ -44,7 +92,7 @@ const useHome = () => {
       }
       console.log(JSON.stringify(address, null, 2));
     }
-  };
+  }, [location]);
 
   const [textSearch, setTextSearch] = useState<string | null>('');
   const {
@@ -85,10 +133,10 @@ const useHome = () => {
   useEffect(() => {
     const fetch = async () => {
       // console.log('Gọi 1');
+      // await getCurrentLocation();
       await fetchHomePostUpcomming();
       await fetchHomePostReOpen();
       await fetchCheckInPostRegistration();
-      await getCurrentLocation();
     };
     fetch();
   }, [textSearch, navigation]);
@@ -138,10 +186,11 @@ const useHome = () => {
     setRefreshing(true);
     setTextSearch(null);
     setValue('search', '');
+    // await getCurrentLocation();
     await fetchHomePostUpcomming();
     await fetchHomePostReOpen();
     await fetchCheckInPostRegistration();
-    await getCurrentLocation();
+
     setTimeout(() => {
       setRefreshing(false);
     }, 0);
@@ -149,7 +198,7 @@ const useHome = () => {
 
   const renderItemUpcomming = ({ item }: { item: DataPost }) => {
     return (
-      <View style={{ marginTop: 5, marginBottom: 10, marginHorizontal: 15, }}>
+      <View style={{ marginTop: 5, marginBottom: 10, marginHorizontal: 15 }}>
         <EventCard
           onPress={() =>
             navigation.navigate(ROUTES.HOME_EVENT_DETAIL, {
@@ -211,7 +260,7 @@ const useHome = () => {
     handleSubmit,
     setValue,
   };
-  const state = { refreshing, textSearch, cityName };
+  const state = { refreshing, textSearch, cityName, currentLocation };
   const props = {
     checkInPostRegistrationList,
     postHomeUpcommingList,
