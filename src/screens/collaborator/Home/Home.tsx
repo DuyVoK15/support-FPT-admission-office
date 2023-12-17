@@ -65,13 +65,13 @@ const Home = () => {
           <View
             style={{
               flexDirection: 'row',
-              alignItems: 'center',
+              alignItems: 'flex-start',
             }}
           >
             <TouchableOpacity style={{ flex: 1 }}>
               <Octicons name="three-bars" size={30} color="white" />
             </TouchableOpacity>
-            <View style={{ flex: 7, alignItems: 'center' }}>
+            <View style={{ flex: 6, alignItems: 'center' }}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Text
                   style={{
@@ -92,6 +92,7 @@ const Home = () => {
               </View>
               <View style={{ marginTop: 2 }}>
                 <Text
+                numberOfLines={2}
                   style={{
                     fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
                     fontSize: 17,
