@@ -477,7 +477,16 @@ const RequestChangePositionConfirm = () => {
                                         fontSize: 16,
                                       }}
                                     >
-                                      Attendee Number
+                                      Attendee Number {''}
+                                      <Text
+                                        style={{ color: COLORS?.red_status }}
+                                      >
+                                        (
+                                        {position?.totalPositionRegisterAmount
+                                          ? position?.totalPositionRegisterAmount
+                                          : 0}
+                                        )
+                                      </Text>
                                     </Text>
                                   </View>
                                   <View style={{ marginBottom: 4 }}>
@@ -493,7 +502,7 @@ const RequestChangePositionConfirm = () => {
                                         ? position?.positionRegisterAmount +
                                           ' / ' +
                                           position?.amount +
-                                          ' collaborators'
+                                          ' collaborators have CONFIRMED'
                                         : ''}
                                     </Text>
                                   </View>

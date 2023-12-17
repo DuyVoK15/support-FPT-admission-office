@@ -254,10 +254,8 @@ const PositionRegistration = () => {
                                   Attendee Number {''}
                                   <Text style={{ color: COLORS?.red_status }}>
                                     (
-                                    {stateRedux.item?.data
-                                      ?.pendingRegisterAmount
-                                      ? stateRedux.item?.data
-                                          ?.pendingRegisterAmount
+                                    {position?.totalPositionRegisterAmount
+                                      ? position?.totalPositionRegisterAmount
                                       : 0}
                                     )
                                   </Text>

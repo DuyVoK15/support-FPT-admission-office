@@ -322,8 +322,8 @@ const HomeEventDetail: FC = () => {
                     color: COLORS?.red_date,
                   }}
                 >
-                  {stateRedux.item?.data?.registerAmount
-                    ? `Attendees(${stateRedux.item?.data?.pendingRegisterAmount})`
+                  {stateRedux.item?.data?.totalRegisterAmount
+                    ? `Attendees(${stateRedux.item?.data?.totalRegisterAmount})`
                     : 'Ateendees(0)'}
                 </Text>
               </View>
