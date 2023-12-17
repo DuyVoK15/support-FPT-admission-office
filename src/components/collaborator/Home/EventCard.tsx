@@ -84,7 +84,7 @@ const EventCard: FC<EventCardProps> = (props) => {
                   fontSize: responsiveFontSize(12),
                 }}
               >
-                {props.timeAgo + 'ádlkalsdnkasndklna'}
+                {props.timeAgo}
               </Text>
             </View>
           </View>

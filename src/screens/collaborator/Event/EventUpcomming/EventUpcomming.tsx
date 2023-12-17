@@ -213,7 +213,7 @@ const EventUpcomming: FC = () => {
           timeAgo={
             post?.createAt
               ? timeAgo({ dateProp: post?.createAt })
-                ? 'Posted at: '+ timeAgo({ dateProp: post?.createAt })
+                ? timeAgo({ dateProp: post?.createAt })
                 : 'No time'
               : 'No Time'
           }
