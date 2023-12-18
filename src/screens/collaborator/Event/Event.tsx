@@ -32,7 +32,11 @@ const Event = () => {
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <TouchableOpacity
             style={{ flex: 1 }}
-            onPress={() => navigation.navigate(ROUTES.HOME_STACK_NAVIGATOR)}
+            onPress={() =>
+              navigation.navigate(ROUTES.HOME_STACK_NAVIGATOR, {
+                screen: ROUTES.HOME,
+              })
+            }
           >
             <Image
               style={{ height: 50, width: 50, resizeMode: 'contain' }}
@@ -75,7 +79,7 @@ const Event = () => {
           </TouchableOpacity>
         </View>
       </View>
-     
+
       <EventTopTabs />
     </View>
   );

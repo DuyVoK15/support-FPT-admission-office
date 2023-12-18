@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import Event from '../../../../screens/collaborator/Event'
+import Event from '../../../../screens/collaborator/Event/Event'
 
 const EventTab: React.FC = () => {
   return (
