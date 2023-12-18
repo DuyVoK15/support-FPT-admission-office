@@ -140,7 +140,7 @@ const ScanIDRecognitionFront = () => {
               navigation.navigate(ROUTES.ACCOUNT_INFORMATION_CREATION);
             } else {
               setImageUri(null);
-              showToastError('Upload front image failed!');
+              showToastError('Upload front image failed! Please scan again!');
             }
           });
           // Alert.alert('Photo uploaded!');

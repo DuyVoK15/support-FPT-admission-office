@@ -154,7 +154,7 @@ const ScanIDRecognitionBack = () => {
                 navigation.navigate(ROUTES.ACCOUNT_INFORMATION_CREATION);
               } else {
                 setImageUri(null);
-                showToastError('Upload back image failed!');
+                showToastError('Upload back image failed! Please scan again!');
               }
             }
           );
