@@ -20,27 +20,27 @@ const Stack =
   createNativeStackNavigator<HomeCollaboratorStackNavigatorParamList>();
 const RegistrationStackNavigator = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener('tabPress', (e: any) => {
-      // Do something
-      navigation.navigate(ROUTES.REGISTRATION_PENDING);
-    });
+  // React.useEffect(() => {
+  //   const unsubscribe = navigation.addListener('tabPress', (e: any) => {
+  //     // Do something
+  //     navigation.navigate(ROUTES.REGISTRATION_PENDING);
+  //   });
 
-    return unsubscribe;
-  }, [navigation]);
-  // When have a navigate to this, this wil navigate to REGISTRATION_PENDING
-  useFocusEffect(
-    React.useCallback(() => {
-      // Thực hiện công việc khi Navigator 2 được focus (khi được navigate tới từ Navigator 1)
-      console.log('Navigator 2 focused!');
-      navigation.navigate(ROUTES.REGISTRATION_PENDING);
-      // Các hành động khác có thể được thực hiện ở đây khi Navigator 2 được focus
+  //   return unsubscribe;
+  // }, [navigation]);
+  // // When have a navigate to this, this wil navigate to REGISTRATION_PENDING
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     // Thực hiện công việc khi Navigator 2 được focus (khi được navigate tới từ Navigator 1)
+  //     console.log('Navigator 2 focused!');
+  //     navigation.navigate(ROUTES.REGISTRATION_PENDING);
+  //     // Các hành động khác có thể được thực hiện ở đây khi Navigator 2 được focus
 
-      return () => {
-        // Có thể thực hiện các công việc cleanup nếu cần khi Navigator 2 không còn được focus
-      };
-    }, [])
-  );
+  //     return () => {
+  //       // Có thể thực hiện các công việc cleanup nếu cần khi Navigator 2 không còn được focus
+  //     };
+  //   }, [])
+  // );
   return (
     <Stack.Navigator initialRouteName={ROUTES.REGISTRATION}>
       <Stack.Screen

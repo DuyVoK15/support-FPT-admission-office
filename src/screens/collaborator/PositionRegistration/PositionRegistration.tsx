@@ -383,7 +383,13 @@ const PositionRegistration = () => {
                                 case props.TYPE_BUTTON_ENUM
                                   .NAVIGATE_TO_REGISTRATION:
                                   props.navigation.navigate(
-                                    ROUTES.REGISTRATION_STACK_NAVIGATOR
+                                    ROUTES.REGISTRATION_STACK_NAVIGATOR,
+                                    {
+                                      screen: ROUTES.REGISTRATION,
+                                      params: {
+                                        screen: ROUTES.REGISTRATION_PENDING,
+                                      },
+                                    }
                                   );
                                   break;
                                 default:
