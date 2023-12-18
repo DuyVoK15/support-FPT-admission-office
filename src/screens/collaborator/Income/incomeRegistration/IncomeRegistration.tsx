@@ -95,10 +95,10 @@ const IncomeRegistration = () => {
                         fontSize: 16,
                       }}
                     >
-                      {item?.postPosition?.positionRegisterAmount
+                      {/* {item?.postPosition?.positionRegisterAmount
                         ? item?.postPosition?.positionRegisterAmount +
                           ' attendees'
-                        : '0 attendees'}
+                        : '0 attendees'} */}
                     </Text>
                   </View>
                 </View>
@@ -386,12 +386,15 @@ const IncomeRegistration = () => {
                       fontSize: 14,
                     }}
                   >
-                    Salary: {''}{' '}
+                    Salary: {''}
                     <Text
-                      style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular }}
+                      style={{
+                        fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                        color: COLORS?.orange_icon,
+                      }}
                     >
                       {item?.postPosition?.salary
-                        ? item?.postPosition?.salary + ' VNĐ'
+                        ? item?.postPosition?.salary.toLocaleString() + ' VNĐ'
                         : '0 VNĐ'}
                     </Text>
                   </Text>
@@ -423,9 +426,14 @@ const IncomeRegistration = () => {
                   >
                     Use Bus Service?: {''}{' '}
                     <Text
-                      style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular }}
+                      style={{
+                        fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                        color: item?.schoolBusOption
+                          ? COLORS?.green_status
+                          : COLORS?.red_status,
+                      }}
                     >
-                      {item?.postPosition?.isBusService ? 'Yes' : 'No'}
+                      {item?.schoolBusOption ? 'Yes' : 'No'}
                     </Text>
                   </Text>
                 </View>

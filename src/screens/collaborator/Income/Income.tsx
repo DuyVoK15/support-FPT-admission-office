@@ -71,7 +71,9 @@ const InCome = () => {
 
           <View style={{ flex: 0 }}>
             <Text style={styles.textPrice}>
-              {item?.salary ? '+' + item?.salary + ' VNĐ' : '+0 VNĐ'}
+              {item?.salary
+                ? '+' + item?.salary.toLocaleString() + ' VNĐ'
+                : '+0 VNĐ'}
             </Text>
           </View>
         </View>
@@ -111,7 +113,7 @@ const InCome = () => {
               }}
             >
               {stateRedux?.totalSalary
-                ? stateRedux?.totalSalary + ' VNĐ'
+                ? stateRedux?.totalSalary.toLocaleString() + ' VNĐ'
                 : '0 VNĐ'}
             </Text>
           </Text>
