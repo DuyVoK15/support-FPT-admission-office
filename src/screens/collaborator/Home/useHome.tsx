@@ -248,13 +248,9 @@ const useHome = () => {
                 : 'No value'
               : 'No value'
           }
-          // timeFrom={
-          //   item?.timeFrom
-          //     ? format_Time_To_HHss(item?.timeFrom)
-          //       ? format_Time_To_HHss(item?.timeFrom) ?? 'No value'
-          //       : 'No value'
-          //     : 'No value'
-          // }
+          totalAmountPosition={item?.totalAmountPosition ? item?.totalAmountPosition : 0}
+          registerAmount={item?.registerAmount ? item?.registerAmount : 0}  
+          status={item?.status ? item?.status : 0}
         />
       </View>
     );
