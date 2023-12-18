@@ -216,7 +216,12 @@ const Home = () => {
 
             <TouchableOpacity
               style={{ flexDirection: 'row', alignItems: 'center' }}
-              onPress={() => navigation.navigate('EVENT_STACK_NAVIGATOR')}
+              onPress={() =>
+                navigation.navigate(ROUTES.EVENT_STACK_NAVIGATOR, {
+                  screen: ROUTES.EVENT,
+                  params: { screen: ROUTES.EVENT_UPCOMMING },
+                })
+              }
             >
               <View>
                 <Text
@@ -290,23 +295,10 @@ const Home = () => {
             <TouchableOpacity
               style={{ flexDirection: 'row', alignItems: 'center' }}
               onPress={() =>
-                navigation.dispatch(
-                  CommonActions.reset({
-                    index: 0,
-                    routes: [
-                      {
-                        name: ROUTES.EVENT_STACK_NAVIGATOR,
-                        state: {
-                          routes: [
-                            {
-                              name: ROUTES.EVENT,
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  })
-                )
+                navigation.navigate(ROUTES.EVENT_STACK_NAVIGATOR, {
+                  screen: ROUTES.EVENT,
+                  params: { screen: ROUTES.EVENT_REOPEN },
+                })
               }
             >
               <View>
