@@ -214,7 +214,7 @@ const PositionRegistration = () => {
                                 >
                                   {position?.schoolName
                                     ? position?.schoolName
-                                    : ''}
+                                    : 'No value'}
                                 </Text>
                               </View>
                               <View
@@ -229,7 +229,7 @@ const PositionRegistration = () => {
                                     fontSize: 14,
                                   }}
                                 >
-                                  {position?.location ? position?.location : ''}
+                                  {position?.location ? position?.location : 'No value'}
                                 </Text>
                               </View>
                             </View>
@@ -238,7 +238,7 @@ const PositionRegistration = () => {
                           <View style={[styles.column, { marginBottom: 0 }]}>
                             <View style={styles.contentRow}>
                               <Ionicons
-                                name="md-calendar"
+                                name="people"
                                 size={28}
                                 color={COLORS.orange_icon}
                               />
@@ -286,6 +286,22 @@ const PositionRegistration = () => {
                                 styles.paragraph,
                                 {
                                   fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
+                                },
+                              ]}
+                            >
+                              Salary: {''}
+                              <Text style={{ color: COLORS?.orange_icon }}>
+                                {position?.salary
+                                  ? position?.salary.toLocaleString() + ' VNĐ'
+                                  : 'None'}
+                              </Text>
+                            </Text>
+                            <Text
+                              style={[
+                                styles.paragraph,
+                                {
+                                  fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
+                                  marginTop: 5,
                                 },
                               ]}
                             >
@@ -497,6 +513,7 @@ const styles = StyleSheet.create({
   textPositionNum_2: {
     fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
     fontSize: 15,
+    color: COLORS?.orange_icon
   },
   textOnPressDetail: {
     fontFamily: FONTS_FAMILY.Ubuntu_300Light_Italic,

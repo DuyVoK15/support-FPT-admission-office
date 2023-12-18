@@ -432,12 +432,15 @@ const RegistrationDetail = () => {
                       fontSize: 14,
                     }}
                   >
-                    Salary: {''}{' '}
+                    Salary: {''}
                     <Text
-                      style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular }}
+                      style={{
+                        fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                        color: COLORS?.orange_icon,
+                      }}
                     >
                       {item?.postPosition?.salary
-                        ? item?.postPosition?.salary + ' VNĐ'
+                        ? item?.postPosition?.salary.toLocaleString() + ' VNĐ'
                         : '0 VNĐ'}
                     </Text>
                   </Text>

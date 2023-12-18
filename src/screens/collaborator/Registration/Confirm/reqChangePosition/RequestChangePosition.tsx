@@ -463,7 +463,7 @@ const RequestChangePositionConfirm = () => {
                               >
                                 <View style={styles.contentRow}>
                                   <Ionicons
-                                    name="md-calendar"
+                                    name="people"
                                     size={28}
                                     color={COLORS.orange_icon}
                                   />
@@ -509,22 +509,38 @@ const RequestChangePositionConfirm = () => {
                                 </View>
                               </View>
                               <View style={{ marginTop: 15 }}>
-                                <Text
-                                  style={[
-                                    styles.paragraph,
-                                    {
-                                      fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
-                                    },
-                                  ]}
-                                >
-                                  Certificate Need?: {''}
-                                  <Text style={{ color: COLORS?.orange_icon }}>
-                                    {position?.certificateName
-                                      ? position?.certificateName
-                                      : 'None'}
-                                  </Text>
-                                </Text>
-                              </View>
+                            <Text
+                              style={[
+                                styles.paragraph,
+                                {
+                                  fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
+                                },
+                              ]}
+                            >
+                              Salary: {''}
+                              <Text style={{ color: COLORS?.orange_icon }}>
+                                {position?.salary
+                                  ? position?.salary.toLocaleString() + ' VNĐ'
+                                  : 'None'}
+                              </Text>
+                            </Text>
+                            <Text
+                              style={[
+                                styles.paragraph,
+                                {
+                                  fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
+                                  marginTop: 5,
+                                },
+                              ]}
+                            >
+                              Certificate Need?: {''}
+                              <Text style={{ color: COLORS?.orange_icon }}>
+                                {position?.certificateName
+                                  ? position?.certificateName
+                                  : 'None'}
+                              </Text>
+                            </Text>
+                          </View>
                             </View>
 
                             <DashedLine
@@ -683,6 +699,7 @@ const styles = StyleSheet.create({
   textPositionNum_2: {
     fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
     fontSize: 15,
+    color: COLORS?.orange_icon
   },
   textOnPressDetail: {
     fontFamily: FONTS_FAMILY.Ubuntu_300Light_Italic,
