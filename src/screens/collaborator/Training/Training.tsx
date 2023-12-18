@@ -73,15 +73,15 @@ const Training = () => {
             <View style={{ flex: 1 }}>
               <Text
                 style={{
-                  fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
-                  color: 'white',
+                  fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                  color: 'black',
                   fontSize: responsiveFontSize(18),
                 }}
               >
                 Certificate: {''}
                 <Text
                   style={{
-                    fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
+                    fontFamily: FONTS_FAMILY?.Ubuntu_700Bold_Italic,
                     color: 'black',
                     fontSize: responsiveFontSize(18),
                   }}
