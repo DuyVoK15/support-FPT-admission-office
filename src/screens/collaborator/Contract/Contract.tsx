@@ -185,23 +185,28 @@ const Contract = () => {
               }}
             >
               <View style={{ margin: 15 }}>
-                  {item?.contract?.contractDescription ? (
-                    <RenderHTML
-                      source={{ html: item?.contract?.contractDescription }}
-                      contentWidth={width}
-                    />
-                  ) : (
-                    'No data'
-                  )}
+                {item?.contract?.contractDescription ? (
+                  <RenderHTML
+                    source={{ html: item?.contract?.contractDescription }}
+                    contentWidth={width}
+                  />
+                ) : (
+                  'No data'
+                )}
               </View>
             </View>
           </View>
           <View style={{ marginTop: 10, marginHorizontal: 15 }}>
             <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_500Medium }}>
               Salary: {''}
-              <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular }}>
+              <Text
+                style={{
+                  fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                  color: COLORS?.orange_icon,
+                }}
+              >
                 {item?.contract?.totalSalary
-                  ? numberWithCommas(item?.contract?.totalSalary) + ' VNĐ'
+                  ? item?.contract?.totalSalary.toLocaleString() + ' VNĐ'
                   : 'Not yet'}
               </Text>
             </Text>
