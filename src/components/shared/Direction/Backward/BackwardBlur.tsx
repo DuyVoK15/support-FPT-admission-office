@@ -8,11 +8,9 @@ export default class BackwardBlur extends Component<BackwardBlurProps> {
     const { style, ...otherProps } = this.props;
 
     return (
-      <View style={[styles.container, style]}>
-        <TouchableOpacity {...otherProps}>
-          <AntDesign name="arrowleft" size={30} color="white" />
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={[styles.container, style]} {...otherProps}>
+        <AntDesign name="arrowleft" size={30} color="white" />
+      </TouchableOpacity>
     );
   }
 }
@@ -21,11 +19,11 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: "center",
+    justifyContent: 'center',
     marginLeft: 15,
     borderRadius: 100,
-    backgroundColor: "rgba(0,0,0,0.3)",
+    backgroundColor: 'rgba(0,0,0,0.3)',
     width: 40,
-    height: 40
+    height: 40,
   },
 });

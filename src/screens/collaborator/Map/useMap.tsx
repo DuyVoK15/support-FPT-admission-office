@@ -221,7 +221,7 @@ const useMap = () => {
   };
 
   const handleCurrentButton = async () => {
-    const currentLocation = await getCurrentLocation();
+    // const currentLocation = await getCurrentLocation();
     if (mapRef.current) {
       mapRef.current.animateToRegion({
         latitude: currentLocation?.coords?.latitude
@@ -474,9 +474,15 @@ const useMap = () => {
           isPreselected={true}
         >
           <Callout
-            style={{ backgroundColor: '#FFF', padding: 10, borderRadius: 10 }}
+            tooltip
+            style={{
+              flex: 1,
+              backgroundColor: '#FFF',
+              padding: 10,
+              borderRadius: 10,
+            }}
           >
-            <View style={{ borderRadius: 10 }}>
+            <View style={{ borderRadius: 10, width: ScreenWidth - 50 }}>
               <View style={{ alignItems: 'center' }}>
                 <Text
                   style={{
@@ -567,8 +573,8 @@ const useMap = () => {
                     }}
                   >
                     {' '}
-                    {registration?.postPosition?.schoolName
-                      ? registration?.postPosition?.schoolName
+                    {registration?.postPosition?.location
+                      ? registration?.postPosition?.location
                       : 'No value'}
                   </Text>
                 </Text>

@@ -41,7 +41,8 @@ import Registration_Confirm_Detail from './confirmDetail/RegistrationConfirmDeta
 import RegistrationDetail from '../RegistrationDetail';
 import RegistrationStatus from '../RegistrationStatus';
 import Spinner from 'react-native-loading-spinner-overlay';
-import LoadingLocation from '../../../../components/shared/PopupNotification/LoadingLocation';
+import LoadingLocation from '../../../../components/shared/Spinner/LoadingSpinner';
+import LoadingSpinner from '../../../../components/shared/Spinner/LoadingSpinner';
 
 const Registration_Confirm = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -373,7 +374,7 @@ const Registration_Confirm = () => {
     <View style={styles.container}>
       <Spinner
         visible={state.loadingLocation}
-        children={<LoadingLocation />}
+        children={<LoadingSpinner title="Waiting for Checking Your Location" />}
       />
       <View
         style={{

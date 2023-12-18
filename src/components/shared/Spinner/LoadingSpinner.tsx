@@ -1,9 +1,12 @@
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import React, { FC } from 'react';
 import { ScreenWidth } from '../../../constants/Demesions';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
 
-const LoadingLocation = () => {
+interface LoadingSpinnerProps {
+  title: string;
+}
+const LoadingSpinner: FC<LoadingSpinnerProps> = ({ title }) => {
   return (
     <View
       style={{
@@ -34,7 +37,7 @@ const LoadingLocation = () => {
               textAlign: 'center',
             }}
           >
-            Waiting for Checking Your Location
+            {title}
           </Text>
         </View>
       </View>
@@ -42,6 +45,6 @@ const LoadingLocation = () => {
   );
 };
 
-export default LoadingLocation;
+export default LoadingSpinner;
 
 const styles = StyleSheet.create({});

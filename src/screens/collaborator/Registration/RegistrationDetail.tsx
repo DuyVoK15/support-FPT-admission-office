@@ -457,7 +457,7 @@ const RegistrationDetail = () => {
                     >
                       {item?.postPosition?.certificateName
                         ? item?.postPosition?.certificateName
-                        : 'No value'}
+                        : 'No need'}
                     </Text>
                   </Text>
                   <Text
@@ -469,9 +469,14 @@ const RegistrationDetail = () => {
                   >
                     Use Bus Service?: {''}{' '}
                     <Text
-                      style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular }}
+                      style={{
+                        fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                        color: item?.schoolBusOption
+                          ? COLORS?.green_status
+                          : COLORS?.red_status,
+                      }}
                     >
-                      {item?.postPosition?.isBusService ? 'Yes' : 'No'}
+                      {item?.schoolBusOption ? 'Yes' : 'No'}
                     </Text>
                   </Text>
                 </View>

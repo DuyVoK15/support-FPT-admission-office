@@ -18,7 +18,7 @@ import ConfirmAlert from '../../../components/shared/AwesomeAlert/ConfirmAlert';
 import { Entypo, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
 import { SHADOWS } from '../../../constants/Shadows';
-import LoadingLocation from '../../../components/shared/PopupNotification/LoadingLocation';
+import LoadingSpinner from '../../../components/shared/Spinner/LoadingSpinner';
 
 export default function Map() {
   const { ref, state, setState, stateRedux, props, handlers } = useMap();
@@ -27,7 +27,7 @@ export default function Map() {
       <Spinner visible={state.isOpenMapLoading || state.refreshing} />
       <Spinner
         visible={state.loadingLocation}
-        children={<LoadingLocation />}
+        children={<LoadingSpinner title='Waiting for Checking Your Location' />}
       />
       <MapView
         // key={state.markersKey.toString()}
