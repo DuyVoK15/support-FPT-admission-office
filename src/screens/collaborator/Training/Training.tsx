@@ -107,7 +107,7 @@ const Training = () => {
           <View
             style={{
               flexDirection: 'row',
-              marginTop: 15,
+              marginTop: 25,
               alignItems: 'flex-end',
             }}
           >
@@ -134,28 +134,84 @@ const Training = () => {
                 </Text>
               </Text>
             </View>
-            <View>
-              <TouchableOpacity
-                onPress={() =>
-                  handlers.showAlertHandler(
-                    props.TYPE_BUTTON_ENUM.REGISTER,
-                    item
-                  )
-                }
-                style={{
-                  paddingVertical: 8,
-                  paddingHorizontal: 18,
-                  borderRadius: 13,
-                  backgroundColor: 'white',
-                  ...SHADOWS.SHADOW_02,
-                }}
-              >
-                <Text
-                  style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular_Italic }}
+            <View style={{ marginLeft: 10 }}>
+              {item?.isHasThisCertificate ? (
+                <TouchableOpacity
+                  onPress={() =>
+                    props.navigation.navigate(ROUTES.CERTIFICATE_HISTORY)
+                  }
+                  style={{
+                    paddingVertical: 8,
+                    paddingHorizontal: 18,
+                    borderRadius: 11,
+                    backgroundColor: '#46910d',
+
+                    shadowColor: COLORS?.orange_button,
+                    shadowOffset: {
+                      width: 0,
+                      height: 0,
+                    },
+                    shadowOpacity: 0.25,
+                    shadowRadius: 3.84,
+
+                    elevation: 5,
+                  }}
                 >
-                  Register
-                </Text>
-              </TouchableOpacity>
+                  <Text
+                    style={{
+                      fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                      color: 'white'
+                    }}
+                  >
+                    View your certificate
+                  </Text>
+                </TouchableOpacity>
+              ) : item?.isRegistered ? (
+                <TouchableOpacity
+                  onPress={() =>
+                    props.navigation.navigate(ROUTES.TRAINING_REGISTRATION)
+                  }
+                  style={{
+                    paddingVertical: 8,
+                    paddingHorizontal: 18,
+                    borderRadius: 11,
+                    backgroundColor: 'white',
+                    ...SHADOWS.SHADOW_02,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
+                    }}
+                  >
+                    You've registered
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  onPress={() =>
+                    handlers.showAlertHandler(
+                      props.TYPE_BUTTON_ENUM.REGISTER,
+                      item
+                    )
+                  }
+                  style={{
+                    paddingVertical: 8,
+                    paddingHorizontal: 18,
+                    borderRadius: 13,
+                    backgroundColor: 'white',
+                    ...SHADOWS.SHADOW_02,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
+                    }}
+                  >
+                    Register
+                  </Text>
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </View>
