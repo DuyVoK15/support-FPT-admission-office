@@ -137,7 +137,6 @@ const AccountStackNavigator = () => {
         name={ROUTES.CONTRACT}
         component={Contract}
         options={{
-          animation: 'none',
           headerShown: false,
         }}
       />
