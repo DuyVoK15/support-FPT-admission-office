@@ -15,6 +15,8 @@ import * as Location from 'expo-location';
 import { getLocation } from '../../../../useCurrentLocation';
 import { DataPost } from '../../../models/collaborator/dataPost.model';
 import {
+  format_ISODateString_To_DDMonth,
+  format_ISODateString_To_DDMonthYYYY,
   format_ISODateString_To_MonthDD,
   format_Time_To_HHss,
   timeAgo,
@@ -34,7 +36,7 @@ const useHome = () => {
     (state) => state.collab_location.currentLocation
   );
   useEffect(() => {
-    console.log("BỊ GỌI")
+    console.log('BỊ GỌI');
     let subscription: { remove: any };
 
     const startWatchingPosition = async () => {
@@ -233,19 +235,26 @@ const useHome = () => {
               : 'No value'
           }
           dateFrom={
-            item?.dateFrom
-              ? format_ISODateString_To_MonthDD(item?.dateFrom)
-                ? format_ISODateString_To_MonthDD(item?.dateFrom) ?? 'No value'
+            item?.dateFrom && item?.dateTo
+              ? item?.dateFrom === item?.dateTo
+                ? format_ISODateString_To_DDMonthYYYY(item?.dateFrom)
+                  ? format_ISODateString_To_DDMonthYYYY(item?.dateFrom)
+                  : 'No value'
+                : format_ISODateString_To_DDMonth(item?.dateFrom) &&
+                  format_ISODateString_To_DDMonthYYYY(item?.dateTo)
+                ? format_ISODateString_To_DDMonth(item?.dateFrom) +
+                  ' - ' +
+                  format_ISODateString_To_DDMonthYYYY(item?.dateTo)
                 : 'No value'
               : 'No value'
           }
-          timeFrom={
-            item?.timeFrom
-              ? format_Time_To_HHss(item?.timeFrom)
-                ? format_Time_To_HHss(item?.timeFrom) ?? 'No value'
-                : 'No value'
-              : 'No value'
-          }
+          // timeFrom={
+          //   item?.timeFrom
+          //     ? format_Time_To_HHss(item?.timeFrom)
+          //       ? format_Time_To_HHss(item?.timeFrom) ?? 'No value'
+          //       : 'No value'
+          //     : 'No value'
+          // }
         />
       </View>
     );

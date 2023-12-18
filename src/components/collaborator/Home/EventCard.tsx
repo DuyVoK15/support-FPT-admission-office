@@ -14,7 +14,7 @@ type EventCardProps = TouchableOpacity['props'] & {
   schoolName?: string;
   totalPeopleAmount?: number;
   location?: string;
-  dateFrom?: string;
+  dateFrom?: string | null;
   timeFrom?: string;
 };
 
@@ -77,7 +77,7 @@ const EventCard: FC<EventCardProps> = (props) => {
                 {props.titleEvent}
               </Text>
             </View>
-            <View style={{ width: '40%', alignItems: 'flex-end',  }}>
+            <View style={{ width: '40%', alignItems: 'flex-end' }}>
               <Text
                 style={{
                   fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
@@ -158,7 +158,9 @@ const EventCard: FC<EventCardProps> = (props) => {
               color: COLORS.red_date,
             }}
           >
-            {props.dateFrom} - {props.timeFrom}
+            {props.dateFrom}
+            {/* - 
+             {props.timeFrom} */}
           </Text>
         </View>
       </View>

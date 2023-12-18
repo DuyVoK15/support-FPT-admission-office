@@ -101,10 +101,10 @@ const Home = () => {
                     letterSpacing: 1,
                   }}
                 >
-                  {/* {state.cityName ? state.cityName : 'Not found'} */}
-                  {state.currentLocation?.coords?.latitude +
+                  {state.cityName ? state.cityName : 'Not found'}
+                  {/* {state.currentLocation?.coords?.latitude +
                     ', ' +
-                    state.currentLocation?.coords?.longitude}
+                    state.currentLocation?.coords?.longitude} */}
                 </Text>
               </View>
             </View>
