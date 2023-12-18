@@ -12,12 +12,19 @@ import StatusInfo from '../../models/collaborator/statusInfo.model';
 import { useState } from 'react';
 import UpdateEnableAccountResponse from '../../dtos/collaborator/response/updateEnableAccount.dto';
 import ViewVerifyAccountResponse from '../../dtos/collaborator/response/viewVerifyAccount.dto';
+import { FilterAccountBannedParam } from '../../dtos/collaborator/parameter/filterAccountBanned.dto';
+import ViewAccountBannedResponse from '../../dtos/collaborator/response/viewAccountBanned.dto';
+import { DataAccountBanned } from '../../models/collaborator/accountBanned.model';
+import ViewCurrentAccountBannedResponse from '../../dtos/collaborator/response/viewCurrentAccountBanned.dto';
 
 interface AccountState {
   userInfo: GetUserInfoDto | null;
   userInfoSignup: GetUserInfoDto | null;
   enableResponse: UpdateEnableAccountResponse | null;
   verifyResponse: ViewVerifyAccountResponse | null;
+  accountBanned: ViewAccountBannedResponse | null;
+  currentAccountBanned: ViewCurrentAccountBannedResponse | null;
+  loading_banned: boolean;
   loading: boolean;
   loading_signup_accinfo: boolean;
   loading_update: boolean;
@@ -30,6 +37,9 @@ const initialState: AccountState = {
   userInfoSignup: null,
   enableResponse: null,
   verifyResponse: null,
+  accountBanned: null,
+  currentAccountBanned: null,
+  loading_banned: false,
   loading: false,
   loading_signup_accinfo: false,
   loading_update: false,
@@ -204,6 +214,36 @@ export const collab_verifyAccount = createAsyncThunk(
   }
 );
 
+export const collab_getAccountBanned = createAsyncThunk(
+  'account/account-banned/getByToken',
+  async (params: FilterAccountBannedParam, { rejectWithValue }) => {
+    try {
+      const response = await accountService.collab_getAccountBanned(params);
+
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      console.log(axiosError);
+      return rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+
+export const collab_getCurrentAccountBanned = createAsyncThunk(
+  'account/account-banned/getCurrentAccountBanned',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await accountService.collab_getCurrentAccountBanned();
+
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      console.log(axiosError);
+      return rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+
 export const admission_signupAccountInformation = createAsyncThunk(
   'account-admission/createAccountInfo',
   async (params: AccountInfoSignup, { rejectWithValue }) => {
@@ -212,7 +252,7 @@ export const admission_signupAccountInformation = createAsyncThunk(
       return response.data;
     } catch (error) {
       const axiosError = error as AxiosError;
-      console.log(error);
+      console.log(axiosError);
       return rejectWithValue(axiosError.response?.data);
     }
   }
@@ -403,6 +443,30 @@ export const accountSlice = createSlice({
       .addCase(collab_verifyAccount.rejected, (state, action) => {
         state.error = action.payload as GetUserInfoDto;
         state.loading = false;
+      })
+      .addCase(collab_getAccountBanned.pending, (state) => {
+        state.loading_banned = true;
+        state.error = null;
+      })
+      .addCase(collab_getAccountBanned.fulfilled, (state, action) => {
+        state.accountBanned = action.payload;
+        state.loading_banned = false;
+      })
+      .addCase(collab_getAccountBanned.rejected, (state, action) => {
+        state.error = action.payload as GetUserInfoDto;
+        state.loading_banned = false;
+      })
+      .addCase(collab_getCurrentAccountBanned.pending, (state) => {
+        state.loading_banned = true;
+        state.error = null;
+      })
+      .addCase(collab_getCurrentAccountBanned.fulfilled, (state, action) => {
+        state.currentAccountBanned = action.payload;
+        state.loading_banned = false;
+      })
+      .addCase(collab_getCurrentAccountBanned.rejected, (state, action) => {
+        state.error = action.payload as GetUserInfoDto;
+        state.loading_banned = false;
       });
   },
 });

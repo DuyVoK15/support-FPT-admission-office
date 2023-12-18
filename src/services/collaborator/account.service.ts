@@ -7,6 +7,10 @@ import UpdateAvatarDto from '../../dtos/collaborator/parameter/updateAvatar.dto'
 import UpdateEnableAccountResponse from '../../dtos/collaborator/response/updateEnableAccount.dto';
 import ViewVerifyAccountResponse from '../../dtos/collaborator/response/viewVerifyAccount.dto';
 import { ViewUserInfoResponse } from '../../dtos/collaborator/response/viewUserInfo.dto';
+import ViewAccountBannedResponse from '../../dtos/collaborator/response/viewAccountBanned.dto';
+import { FilterAccountBannedParam } from '../../dtos/collaborator/parameter/filterAccountBanned.dto';
+import { DataAccountBanned } from '../../models/collaborator/accountBanned.model';
+import ViewCurrentAccountBannedResponse from '../../dtos/collaborator/response/viewCurrentAccountBanned.dto';
 
 export const accountService = {
   collab_getUserInfo: (): Promise<AxiosResponse<ViewUserInfoResponse>> => {
@@ -38,16 +42,14 @@ export const accountService = {
   collab_updateFrontImage: (payload: {
     identityFrontImg: string;
   }): Promise<AxiosResponse<GetUserInfoDto>> => {
-    const url =
-      '/api/account/updateFrontImg';
+    const url = '/api/account/updateFrontImg';
 
     return axiosClient.patch(url, { ...payload });
   },
   collab_updateBackImage: (payload: {
     identityBackImg: string;
   }): Promise<AxiosResponse<GetUserInfoDto>> => {
-    const url =
-      '/api/account/updateBackImg';
+    const url = '/api/account/updateBackImg';
 
     return axiosClient.patch(url, { ...payload });
   },
@@ -55,8 +57,7 @@ export const accountService = {
     identityNumber: string;
     address: string;
   }): Promise<AxiosResponse<GetUserInfoDto>> => {
-    const url =
-      '/api/account/updateFrontAccountInformationCitizen';
+    const url = '/api/account/updateFrontAccountInformationCitizen';
 
     return axiosClient.patch(url, { ...payload });
   },
@@ -65,8 +66,7 @@ export const accountService = {
     identityIssueDate: string;
     placeOfIssue: string;
   }): Promise<AxiosResponse<GetUserInfoDto>> => {
-    const url =
-      '/api/account/updateBackAccountInformationCitizen';
+    const url = '/api/account/updateBackAccountInformationCitizen';
 
     return axiosClient.patch(url, { ...payload });
   },
@@ -76,6 +76,20 @@ export const accountService = {
     const url = '/api/account/enable-account';
 
     return axiosClient.put(url);
+  },
+  collab_getAccountBanned: (
+    params: FilterAccountBannedParam
+  ): Promise<AxiosResponse<ViewAccountBannedResponse>> => {
+    const url = '/api/account-banned/getByToken';
+
+    return axiosClient.get(url, { params });
+  },
+  collab_getCurrentAccountBanned: (): Promise<
+    AxiosResponse<ViewCurrentAccountBannedResponse>
+  > => {
+    const url = '/api/account-banned/getCurrentAccountBanned';
+
+    return axiosClient.get(url);
   },
   collab_verifyAccount: (params: {
     code: number;
