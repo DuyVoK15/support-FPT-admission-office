@@ -122,7 +122,12 @@ const AccountInfoCreation = () => {
         )}
       </View>
       <View style={{ flex: 1, marginHorizontal: 20 }}>
-        {true ? (
+        {userInfo?.data?.accountInformation &&
+        userInfo?.data?.accountInformation?.identityFrontImg !== null &&
+        userInfo?.data?.accountInformation?.identityFrontImg !== '' &&
+        userInfo?.data?.accountInformation &&
+        userInfo?.data?.accountInformation?.identityBackImg !== null &&
+        userInfo?.data?.accountInformation?.identityBackImg !== '' ? (
           <SubmitButton
             titleButton="NEXT STEP"
             onPress={() => navigation.navigate(ROUTES.USER_PROFILE_SIGNUP)}

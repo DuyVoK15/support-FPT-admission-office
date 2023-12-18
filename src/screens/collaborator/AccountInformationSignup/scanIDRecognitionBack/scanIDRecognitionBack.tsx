@@ -43,6 +43,7 @@ import { COLORS } from '../../../../constants/Colors';
 import ErrorStatus from '../../../../dtos/collaborator/response/errorStatus.dto';
 import { formatToISO_8601 } from '../../../../utils/formats';
 import Spinner from 'react-native-loading-spinner-overlay';
+import LoadingSpinner from '../../../../components/shared/Spinner/LoadingSpinner';
 
 const ScanIDRecognitionBack = () => {
   const [hasCameraPermission, setHasCameraPermission] = useState<
@@ -54,6 +55,9 @@ const ScanIDRecognitionBack = () => {
 
   const informationBack = useAppSelector(
     (state) => state.collan_information.informationBack
+  );
+  const loadingUserInfo = useAppSelector(
+    (state) => state.collab_account.loading
   );
   const loadingScan = useAppSelector(
     (state) => state.collan_information.loading
@@ -145,11 +149,12 @@ const ScanIDRecognitionBack = () => {
           await dispatch(collab_updateBackImage({ identityBackImg: url })).then(
             async (res) => {
               if (res?.meta?.requestStatus === 'fulfilled') {
-                showToastSuccess('Upload front image successful!');
+                showToastSuccess('Upload back image successful!');
                 await fetchUserInfo();
                 navigation.navigate(ROUTES.ACCOUNT_INFORMATION_CREATION);
               } else {
-                showToastError('Upload front image failed!');
+                setImageUri(null);
+                showToastError('Upload back image failed!');
               }
             }
           );
@@ -158,10 +163,12 @@ const ScanIDRecognitionBack = () => {
         })
         .catch((error) => {
           // Xử lý lỗi nếu có
+          setImageUri(null);
           console.log('Lỗi khi lấy URL hình ảnh:', error);
           setLoadingUpload(false);
         });
     } catch (error) {
+      setImageUri(null);
       setLoadingUpload(false);
       console.log('Lỗi ở: ', error);
     }
@@ -191,7 +198,7 @@ const ScanIDRecognitionBack = () => {
                 );
                 setImageUri(null);
               } else {
-                // showToastSuccess('Get info from CCCD/CMND Back Image');
+                showToastSuccess('Get info from CCCD/CMND Back Image');
                 await updateInformationBack(
                   resData?.data?.[0]?.mrz_details?.id,
                   formatToISO_8601(resData?.data?.[0]?.issue_date) ?? '',
@@ -202,7 +209,9 @@ const ScanIDRecognitionBack = () => {
                     showToastError(resData?.message);
                     setImageUri(null);
                   } else {
-                    showToastSuccess('Đã trùng');
+                    showToastSuccess(
+                      'Information on both sides of the card matches!'
+                    );
                     await uploadMedia(imageUri ?? '');
                   }
                 });
@@ -211,6 +220,7 @@ const ScanIDRecognitionBack = () => {
               showToastError('Get information failed! Please scan again!');
               setImageUri(null);
             }
+            setImageUri(null);
           }
         );
         // Xử lý dữ liệu trả về ở đây
@@ -220,13 +230,15 @@ const ScanIDRecognitionBack = () => {
       }
     }
   };
-  useEffect(() => {
-    console.log(informationBack);
-  }, [informationBack]);
 
   return (
     <View style={styles.container}>
-      <Spinner visible={loadingScan || loadingUpdate || loadingUpload} />
+      <Spinner
+        visible={
+          loadingScan || loadingUpdate || loadingUpload || loadingUserInfo
+        }
+        children={<LoadingSpinner title="Waiting for checking information" />}
+      />
       {!imageUri ? (
         <Camera
           style={styles.camera}

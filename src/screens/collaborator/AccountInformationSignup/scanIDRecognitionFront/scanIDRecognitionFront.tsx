@@ -34,6 +34,7 @@ import { ROUTES } from '../../../../constants/Routes';
 import { COLORS } from '../../../../constants/Colors';
 import ErrorStatus from '../../../../dtos/collaborator/response/errorStatus.dto';
 import Spinner from 'react-native-loading-spinner-overlay';
+import LoadingSpinner from '../../../../components/shared/Spinner/LoadingSpinner';
 
 const ScanIDRecognitionFront = () => {
   const [hasCameraPermission, setHasCameraPermission] = useState<
@@ -45,6 +46,9 @@ const ScanIDRecognitionFront = () => {
 
   const informationFront = useAppSelector(
     (state) => state.collan_information.informationFront
+  );
+  const loadingUserInfo = useAppSelector(
+    (state) => state.collab_account.loading
   );
   const loadingScan = useAppSelector(
     (state) => state.collan_information.loading
@@ -135,6 +139,7 @@ const ScanIDRecognitionFront = () => {
               await fetchUserInfo();
               navigation.navigate(ROUTES.ACCOUNT_INFORMATION_CREATION);
             } else {
+              setImageUri(null);
               showToastError('Upload front image failed!');
             }
           });
@@ -144,10 +149,12 @@ const ScanIDRecognitionFront = () => {
 
         .catch((error) => {
           // Xử lý lỗi nếu có
+          setImageUri(null);
           setLoadingUpload(false);
           console.log('Lỗi khi lấy URL hình ảnh:', error);
         });
     } catch (error) {
+      setImageUri(null);
       setLoadingUpload(false);
       console.log('Lỗi ở: ', error);
     }
@@ -166,31 +173,38 @@ const ScanIDRecognitionFront = () => {
             console.log(JSON.stringify(res, null, 2));
             if (res?.meta?.requestStatus === 'fulfilled') {
               const resData = res?.payload as ViewIDRecognitionFrontResponse;
-              if (
-                resData?.data?.[0]?.id === null ||
-                resData?.data?.[0]?.id === undefined ||
-                resData?.data?.[0]?.address === null ||
-                resData?.data?.[0]?.address === undefined
-              ) {
+              if (resData?.data?.[0]?.id.trim().length === 12) {
+                if (
+                  resData?.data?.[0]?.id === null ||
+                  resData?.data?.[0]?.id === undefined ||
+                  resData?.data?.[0]?.address === null ||
+                  resData?.data?.[0]?.address === undefined
+                ) {
+                  showToastError(
+                    'Scanned the wrong side of the CCCD! Try again!'
+                  );
+                  setImageUri(null);
+                } else {
+                  showToastSuccess('Get info from CCCD Front Image');
+                  await updateInformationFront(
+                    resData?.data?.[0]?.id,
+                    resData?.data?.[0]?.address
+                  ).then(async (res) => {
+                    if (res?.meta?.requestStatus === 'rejected') {
+                      const resData = res?.payload as ErrorStatus;
+                      showToastError(resData?.message);
+                      setImageUri(null);
+                    } else {
+                      await uploadMedia(imageUri ?? '');
+                      setImageUri(null);
+                    }
+                  });
+                }
+              } else {
                 showToastError(
-                  'Scanned the wrong side of the CCCD/CMND! Try again!'
+                  'Only CCCD cards are accepted! Please scan again!'
                 );
                 setImageUri(null);
-              } else {
-                showToastSuccess('Get info from CCCD/CMND Front Image');
-                await updateInformationFront(
-                  resData?.data?.[0]?.id,
-                  resData?.data?.[0]?.address
-                ).then(async (res) => {
-                  if (res?.meta?.requestStatus === 'rejected') {
-                    const resData = res?.payload as ErrorStatus;
-                    showToastError(resData?.message);
-                    setImageUri(null);
-                  } else {
-                    await uploadMedia(imageUri ?? '');
-                    setImageUri(null);
-                  }
-                });
               }
             } else {
               showToastError('Get information failed! Please scan again!');
@@ -209,7 +223,12 @@ const ScanIDRecognitionFront = () => {
 
   return (
     <View style={styles.container}>
-      <Spinner visible={loadingScan || loadingUpdate || loadingUpload} />
+      <Spinner
+        visible={
+          loadingScan || loadingUpdate || loadingUpload || loadingUserInfo
+        }
+        children={<LoadingSpinner title="Waiting for checking information" />}
+      />
       {!imageUri ? (
         <Camera
           style={styles.camera}
