@@ -105,7 +105,7 @@ const RegistrationDetail = () => {
                     />
                   </View>
 
-                  <View
+                  {/* <View
                     style={{
                       flex: 1,
                       flexDirection: 'row',
@@ -124,7 +124,7 @@ const RegistrationDetail = () => {
                           ' attendees'
                         : '0 attendees'}
                     </Text>
-                  </View>
+                  </View> */}
                 </View>
                 <View
                   style={{

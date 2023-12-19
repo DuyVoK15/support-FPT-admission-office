@@ -266,7 +266,7 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
   // Render Main Component JSX
   return (
     <View style={styles.container}>
-      <View
+      {/* <View
         style={{
           flexDirection: 'row',
           marginTop: 10,
@@ -280,7 +280,7 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
         <View style={{ flex: 1, alignItems: 'flex-end' }}>
           <SortRegistrationButton />
         </View>
-      </View>
+      </View> */}
       <View style={{ flex: 1 }}>
         <FlatList
           data={stateRedux.postRegistrationList?.data}

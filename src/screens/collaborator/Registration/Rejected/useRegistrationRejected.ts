@@ -3,9 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../../../app/store';
 import { useAppSelector } from '../../../../app/hooks';
 import {
-  getAllPostRegistration,
-  getAllPostRegistration_Cancelled,
-  getAllPostRegistration_Completed,
+  getAllPostRegistration_Rejected,
 } from '../../../../features/collaborator/collab.postRegistrationSlice';
 import { REGISTRATION_STATUS_ENUM } from '../../../../enums/collaborator/RegistrationStatus';
 import { useFocusEffect } from '@react-navigation/native';
@@ -17,7 +15,7 @@ const useRegistrationRejected = () => {
   );
   const fetchPostRegistration = async () => {
     await dispatch(
-      getAllPostRegistration_Cancelled({
+      getAllPostRegistration_Rejected({
         Page: 1,
         PageSize: 10000,
         RegistrationStatus: [REGISTRATION_STATUS_ENUM.REJECT],

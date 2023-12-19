@@ -306,7 +306,7 @@ const Registration_Completed = () => {
 
   return (
     <View style={styles.container}>
-      <View
+      {/* <View
         style={{
           flexDirection: 'row',
           marginTop: 10,
@@ -320,7 +320,7 @@ const Registration_Completed = () => {
         <View style={{ flex: 1, alignItems: 'flex-end' }}>
           <SortRegistrationButton />
         </View>
-      </View>
+      </View> */}
       <View style={{ flex: 1 }}>
         <FlatList
           data={props.postRegistrationList?.data}

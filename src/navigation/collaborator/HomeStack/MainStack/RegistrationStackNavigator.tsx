@@ -15,6 +15,7 @@ import {
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { ROUTES } from '../../../../constants/Routes';
 import RegistrationDetail from '../../../../screens/collaborator/Registration/RegistrationDetail';
+import ViewApplication from '../../../../screens/collaborator/Application/ViewApplication/ViewApplication';
 
 const Stack =
   createNativeStackNavigator<HomeCollaboratorStackNavigatorParamList>();
@@ -89,6 +90,13 @@ const RegistrationStackNavigator = () => {
       <Stack.Screen
         name={ROUTES.REGISTRATION_DETAIL}
         component={RegistrationDetail}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name={ROUTES.APPLICATION}
+        component={ViewApplication}
         options={{
           headerShown: false,
         }}

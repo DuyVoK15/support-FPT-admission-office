@@ -377,7 +377,7 @@ const Registration_Confirm = () => {
         visible={state.loadingLocation}
         children={<LoadingSpinner title="Waiting for Checking Your Location" />}
       />
-      <View
+      {/* <View
         style={{
           flexDirection: 'row',
           marginTop: 10,
@@ -391,7 +391,7 @@ const Registration_Confirm = () => {
         <View style={{ flex: 1, alignItems: 'flex-end' }}>
           <SortRegistrationButton />
         </View>
-      </View>
+      </View> */}
       <View style={{ flex: 1 }}>
         <FlatList
           data={props.postRegistrationList?.data}
