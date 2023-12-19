@@ -14,27 +14,54 @@ const CountdownTimer: FC<CountdownTimerProps> = ({
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      const currentTime = new Date().getTime();
-      const targetTime = new Date(futureDate).getTime();
+      if (
+        futureDate !== null &&
+        futureDate !== undefined &&
+        futureDate !== ''
+      ) {
+        try {
+          const currentTime = new Date().getTime();
+          // Đổi múi giờ
+          let formatTargetTime = new Date(futureDate);
+          formatTargetTime.setHours(formatTargetTime.getHours() - 7);
+          const targetTime = new Date(formatTargetTime.toISOString()).getTime();
+          console.log(
+            new Date() + ' oo ' + new Date(formatTargetTime.toISOString())
+          );
+          const timeDifference = targetTime - currentTime;
 
-      const timeDifference = targetTime - currentTime;
+          if (timeDifference > 0) {
+            const daysLeft = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+            const hoursLeft = Math.floor(
+              (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+            );
+            const minutesLeft = Math.floor(
+              (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
+            );
+            const secondsLeft = Math.floor(
+              (timeDifference % (1000 * 60)) / 1000
+            );
 
-      if (timeDifference > 0) {
-        const daysLeft = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-        const hoursLeft = Math.floor(
-          (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-        );
-        const minutesLeft = Math.floor(
-          (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
-        );
-        const secondsLeft = Math.floor((timeDifference % (1000 * 60)) / 1000);
-
-        setTimeLeft(
-          `${daysLeft}d ${hoursLeft}h ${minutesLeft}m ${secondsLeft}s`
-        );
+            setTimeLeft(
+              `${(String(daysLeft).length === 1 ? '0' : '') + daysLeft}d ${
+                (String(hoursLeft).length === 1 ? '0' : '') + hoursLeft
+              }h ${
+                (String(minutesLeft).length === 1 ? '0' : '') + minutesLeft
+              }m ${
+                (String(secondsLeft).length === 1 ? '0' : '') + secondsLeft
+              }s`
+            );
+          } else {
+            clearInterval(intervalId);
+            setTimeLeft('You be unbanned!');
+          }
+        } catch (error) {
+          clearInterval(intervalId);
+          setTimeLeft('Invalid Date Time!');
+        }
       } else {
         clearInterval(intervalId);
-        setTimeLeft('Countdown Finished');
+        setTimeLeft('Invalid Date Time!');
       }
     }, 1000);
 

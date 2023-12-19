@@ -12,22 +12,22 @@ import CountdownTimer from '../../../components/shared/CountdownTimer/CountdownT
 import { FONTS_FAMILY } from '../../../constants/Fonts';
 import { responsiveFontSize } from '../../../utils/responsive';
 import { COLORS } from '../../../constants/Colors';
+import { ROUTES } from '../../../constants/Routes';
 
 interface BannedPopupProps {
   isVisible: boolean;
   showModal?: () => void;
   hideModal: () => void;
   currentAccountBanned: ViewCurrentAccountBannedResponse | null;
+  navigation?: any;
 }
 const BannedPopup: FC<BannedPopupProps> = ({
   isVisible,
   showModal,
   hideModal,
   currentAccountBanned,
+  navigation,
 }) => {
-  //   const currentAccountBanned = useAppSelector(
-  //     (state) => state.collab_account.currentAccountBanned
-  //   );
   console.log(currentAccountBanned);
   return (
     <ReactNativeModal
@@ -58,12 +58,12 @@ const BannedPopup: FC<BannedPopupProps> = ({
             <View style={{ alignItems: 'center' }}>
               <Text
                 style={{
-                  fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
+                  fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
                   color: 'red',
-                  fontSize: responsiveFontSize(22),
+                  fontSize: responsiveFontSize(24),
                 }}
               >
-                You have been banned
+                YOU HAVE BEEN BANNED
               </Text>
             </View>
             <View style={{ marginTop: 0, alignItems: 'center' }}>
@@ -72,11 +72,21 @@ const BannedPopup: FC<BannedPopupProps> = ({
                   fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
                   fontSize: responsiveFontSize(14),
                   textAlign: 'center',
+                  color: COLORS?.red_date,
                 }}
               >
                 You have been banned from registering for violating the
-                admission office's regulations. Please wait until the deadline
-                expires or amnesty is received from the admissions office.
+                admission office's regulations.
+              </Text>
+              <Text
+                style={{
+                  marginTop: 5,
+                  textAlign: 'center',
+                  color: COLORS?.red_date,
+                }}
+              >
+                Please wait until the deadline expires or amnesty is received
+                from the admissions office.
               </Text>
             </View>
             <View style={{ marginTop: 0, alignItems: 'center' }}>
@@ -85,7 +95,7 @@ const BannedPopup: FC<BannedPopupProps> = ({
                 style={{
                   fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
                   fontSize: responsiveFontSize(28),
-                  color: COLORS?.orange_icon,
+                  color: '#000',
                 }}
                 futureDate={
                   currentAccountBanned?.data?.dayEnd
@@ -115,8 +125,8 @@ const BannedPopup: FC<BannedPopupProps> = ({
                   OK
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => null}
+              {/* <TouchableOpacity
+                onPress={() => navigation.navigate(ROUTES.APPLICATION)}
                 style={{
                   paddingVertical: 12,
                   paddingHorizontal: 18,
@@ -132,7 +142,7 @@ const BannedPopup: FC<BannedPopupProps> = ({
                 >
                   Complain
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </View>
         </View>
