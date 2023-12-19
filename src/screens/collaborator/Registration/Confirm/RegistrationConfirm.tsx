@@ -240,7 +240,7 @@ const Registration_Confirm = () => {
             style={{
               flexDirection: 'row',
               marginTop: 10,
-              alignItems: 'center',
+              // alignItems: 'center',
               justifyContent: 'space-evenly',
             }}
           >

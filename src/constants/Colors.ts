@@ -15,5 +15,6 @@ export const COLORS = {
   green_status: '#18ad31',
   blue_status: '#65B4E2',
   brown_status: '#8E7241',
-  red_status: '#ff5000'
+  red_status: '#ff5000',
+  light_blue_status: '#0e7ab0',
 };

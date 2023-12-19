@@ -132,17 +132,18 @@ const Registration_Completed = () => {
             >
               <Text style={styles.textSecond}>Time</Text>
               <Text style={styles.textSecond_2}>
-                {item?.postPosition?.timeFrom
-                  ? format_Time_To_HHss(item?.postPosition?.timeFrom)
-                    ? format_Time_To_HHss(item?.postPosition?.timeFrom)
-                    : 'No value'
-                  : 'No value'}
+                {item?.postPosition?.timeFrom &&
+                  item?.postPosition?.timeTo &&
+                  format_Time_To_HHss(item?.postPosition?.timeFrom) &&
+                  format_Time_To_HHss(item?.postPosition?.timeTo) &&
+                  format_Time_To_HHss(item?.postPosition?.timeFrom) +
+                    ' - ' +
+                    format_Time_To_HHss(item?.postPosition?.timeTo)}
               </Text>
             </View>
           </View>
 
           <RegistrationStatus status={REGISTRATION_STATUS_ENUM.CHECKOUT} />
-
 
           <DashedLine
             style={{ marginVertical: 10 }}
@@ -184,7 +185,15 @@ const Registration_Completed = () => {
             />
           </View>
 
-          <View style={{ flexDirection: 'row', marginTop: 15 }}>
+          <DashedLine
+            style={{ marginTop: 20, marginBottom: 15 }}
+            dashGap={0}
+            dashThickness={1}
+            dashLength={8}
+            dashColor={COLORS.super_light_grey}
+          />
+
+          <View style={{ flexDirection: 'row', marginTop: 0 }}>
             <View style={{ flex: 1 }}>
               <Text
                 style={{

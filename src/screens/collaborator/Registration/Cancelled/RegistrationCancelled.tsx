@@ -34,6 +34,7 @@ import RegistrationDetail from '../RegistrationDetail';
 import { ROUTES } from '../../../../constants/Routes';
 import { REGISTRATION_STATUS_ENUM } from '../../../../enums/collaborator/RegistrationStatus';
 import RegistrationStatus from '../RegistrationStatus';
+import ViewEventButton from '../../../../components/shared/Button/ViewEventButton';
 
 const Registration_Cancelled = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -132,11 +133,13 @@ const Registration_Cancelled = () => {
             >
               <Text style={styles.textSecond}>Time</Text>
               <Text style={styles.textSecond_2}>
-                {item?.postPosition?.timeFrom
-                  ? format_Time_To_HHss(item?.postPosition?.timeFrom)
-                    ? format_Time_To_HHss(item?.postPosition?.timeFrom)
-                    : 'No value'
-                  : 'No value'}
+                {item?.postPosition?.timeFrom &&
+                  item?.postPosition?.timeTo &&
+                  format_Time_To_HHss(item?.postPosition?.timeFrom) &&
+                  format_Time_To_HHss(item?.postPosition?.timeTo) &&
+                  format_Time_To_HHss(item?.postPosition?.timeFrom) +
+                    ' - ' +
+                    format_Time_To_HHss(item?.postPosition?.timeTo)}
               </Text>
             </View>
           </View>
@@ -144,14 +147,14 @@ const Registration_Cancelled = () => {
           <RegistrationStatus status={REGISTRATION_STATUS_ENUM.CANCEL} />
 
           <DashedLine
-            style={{ marginTop: 10 }}
+            style={{ marginVertical: 10 }}
             dashGap={0}
             dashThickness={1}
             dashLength={8}
             dashColor={COLORS.super_light_grey}
           />
 
-          {/* <View
+          <View
             style={{
               flexDirection: 'row',
               marginTop: 10,
@@ -159,16 +162,24 @@ const Registration_Cancelled = () => {
               justifyContent: 'space-evenly',
             }}
           >
-            <DetailButton
+            <ViewEventButton
               onPress={() =>
-                navigation.navigate('REGISTRATION_PENDING_DETAIL', {
-                  item,
+                navigation.navigate(ROUTES.EVENT_STACK_NAVIGATOR, {
+                  screen: ROUTES.EVENT,
+                  params: { screen: ROUTES.EVENT_UPCOMMING },
                 })
               }
             />
-          </View> */}
+          </View>
+          <DashedLine
+            style={{ marginVertical: 20 }}
+            dashGap={0}
+            dashThickness={1}
+            dashLength={8}
+            dashColor={COLORS.super_light_grey}
+          />
 
-          <View style={{ flexDirection: 'row', marginTop: 15 }}>
+          <View style={{ flexDirection: 'row' }}>
             <View style={{ flex: 1 }}>
               <Text
                 style={{

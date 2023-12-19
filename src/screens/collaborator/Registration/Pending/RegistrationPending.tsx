@@ -173,11 +173,13 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
             >
               <Text style={styles.textSecond}>Time</Text>
               <Text style={styles.textSecond_2}>
-                {item?.postPosition?.timeFrom
-                  ? format_Time_To_HHss(item?.postPosition?.timeFrom)
-                    ? format_Time_To_HHss(item?.postPosition?.timeFrom)
-                    : 'No value'
-                  : 'No value'}
+                {item?.postPosition?.timeFrom &&
+                  item?.postPosition?.timeTo &&
+                  format_Time_To_HHss(item?.postPosition?.timeFrom) &&
+                  format_Time_To_HHss(item?.postPosition?.timeTo) &&
+                  format_Time_To_HHss(item?.postPosition?.timeFrom) +
+                    ' - ' +
+                    format_Time_To_HHss(item?.postPosition?.timeTo)}
               </Text>
             </View>
           </View>
@@ -204,6 +206,14 @@ const Registration_Pending: FC<Registration_PendingProps> = (Props) => {
               onPress={() => showAlertHandler(TYPE_BUTTON_ENUM.CANCEL, item)}
             />
           </View>
+
+          <DashedLine
+            style={{ marginTop: 20 }}
+            dashGap={0}
+            dashThickness={1}
+            dashLength={8}
+            dashColor={COLORS.super_light_grey}
+          />
 
           <View
             style={{

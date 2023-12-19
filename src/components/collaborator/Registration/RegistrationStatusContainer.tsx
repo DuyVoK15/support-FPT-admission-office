@@ -18,17 +18,17 @@ const RegistrationStatusContainer: FC<RegistrationStatusProps> = (Props) => {
         borderColor: (() => {
           switch (Props.status) {
             case REGISTRATION_STATUS_ENUM.PENDING:
-              return 'orange';
+              return COLORS?.orange_button;
             case REGISTRATION_STATUS_ENUM.CONFIRM:
-              return 'green';
+              return COLORS?.green_status;
             case REGISTRATION_STATUS_ENUM.CHECKIN:
-              return '#65B4E2';
+              return COLORS?.blue_status;
             case REGISTRATION_STATUS_ENUM.CHECKOUT:
-              return '#8E7241';
+              return COLORS?.light_blue_status;
             case REGISTRATION_STATUS_ENUM.CANCEL:
-              return 'red';
+              return COLORS?.red_status;
             case REGISTRATION_STATUS_ENUM.REJECT:
-              return 'black';
+              return COLORS?.brown_status;
             default:
               return 'black'; // Set your default border color here
           }
@@ -42,17 +42,17 @@ const RegistrationStatusContainer: FC<RegistrationStatusProps> = (Props) => {
           color: (() => {
             switch (Props.status) {
               case REGISTRATION_STATUS_ENUM.PENDING:
-                return 'orange';
+                return COLORS?.orange_button;
               case REGISTRATION_STATUS_ENUM.CONFIRM:
-                return 'green';
+                return COLORS?.green_status;
               case REGISTRATION_STATUS_ENUM.CHECKIN:
-                return '#65B4E2';
+                return COLORS?.blue_status;
               case REGISTRATION_STATUS_ENUM.CHECKOUT:
-                return '#8E7241';
+                return COLORS?.light_blue_status;
               case REGISTRATION_STATUS_ENUM.CANCEL:
-                return 'red';
+                return COLORS?.red_status;
               case REGISTRATION_STATUS_ENUM.REJECT:
-                return 'black';
+                return COLORS?.brown_status;
               default:
                 return 'black'; // Set your default border color here
             }
