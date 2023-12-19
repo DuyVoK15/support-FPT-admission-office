@@ -25,16 +25,24 @@ import {
   getLocation,
 } from '../../../../../useCurrentLocation';
 import { updateCurrentLocation } from '../../../../features/collaborator/collab.locationSlice';
+import { collab_getCurrentAccountBanned } from '../../../../features/collaborator/collab.accountSlice';
 
 const useIndex = () => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
+  const [isVisibleBannedPopup, setIsVisibleBannedPopup] =
+    useState<boolean>(false);
+  const showBannedPopup = () => setIsVisibleBannedPopup(true);
+  const hideBannedPopup = () => setIsVisibleBannedPopup(false);
 
   const postRegistrationList = useAppSelector(
     (state) => state.collab_postRegistration.postRegistrationConfirmed
   );
   const currentLocation = useAppSelector(
     (state) => state.collab_location.currentLocation
+  );
+  const currentAccountBanned = useAppSelector(
+    (state) => state.collab_account.currentAccountBanned
   );
   const dispatch_getAllPostRegistration_Confirmed = async () => {
     return await dispatch(
@@ -111,11 +119,15 @@ const useIndex = () => {
             fetchPostRegistration();
             showToastSuccess('Check In Successful!');
           } else {
-            const resRejectedData = res.payload as ErrorStatus;
-
-            switch (resRejectedData?.errorCode) {
+            const resRejected = res?.payload as ErrorStatus;
+            switch (resRejected?.errorCode) {
+              case 4026:
+                await dispatch(collab_getCurrentAccountBanned()).then((res) =>
+                  console.log(JSON.stringify(res, null, 2))
+                );
+                showBannedPopup();
               default:
-                showToastError(resRejectedData?.message);
+                showToastError(resRejected?.message);
             }
           }
         });
@@ -158,13 +170,21 @@ const useIndex = () => {
       cancelPostRegistration({
         postRegistrationId: id,
       })
-    ).then((res) => {
+    ).then(async (res) => {
       console.log(JSON.stringify(res, null, 2));
       if (res?.meta?.requestStatus === 'fulfilled') {
         showToastSuccess('Send request cancel successful!');
       } else {
         const resRejected = res?.payload as ErrorStatus;
-        showToastError(resRejected?.message);
+        switch (resRejected?.errorCode) {
+          case 4026:
+            await dispatch(collab_getCurrentAccountBanned()).then((res) =>
+              console.log(JSON.stringify(res, null, 2))
+            );
+            showBannedPopup();
+          default:
+            showToastError(resRejected?.message);
+        }
       }
     });
   };
@@ -182,11 +202,13 @@ const useIndex = () => {
     checkInPostRegistation,
     checkOutPostRegistation,
     cancelRegistrationById,
+    showBannedPopup,
+    hideBannedPopup,
   };
-  const state = { refreshing, loadingLocation };
+  const state = { refreshing, loadingLocation, isVisibleBannedPopup };
   const props = { postRegistrationList };
   const setState = {};
-  const stateRedux = { postRegistrationList };
+  const stateRedux = { postRegistrationList, currentAccountBanned };
   return {
     handlers,
     state,

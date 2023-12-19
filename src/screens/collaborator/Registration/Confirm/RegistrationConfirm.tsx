@@ -43,6 +43,7 @@ import RegistrationStatus from '../RegistrationStatus';
 import Spinner from 'react-native-loading-spinner-overlay';
 import LoadingLocation from '../../../../components/shared/Spinner/LoadingSpinner';
 import LoadingSpinner from '../../../../components/shared/Spinner/LoadingSpinner';
+import BannedPopup from '../../Banned/BannedPopup';
 
 const Registration_Confirm = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -433,6 +434,12 @@ const Registration_Confirm = () => {
           onCancelPressed={hideAlertHandler}
         />
       </View>
+      <BannedPopup
+        isVisible={state.isVisibleBannedPopup}
+        showModal={handlers.showBannedPopup}
+        hideModal={handlers.hideBannedPopup}
+        currentAccountBanned={stateRedux.currentAccountBanned}
+      />
     </View>
   );
 };
