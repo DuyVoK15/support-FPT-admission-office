@@ -13,15 +13,15 @@ const CancelButton: FC<CancelButtonProps> = (props) => {
       {...otherProps}
       style={{
         flexDirection: 'row',
-        paddingVertical: 10,
-        width: 110,
+        paddingVertical: 12,
+        paddingHorizontal: 18,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-evenly',
         borderRadius: 15,
         backgroundColor: '#F64C18',
       }}
     >
-      <View style={{ flex: 1, marginLeft: 17 }}>
+      <View style={{ flex: 0 }}>
         <Text
           style={{
             fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
@@ -33,7 +33,7 @@ const CancelButton: FC<CancelButtonProps> = (props) => {
         </Text>
       </View>
 
-      <View style={{ flex: 0, marginRight: 17 }}>
+      <View style={{ flex: 0, marginLeft: 5 }}>
         <MaterialIcons name="cancel-presentation" size={20} color="white" />
       </View>
     </TouchableOpacity>
