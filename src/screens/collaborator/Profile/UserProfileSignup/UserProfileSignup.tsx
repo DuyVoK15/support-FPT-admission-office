@@ -217,7 +217,7 @@ const UserProfileSignup = () => {
             <Controller
               control={props.control}
               rules={{
-                required: '*This field is required',
+                // required: '*This field is required',
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <ProfileSignupTextInput

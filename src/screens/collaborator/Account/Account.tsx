@@ -75,7 +75,10 @@ const Account = () => {
           locations={[0, 1]}
           style={styles.containerInfoBox}
         >
-          <View style={styles.containerInfoContent}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate(ROUTES.USER_PROFILE)}
+            style={styles.containerInfoContent}
+          >
             <View style={styles.avatarStyle}>
               <Image
                 source={{
@@ -87,16 +90,16 @@ const Account = () => {
               />
             </View>
             <View style={styles.column}>
-              <TouchableOpacity>
-                <Text style={styles.textName}>
+              <View>
+                <Text numberOfLines={2} style={styles.textName}>
                   {userInfo?.name ? userInfo?.name : 'No value'}
                 </Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => console.log('alo')}>
+              </View>
+              {/* <TouchableOpacity onPress={() => console.log('alo')}>
                 <Text style={styles.textName2}>Upgrade to Premium {'>'}</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
-          </View>
+          </TouchableOpacity>
         </LinearGradient>
       </View>
 
@@ -138,11 +141,7 @@ const Account = () => {
               style={styles.containerRow}
             >
               <View style={styles.column1}>
-                <AntDesign
-                  name="bank"
-                  size={24}
-                  color={COLORS.orange_icon}
-                />
+                <AntDesign name="bank" size={24} color={COLORS.orange_icon} />
               </View>
               <View style={styles.column2}>
                 <View>
@@ -296,10 +295,7 @@ const Account = () => {
           </View>
 
           <View style={styles.containerColumn}>
-            <TouchableOpacity
-              onPress={() => null}
-              style={styles.containerRow}
-            >
+            <TouchableOpacity onPress={() => null} style={styles.containerRow}>
               <View style={styles.column1}>
                 <MaterialIcons
                   name="connect-without-contact"
