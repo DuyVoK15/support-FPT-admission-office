@@ -141,7 +141,7 @@ export default function App() {
               >
                 <SafeAreaProvider>
                   <AppNavigator />
-                  <StatusBar backgroundColor="transparent" translucent={true} />
+                  <StatusBar style='dark' backgroundColor="transparent" translucent={true} />
                 </SafeAreaProvider>
               </NavigationContainer>
             </MyContextProvider>
