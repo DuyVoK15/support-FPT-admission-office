@@ -49,7 +49,7 @@ const Certificate_All_Status = () => {
                 confirmBy={
                   certificate?.certificateIssuer?.name
                     ? certificate?.certificateIssuer?.name
-                    : 'No value'
+                    : 'System'
                 }
                 status={
                   certificate?.status === CERTIFICATE_STATUS_ENUM.COMPLETED

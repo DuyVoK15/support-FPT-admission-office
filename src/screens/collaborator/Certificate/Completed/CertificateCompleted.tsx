@@ -48,7 +48,7 @@ const Certificate_Completed_Status = () => {
                 confirmBy={
                   certificate?.certificateIssuer?.name
                     ? certificate?.certificateIssuer?.name
-                    : 'No value'
+                    : 'System'
                 }
                 status={'Completed'}
               />

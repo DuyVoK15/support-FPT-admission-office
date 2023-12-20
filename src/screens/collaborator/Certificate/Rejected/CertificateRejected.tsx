@@ -43,7 +43,7 @@ const Certificate_Rejected_Status = () => {
                 confirmBy={
                   certificate?.certificateIssuer?.name
                     ? certificate?.certificateIssuer?.name
-                    : 'No value'
+                    : 'System'
                 }
                 status={'Rejected'}
               />
