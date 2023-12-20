@@ -83,6 +83,7 @@ const AvatarImagePicker = (props: AvatarImageProps) => {
             async (res) => {
               if (res?.meta?.requestStatus === 'fulfilled') {
                 showToastSuccess('Update Avatar successful!');
+                props.setValue('imgUrl', url);
               } else {
                 const resData = res?.payload as ErrorStatus;
                 showToastError(resData?.message);
