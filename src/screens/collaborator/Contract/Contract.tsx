@@ -286,7 +286,7 @@ const Contract = () => {
         />
         <ConfirmAlert
           show={state.showAlert}
-          title="CONFIRMATION"
+          title={state.confirmInfo?.title}
           message={state.confirmInfo?.message}
           confirmText="Yes"
           cancelText="No"

@@ -17,6 +17,7 @@ import { DataTrainingCertificateRegistration } from '../../../models/collaborato
 import { DataContract } from '../../../models/collaborator/contract.model';
 import ErrorStatus from '../../../dtos/collaborator/response/errorStatus.dto';
 import { CONTRACT_STATUS_ENUM } from '../../../enums/collaborator/ContractStatus.';
+import { ROUTES } from '../../../constants/Routes';
 const useIndex = () => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -92,7 +93,13 @@ const useIndex = () => {
             fetchContract();
           } else {
             const resData = res?.payload as ErrorStatus;
-            showToastError(resData?.message);
+            switch (resData?.errorCode) {
+              case 4005:
+                showAlertHandler(TYPE_BUTTON_ENUM.NAVIGATE_TO_BANKING, null);
+                break;
+              default:
+                showToastError(resData?.message);
+            }
           }
         }
       );
@@ -104,6 +111,7 @@ const useIndex = () => {
   enum TYPE_BUTTON_ENUM {
     APPROVE = 1,
     REJECT = 2,
+    NAVIGATE_TO_BANKING = 3,
   }
   type ConfirmInfo = {
     title: string | null;
@@ -132,6 +140,13 @@ const useIndex = () => {
           typeButton: TYPE_BUTTON_ENUM.REJECT,
         });
         break;
+      case TYPE_BUTTON_ENUM.NAVIGATE_TO_BANKING:
+        setConfirmInfo({
+          title: 'WARNING',
+          message: `You mising account banking information, let's create a banking information!`,
+          typeButton: TYPE_BUTTON_ENUM.NAVIGATE_TO_BANKING,
+        });
+        break;
       default:
         setConfirmInfo({
           title: '',
@@ -158,6 +173,11 @@ const useIndex = () => {
         handleUpdateContract(Item?.id ?? null, CONTRACT_STATUS_ENUM.REJECTED);
 
         break;
+      case TYPE_BUTTON_ENUM.NAVIGATE_TO_BANKING:
+        console.log(Item?.id);
+        navigation.navigate(ROUTES.BANKING);
+
+        break;
       default:
         console.log('Type Button Null');
     }
@@ -169,7 +189,7 @@ const useIndex = () => {
     showAlertHandler,
     hideAlertHandler,
     handleUpdateContract,
-    handleConfirm
+    handleConfirm,
   };
 
   const props = { navigation, TYPE_BUTTON_ENUM };
