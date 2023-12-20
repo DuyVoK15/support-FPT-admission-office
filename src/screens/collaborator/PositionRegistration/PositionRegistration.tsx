@@ -52,6 +52,7 @@ import { ROUTES } from '../../../constants/Routes';
 import { CommonActions } from '@react-navigation/native';
 import usePositionRegistration from './usePositionRegistration';
 import { ic_certificateUri, imageNotFoundUri } from '../../../utils/images';
+import BannedPopup from '../Banned/BannedPopup';
 
 const PositionRegistration = () => {
   const { state, setState, stateRedux, handlers, props } =
@@ -229,7 +230,9 @@ const PositionRegistration = () => {
                                     fontSize: 14,
                                   }}
                                 >
-                                  {position?.location ? position?.location : 'No value'}
+                                  {position?.location
+                                    ? position?.location
+                                    : 'No value'}
                                 </Text>
                               </View>
                             </View>
@@ -466,6 +469,12 @@ const PositionRegistration = () => {
               <SubmitButton titleButton="SUBMIT" />
             </View> */}
       </ScrollView>
+      <BannedPopup
+        isVisible={state.isVisibleBannedPopup}
+        showModal={handlers.showBannedPopup}
+        hideModal={handlers.hideBannedPopup}
+        currentAccountBanned={stateRedux.currentAccountBanned}
+      />
     </View>
   );
 };
@@ -513,7 +522,7 @@ const styles = StyleSheet.create({
   textPositionNum_2: {
     fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
     fontSize: 15,
-    color: COLORS?.orange_icon
+    color: COLORS?.orange_icon,
   },
   textOnPressDetail: {
     fontFamily: FONTS_FAMILY.Ubuntu_300Light_Italic,

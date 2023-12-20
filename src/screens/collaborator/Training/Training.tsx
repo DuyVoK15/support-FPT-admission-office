@@ -181,7 +181,7 @@ const Training = () => {
                 >
                   <Text
                     style={{
-                      fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
+                      fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
                     }}
                   >
                     You've registered
@@ -205,7 +205,7 @@ const Training = () => {
                 >
                   <Text
                     style={{
-                      fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
+                      fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
                     }}
                   >
                     Register

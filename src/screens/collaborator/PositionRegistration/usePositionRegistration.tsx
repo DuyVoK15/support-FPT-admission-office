@@ -13,11 +13,19 @@ import CreatePostRegistrationParam from '../../../dtos/collaborator/parameter/cr
 import { DataPosition } from '../../../models/collaborator/dataPosition.model';
 import useCustomToast from '../../../utils/toasts';
 import { TITLE_ENUM } from '../../../components/shared/AwesomeAlert/ConfirmAlert';
+import { collab_getCurrentAccountBanned } from '../../../features/collaborator/collab.accountSlice';
 
 const usePositionRegistration = () => {
   const { width } = useWindowDimensions();
   const dispatch = useAppDispatch();
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
+  const [isVisibleBannedPopup, setIsVisibleBannedPopup] =
+    useState<boolean>(false);
+  const showBannedPopup = () => setIsVisibleBannedPopup(true);
+  const hideBannedPopup = () => setIsVisibleBannedPopup(false);
+  const currentAccountBanned = useAppSelector(
+    (state) => state.collab_account.currentAccountBanned
+  );
   // Get item data from
   const route = useRoute();
   const { post } = route?.params as { post: DataPost };
@@ -134,7 +142,7 @@ const usePositionRegistration = () => {
         positionId: position?.id,
       } as CreatePostRegistrationParam;
       await dispatch(createPostRegistration(params))
-        .then((res) => {
+        .then(async (res) => {
           const requestStatus = res?.meta?.requestStatus;
           console.log(JSON.stringify(res, null, 2));
           if (requestStatus === 'fulfilled') {
@@ -158,6 +166,12 @@ const usePositionRegistration = () => {
                 showToastError(
                   'You have applied for a position that overlaps with this position'
                 );
+                break;
+              case 4026:
+                await dispatch(collab_getCurrentAccountBanned()).then((res) =>
+                  console.log(JSON.stringify(res, null, 2))
+                );
+                showBannedPopup();
                 break;
               default:
                 showToastError(resRejectedData?.message);
@@ -191,6 +205,8 @@ const usePositionRegistration = () => {
     handleSubmit,
     selectedBusOption,
     onRefresh,
+    showBannedPopup,
+    hideBannedPopup,
   };
   const props = { navigation, width, TYPE_BUTTON_ENUM };
   const state = {
@@ -200,9 +216,10 @@ const usePositionRegistration = () => {
     isSelectedBusOption,
     refreshing,
     Item,
+    isVisibleBannedPopup
   };
   const setState = { setPosisitionId, selectedBusOption };
-  const stateRedux = { item, loading };
+  const stateRedux = { item, loading, currentAccountBanned };
   return {
     handlers,
     props,
