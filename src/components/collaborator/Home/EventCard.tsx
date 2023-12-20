@@ -46,7 +46,7 @@ const EventCard: FC<EventCardProps> = (props) => {
     >
       <View style={{ flex: 1, overflow: 'hidden' }}>
         <View
-          style={{ flex: 1, margin: 15, marginBottom: 20, }}
+          style={{ flex: 1, margin: 15, marginBottom: 20, overflow: 'hidden'}}
         >
           <View
             style={{
