@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../type';
 import { useAppDispatch } from '../../../app/store';
 import { useAppSelector } from '../../../app/hooks';
@@ -27,6 +27,7 @@ const useTraining = () => {
   const trainingCertificateRegistrationList = useAppSelector(
     (state) => state.collab_certificate.trainingCertificateRegistration
   );
+  const userInfo = useAppSelector((state) => state.collab_auth.userInfo);
   const fetchAllCertificate = async () => {
     try {
       await dispatch(getAllCertificate({})).then((res) => {});
@@ -59,7 +60,7 @@ const useTraining = () => {
       ).then(async (res) => {
         if (res?.meta?.requestStatus === 'fulfilled') {
           showToastSuccess('Registered success!');
-          await fetchTrainingCertificateRegistration();
+          await fetchCertificateFromAdmission();
         } else {
           const resData = res?.payload as ErrorStatus;
           showToastError(resData?.message);
@@ -69,15 +70,16 @@ const useTraining = () => {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await fetchAllCertificate();
-      await fetchCertificateFromAdmission();
-      await fetchTrainingCertificateRegistration();
-    };
-    fetchData();
-  }, []);
+  const fetchData = async () => {
+    await fetchAllCertificate();
+    await fetchCertificateFromAdmission();
+    await fetchTrainingCertificateRegistration();
+  };
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [])
+  );
 
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = useCallback(() => {
@@ -144,6 +146,7 @@ const useTraining = () => {
     certificateList,
     certificateFromAdmissionList,
     trainingCertificateRegistrationList,
+    userInfo,
   };
   return {
     handlers,

@@ -160,7 +160,7 @@ const Training = () => {
                   <Text
                     style={{
                       fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
-                      color: 'white'
+                      color: 'white',
                     }}
                   >
                     View your certificate
@@ -256,7 +256,9 @@ const Training = () => {
                 fontSize: responsiveFontSize(16),
               }}
             >
-              Võ Thanh Duy K15
+              {stateRedux?.userInfo?.name
+                ? stateRedux?.userInfo?.name
+                : 'good morning'}
             </Text>
           </Text>
         </View>
