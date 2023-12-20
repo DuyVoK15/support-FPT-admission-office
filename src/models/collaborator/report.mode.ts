@@ -4,6 +4,7 @@ export interface DataReport {
   id: number;
   accountId: number;
   positionId: number;
+  position: DataPosition;
   salary: number;
   createAt: string;
 }

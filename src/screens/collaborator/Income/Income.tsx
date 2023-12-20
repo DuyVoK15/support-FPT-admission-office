@@ -43,38 +43,70 @@ const InCome = () => {
           navigation.navigate(ROUTES.INCOME_REGISTRATION, { id: item?.id })
         }
       >
-        <View style={styles.walletContent}>
-          <View style={{ flex: 1 }}>
-            <Fontisto name="wallet" size={24} color="black" />
-          </View>
+        <View style={{ margin: 15 }}>
+          <View style={styles.walletContent}>
+            <View style={{ flex: 1 }}>
+              <Fontisto name="wallet" size={24} color={COLORS?.orange_icon} />
+            </View>
 
-          <View style={{ flex: 5 }}>
-            <View>
-              <Text style={styles.textDate}>
-                {item?.createAt
-                  ? format_ISODateString_To_DDMonthYYYY(item?.createAt)
+            <View style={{ flex: 5 }}>
+              <View>
+                <Text style={styles.textDate}>
+                  {item?.createAt
                     ? format_ISODateString_To_DDMonthYYYY(item?.createAt)
-                    : 'No date'
-                  : 'No date'}
-              </Text>
-            </View>
-            <View>
-              <Text style={styles.textTime}>
-                {item?.createAt
-                  ? format_ISODateString_To_HHss(item?.createAt)
+                      ? format_ISODateString_To_DDMonthYYYY(item?.createAt)
+                      : 'No date'
+                    : 'No date'}
+                </Text>
+              </View>
+              <View>
+                <Text style={styles.textTime}>
+                  at {item?.createAt
                     ? format_ISODateString_To_HHss(item?.createAt)
-                    : 'No time'
-                  : 'No time'}
+                      ? format_ISODateString_To_HHss(item?.createAt)
+                      : 'No time'
+                    : 'No time'}
+                </Text>
+              </View>
+            </View>
+
+            <View style={{ flex: 0 }}>
+              <Text style={styles.textPrice}>
+                {item?.salary
+                  ? '+' + item?.salary.toLocaleString() + ' VNĐ'
+                  : '+0 VNĐ'}
               </Text>
             </View>
           </View>
-
-          <View style={{ flex: 0 }}>
-            <Text style={styles.textPrice}>
-              {item?.salary
-                ? '+' + item?.salary.toLocaleString() + ' VNĐ'
-                : '+0 VNĐ'}
-            </Text>
+          <View style={{ marginTop: 10 }}>
+            <View>
+              <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_500Medium }}>
+                Post ID: {''}
+                <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular }}>
+                  {item?.positionId ? item?.positionId : 'No value'}
+                </Text>
+              </Text>
+              <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_500Medium, marginTop: 5 }}>
+                Position: {''}
+                <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular }}>
+                  {item?.position?.positionName
+                    ? item?.position?.positionName
+                    : 'No value'}
+                </Text>
+              </Text>
+              <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_500Medium, marginTop: 5 }}>
+                Working Date: {''}
+                <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular }}>
+                  {item?.position?.date
+                    ? format_ISODateString_To_DDMonthYYYY(item?.position?.date)
+                      ? format_ISODateString_To_DDMonthYYYY(
+                          item?.position?.date
+                        )
+                      : 'No date'
+                    : 'No date'}
+                </Text>
+              </Text>
+            </View>
           </View>
         </View>
       </TouchableOpacity>
@@ -167,7 +199,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    margin: 15,
   },
   textDate: {
     fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
