@@ -1,5 +1,6 @@
 import {
   FlatList,
+  Image,
   Platform,
   RefreshControl,
   ScrollView,
@@ -68,8 +69,18 @@ const Home = () => {
               alignItems: 'flex-start',
             }}
           >
-            <TouchableOpacity style={{ flex: 1 }}>
-              <Octicons name="three-bars" size={30} color="white" />
+            <TouchableOpacity
+              style={{ flex: 1 }}
+              onPress={() =>
+                navigation.navigate(ROUTES.HOME_STACK_NAVIGATOR, {
+                  screen: ROUTES.HOME,
+                })
+              }
+            >
+              <Image
+                style={{ height: 50, width: 50, resizeMode: 'contain', backgroundColor: COLORS?.orange_icon, borderRadius: 10 }}
+                source={require('../../../assets/Images/ic_app_no_text_white.png')}
+              />
             </TouchableOpacity>
             <View style={{ flex: 6, alignItems: 'center' }}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
