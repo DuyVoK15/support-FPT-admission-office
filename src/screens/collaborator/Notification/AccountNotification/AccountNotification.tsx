@@ -11,7 +11,7 @@ import { CommonActions, useNavigation } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
 import Header from '../../../../components/shared/Header/Back';
 import Backward from '../../../../components/shared/Direction/Backward/Backward';
-import { imageUndefinedUserUri } from '../../../../utils/images';
+import { imageFPTUri, imageUndefinedUserUri } from '../../../../utils/images';
 import { FONTS_FAMILY } from '../../../../constants/Fonts';
 import { Entypo } from '@expo/vector-icons';
 import { useAppDispatch } from '../../../../app/store';
@@ -259,7 +259,7 @@ const AccountNotification = () => {
             <View style={{ justifyContent: 'center' }}>
               <Image
                 style={{ width: 50, height: 50, resizeMode: 'cover' }}
-                source={{ uri: imageUndefinedUserUri }}
+                source={{ uri: imageFPTUri ? imageFPTUri : imageUndefinedUserUri }}
               />
             </View>
             <View style={{ flex: 1, marginLeft: 10 }}>
@@ -290,6 +290,8 @@ const AccountNotification = () => {
                 <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular }}>
                   {item?.createAt
                     ? formatDateTimeForNotification(item?.createAt)
+                      ? formatDateTimeForNotification(item?.createAt)
+                      : 'No value'
                     : 'No value'}
                 </Text>
               </View>

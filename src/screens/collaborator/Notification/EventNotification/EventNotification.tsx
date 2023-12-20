@@ -4,7 +4,7 @@ import { CommonActions, useNavigation } from '@react-navigation/native';
 import { HomeCollaboratorScreenNavigationProp } from '../../../../../type';
 import Header from '../../../../components/shared/Header/Back';
 import Backward from '../../../../components/shared/Direction/Backward/Backward';
-import { imageUndefinedUserUri } from '../../../../utils/images';
+import { imageFPTUri, imageUndefinedUserUri } from '../../../../utils/images';
 import { FONTS_FAMILY } from '../../../../constants/Fonts';
 import { Entypo } from '@expo/vector-icons';
 import { useAppDispatch } from '../../../../app/store';
@@ -253,7 +253,7 @@ const EventNotification = () => {
             <View style={{ justifyContent: 'center' }}>
               <Image
                 style={{ width: 50, height: 50, resizeMode: 'cover' }}
-                source={{ uri: imageUndefinedUserUri }}
+                source={{ uri: imageFPTUri ? imageFPTUri : imageUndefinedUserUri }}
               />
             </View>
             <View style={{ flex: 1, marginLeft: 10 }}>
