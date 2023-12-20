@@ -14,15 +14,15 @@ const CheckOutButton: FC<CheckOutButtonProps> = (props) => {
       {...otherProps}
       style={{
         flexDirection: 'row',
-        paddingVertical: 10,
-        width: 115,
+        paddingVertical: 12,
+        paddingHorizontal: 18,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-evenly',
         borderRadius: 15,
-        backgroundColor: '#8D786E',
+        backgroundColor: '#02cc3b',
       }}
     >
-      <View style={{ flex: 1, marginLeft: 10 }}>
+      <View style={{ flex: 0 }}>
         <Text
           style={{
             fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
@@ -34,7 +34,7 @@ const CheckOutButton: FC<CheckOutButtonProps> = (props) => {
         </Text>
       </View>
 
-      <View style={{ flex: 0, marginRight: 10 }}>
+      <View style={{ flex: 0, marginLeft: 5 }}>
         <Feather name="log-out" size={20} color="white" />
       </View>
     </TouchableOpacity>
