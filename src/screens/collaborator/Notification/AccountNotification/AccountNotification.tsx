@@ -258,7 +258,7 @@ const AccountNotification = () => {
           <View style={{ flexDirection: 'row' }}>
             <View style={{ justifyContent: 'center' }}>
               <Image
-                style={{ width: 50, height: 50, resizeMode: 'cover' }}
+                style={{ width: 50, height: 50, resizeMode: 'cover', borderRadius: 100 }}
                 source={{ uri: imageFPTUri ? imageFPTUri : imageUndefinedUserUri }}
               />
             </View>
