@@ -120,7 +120,7 @@ const IncomeRegistration = () => {
                   >
                     {item?.post?.postCategory?.postCategoryDescription
                       ? item?.post?.postCategory?.postCategoryDescription
-                      : 'No value'}
+                      : 'Open day'}
                   </Text>
                 </View>
                 <View style={{ marginBottom: 15, marginTop: 10 }}>
