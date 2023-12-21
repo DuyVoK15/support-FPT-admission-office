@@ -19,7 +19,7 @@ const CheckOutButton: FC<CheckOutButtonProps> = (props) => {
         alignItems: 'center',
         justifyContent: 'space-evenly',
         borderRadius: 15,
-        backgroundColor: '#02cc3b',
+        backgroundColor: COLORS?.brown_status,
       }}
     >
       <View style={{ flex: 0 }}>
