@@ -78,7 +78,7 @@ const Home = () => {
               }
             >
               <Image
-                style={{ height: 50, width: 50, resizeMode: 'contain', backgroundColor: COLORS?.orange_icon, borderRadius: 10 }}
+                style={{ height: 40, width: 40, resizeMode: 'contain', backgroundColor: COLORS?.orange_icon, borderRadius: 10 }}
                 source={require('../../../assets/Images/ic_app_no_text_white.png')}
               />
             </TouchableOpacity>

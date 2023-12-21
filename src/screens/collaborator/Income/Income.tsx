@@ -81,13 +81,13 @@ const InCome = () => {
           <View style={{ marginTop: 10 }}>
             <View>
               <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_500Medium }}>
-                Post ID: {''}
+                Position ID: {''}
                 <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular }}>
                   {item?.positionId ? item?.positionId : 'No value'}
                 </Text>
               </Text>
               <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_500Medium, marginTop: 5 }}>
-                Position: {''}
+                Position Name: {''}
                 <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular }}>
                   {item?.position?.positionName
                     ? item?.position?.positionName

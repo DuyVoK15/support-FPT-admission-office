@@ -29,7 +29,7 @@ const PickFrontImageTouchable: FC<PickFrontImageTouchableProps> = (Props) => {
           color: COLORS?.grey_underline,
         }}
       >
-        CCCD/CMND Front Image
+        CCCD Front Image
       </Text>
     </TouchableOpacity>
   );

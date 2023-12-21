@@ -29,7 +29,7 @@ const PickBackImageTouchable: FC<PickBackImageTouchableProps> = (Props) => {
           color: COLORS?.grey_underline,
         }}
       >
-        CCCD/CMND Back Image
+        CCCD Back Image
       </Text>
     </TouchableOpacity>
   );
