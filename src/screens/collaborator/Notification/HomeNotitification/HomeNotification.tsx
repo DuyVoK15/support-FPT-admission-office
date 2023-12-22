@@ -24,7 +24,7 @@ import { ROUTES } from '../../../../constants/Routes';
 
 const HomeNotification = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
-  const data: number[] | [] = [1, 2, 3];
+  const data: number[] | [] = [1, 2, 3]; 
 
   const notificationByTokenList = useAppSelector(
     (state) => state.collab_notification.notificationByToken
