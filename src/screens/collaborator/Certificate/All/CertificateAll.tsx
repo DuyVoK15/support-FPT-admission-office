@@ -55,7 +55,7 @@ const Certificate_All_Status = () => {
     }, 500);
     setTimeout(() => {
       setShadowColor('#000');
-    }, 2000);
+    }, 2500);
   };
   useEffect(() => {
     // Validate route.params and productId
