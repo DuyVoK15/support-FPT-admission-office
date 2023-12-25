@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../../../app/store';
 import { getAllCertificate } from '../../../../features/collaborator/collab.certificateSlice';
 import { useAppSelector } from '../../../../app/hooks';
+import { useFocusEffect } from '@react-navigation/native';
 
 const useAllCertificate = () => {
   const dispatch = useAppDispatch();
@@ -18,13 +19,19 @@ const useAllCertificate = () => {
         Order: 'Descending',
       })
     ).then((res) => {
-      console.log(JSON.stringify(res, null, 2));
+      // console.log(JSON.stringify(res, null, 2));
     });
   };
-  useEffect(() => {
-    fetchCertificateData();
-  }, []);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        await fetchCertificateData();
+      };
+      fetchData();
+    }, [])
+  );
+  
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = useCallback(() => {
     setRefreshing(true);

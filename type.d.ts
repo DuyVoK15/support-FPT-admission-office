@@ -42,7 +42,7 @@ export type HomeCollaboratorStackNavigatorParamList = {
   USER_PROFILE: undefined;
   USER_PROFILE_SIGNUP: undefined;
   CERTIFICATE_HISTORY: undefined;
-  CERTIFICATE_ALL: undefined;
+  CERTIFICATE_ALL: {certificateId?: number};
   CERTIFICATE_COMPLETED: undefined;
   CERTIFICATE_REJECTED: undefined;
   INCOME: undefined;

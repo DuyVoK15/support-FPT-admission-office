@@ -1,89 +1,83 @@
-import React, { Component } from 'react';
-import { Text, StyleSheet, View } from 'react-native';
+import React, { Component, FC } from 'react';
+import { Text, StyleSheet, View, ViewProps } from 'react-native';
 import { FONTS_FAMILY } from '../../../constants/Fonts';
 import { COLORS } from '../../../constants/Colors';
 import Dash from 'react-native-dash';
 import DashedLine from 'react-native-dashed-line';
+import { SHADOWS } from '../../../constants/Shadows';
 
-type CertificateCardProps = {
+interface CertificateCardProps extends ViewProps {
   dateReceive?: string | null;
   certificateID?: string;
   certificateName?: string;
   confirmBy?: string;
   status?: string;
   color?: string;
-};
+}
 
-export default class CertificateCard extends Component<CertificateCardProps> {
-  render() {
-    return (
-      <View style={styles.containerItem}>
-        <View style={styles.containerRow}>
-          <View style={styles.firstRow}>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.textFirst}>{this.props?.dateReceive}</Text>
-            </View>
-            <View style={{ borderWidth: 1, borderRadius: 30 }}>
+const CertificateCard: FC<CertificateCardProps> = (Props) => {
+  const { ...otherProps } = Props;
+  return (
+      <View style={styles.containerRow}>
+        <View style={styles.firstRow}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.textFirst}>{Props?.dateReceive}</Text>
+          </View>
+          <View style={{ borderWidth: 1, borderRadius: 30 }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                margin: 6,
+              }}
+            >
+              <View>
+                <Text style={styles.thirdText}>{Props?.status}</Text>
+              </View>
               <View
                 style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  margin: 6,
+                  width: 12,
+                  height: 12,
+                  marginLeft: 5,
+                  borderRadius: 100,
+                  backgroundColor:
+                    Props?.status === 'Rejected' ? 'red' : 'green',
                 }}
-              >
-                <View>
-                  <Text style={styles.thirdText}>{this.props?.status}</Text>
-                </View>
-                <View
-                  style={{
-                    width: 12,
-                    height: 12,
-                    marginLeft: 5,
-                    borderRadius: 100,
-                    backgroundColor:
-                      this.props?.status === 'Rejected' ? 'red' : 'green',
-                  }}
-                />
-              </View>
-            </View>
-          </View>
-
-          <DashedLine
-            style={{ marginVertical: 15 }}
-            dashGap={5}
-            dashThickness={1}
-            dashLength={8}
-            dashColor={COLORS.light_grey}
-          />
-          <View style={styles.secondRow}>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.textSecond}>
-                {this.props?.certificateID
-                  ? 'ID: ' + this.props?.certificateID
-                  : ''}
-              </Text>
-            </View>
-            <View>
-              <Text style={styles.textSecond}>
-                {this.props?.certificateName}
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.thirdRow}>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.thirdText}>
-                {this.props?.confirmBy
-                  ? 'Confirm By: ' + this.props?.confirmBy
-                  : ''}
-              </Text>
+              />
             </View>
           </View>
         </View>
+
+        <DashedLine
+          style={{ marginVertical: 15 }}
+          dashGap={5}
+          dashThickness={1}
+          dashLength={8}
+          dashColor={COLORS.light_grey}
+        />
+        <View style={styles.secondRow}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.textSecond}>
+              {Props?.certificateID ? 'ID: ' + Props?.certificateID : ''}
+            </Text>
+          </View>
+          <View>
+            <Text style={styles.textSecond}>{Props?.certificateName}</Text>
+          </View>
+        </View>
+
+        <View style={styles.thirdRow}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.thirdText}>
+              {Props?.confirmBy ? 'Confirm By: ' + Props?.confirmBy : ''}
+            </Text>
+          </View>
+        </View>
       </View>
-    );
-  }
-}
+  );
+};
+
+export default CertificateCard;
 
 const styles = StyleSheet.create({
   container: {
@@ -92,19 +86,11 @@ const styles = StyleSheet.create({
   },
   containerItem: {
     marginVertical: 10,
-    marginHorizontal: 20,
+    marginHorizontal: 15,
     backgroundColor: 'white',
     borderTopRightRadius: 20,
     borderBottomRightRadius: 20,
     borderBottomLeftRadius: 20,
-    shadowColor: '#000000',
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 5.62,
-    elevation: 8,
   },
   containerRow: {
     margin: 15,

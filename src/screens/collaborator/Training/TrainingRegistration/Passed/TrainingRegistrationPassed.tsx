@@ -167,7 +167,10 @@ const TrainingRegistrationPassed = () => {
             <View>
               <TouchableOpacity
                 onPress={() =>
-                  props.navigation.navigate(ROUTES.CERTIFICATE_HISTORY)
+                  props.navigation.navigate(ROUTES.CERTIFICATE_HISTORY, {
+                    screen: ROUTES.CERTIFICATE_ALL,
+                    params: { certificateId: item?.trainingCertificate?.id },
+                  })
                 }
                 style={{
                   paddingVertical: 8,

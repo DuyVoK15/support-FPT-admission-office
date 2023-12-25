@@ -4,6 +4,7 @@ import { useAppDispatch } from '../../../../app/store';
 import { getAllCertificate, getAllCertificate_Rejected } from '../../../../features/collaborator/collab.certificateSlice';
 import { useAppSelector } from '../../../../app/hooks';
 import CERTIFICATE_STATUS_ENUM from '../../../../enums/collaborator/CertificateStatus';
+import { useFocusEffect } from '@react-navigation/native';
 
 const useRejectedCertificate = () => {
   const dispatch = useAppDispatch();
@@ -23,9 +24,14 @@ const useRejectedCertificate = () => {
       console.log(JSON.stringify(res, null, 2));
     });
   };
-  useEffect(() => {
-    fetchCertificateData();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        await fetchCertificateData();
+      };
+      fetchData();
+    }, [])
+  );
 
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = useCallback(() => {

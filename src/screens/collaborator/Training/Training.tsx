@@ -138,7 +138,10 @@ const Training = () => {
               {item?.isHasThisCertificate ? (
                 <TouchableOpacity
                   onPress={() =>
-                    props.navigation.navigate(ROUTES.CERTIFICATE_HISTORY)
+                    props.navigation.navigate(ROUTES.CERTIFICATE_HISTORY, {
+                      screen: ROUTES.CERTIFICATE_ALL,
+                      params: { certificateId: item?.id },
+                    })
                   }
                   style={{
                     paddingVertical: 8,

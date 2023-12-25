@@ -1,3 +1,5 @@
+import { COLORS } from "./Colors";
+
 export const SHADOWS = {
   SHADOW_01: {
     shadowColor: '#000',
@@ -97,5 +99,16 @@ export const SHADOWS = {
     shadowRadius: 5.46,
 
     elevation: 9,
+  },
+  SHADOW_ORANGE_06: {
+    shadowColor: COLORS?.orange_button,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
   },
 };
