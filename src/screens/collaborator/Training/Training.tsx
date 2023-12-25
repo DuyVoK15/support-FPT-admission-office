@@ -239,7 +239,7 @@ const Training = () => {
               fontSize: responsiveFontSize(26),
             }}
           >
-            Training Certificate
+            Certificate Interview
           </Text>
         </View>
         <View style={{ marginTop: 20, alignItems: 'center' }}>

@@ -108,9 +108,9 @@ const BottomTabs: React.FC = () => {
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <Entypo name="briefcase" color={color} size={26}/>
+            <MaterialCommunityIcons name="certificate" size={26} color={color} />
           ),
-          tabBarLabel: 'Training',
+          tabBarLabel: 'Certificate',
         }}
       />
       <Tab.Screen

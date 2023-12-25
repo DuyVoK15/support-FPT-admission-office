@@ -91,7 +91,7 @@ const TrainingRegistrationPending = () => {
             colorTextValue={COLORS?.orange_icon}
           />
           <InformationRow
-            title={'Class'}
+            title={'Room'}
             value={item?.eventDay?.class ? item?.eventDay?.class : 'Not yet'}
             marginTop={10}
           />

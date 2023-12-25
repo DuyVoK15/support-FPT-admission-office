@@ -18,7 +18,7 @@ const TrainingRegistration = () => {
           <Text
             style={{ fontFamily: FONTS_FAMILY.Ubuntu_500Medium, fontSize: 24 }}
           >
-            Training Registration
+            Interview Registration
           </Text>
         </View>
         <BackwardBlur onPress={() => navigation.navigate(ROUTES.TRAINING)} style={{position: 'absolute', left: 0, bottom: 10}} />
