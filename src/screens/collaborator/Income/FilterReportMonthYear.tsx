@@ -145,12 +145,16 @@ const FilterReportMonthYear: FC<FilterReportMonthYearProps> = (Props) => {
 
         <DateTimePicker
           mode="date"
+          minimumDate={new Date('2019-01-01')}
+          maximumDate={new Date(format_DDMMYYYYYString_To_YYYYMMDate(createAtEnd))}
           date={format_DDMMYYYYYString_To_YYYYMMDate(createAtStart)}
           isVisible={isModalCreateAtStartPicker}
           onConfirm={handleSetCreateAtStart}
           onCancel={hideModalCreateAtStartPicker}
         />
         <DateTimePicker
+          minimumDate={new Date(format_DDMMYYYYYString_To_YYYYMMDate(createAtStart))}
+          maximumDate={new Date()}
           mode="date"
           date={format_DDMMYYYYYString_To_YYYYMMDate(createAtEnd)}
           isVisible={isModalCreateAtEndPicker}
