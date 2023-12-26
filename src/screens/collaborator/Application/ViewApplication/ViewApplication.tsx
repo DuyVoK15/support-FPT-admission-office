@@ -33,6 +33,7 @@ import TrainingStatus from '../../Training/TrainingRegistration/TrainingStatus';
 import ApplicationStatus from './ApplicationStatus';
 import APPLICATION_STATUS_ENUM from '../../../../enums/collaborator/ApplicationStatus';
 import RegistrationEmpty from '../../../../components/shared/Empty/RegistrationEmpty';
+import FilterApplicationStatus from './FilterApplicationStatus';
 
 const ViewApplication = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -257,7 +258,9 @@ const ViewApplication = () => {
             marginHorizontal: 10,
           }}
         >
-          <View style={{ flex: 1 }}></View>
+          <View style={{ flex: 1 }}>
+            <FilterApplicationStatus selectedStatus={state.selectedStatus} setSelectedStatus={setState.setSelectedStatus} />
+          </View>
           <TouchableOpacity onPress={handlers.showModal}>
             <AntDesign name="form" size={32} color="black" />
           </TouchableOpacity>

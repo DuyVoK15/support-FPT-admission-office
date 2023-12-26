@@ -12,11 +12,16 @@ import { DataApplication } from '../../../../models/collaborator/application.mod
 import { TITLE_ENUM } from '../../../../components/shared/AwesomeAlert/ConfirmAlert';
 import useCustomToast from '../../../../utils/toasts';
 import ErrorStatus from '../../../../dtos/collaborator/response/errorStatus.dto';
+import APPLICATION_STATUS_ENUM from '../../../../enums/collaborator/ApplicationStatus';
 
 const useViewApplication = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const dispatch = useAppDispatch();
   const { showToastSuccess, showToastError, toastRef } = useCustomToast();
+  const [selectedStatus, setSelectedStatus] = useState<number>(
+    APPLICATION_STATUS_ENUM.PENDING
+  );
+
   const applicationList = useAppSelector(
     (state) => state.collab_application.application
   );
@@ -26,6 +31,7 @@ const useViewApplication = () => {
         getAllApplication({
           Page: 1,
           PageSize: 10000,
+          Status: selectedStatus,
           Sort: 'ReportDate',
           Order: 'DESCENDING',
         })
@@ -39,7 +45,7 @@ const useViewApplication = () => {
 
   useEffect(() => {
     fetchApplication();
-  }, []);
+  }, [selectedStatus]);
 
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = useCallback(() => {
@@ -54,6 +60,7 @@ const useViewApplication = () => {
         if (res?.meta?.requestStatus === 'fulfilled') {
           console.log(JSON.stringify(res, null, 2));
           setProblemNote('');
+          setSelectedStatus(APPLICATION_STATUS_ENUM.PENDING);
           hideAlertHandler();
           hideModal();
           showToastSuccess('Send application successful!');
@@ -123,8 +130,15 @@ const useViewApplication = () => {
     hideAlertHandler,
   };
   const props = { navigation, TYPE_BUTTON_ENUM, toastRef };
-  const state = { refreshing, problemNote, isVisible, showAlert, confirmInfo };
-  const setState = { setRefreshing, setProblemNote };
+  const state = {
+    refreshing,
+    problemNote,
+    isVisible,
+    showAlert,
+    confirmInfo,
+    selectedStatus,
+  };
+  const setState = { setRefreshing, setProblemNote, setSelectedStatus };
   const stateRedux = { applicationList };
   return {
     handlers,
