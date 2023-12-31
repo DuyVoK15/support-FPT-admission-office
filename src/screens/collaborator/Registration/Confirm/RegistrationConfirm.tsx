@@ -412,6 +412,7 @@ const Registration_Confirm = () => {
           cancelText="No"
           confirmButtonColor={COLORS.orange_button}
           onConfirmPressed={() => {
+            hideAlertHandler();
             switch (confirmInfo?.typeButton) {
               case TYPE_BUTTON_ENUM.CANCEL:
                 handlers.cancelRegistrationById(Item?.id ?? null);
@@ -429,7 +430,6 @@ const Registration_Confirm = () => {
                 hideAlertHandler();
                 break;
             }
-            hideAlertHandler();
           }}
           onCancelPressed={hideAlertHandler}
         />

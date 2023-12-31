@@ -20,6 +20,7 @@ import RegistrationEmpty from '../../../components/shared/Empty/RegistrationEmpt
 import { format_ISODateString_To_DayOfWeekMonthDDYYYY } from '../../../utils/formats';
 import ConfirmAlert from '../../../components/shared/AwesomeAlert/ConfirmAlert';
 import { responsiveFontSize } from '../../../utils/responsive';
+import { TRAINING_CERTI_REGIS_STATUS_ENUM } from '../../../enums/collaborator/TrainingCertificateRegistrationStatus';
 
 const CARD_HEIGHT = 830;
 const CARD_WIDTH = 380;
@@ -171,9 +172,18 @@ const Training = () => {
                 </TouchableOpacity>
               ) : item?.isRegistered ? (
                 <TouchableOpacity
-                  onPress={() =>
-                    props.navigation.navigate(ROUTES.TRAINING_REGISTRATION)
-                  }
+                  onPress={() => {
+                    item?.certificateStatus ===
+                    TRAINING_CERTI_REGIS_STATUS_ENUM.ASSIGNED
+                      ? props.navigation.navigate(
+                          ROUTES.TRAINING_REGISTRATION,
+                          { screen: ROUTES.TRAINING_REGISTRATION_ASSIGNED }
+                        )
+                      : props.navigation.navigate(
+                          ROUTES.TRAINING_REGISTRATION,
+                          { screen: ROUTES.TRAINING_REGISTRATION_PENDING }
+                        );
+                  }}
                   style={{
                     paddingVertical: 8,
                     paddingHorizontal: 18,

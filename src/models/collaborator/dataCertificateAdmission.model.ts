@@ -5,6 +5,7 @@ export interface DataCertificateAdmission {
   isActive: boolean;
   createAt: string;
   updateAt: string;
+  certificateStatus: number;
   isRegistered: boolean;
   isHasThisCertificate: boolean;
 }
