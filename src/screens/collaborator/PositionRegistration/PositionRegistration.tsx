@@ -276,8 +276,17 @@ const PositionRegistration = () => {
                                     ? position?.positionRegisterAmount +
                                       ' / ' +
                                       position?.amount +
-                                      ' collaborators have CONFIRMED'
-                                    : ''}
+                                      ' people have been'
+                                    : '0/0 people have been'}
+                                  <Text
+                                    style={{
+                                      fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
+                                      color: COLORS?.green_status,
+                                    }}
+                                  >
+                                    {' '}
+                                    CONFIRMED
+                                  </Text>
                                 </Text>
                               </View>
                             </View>

@@ -425,22 +425,30 @@ const RequestChangePositionPending = () => {
                                     </Text>
                                   </View>
                                   <View style={{ marginBottom: 4 }}>
-                                    <Text
-                                      style={{
-                                        fontFamily:
-                                          FONTS_FAMILY.Ubuntu_400Regular,
-                                        fontSize: 14,
-                                      }}
-                                    >
-                                      {position?.positionRegisterAmount ||
-                                      position?.amount
-                                        ? position?.positionRegisterAmount +
-                                          ' / ' +
-                                          position?.amount +
-                                          ' collaborators have CONFIRMED'
-                                        : ''}
-                                    </Text>
-                                  </View>
+                                <Text
+                                  style={{
+                                    fontFamily: FONTS_FAMILY.Ubuntu_400Regular,
+                                    fontSize: 14,
+                                  }}
+                                >
+                                  {position?.positionRegisterAmount ||
+                                  position?.amount
+                                    ? position?.positionRegisterAmount +
+                                      ' / ' +
+                                      position?.amount +
+                                      ' people have been'
+                                    : '0/0 people have been'}
+                                  <Text
+                                    style={{
+                                      fontFamily: FONTS_FAMILY.Ubuntu_500Medium,
+                                      color: COLORS?.green_status,
+                                    }}
+                                  >
+                                    {' '}
+                                    CONFIRMED
+                                  </Text>
+                                </Text>
+                              </View>
                                 </View>
                               </View>
                               <View style={{ marginTop: 15 }}>

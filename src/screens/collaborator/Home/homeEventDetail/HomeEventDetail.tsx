@@ -184,11 +184,7 @@ const HomeEventDetail: FC = () => {
                     {stateRedux.item?.data?.dateFrom &&
                       stateRedux.item?.data?.timeFrom &&
                       stateRedux.item?.data?.timeTo &&
-                      format_ISODateString_To_DayOfWeek(
-                        stateRedux.item?.data?.dateFrom
-                      ) +
-                        ', ' +
-                        format_Time_To_HHss(stateRedux.item?.data?.timeFrom) +
+                      format_Time_To_HHss(stateRedux.item?.data?.timeFrom) +
                         ' - ' +
                         format_Time_To_HHss(stateRedux.item?.data?.timeTo)}
                   </Text>
@@ -427,9 +423,7 @@ const HomeEventDetail: FC = () => {
         </ScrollView>
       </View>
       <View style={{ position: 'absolute', top: 50 }}>
-        <BackwardBlur
-          onPress={() => props.navigation.goBack()}
-        />
+        <BackwardBlur onPress={() => props.navigation.goBack()} />
       </View>
     </View>
   );
