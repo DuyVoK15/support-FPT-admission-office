@@ -21,6 +21,7 @@ import { DataNotification } from '../../../../models/collaborator/notification.m
 import { formatDateTimeForNotification } from '../../../../utils/formats';
 import { ROUTES } from '../../../../constants/Routes';
 import { NOTIFICATION_TYPE_ENUM } from '../../../../enums/collaborator/NotificationType';
+import { SHADOWS } from '../../../../constants/Shadows';
 
 const AccountNotification = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -251,7 +252,10 @@ const AccountNotification = () => {
         style={{
           backgroundColor: '#FFF',
           borderRadius: 15,
-          marginVertical: 10,
+          marginTop: 10,
+          marginBottom: 5,
+          marginHorizontal: 10,
+          ...SHADOWS?.SHADOW_01
         }}
       >
         <View style={{ margin: 15 }}>
@@ -314,7 +318,6 @@ const AccountNotification = () => {
           data={notificationByTokenList?.data}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={{ marginHorizontal: 15 }}
         />
       </View>
     </View>

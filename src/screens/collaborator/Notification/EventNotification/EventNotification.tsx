@@ -15,6 +15,7 @@ import { formatDateTimeForNotification } from '../../../../utils/formats';
 import { TouchableOpacity } from 'react-native';
 import { ROUTES } from '../../../../constants/Routes';
 import { NOTIFICATION_TYPE_ENUM } from '../../../../enums/collaborator/NotificationType';
+import { SHADOWS } from '../../../../constants/Shadows';
 
 const EventNotification = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -245,7 +246,10 @@ const EventNotification = () => {
         style={{
           backgroundColor: '#FFF',
           borderRadius: 15,
-          marginVertical: 10,
+          marginTop: 10,
+          marginBottom: 5,
+          marginHorizontal: 10,
+          ...SHADOWS?.SHADOW_01
         }}
       >
         <View style={{ margin: 15 }}>
@@ -284,6 +288,8 @@ const EventNotification = () => {
                 <Text style={{ fontFamily: FONTS_FAMILY?.Ubuntu_400Regular }}>
                   {item?.createAt
                     ? formatDateTimeForNotification(item?.createAt)
+                      ? formatDateTimeForNotification(item?.createAt)
+                      : 'No value'
                     : 'No value'}
                 </Text>
               </View>
@@ -306,7 +312,6 @@ const EventNotification = () => {
           data={notificationByTokenList?.data}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={{ marginHorizontal: 15 }}
         />
       </View>
     </View>
