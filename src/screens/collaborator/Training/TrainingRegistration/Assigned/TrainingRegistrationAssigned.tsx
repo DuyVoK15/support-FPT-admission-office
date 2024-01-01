@@ -15,7 +15,7 @@ import { COLORS } from '../../../../../constants/Colors';
 import { FONTS_FAMILY } from '../../../../../constants/Fonts';
 import TrainingStatus from '../TrainingStatus';
 import RegistrationEmpty from '../../../../../components/shared/Empty/RegistrationEmpty';
-import { format_ISODateString_To_DayOfWeekMonthDDYYYY, format_ISODateString_To_Full } from '../../../../../utils/formats';
+import { format_ISODateString_To_DDMonthYYYY, format_ISODateString_To_DayOfWeekMonthDDYYYY, format_ISODateString_To_Full } from '../../../../../utils/formats';
 import InformationRow from '../../../../../components/collaborator/Training/InformationRow';
 
 const TrainingRegistrationAssigned = () => {
@@ -96,7 +96,7 @@ const TrainingRegistrationAssigned = () => {
             title={'Date'}
             value={
               item?.eventDay?.date
-                ? format_ISODateString_To_DayOfWeekMonthDDYYYY(
+                ? format_ISODateString_To_DDMonthYYYY(
                     item?.eventDay?.date
                   )
                 : 'Not yet'

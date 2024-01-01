@@ -10,6 +10,7 @@ import { DataTrainingCertificateRegistration } from '../../../../../models/colla
 import useTrainingRegistrationCanceled from './useTrainingRegistrationCanceled';
 import RegistrationEmpty from '../../../../../components/shared/Empty/RegistrationEmpty';
 import {
+  format_ISODateString_To_DDMonthYYYY,
   format_ISODateString_To_DayOfWeekMonthDDYYYY,
   format_ISODateString_To_Full,
 } from '../../../../../utils/formats';
@@ -95,7 +96,7 @@ const TrainingRegistrationCanceled = () => {
             title={'Date'}
             value={
               item?.eventDay?.date
-                ? format_ISODateString_To_DayOfWeekMonthDDYYYY(
+                ? format_ISODateString_To_DDMonthYYYY(
                     item?.eventDay?.date
                   )
                 : 'Not yet'

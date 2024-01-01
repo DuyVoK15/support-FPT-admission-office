@@ -16,6 +16,7 @@ import { DataTrainingCertificateRegistration } from '../../../../../models/colla
 import useTrainingRegistrationPending from './useTrainingRegistrationPending';
 import RegistrationEmpty from '../../../../../components/shared/Empty/RegistrationEmpty';
 import {
+  format_ISODateString_To_DDMonthYYYY,
   format_ISODateString_To_DayOfWeekMonthDDYYYY,
   format_ISODateString_To_Full,
 } from '../../../../../utils/formats';
@@ -99,7 +100,7 @@ const TrainingRegistrationPending = () => {
             title={'Date'}
             value={
               item?.eventDay?.date
-                ? format_ISODateString_To_DayOfWeekMonthDDYYYY(
+                ? format_ISODateString_To_DDMonthYYYY(
                     item?.eventDay?.date
                   )
                 : 'Not yet'
