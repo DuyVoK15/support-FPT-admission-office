@@ -18,62 +18,78 @@ interface CertificateCardProps extends ViewProps {
 const CertificateCard: FC<CertificateCardProps> = (Props) => {
   const { ...otherProps } = Props;
   return (
-      <View style={styles.containerRow}>
-        <View style={styles.firstRow}>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.textFirst}>{Props?.dateReceive}</Text>
-          </View>
-          <View style={{ borderWidth: 1, borderRadius: 30 }}>
+    <View style={styles.containerRow}>
+      <View style={styles.firstRow}>
+        <View style={{ flex: 1 }}>
+          <Text style={styles.textFirst}>{Props?.dateReceive}</Text>
+        </View>
+        <View style={{ borderWidth: 1, borderRadius: 30 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              margin: 6,
+            }}
+          >
+            <View>
+              <Text style={styles.thirdText}>{Props?.status}</Text>
+            </View>
             <View
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                margin: 6,
+                width: 12,
+                height: 12,
+                marginLeft: 5,
+                borderRadius: 100,
+                backgroundColor:
+                  Props?.status === 'Rejected'
+                    ? COLORS?.red_status
+                    : COLORS?.green_status,
               }}
-            >
-              <View>
-                <Text style={styles.thirdText}>{Props?.status}</Text>
-              </View>
-              <View
-                style={{
-                  width: 12,
-                  height: 12,
-                  marginLeft: 5,
-                  borderRadius: 100,
-                  backgroundColor:
-                    Props?.status === 'Rejected' ? 'red' : 'green',
-                }}
-              />
-            </View>
-          </View>
-        </View>
-
-        <DashedLine
-          style={{ marginVertical: 15 }}
-          dashGap={5}
-          dashThickness={1}
-          dashLength={8}
-          dashColor={COLORS.light_grey}
-        />
-        <View style={styles.secondRow}>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.textSecond}>
-              {Props?.certificateID ? 'ID: ' + Props?.certificateID : ''}
-            </Text>
-          </View>
-          <View>
-            <Text style={styles.textSecond}>{Props?.certificateName}</Text>
-          </View>
-        </View>
-
-        <View style={styles.thirdRow}>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.thirdText}>
-              {Props?.confirmBy ? 'Confirm By: ' + Props?.confirmBy : ''}
-            </Text>
+            />
           </View>
         </View>
       </View>
+
+      <DashedLine
+        style={{ marginVertical: 15 }}
+        dashGap={5}
+        dashThickness={1}
+        dashLength={8}
+        dashColor={COLORS.light_grey}
+      />
+      <View style={styles.secondRow}>
+        <View style={{ flex: 1 }}>
+          <Text style={styles.textSecond}>{Props?.certificateID}</Text>
+        </View>
+        <View>
+          <Text
+            style={{
+              fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
+              fontSize: 18,
+              color: COLORS.light_black,
+            }}
+          >
+            {Props?.certificateName}
+          </Text>
+        </View>
+      </View>
+
+      <View style={styles.thirdRow}>
+        <View style={{ flex: 1 }}>
+          <Text style={styles.thirdText}>
+            Confirm By:{' '}
+            <Text
+              style={{
+                fontFamily: FONTS_FAMILY.Ubuntu_700Bold,
+                color: COLORS?.light_black,
+              }}
+            >
+              {Props?.confirmBy}
+            </Text>
+          </Text>
+        </View>
+      </View>
+    </View>
   );
 };
 

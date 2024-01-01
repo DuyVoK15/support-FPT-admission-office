@@ -38,7 +38,7 @@ const Certificate_Rejected_Status = () => {
               : 'No date'
           }
           certificateID={
-            item?.id ? String(item?.trainingCertificate?.id) : 'No value'
+            item?.id ? 'ID: ' + String(item?.trainingCertificate?.id) : 'No value'
           }
           certificateName={
             item?.trainingCertificate?.certificateName
@@ -48,7 +48,7 @@ const Certificate_Rejected_Status = () => {
           confirmBy={
             item?.certificateIssuer?.name
               ? item?.certificateIssuer?.name
-              : 'System'
+              : 'Automatic System'
           }
           status={
             item?.status === CERTIFICATE_STATUS_ENUM.COMPLETED
