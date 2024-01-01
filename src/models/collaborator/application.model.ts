@@ -9,4 +9,10 @@ export interface DataApplication {
   replyNote: string;
   status: number;
   account: UserInfo;
+  accountReply: {
+    id: number;
+    name: string;
+    email: string;
+    imgUrl: string;
+  };
 }

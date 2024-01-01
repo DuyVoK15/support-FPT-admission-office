@@ -172,7 +172,9 @@ const ViewApplication = () => {
                   <Image
                     style={{ height: 50, width: 50, borderRadius: 100 }}
                     source={{
-                      uri: imageFPTUri ? imageFPTUri : imageFPTUri,
+                      uri: item?.accountReply?.imgUrl
+                        ? item?.accountReply?.imgUrl
+                        : imageFPTUri,
                     }}
                   />
                 </View>
@@ -180,11 +182,13 @@ const ViewApplication = () => {
                   <Text
                     style={{
                       fontFamily: FONTS_FAMILY?.Ubuntu_400Regular,
-                      letterSpacing: 1,
-                      fontSize: 18,
+                      letterSpacing: 0.2,
+                      fontSize: 15,
                     }}
                   >
-                    Admission Officer
+                    {item?.accountReply?.name
+                      ? item?.accountReply?.name
+                      : 'No value'}
                   </Text>
 
                   <Text
@@ -193,7 +197,9 @@ const ViewApplication = () => {
                       fontSize: 15,
                     }}
                   >
-                    tuyensinhfpthcm
+                    {item?.accountReply?.email
+                      ? item?.accountReply?.email
+                      : 'No value'}
                   </Text>
                 </View>
               </View>
@@ -259,7 +265,10 @@ const ViewApplication = () => {
           }}
         >
           <View style={{ flex: 1 }}>
-            <FilterApplicationStatus selectedStatus={state.selectedStatus} setSelectedStatus={setState.setSelectedStatus} />
+            <FilterApplicationStatus
+              selectedStatus={state.selectedStatus}
+              setSelectedStatus={setState.setSelectedStatus}
+            />
           </View>
           <TouchableOpacity onPress={handlers.showModal}>
             <AntDesign name="form" size={32} color="black" />
@@ -286,7 +295,7 @@ const ViewApplication = () => {
                   style={{
                     fontFamily: FONTS_FAMILY?.Ubuntu_500Medium,
                     marginBottom: 10,
-                    fontSize: 15
+                    fontSize: 15,
                   }}
                 >
                   Write your problem below
@@ -300,7 +309,7 @@ const ViewApplication = () => {
                     borderRadius: 10,
                     borderStyle: 'dashed',
                     padding: 10,
-                    textAlignVertical: 'top'
+                    textAlignVertical: 'top',
                   }}
                   placeholder="Enter problem . . . "
                   multiline={true}
