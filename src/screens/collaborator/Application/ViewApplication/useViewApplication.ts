@@ -18,8 +18,8 @@ const useViewApplication = () => {
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
   const dispatch = useAppDispatch();
   const { showToastSuccess, showToastError, toastRef } = useCustomToast();
-  const [selectedStatus, setSelectedStatus] = useState<number>(
-    APPLICATION_STATUS_ENUM.PENDING
+  const [selectedStatus, setSelectedStatus] = useState<{status: number}>(
+    {status: APPLICATION_STATUS_ENUM.PENDING}
   );
 
   const applicationList = useAppSelector(
@@ -31,7 +31,7 @@ const useViewApplication = () => {
         getAllApplication({
           Page: 1,
           PageSize: 10000,
-          Status: selectedStatus,
+          Status: selectedStatus.status,
           Sort: 'ReportDate',
           Order: 'DESCENDING',
         })
@@ -42,17 +42,17 @@ const useViewApplication = () => {
       console.log(error);
     }
   };
-
+console.log("tong", selectedStatus.status)
   useEffect(() => {
     fetchApplication();
   }, [selectedStatus]);
 
   const [refreshing, setRefreshing] = useState(false);
-  const onRefresh = useCallback(() => {
+  const onRefresh = () => {
     setRefreshing(true);
     fetchApplication();
     setRefreshing(false);
-  }, []);
+  };
 
   const createOneApplication = async () => {
     try {
@@ -60,7 +60,7 @@ const useViewApplication = () => {
         if (res?.meta?.requestStatus === 'fulfilled') {
           console.log(JSON.stringify(res, null, 2));
           setProblemNote('');
-          setSelectedStatus(APPLICATION_STATUS_ENUM.PENDING);
+          setSelectedStatus({status: APPLICATION_STATUS_ENUM.PENDING});
           hideAlertHandler();
           hideModal();
           showToastSuccess('Send application successful!');

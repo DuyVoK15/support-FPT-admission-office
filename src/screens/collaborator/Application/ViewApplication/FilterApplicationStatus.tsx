@@ -11,8 +11,12 @@ import { COLORS } from '../../../../constants/Colors';
 import { FONTS_FAMILY } from '../../../../constants/Fonts';
 
 interface FilterApplicationStatusProps {
-  selectedStatus: number;
-  setSelectedStatus: React.Dispatch<React.SetStateAction<number>>;
+  selectedStatus: { status: number };
+  setSelectedStatus: React.Dispatch<
+    React.SetStateAction<{
+      status: number;
+    }>
+  >;
 }
 const FilterApplicationStatus: FC<FilterApplicationStatusProps> = (Props) => {
   const statusKeys = Object.keys(APPLICATION_STATUS_ENUM)
@@ -21,8 +25,8 @@ const FilterApplicationStatus: FC<FilterApplicationStatusProps> = (Props) => {
   console.log(statusKeys);
 
   const handeSelectItem = (num: number) => {
-    Props.setSelectedStatus(num);
-    console.log(num)
+    Props.setSelectedStatus({status: num});
+    console.log(num);
   };
 
   const renderItem = ({ item }: { item: number }) => {
@@ -33,7 +37,7 @@ const FilterApplicationStatus: FC<FilterApplicationStatusProps> = (Props) => {
           borderWidth: 3,
           borderRadius: 20,
           borderColor: (() => {
-            switch (Props.selectedStatus) {
+            switch (Props.selectedStatus.status) {
               case APPLICATION_STATUS_ENUM.PENDING:
                 return COLORS?.orange_button;
               case APPLICATION_STATUS_ENUM.APPROVED:
@@ -44,28 +48,10 @@ const FilterApplicationStatus: FC<FilterApplicationStatusProps> = (Props) => {
                 return '#FFF';
             }
           })(),
-          backgroundColor: item === Props.selectedStatus ? (() => {
-            switch (Props.selectedStatus) {
-              case APPLICATION_STATUS_ENUM.PENDING:
-                return COLORS?.orange_button;
-              case APPLICATION_STATUS_ENUM.APPROVED:
-                return COLORS?.green_status;
-              case APPLICATION_STATUS_ENUM.REJECTED:
-                return COLORS?.red_status;
-              default:
-                return '#FFF';
-            }
-          })() : '#FFF',
-          marginRight: 10,
-        }}
-      >
-        <View style={{ marginVertical: 8, marginHorizontal: 10 }}>
-          <View>
-            <Text
-              style={{
-                fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
-                color: item !== Props.selectedStatus ? (() => {
-                  switch (Props.selectedStatus) {
+          backgroundColor:
+            item === Props.selectedStatus.status
+              ? (() => {
+                  switch (Props.selectedStatus.status) {
                     case APPLICATION_STATUS_ENUM.PENDING:
                       return COLORS?.orange_button;
                     case APPLICATION_STATUS_ENUM.APPROVED:
@@ -75,7 +61,31 @@ const FilterApplicationStatus: FC<FilterApplicationStatusProps> = (Props) => {
                     default:
                       return '#FFF';
                   }
-                })() : '#FFF',
+                })()
+              : '#FFF',
+          marginRight: 10,
+        }}
+      >
+        <View style={{ marginVertical: 8, marginHorizontal: 10 }}>
+          <View>
+            <Text
+              style={{
+                fontFamily: FONTS_FAMILY?.Ubuntu_700Bold,
+                color:
+                  item !== Props.selectedStatus.status
+                    ? (() => {
+                        switch (Props.selectedStatus.status) {
+                          case APPLICATION_STATUS_ENUM.PENDING:
+                            return COLORS?.orange_button;
+                          case APPLICATION_STATUS_ENUM.APPROVED:
+                            return COLORS?.green_status;
+                          case APPLICATION_STATUS_ENUM.REJECTED:
+                            return COLORS?.red_status;
+                          default:
+                            return '#FFF';
+                        }
+                      })()
+                    : '#FFF',
               }}
             >
               {(() => {
