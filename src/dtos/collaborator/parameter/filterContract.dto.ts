@@ -4,4 +4,5 @@ export interface FilterContract {
   Sort?: string;
   Order?: string;
   Status?: number;
+  searchContract? : string;
 }

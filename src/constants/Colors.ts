@@ -7,6 +7,7 @@ export const COLORS = {
   light_black: '#747688',
   red_date: '#F0635A',
   green_filter_button: '#029A11',
+  light_green_filter_button: '#809c82',
   light_grey: '#716E90',
   super_light_grey: '#bbbbc4',
   grey_underline: '#A5A0A0',

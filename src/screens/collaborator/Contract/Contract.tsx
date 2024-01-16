@@ -31,10 +31,16 @@ import { CONTRACT_STATUS_ENUM } from '../../../enums/collaborator/ContractStatus
 import { Button } from 'react-native-paper';
 import ConfirmAlert from '../../../components/shared/AwesomeAlert/ConfirmAlert';
 import RenderHTML from 'react-native-render-html';
+import Search from '../../../components/collaborator/Contract/Search';
+import RegistrationEmpty from '../../../components/shared/Empty/RegistrationEmpty';
 
 const Contract = () => {
-  const { handlers, state, props, stateRedux } = useIndex();
+  const { handlers, state, props, stateRedux, setState } = useIndex();
   const { width } = useWindowDimensions();
+  // Render Empty JSX
+  const renderListEmptyComponent = () => {
+    return <RegistrationEmpty />;
+  };
   const renderItem = ({ item }: { item: DataContract }) => {
     return (
       <View
@@ -271,8 +277,15 @@ const Contract = () => {
           onPress={() => props.navigation.navigate(ROUTES.ACCOUNT)}
         />
       </Header>
-
-      <View style={{ flex: 1, marginTop: 15 }}>
+      <View style={{ flex: 0, marginTop: 10, marginHorizontal: 15 }}>
+        <Search
+          dataFilterContract={state.dataFilterContract}
+          setDataFilterContract={setState.setDataFilterContract}
+          total={stateRedux.contractList?.metadata?.total ?? 0}
+          isRefresh={state.refreshing}
+        />
+      </View>
+      <View style={{ flex: 1, marginTop: 5 }}>
         <FlatList
           data={stateRedux?.contractList?.data}
           renderItem={renderItem}
@@ -283,6 +296,7 @@ const Contract = () => {
             />
           }
           keyExtractor={(item, index) => index.toString()}
+          ListEmptyComponent={renderListEmptyComponent}
         />
         <ConfirmAlert
           show={state.showAlert}

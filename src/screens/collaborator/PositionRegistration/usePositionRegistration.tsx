@@ -90,7 +90,7 @@ const usePositionRegistration = () => {
         setConfirmInfo({
           title: 'CONFIRMATION',
           titleType: TITLE_ENUM.WARNING,
-          message: `You need Certificate "${item?.certificateName}" for this position? View Training NOW?`,
+          message: `You need Certificate "${item?.certificateName}" for this position? View Certificates NOW?`,
           typeButton: TYPE_BUTTON_ENUM.NAVIGATE_TO_CERTIFICATE,
         });
         break;

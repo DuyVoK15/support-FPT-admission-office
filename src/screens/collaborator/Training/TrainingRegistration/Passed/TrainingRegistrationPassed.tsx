@@ -158,15 +158,23 @@ const TrainingRegistrationPassed = () => {
             }
             marginTop={10}
           />
+          <DashedLine
+            style={{ marginVertical: 10 }}
+            dashGap={0}
+            dashThickness={1}
+            dashLength={8}
+            dashColor={COLORS.super_light_grey}
+          />
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-around',
-              marginTop: 15,
+              marginTop: 5,
             }}
           >
             <View>
               <TouchableOpacity
+                disabled={item?.isHasThisCertificate ? false : true}
                 onPress={() =>
                   props.navigation.navigate(ROUTES.CERTIFICATE_HISTORY, {
                     screen: ROUTES.CERTIFICATE_ALL,
@@ -176,7 +184,7 @@ const TrainingRegistrationPassed = () => {
                 style={{
                   paddingVertical: 8,
                   paddingHorizontal: 12,
-                  backgroundColor: COLORS?.green_filter_button,
+                  backgroundColor: item?.isHasThisCertificate ? COLORS?.green_filter_button : COLORS?.light_green_filter_button,
                   borderRadius: 10,
                 }}
               >

@@ -18,6 +18,7 @@ import { DataContract } from '../../../models/collaborator/contract.model';
 import ErrorStatus from '../../../dtos/collaborator/response/errorStatus.dto';
 import { CONTRACT_STATUS_ENUM } from '../../../enums/collaborator/ContractStatus.';
 import { ROUTES } from '../../../constants/Routes';
+import { DataFilterContract } from '../../../components/collaborator/Contract/Search';
 const useIndex = () => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation<HomeCollaboratorScreenNavigationProp>();
@@ -26,6 +27,8 @@ const useIndex = () => {
   const contractList = useAppSelector(
     (state) => state.collab_contract.contract
   );
+  const [dataFilterContract, setDataFilterContract] =
+    useState<DataFilterContract | null>({ search: null });
   const fetchContract = async () => {
     try {
       await dispatch(
@@ -34,6 +37,7 @@ const useIndex = () => {
           PageSize: 10000,
           Sort: 'CreateAt',
           Order: 'DESCENDING',
+          searchContract: dataFilterContract?.search ?? '',
         })
       ).then((res) => {
         console.log(JSON.stringify(res, null, 2));
@@ -45,13 +49,15 @@ const useIndex = () => {
 
   useEffect(() => {
     fetchContract();
-  }, []);
+  }, [dataFilterContract]);
 
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    fetchContract();
-    setRefreshing(false);
+    setTimeout(() => {
+      setDataFilterContract({ search: null });
+      setRefreshing(false);
+    }, 500);
   }, []);
 
   const downloadAndOpenFile = async (stringFile: string) => {
@@ -193,8 +199,14 @@ const useIndex = () => {
   };
 
   const props = { navigation, TYPE_BUTTON_ENUM };
-  const state = { refreshing, showAlert, confirmInfo, Item };
-  const setState = {};
+  const state = {
+    refreshing,
+    showAlert,
+    confirmInfo,
+    Item,
+    dataFilterContract,
+  };
+  const setState = { setDataFilterContract };
   const stateRedux = { contractList };
 
   return {
@@ -202,6 +214,7 @@ const useIndex = () => {
     props,
     state,
     stateRedux,
+    setState,
   };
 };
 

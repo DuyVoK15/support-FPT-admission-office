@@ -114,7 +114,7 @@ const useTraining = () => {
       case TYPE_BUTTON_ENUM.REGISTER:
         setConfirmInfo({
           title: 'CONFIRMATION',
-          message: `Are you sure you want to REGISTER "${item?.certificateName}" training?`,
+          message: `Are you sure you want to REGISTER "${item?.certificateName}" interview?`,
           typeButton: TYPE_BUTTON_ENUM.REGISTER,
         });
         break;
