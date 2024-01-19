@@ -39,13 +39,14 @@ import NetworkCheck from '../../NetworkCheck';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { FONTS_FAMILY } from '../constants/Fonts';
 import { ScreenWidth } from '../constants/Demesions';
+import ExpiredAccessToken from '../screens/collaborator/Authentication/ExpiredAccessToken';
 
 const AuthStackScreen: React.FC = () => {
   return <LoginScreen />;
 };
 
 const AppNavigator: FC = () => {
-  const { state } = useAppNavigator();
+  const { state, setState } = useAppNavigator();
   const [connectionStatus, setConnectionStatus] = useState(false);
   const [connectionType, setConnectionType] = useState<string | null>(null);
 
@@ -75,7 +76,9 @@ const AppNavigator: FC = () => {
     state.roleId === RoleId.COLLAB_ROLE
   )
     return <Verification />;
-
+    // if(state.isExpiredDate){
+    //   return <ExpiredAccessToken />
+    // }
   // Check if user hasn't account information and role is COLLAB will navigate to User Profile Signup
   const obj = state.collab_userInfo?.accountInformation;
   if (obj) {

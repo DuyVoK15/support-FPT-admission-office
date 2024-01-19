@@ -119,7 +119,7 @@ const RequestChangePositionPending = () => {
           })
         );
         navigation.goBack();
-        showToastSuccess('Update thành công');
+        showToastSuccess('Change position successful!');
         console.log(JSON.stringify(res, null, 2));
       } else {
         const resRejectedData = res?.payload as ErrorStatus;
